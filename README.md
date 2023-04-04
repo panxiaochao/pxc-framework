@@ -1,2 +1,8 @@
 # pxc-framework
-pxc-framework是对spring boot环境下各个组件的一个框架封装
+
+pxc-framework Converged Project, base on spring boot 2.7.X up-to-date
+
+### current version
+
+- Spring Boot 2.7.10
+- jdk >= 1.8

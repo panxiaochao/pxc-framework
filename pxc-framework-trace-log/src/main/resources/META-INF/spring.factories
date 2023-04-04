@@ -1,0 +1,11 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.github.panxiaochao.log.config.TraceAspectAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceFeignAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceGatewayAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceHttpClientAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceOkHttpAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceRestTemplateAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceWebClientAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceWebFluxAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceWebMvcAutoConfiguration
+  
