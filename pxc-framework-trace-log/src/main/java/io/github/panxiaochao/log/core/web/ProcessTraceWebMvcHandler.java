@@ -51,9 +51,9 @@ public class ProcessTraceWebMvcHandler extends AbstractProcessTraceHandler {
      * @return 初始化实例
      */
     public static ProcessTraceWebMvcHandler INSTANCE() {
-        if (processTraceWebMvcHandler == null) {
+        if (null == processTraceWebMvcHandler) {
             synchronized (ProcessTraceWebMvcHandler.class) {
-                if (processTraceWebMvcHandler == null) {
+                if (null == processTraceWebMvcHandler) {
                     processTraceWebMvcHandler = new ProcessTraceWebMvcHandler();
                 }
             }

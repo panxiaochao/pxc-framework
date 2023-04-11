@@ -37,6 +37,8 @@ import java.time.LocalDateTime;
 @ToString
 public class BasePo implements Serializable {
 
+    private static final long serialVersionUID = 8783258730646009478L;
+
     /**
      * 创建时间
      */

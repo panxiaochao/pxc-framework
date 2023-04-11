@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.log.core.web;
+package io.github.panxiaochao.log.core.webflux;
 
 import io.github.panxiaochao.common.utils.LocalhostUtil;
-import io.github.panxiaochao.common.utils.OptionalUtil;
 import io.github.panxiaochao.common.utils.SpringContextUtil;
 import io.github.panxiaochao.log.constant.LogConstants;
 import io.github.panxiaochao.log.context.TraceContext;
 import io.github.panxiaochao.log.core.mdc.MDCHelper;
+import io.github.panxiaochao.log.core.web.AbstractProcessTraceHandler;
 import io.github.panxiaochao.log.utils.TraceIdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -76,13 +77,13 @@ public class ProcessTraceWebFluxHandler extends AbstractProcessTraceHandler {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         // 获取Head信息
         List<String> headerList = headers.get(LogConstants.TRACE_ID);
-        String traceId = OptionalUtil.isCollectionEmpty(headerList) ? null : headerList.get(0);
+        String traceId = CollectionUtils.isEmpty(headerList) ? null : headerList.get(0);
         headerList = headers.get(LogConstants.SPAN_ID);
-        String spanId = OptionalUtil.isCollectionEmpty(headerList) ? null : headerList.get(0);
+        String spanId = CollectionUtils.isEmpty(headerList) ? null : headerList.get(0);
         headerList = headers.get(LogConstants.HOST_IP);
-        String hostIp = OptionalUtil.isCollectionEmpty(headerList) ? null : headerList.get(0);
+        String hostIp = CollectionUtils.isEmpty(headerList) ? null : headerList.get(0);
         headerList = headers.get(LogConstants.HOST_NAME);
-        String hostName = OptionalUtil.isCollectionEmpty(headerList) ? null : headerList.get(0);
+        String hostName = CollectionUtils.isEmpty(headerList) ? null : headerList.get(0);
 
         if (StringUtils.hasText(hostIp)) {
             TraceContext.setHostIp(hostIp);

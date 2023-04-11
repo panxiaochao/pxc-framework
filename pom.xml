@@ -62,6 +62,8 @@
         <module>pxc-framework-trace-log</module>
         <module>pxc-framework-log4j2</module>
         <module>pxc-framework-file-storage</module>
+        <module>pxc-framework-mybatis-flex</module>
+        <module>pxc-framework-plugin-loader</module>
     </modules>
 
     <!-- properties -->
@@ -140,7 +142,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

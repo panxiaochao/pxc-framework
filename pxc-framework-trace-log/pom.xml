@@ -18,6 +18,7 @@
     <properties>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <okhttp.version>4.10.0</okhttp.version>
+        <dubbo.version>3.1.9</dubbo.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,13 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>

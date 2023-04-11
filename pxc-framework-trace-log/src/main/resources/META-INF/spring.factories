@@ -1,5 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   io.github.panxiaochao.log.config.TraceAspectAutoConfiguration,\
+  io.github.panxiaochao.log.config.TraceDubboAutoConfiguration,\
   io.github.panxiaochao.log.config.TraceFeignAutoConfiguration,\
   io.github.panxiaochao.log.config.TraceGatewayAutoConfiguration,\
   io.github.panxiaochao.log.config.TraceHttpClientAutoConfiguration,\
