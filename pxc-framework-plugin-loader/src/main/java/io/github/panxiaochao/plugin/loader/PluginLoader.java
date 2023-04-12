@@ -83,7 +83,6 @@ public class PluginLoader extends ClassLoader implements Closeable {
         try {
             for (File each : jarFiles) {
                 JarFile jar = new JarFile(each, true);
-                jars.add(new PluginJar(jar, each));
                 Enumeration<JarEntry> entries = jar.entries();
                 while (entries.hasMoreElements()) {
                     JarEntry jarEntry = entries.nextElement();
@@ -93,6 +92,8 @@ public class PluginLoader extends ClassLoader implements Closeable {
                         names.add(className);
                     }
                 }
+                // add jars info
+                jars.add(new PluginJar(jar, each));
             }
         } catch (IOException e) {
             logger.error("Failed to load JarFile", e);
@@ -112,7 +113,7 @@ public class PluginLoader extends ClassLoader implements Closeable {
         return results;
     }
 
-    private <T> T getOrCreateSpringBean(final String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private <T> T getOrCreateSpringBean(final String className) throws ClassNotFoundException {
         if (SpringContextUtil.getInstance().existBeanByClassName(className)) {
             return SpringContextUtil.getInstance().getBeanByClassName(className);
         }
@@ -153,6 +154,7 @@ public class PluginLoader extends ClassLoader implements Closeable {
 
     @Override
     protected Class<?> findClass(final String name) throws ClassNotFoundException {
+        logger.info("Find class " + name);
         if (ability(name)) {
             return this.getParent().loadClass(name);
         }
@@ -189,6 +191,7 @@ public class PluginLoader extends ClassLoader implements Closeable {
 
     @Override
     protected Enumeration<URL> findResources(final String name) throws IOException {
+        logger.info("findResources Enumeration URL" + name);
         if (ability(name)) {
             return this.getParent().getResources(name);
         }
@@ -207,6 +210,7 @@ public class PluginLoader extends ClassLoader implements Closeable {
 
     @Override
     protected URL findResource(final String name) {
+        logger.info("findResources URL " + name);
         if (ability(name)) {
             return this.getParent().getResource(name);
         }
@@ -224,6 +228,7 @@ public class PluginLoader extends ClassLoader implements Closeable {
 
     @Override
     public void close() {
+        logger.info("Closing");
         for (PluginJar each : jars) {
             try {
                 each.jarFile.close();

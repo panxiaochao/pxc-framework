@@ -28,7 +28,7 @@ public class PluginLoaderProperties {
     /**
      * 是否开启
      */
-    private boolean enable;
+    private boolean enabled;
 
     /**
      * 插件存放路径
@@ -36,17 +36,17 @@ public class PluginLoaderProperties {
     private String path;
 
     /**
-     * 使用线程数
+     * 核心线程数
      */
-    private Integer threads = 1;
+    private int corePoolSize = 1;
 
     /**
      * 定时周期, 单位秒
      */
-    private Integer scheduleTime = 300;
+    private long scheduleTime = 300;
 
     /**
      * 延迟启动时间, 单位秒
      */
-    private Integer scheduleDelay = 30;
+    private long scheduleDelay = 30;
 }
