@@ -134,14 +134,15 @@ public class SpringContextUtil {
      *
      * @param beanDefinition the bean definition
      * @param classLoader    the class loader
-     * @return the string
+     * @return the beanName
      */
-    public String registerBean(final GenericBeanDefinition beanDefinition, final ClassLoader classLoader) {
+    public String registerBeanDefinition(final GenericBeanDefinition beanDefinition, final ClassLoader classLoader) {
         String beanClassName = beanDefinition.getBeanClassName();
         if (StringUtils.isBlank(beanClassName)) {
             throw new NullPointerException("beanDefinition.beanClassName is null");
         }
         String beanName = getBeanName(beanClassName);
+        // 创建Bean工厂
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
         beanFactory.setBeanClassLoader(classLoader);
         beanFactory.registerBeanDefinition(beanName, beanDefinition);

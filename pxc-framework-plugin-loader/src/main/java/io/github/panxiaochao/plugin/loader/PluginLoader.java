@@ -15,8 +15,8 @@
  */
 package io.github.panxiaochao.plugin.loader;
 
+import io.github.panxiaochao.common.plugin.api.IPlugin;
 import io.github.panxiaochao.common.utils.SpringContextUtil;
-import io.github.panxiaochao.plugin.api.IPlugin;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,11 +145,15 @@ public class PluginLoader extends ClassLoader implements Closeable {
                             e.annotationType().equals(Component.class) || e.annotationType().equals(Service.class));
                 }
                 if (next) {
+                    // 构造Bean定义
                     GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
                     beanDefinition.setBeanClassName(className);
                     beanDefinition.setAutowireCandidate(true);
+                    // 完全在内部起作用的bean, 不为外部所使用
                     beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-                    String beanName = SpringContextUtil.getInstance().registerBean(beanDefinition, this);
+                    // 对应bean设置唯一ID编码
+                    beanDefinition.setAttribute("id", beanId());
+                    String beanName = SpringContextUtil.getInstance().registerBeanDefinition(beanDefinition, this);
                     inst = SpringContextUtil.getInstance().getBeanByClassName(beanName);
                 }
             }
@@ -273,6 +277,11 @@ public class PluginLoader extends ClassLoader implements Closeable {
 
     private boolean ability(final String name) {
         return !names.contains(name);
+    }
+
+
+    private String beanId() {
+        return Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
     }
 
     @RequiredArgsConstructor

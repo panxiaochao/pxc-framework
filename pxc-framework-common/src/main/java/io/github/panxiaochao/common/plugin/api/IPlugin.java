@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.plugin.api;
+package io.github.panxiaochao.common.plugin.api;
 
 /**
  * {@code IPlugin}

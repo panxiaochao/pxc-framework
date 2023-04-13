@@ -15,7 +15,7 @@
  */
 package io.github.panxiaochao.plugin.loader;
 
-import io.github.panxiaochao.plugin.api.IPlugin;
+import io.github.panxiaochao.common.plugin.api.IPlugin;
 import lombok.Getter;
 import lombok.Setter;
 
