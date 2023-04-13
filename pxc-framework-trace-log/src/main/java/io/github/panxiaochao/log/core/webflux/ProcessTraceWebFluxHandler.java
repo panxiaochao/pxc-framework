@@ -104,7 +104,7 @@ public class ProcessTraceWebFluxHandler extends AbstractProcessTraceHandler {
         TraceContext.setSpanId(spanId);
         // label log
         String labelLog = LogConstants.LOGGER_PATTERN
-                .replace(LogConstants.APPLICATION_NAME, SpringContextUtil.getApplicationName())
+                .replace(LogConstants.APPLICATION_NAME, SpringContextUtil.getInstance().getApplicationName())
                 .replace(LogConstants.TRACE_ID, TraceContext.getTraceId())
                 .replace(LogConstants.SPAN_ID, TraceContext.getSpanId())
                 .replace(LogConstants.HOST_IP, TraceContext.getHostIp())

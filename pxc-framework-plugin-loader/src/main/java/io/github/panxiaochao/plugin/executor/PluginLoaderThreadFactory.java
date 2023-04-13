@@ -41,19 +41,19 @@ public class PluginLoaderThreadFactory implements ThreadFactory {
     private final int priority;
 
     public PluginLoaderThreadFactory() {
-        this.namePrefix = "pool-" + POOL_NUMBER.getAndIncrement() + "-thread-";
+        this.namePrefix = "pool-plugin-loader-" + POOL_NUMBER.getAndIncrement() + "-thread-";
         this.daemon = true;
         this.priority = Thread.NORM_PRIORITY;
     }
 
     public PluginLoaderThreadFactory(final String namePrefix) {
-        this.namePrefix = namePrefix;
+        this.namePrefix = "pool-" + namePrefix + "-" + POOL_NUMBER.getAndIncrement() + "-thread-";
         this.daemon = true;
         this.priority = Thread.NORM_PRIORITY;
     }
 
     public PluginLoaderThreadFactory(final String namePrefix, final boolean daemon) {
-        this.namePrefix = namePrefix;
+        this.namePrefix = "pool-" + namePrefix + "-" + POOL_NUMBER.getAndIncrement() + "-thread-";
         this.daemon = daemon;
         this.priority = Thread.NORM_PRIORITY;
     }

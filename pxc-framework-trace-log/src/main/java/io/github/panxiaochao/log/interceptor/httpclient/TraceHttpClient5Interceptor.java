@@ -44,7 +44,7 @@ public class TraceHttpClient5Interceptor implements HttpRequestInterceptor {
         if (StringUtils.hasText(traceId)) {
             httpRequest.addHeader(LogConstants.TRACE_ID, traceId);
             httpRequest.addHeader(LogConstants.SPAN_ID, TraceContext.generateNextSpanId());
-            httpRequest.addHeader(LogConstants.APPLICATION_NAME, SpringContextUtil.getApplicationName());
+            httpRequest.addHeader(LogConstants.APPLICATION_NAME, SpringContextUtil.getInstance().getApplicationName());
             httpRequest.addHeader(LogConstants.HOST_NAME, LocalhostUtil.getHostName());
             httpRequest.addHeader(LogConstants.HOST_IP, LocalhostUtil.getHostIp());
         } else {

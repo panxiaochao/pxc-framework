@@ -22,7 +22,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
 
 /**
@@ -31,7 +30,7 @@ import org.springframework.lang.NonNull;
  * @author Lypxc
  * @since 2022-05-05
  */
-public class SpringContextUtil implements ApplicationContextAware {
+public class SpringContextUtil {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -39,7 +38,7 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    public SpringContextUtil() {
+    private SpringContextUtil() {
     }
 
     /**
@@ -187,7 +186,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         return activeProfiles != null && activeProfiles.length > 0 ? activeProfiles[0] : null;
     }
 
-    @Override
+
     public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         LOGGER.info(">>> ApplicationContext init success");

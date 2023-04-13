@@ -16,8 +16,12 @@
 package io.github.panxiaochao.web.config;
 
 import io.github.panxiaochao.common.utils.SpringContextUtil;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 
 /**
  * {@code SpringApplicationContextConfiguration}
@@ -29,8 +33,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class SpringApplicationContextConfiguration {
 
+    /**
+     * Application context aware application context aware.
+     *
+     * @return the application context aware
+     */
     @Bean
-    public SpringContextUtil springContextUtil() {
-        return new SpringContextUtil();
+    public ApplicationContextAware applicationContextAware() {
+        return new SpringApplicationContextAware();
+    }
+
+    /**
+     * The type spring application context aware.
+     */
+    public static class SpringApplicationContextAware implements ApplicationContextAware {
+
+        @Override
+        public void setApplicationContext(@NonNull final ApplicationContext applicationContext) throws BeansException {
+            SpringContextUtil.getInstance().setApplicationContext(applicationContext);
+        }
     }
 }

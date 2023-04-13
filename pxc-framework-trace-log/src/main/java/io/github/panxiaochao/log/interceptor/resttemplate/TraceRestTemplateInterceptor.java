@@ -46,7 +46,7 @@ public class TraceRestTemplateInterceptor implements ClientHttpRequestIntercepto
         if (StringUtils.hasText(traceId)) {
             request.getHeaders().add(LogConstants.TRACE_ID, traceId);
             request.getHeaders().add(LogConstants.SPAN_ID, TraceContext.generateNextSpanId());
-            request.getHeaders().add(LogConstants.APPLICATION_NAME, SpringContextUtil.getApplicationName());
+            request.getHeaders().add(LogConstants.APPLICATION_NAME, SpringContextUtil.getInstance().getApplicationName());
             request.getHeaders().add(LogConstants.HOST_NAME, LocalhostUtil.getHostName());
             request.getHeaders().add(LogConstants.HOST_IP, LocalhostUtil.getHostIp());
         } else {

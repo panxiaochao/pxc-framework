@@ -42,7 +42,7 @@ public class TraceFeignInterceptor implements RequestInterceptor {
         if (StringUtils.hasText(traceId)) {
             requestTemplate.header(LogConstants.TRACE_ID, traceId);
             requestTemplate.header(LogConstants.SPAN_ID, TraceContext.generateNextSpanId());
-            requestTemplate.header(LogConstants.APPLICATION_NAME, SpringContextUtil.getApplicationName());
+            requestTemplate.header(LogConstants.APPLICATION_NAME, SpringContextUtil.getInstance().getApplicationName());
             requestTemplate.header(LogConstants.HOST_NAME, LocalhostUtil.getHostName());
             requestTemplate.header(LogConstants.HOST_IP, LocalhostUtil.getHostIp());
         } else {

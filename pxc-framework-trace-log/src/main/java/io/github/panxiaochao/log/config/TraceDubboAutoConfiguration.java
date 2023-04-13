@@ -19,6 +19,7 @@ import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 
 import javax.annotation.PostConstruct;
 
@@ -33,6 +34,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.PROVIDER;
  * @since 2023-04-10
  */
 @Activate(group = {PROVIDER, CONSUMER})
+@ConditionalOnClass(name = {"org.apache.dubbo.rpc.Filter"})
 public class TraceDubboAutoConfiguration implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceDubboAutoConfiguration.class);
 

@@ -15,7 +15,7 @@
  */
 package io.github.panxiaochao.plugin.service;
 
-import io.github.panxiaochao.plugin.executor.ScheduledThreadPoolExecutorManager;
+import io.github.panxiaochao.plugin.executor.PluginLoaderThreadFactory;
 import io.github.panxiaochao.plugin.loader.PluginLoader;
 import io.github.panxiaochao.plugin.loader.PluginLoaderResult;
 import io.github.panxiaochao.plugin.properties.PluginLoaderProperties;
@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,16 +40,27 @@ public class PluginLoaderService {
 
     private final PluginLoaderProperties pluginLoaderProperties;
 
-    public PluginLoaderService(PluginLoaderProperties pluginLoaderProperties, ScheduledThreadPoolExecutorManager scheduledThreadPoolExecutorManager) {
+    public PluginLoaderService(PluginLoaderProperties pluginLoaderProperties) {
         this.pluginLoaderProperties = pluginLoaderProperties;
         if (pluginLoaderProperties.isScheduledEnabled()) {
-            scheduledThreadPoolExecutorManager.scheduleAtFixedRate(
+            ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = initScheduledThreadPoolExecutor(pluginLoaderProperties);
+            scheduledThreadPoolExecutor.scheduleAtFixedRate(
                     this::loadExtendPlugins,
                     pluginLoaderProperties.getScheduleDelay(),
                     pluginLoaderProperties.getScheduleTime(),
                     TimeUnit.SECONDS
             );
         }
+    }
+
+    /**
+     * int ScheduledThreadPoolExecutor
+     *
+     * @param pluginLoaderProperties the plugin loader properties
+     * @return the bean ScheduledThreadPoolExecutor
+     */
+    private ScheduledThreadPoolExecutor initScheduledThreadPoolExecutor(PluginLoaderProperties pluginLoaderProperties) {
+        return new ScheduledThreadPoolExecutor(pluginLoaderProperties.getCorePoolSize(), new PluginLoaderThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
     public List<PluginLoaderResult> loadExtendPlugins() {

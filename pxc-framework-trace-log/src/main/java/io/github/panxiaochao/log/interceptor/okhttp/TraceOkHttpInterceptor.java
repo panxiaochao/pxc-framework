@@ -47,7 +47,7 @@ public class TraceOkHttpInterceptor implements Interceptor {
         if (StringUtils.hasText(traceId)) {
             builder.header(LogConstants.TRACE_ID, traceId);
             builder.header(LogConstants.SPAN_ID, TraceContext.generateNextSpanId());
-            builder.header(LogConstants.APPLICATION_NAME, SpringContextUtil.getApplicationName());
+            builder.header(LogConstants.APPLICATION_NAME, SpringContextUtil.getInstance().getApplicationName());
             builder.header(LogConstants.HOST_NAME, LocalhostUtil.getHostName());
             builder.header(LogConstants.HOST_IP, LocalhostUtil.getHostIp());
         } else {
