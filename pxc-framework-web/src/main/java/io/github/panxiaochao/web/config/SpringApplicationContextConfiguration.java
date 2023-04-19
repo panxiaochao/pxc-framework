@@ -34,7 +34,7 @@ import org.springframework.lang.NonNull;
 public class SpringApplicationContextConfiguration {
 
     /**
-     * Application context aware application context aware.
+     * Application context aware.
      *
      * @return the application context aware
      */

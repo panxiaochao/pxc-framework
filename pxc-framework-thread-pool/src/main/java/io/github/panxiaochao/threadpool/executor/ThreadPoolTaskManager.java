@@ -36,6 +36,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ThreadPoolTaskManager extends ThreadPoolTaskExecutor {
 
+    private static final long serialVersionUID = 2037357330354020324L;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadPoolTaskManager.class);
 
     /**
