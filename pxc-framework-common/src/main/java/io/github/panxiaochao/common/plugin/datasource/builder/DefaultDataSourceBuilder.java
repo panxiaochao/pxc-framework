@@ -21,16 +21,16 @@ import java.util.Properties;
  * @author Lypxc
  * @since 2023-04-18
  */
-@Getter
 public class DefaultDataSourceBuilder {
 
     private DefaultDataSourceBuilder() {
     }
 
     /**
-     * 数据库信息查询
+     * 数据库 查询语句
      */
     private IQuerySql querySql;
+
     /**
      * schemaName
      */
@@ -39,29 +39,28 @@ public class DefaultDataSourceBuilder {
     /**
      * 驱动连接的URL
      */
+    @Getter
     private String url;
 
     /**
      * 数据库连接用户名
      */
+    @Getter
     private String username;
 
     /**
      * 数据库连接密码
      */
+    @Getter
     private String password;
 
     /**
      * 数据源实例
-     *
-     * @since 3.5.0
      */
     private DataSource dataSource;
 
     /**
      * 数据库连接
-     *
-     * @since 3.5.0
      */
     private Connection connection;
 
@@ -79,6 +78,8 @@ public class DefaultDataSourceBuilder {
     public IQuerySql getDefaultQuerySql() {
         if (null == querySql) {
             DatabaseType databaseType = this.getDatabaseType();
+            // 返回为空就是不支持目前的目数据读取
+            Objects.requireNonNull(databaseType, "DatabaseType is not found");
             querySql = databaseType.getDefaultQuery();
         }
         return querySql;
@@ -139,12 +140,10 @@ public class DefaultDataSourceBuilder {
     }
 
     private void processProperties(Properties properties) {
-        // if (this.queryClass.getName().equals(DefaultQueryDecorator.class.getName())) {
-        //     if (this.getDatabaseType() == DatabaseType.MYSQL) {
-        //         properties.put("remarks", "true");
-        //         properties.put("useInformationSchema", "true");
-        //     }
-        // }
+        if (this.getDatabaseType() == DatabaseType.MYSQL) {
+            properties.put("remarks", "true");
+            properties.put("useInformationSchema", "true");
+        }
     }
 
     /**
@@ -152,9 +151,15 @@ public class DefaultDataSourceBuilder {
      *
      * @return 默认schema
      */
-    protected String getDefaultSchema() {
+    public String getDefaultSchema() {
         DatabaseType databaseType = this.getDatabaseType();
-        String schema = null;
+        try {
+            if (databaseType == DatabaseType.MYSQL) {
+                this.schemaName = this.connection.getCatalog();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("获取Schema报错", e);
+        }
         // if (databaseType.POSTGRE_SQL == dbType) {
         //     //pg 默认 schema=public
         //     schema = "public";
@@ -168,7 +173,7 @@ public class DefaultDataSourceBuilder {
         //     //oracle 默认 schema=username
         //     schema = this.username.toUpperCase();
         // }
-        return null;
+        return schemaName;
     }
 
 

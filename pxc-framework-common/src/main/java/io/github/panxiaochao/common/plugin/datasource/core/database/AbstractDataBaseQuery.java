@@ -3,6 +3,7 @@ package io.github.panxiaochao.common.plugin.datasource.core.database;
 import io.github.panxiaochao.common.plugin.datasource.api.IDataBaseQuery;
 import io.github.panxiaochao.common.plugin.datasource.builder.DefaultDataSourceBuilder;
 import io.github.panxiaochao.common.plugin.datasource.core.DefaultQuerySqlDecorator;
+import io.github.panxiaochao.common.plugin.datasource.core.wrapper.DatabaseMetaDataWrapper;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,13 @@ public abstract class AbstractDataBaseQuery implements IDataBaseQuery {
 
     protected final DefaultQuerySqlDecorator defaultQuerySqlDecorator;
 
-    protected final DefaultDataSourceBuilder defaultDataSourceBuilder;
+    protected final DefaultDataSourceBuilder dataSourceBuilder;
 
-    protected AbstractDataBaseQuery(DefaultDataSourceBuilder defaultDataSourceBuilder) {
-        this.defaultQuerySqlDecorator = new DefaultQuerySqlDecorator(defaultDataSourceBuilder);
-        this.defaultDataSourceBuilder = defaultDataSourceBuilder;
+    protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
+
+    protected AbstractDataBaseQuery(DefaultDataSourceBuilder dataSourceBuilder) {
+        this.defaultQuerySqlDecorator = new DefaultQuerySqlDecorator(dataSourceBuilder);
+        this.dataSourceBuilder = dataSourceBuilder;
+        this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceBuilder);
     }
 }

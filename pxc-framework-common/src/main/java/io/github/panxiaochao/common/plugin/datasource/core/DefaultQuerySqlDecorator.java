@@ -35,9 +35,9 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
 
     public DefaultQuerySqlDecorator(DefaultDataSourceBuilder defaultDataSourceBuilder) {
         this.querySql = defaultDataSourceBuilder.getDefaultQuerySql();
-        this.connection = defaultDataSourceBuilder.getConnection();
+        this.connection = defaultDataSourceBuilder.getConn();
         this.databaseType = defaultDataSourceBuilder.getDatabaseType();
-        this.schema = defaultDataSourceBuilder.getSchemaName();
+        this.schema = defaultDataSourceBuilder.getDefaultSchema();
     }
 
     /**
@@ -90,6 +90,14 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
     @Override
     public String getTableComment() {
         return querySql.getTableComment();
+    }
+
+    /**
+     * 表创建时间
+     */
+    @Override
+    public String getTableCreateTime() {
+        return querySql.getTableCreateTime();
     }
 
     /**

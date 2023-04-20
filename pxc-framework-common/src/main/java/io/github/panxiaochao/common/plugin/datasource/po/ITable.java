@@ -34,13 +34,6 @@ public interface ITable {
     String getTableComment();
 
     /**
-     * 表的默认字符集和字符列排序规则
-     *
-     * @return String
-     */
-    String getTableCollation();
-
-    /**
      * 表创建时间
      *
      * @return LocalDateTime

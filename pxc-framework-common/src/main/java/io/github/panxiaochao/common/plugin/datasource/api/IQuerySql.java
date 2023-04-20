@@ -37,6 +37,11 @@ public interface IQuerySql {
     String getTableComment();
 
     /**
+     * 表创建时间
+     */
+    String getTableCreateTime();
+
+    /**
      * 字段名称
      */
     String getColumnName();

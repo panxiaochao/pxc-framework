@@ -31,10 +31,10 @@ public interface IDataBaseQuery {
     /**
      * 根据表名查询表信息
      *
-     * @param tableName the name of the table
+     * @param queryTableName the query name of the table
      * @return the ITable
      */
-    ITable queryTable(String tableName);
+    ITable queryTable(String queryTableName);
 
     /**
      * 获取所有列信息
