@@ -1,7 +1,6 @@
 package io.github.panxiaochao.common.plugin.datasource.api;
 
 import io.github.panxiaochao.common.plugin.datasource.po.IColumn;
-import io.github.panxiaochao.common.plugin.datasource.po.ISchema;
 import io.github.panxiaochao.common.plugin.datasource.po.ITable;
 
 import java.util.List;
@@ -14,12 +13,6 @@ import java.util.List;
  * @since 2023-04-14
  */
 public interface IDataBaseQuery {
-    /**
-     * 查询数据库名字
-     *
-     * @return the Schema
-     */
-    ISchema querySchema();
 
     /**
      * 查询所有表信息

@@ -42,6 +42,11 @@ public interface IQuerySql {
     String getTableCreateTime();
 
     /**
+     * 表类型
+     */
+    String getTableType();
+
+    /**
      * 字段名称
      */
     String getColumnName();

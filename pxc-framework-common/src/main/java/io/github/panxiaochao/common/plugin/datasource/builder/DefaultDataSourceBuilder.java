@@ -182,10 +182,10 @@ public class DefaultDataSourceBuilder {
      */
     public static class Builder {
 
-        private final DefaultDataSourceBuilder defaultDataSourceBuilder;
+        private final DefaultDataSourceBuilder dataSourceBuilder;
 
         public Builder() {
-            this.defaultDataSourceBuilder = new DefaultDataSourceBuilder();
+            this.dataSourceBuilder = new DefaultDataSourceBuilder();
         }
 
         public Builder(String url, String username, String password) {
@@ -193,9 +193,9 @@ public class DefaultDataSourceBuilder {
             if (StringUtils.isBlank(url)) {
                 throw new RuntimeException("url is not null");
             }
-            this.defaultDataSourceBuilder.url = url;
-            this.defaultDataSourceBuilder.username = username;
-            this.defaultDataSourceBuilder.password = password;
+            this.dataSourceBuilder.url = url;
+            this.dataSourceBuilder.username = username;
+            this.dataSourceBuilder.password = password;
         }
 
         /**
@@ -205,18 +205,18 @@ public class DefaultDataSourceBuilder {
          */
         public Builder(DataSource dataSource) {
             this();
-            this.defaultDataSourceBuilder.dataSource = dataSource;
+            this.dataSourceBuilder.dataSource = dataSource;
             try {
                 Connection conn = dataSource.getConnection();
-                this.defaultDataSourceBuilder.url = conn.getMetaData().getURL();
+                this.dataSourceBuilder.url = conn.getMetaData().getURL();
                 try {
-                    this.defaultDataSourceBuilder.schemaName = conn.getSchema();
+                    this.dataSourceBuilder.schemaName = conn.getSchema();
                 } catch (Throwable exception) {
                     // ignore  如果使用低版本的驱动，这里由于是1.7新增的方法，所以会报错，如果驱动太低，需要自行指定了。
                     throw new RuntimeException("JDK Version is not supported");
                 }
-                this.defaultDataSourceBuilder.connection = conn;
-                this.defaultDataSourceBuilder.username = conn.getMetaData().getUserName();
+                this.dataSourceBuilder.connection = conn;
+                this.dataSourceBuilder.username = conn.getMetaData().getUserName();
             } catch (SQLException ex) {
                 throw new RuntimeException("DateSourceBuilder is error", ex);
             }
@@ -229,7 +229,7 @@ public class DefaultDataSourceBuilder {
          * @return this
          */
         public Builder schema(String schemaName) {
-            this.defaultDataSourceBuilder.schemaName = schemaName;
+            this.dataSourceBuilder.schemaName = schemaName;
             return this;
         }
 
@@ -241,7 +241,7 @@ public class DefaultDataSourceBuilder {
          * @return this
          */
         public Builder addConnectionProperty(String key, String value) {
-            this.defaultDataSourceBuilder.connectionProperties.put(key, value);
+            this.dataSourceBuilder.connectionProperties.put(key, value);
             return this;
         }
 
@@ -251,7 +251,7 @@ public class DefaultDataSourceBuilder {
          * @return 数据库配置
          */
         public DefaultDataSourceBuilder build() {
-            return this.defaultDataSourceBuilder;
+            return this.dataSourceBuilder;
         }
     }
 }

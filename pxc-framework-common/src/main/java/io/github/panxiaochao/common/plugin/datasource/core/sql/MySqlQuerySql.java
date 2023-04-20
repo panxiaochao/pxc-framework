@@ -20,9 +20,9 @@ public class MySqlQuerySql extends AbstractQuerySql {
      */
     @Override
     public String queryTablesSql() {
-        return "SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_TIME, TABLE_COMMENT " +
+        return "SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_TIME, TABLE_COMMENT, TABLE_TYPE " +
                 "FROM information_schema.TABLES " +
-                "WHERE TABLE_SCHEMA='%s' and TABLE_TYPE = 'BASE TABLE'";
+                "WHERE TABLE_SCHEMA='%s'";
     }
 
     /**
@@ -54,6 +54,11 @@ public class MySqlQuerySql extends AbstractQuerySql {
     @Override
     public String getTableCreateTime() {
         return "CREATE_TIME";
+    }
+
+    @Override
+    public String getTableType() {
+        return "TABLE_TYPE";
     }
 
     @Override

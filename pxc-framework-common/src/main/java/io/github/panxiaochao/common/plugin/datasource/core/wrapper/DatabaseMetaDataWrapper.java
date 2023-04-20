@@ -8,6 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+
 /**
  * {@code DatabaseMetaDataWrapper}
  * <p> description: 数据库元数据包装类
@@ -19,21 +23,21 @@ public class DatabaseMetaDataWrapper {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    // private final DatabaseMetaData databaseMetaData;
-    //
-    // private final String catalog;
-    //
-    // private final String schema;
+    private final DatabaseMetaData databaseMetaData;
+
+    private final String catalog;
+
+    private final String schema;
 
     public DatabaseMetaDataWrapper(DefaultDataSourceBuilder dataSourceBuilder) {
-        // try {
-        //     Connection connection = dataSourceBuilder.getConn();
-        //     this.databaseMetaData = connection.getMetaData();
-        //     this.catalog = connection.getCatalog();
-        //     this.schema = dataSourceBuilder.getDefaultSchema();
-        // } catch (SQLException e) {
-        //     throw new RuntimeException("获取元数据错误:", e);
-        // }
+        try {
+            Connection connection = dataSourceBuilder.getConn();
+            this.databaseMetaData = connection.getMetaData();
+            this.catalog = connection.getCatalog();
+            this.schema = connection.getSchema();
+        } catch (SQLException e) {
+            throw new RuntimeException("获取元数据错误:", e);
+        }
     }
 
     /**

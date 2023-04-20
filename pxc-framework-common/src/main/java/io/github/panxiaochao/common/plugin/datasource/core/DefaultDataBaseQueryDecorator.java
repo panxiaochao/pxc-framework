@@ -1,13 +1,10 @@
 package io.github.panxiaochao.common.plugin.datasource.core;
 
 import io.github.panxiaochao.common.plugin.datasource.builder.DefaultDataSourceBuilder;
+import io.github.panxiaochao.common.plugin.datasource.builder.DefaultRulesBuilder;
 import io.github.panxiaochao.common.plugin.datasource.core.database.AbstractDataBaseQuery;
-import io.github.panxiaochao.common.plugin.datasource.core.database.TableMeta;
 import io.github.panxiaochao.common.plugin.datasource.po.IColumn;
-import io.github.panxiaochao.common.plugin.datasource.po.ISchema;
 import io.github.panxiaochao.common.plugin.datasource.po.ITable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -22,21 +19,10 @@ import java.util.List;
  * @since 2023-04-18
  */
 public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
+    // private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    public DefaultDataBaseQueryDecorator(DefaultDataSourceBuilder defaultDataSourceBuilder) {
-        super(defaultDataSourceBuilder);
-    }
-
-    /**
-     * 查询数据库名字
-     *
-     * @return the Schema
-     */
-    @Override
-    public ISchema querySchema() {
-        return null;
+    public DefaultDataBaseQueryDecorator(DefaultDataSourceBuilder dataSourceBuilder, DefaultRulesBuilder rulesBuilder) {
+        super(dataSourceBuilder, rulesBuilder);
     }
 
     /**
@@ -45,20 +31,20 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
      * @return the list of tables
      */
     @Override
-    public List<ITable> queryTables() {
+    public List<? extends ITable> queryTables() {
         List<ITable> tables = new ArrayList<>();
-        final String queryTableSql = defaultQuerySqlDecorator.queryTablesSql();
-        defaultQuerySqlDecorator.executeQuery(queryTableSql, resultSet -> {
-            String tableName = resultSet.getString(defaultQuerySqlDecorator.getTableName());
+        final String queryTableSql = querySqlDecorator.queryTablesSql();
+        querySqlDecorator.executeQuery(queryTableSql, resultSet -> {
+            String tableName = resultSet.getString(querySqlDecorator.getTableName());
             if (StringUtils.hasText(tableName)) {
-                String tableComment = resultSet.getComment(defaultQuerySqlDecorator.getTableComment());
-                // 跳过视图 VIEW
-                if (!"VIEW".equals(tableComment)) {
+                String tableType = resultSet.getString(querySqlDecorator.getTableType());
+                // 判断表类型, 是否跳过视图
+                if (!(rulesBuilder.isSkipView() && "VIEW".equalsIgnoreCase(tableType))) {
                     ITable tableMeta = databaseMetaDataWrapper.buildTableMeta(
-                            resultSet.getString(defaultQuerySqlDecorator.getSchemaName()),
+                            resultSet.getString(querySqlDecorator.getSchemaName()),
                             tableName,
-                            tableComment,
-                            resultSet.getString(defaultQuerySqlDecorator.getTableCreateTime())
+                            resultSet.getComment(querySqlDecorator.getTableComment()),
+                            resultSet.getString(querySqlDecorator.getTableCreateTime())
                     );
                     tables.add(tableMeta);
                 }
@@ -75,13 +61,13 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
      */
     @Override
     public ITable queryTable(String queryTableName) {
-        List<ITable> tables = this.queryTables();
-        ITable tableMeta = new TableMeta();
+        List<? extends ITable> tables = this.queryTables();
+        ITable tableMeta = null;
         if (!CollectionUtils.isEmpty(tables)) {
             tableMeta = tables.stream()
                     .filter(s -> s.getTableName().equalsIgnoreCase(queryTableName))
                     .findFirst()
-                    .orElseGet(TableMeta::new);
+                    .orElse(null);
         }
         return tableMeta;
     }

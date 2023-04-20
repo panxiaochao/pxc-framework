@@ -101,6 +101,14 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
     }
 
     /**
+     * 表类型
+     */
+    @Override
+    public String getTableType() {
+        return querySql.getTableType();
+    }
+
+    /**
      * 字段名称
      */
     @Override
