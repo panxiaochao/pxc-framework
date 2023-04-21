@@ -39,12 +39,12 @@ public class PageObjectResponse<T> {
     /**
      * 分页信息
      */
-    @Schema(name = "pagination", description = "分页信息")
+    @Schema(description = "分页信息")
     private Pagination pagination;
 
     /**
      * 对象数据
      */
-    @Schema(name = "data", description = "对象数据")
+    @Schema(description = "对象数据")
     private T data;
 }

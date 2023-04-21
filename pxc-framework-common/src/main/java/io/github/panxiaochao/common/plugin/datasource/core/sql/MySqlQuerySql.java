@@ -26,6 +26,18 @@ public class MySqlQuerySql extends AbstractQuerySql {
     }
 
     /**
+     * 表信息查询 SQL
+     *
+     * @param tableName 数据库 表名
+     */
+    @Override
+    public String queryTablesSql(String tableName) {
+        return "SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_TIME, TABLE_COMMENT, TABLE_TYPE " +
+                "FROM information_schema.TABLES " +
+                "WHERE TABLE_SCHEMA='%s' AND TABLE_NAME='" + tableName + "'";
+    }
+
+    /**
      * 表字段信息查询 SQL
      */
     @Override

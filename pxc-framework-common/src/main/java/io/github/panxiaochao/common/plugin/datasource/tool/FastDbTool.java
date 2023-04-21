@@ -3,6 +3,7 @@ package io.github.panxiaochao.common.plugin.datasource.tool;
 import io.github.panxiaochao.common.plugin.datasource.builder.DefaultDataSourceBuilder;
 import io.github.panxiaochao.common.plugin.datasource.builder.DefaultRulesBuilder;
 import io.github.panxiaochao.common.plugin.datasource.core.DefaultDataBaseQueryDecorator;
+import io.github.panxiaochao.common.plugin.datasource.po.IColumn;
 import io.github.panxiaochao.common.plugin.datasource.po.ITable;
 
 import java.util.List;
@@ -68,5 +69,15 @@ public class FastDbTool {
      */
     public ITable queryTables(String tableName) {
         return dataBaseQueryDecorator.queryTable(tableName);
+    }
+
+    /**
+     * 根据表名 获取数据库字段
+     *
+     * @param tableName the name of the table
+     * @return the columns
+     */
+    public List<IColumn> queryColumns(String tableName) {
+        return dataBaseQueryDecorator.queryTableColumns(tableName);
     }
 }

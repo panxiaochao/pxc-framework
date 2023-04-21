@@ -1,5 +1,7 @@
 package io.github.panxiaochao.common.plugin.datasource.po;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * {@code IColumn}
  * <p> description: 数据库 字段接口
@@ -7,6 +9,7 @@ package io.github.panxiaochao.common.plugin.datasource.po;
  * @author Lypxc
  * @since 2023-04-14
  */
+@Schema(description = "数据库字段")
 public interface IColumn {
 
     /**
@@ -14,6 +17,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "数据库名")
     String getSchema();
 
     /**
@@ -21,6 +25,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "表名")
     String getTableName();
 
     /**
@@ -28,6 +33,7 @@ public interface IColumn {
      *
      * @return boolean
      */
+    @Schema(description = "是否主键")
     boolean isPrimaryKey();
 
     /**
@@ -35,6 +41,7 @@ public interface IColumn {
      *
      * @return boolean
      */
+    @Schema(description = "是否自增")
     boolean isAutoIncrement();
 
     /**
@@ -42,6 +49,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "字段名称")
     String getColumnName();
 
     /**
@@ -49,6 +57,7 @@ public interface IColumn {
      *
      * @return int
      */
+    @Schema(description = "列的索引")
     int getOrdinalPosition();
 
     /**
@@ -56,6 +65,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "字段默认值")
     String getColumnDefault();
 
     /**
@@ -63,6 +73,7 @@ public interface IColumn {
      *
      * @return boolean
      */
+    @Schema(description = "是否空")
     boolean isNullable();
 
     /**
@@ -70,6 +81,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "字段数据类型")
     String getDataType();
 
     /**
@@ -83,6 +95,7 @@ public interface IColumn {
      *
      * @return int
      */
+    @Schema(description = "字段长度")
     int getColumnLength();
 
     /**
@@ -90,6 +103,7 @@ public interface IColumn {
      *
      * @return int
      */
+    @Schema(description = "字段精度")
     int getScale();
 
     /**
@@ -97,6 +111,7 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "字段数据类型，包含精度")
     String getColumnType();
 
     /**
@@ -104,5 +119,6 @@ public interface IColumn {
      *
      * @return String
      */
+    @Schema(description = "字段注释")
     String getColumnComment();
 }

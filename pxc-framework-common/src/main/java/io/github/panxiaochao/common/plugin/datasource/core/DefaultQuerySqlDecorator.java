@@ -51,6 +51,17 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
     }
 
     /**
+     * 表信息查询 SQL
+     *
+     * @param tableName 数据库表名
+     */
+    @Override
+    public String queryTablesSql(String tableName) {
+        String tablesSql = querySql.queryTablesSql(tableName);
+        return String.format(tablesSql, this.schema);
+    }
+
+    /**
      * 扩展查询字段信息，通过表名
      *
      * @param tableName 数据库表名
@@ -139,6 +150,22 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
     @Override
     public String getColumnKey() {
         return querySql.getColumnKey();
+    }
+
+    /**
+     * 是否自增
+     */
+    @Override
+    public boolean isAutoIncrement(ResultSet resultSet) {
+        return querySql.isAutoIncrement(resultSet);
+    }
+
+    /**
+     * 是否主键
+     */
+    @Override
+    public boolean isPrimaryKey(ResultSet resultSet) {
+        return querySql.isPrimaryKey(resultSet);
     }
 
     /**

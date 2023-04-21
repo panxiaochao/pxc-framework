@@ -3,7 +3,7 @@ package io.github.panxiaochao.common.plugin.datasource.core.wrapper;
 import io.github.panxiaochao.common.plugin.datasource.enums.DatabaseType;
 import io.github.panxiaochao.common.utils.StringPoolUtil;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ public class ResultSetWrapper {
 
     public String getString(String columnLabel) {
         try {
-            return resultSet.getString(columnLabel);
+            return StringUtils.hasText(columnLabel) ? resultSet.getString(columnLabel) : StringPoolUtil.EMPTY;
         } catch (SQLException sqlException) {
             throw new RuntimeException(String.format("读取[%s]字段出错!", columnLabel), sqlException);
         }
@@ -50,7 +50,7 @@ public class ResultSetWrapper {
      * @return 注释
      */
     public String getComment(String columnLabel) {
-        return StringUtils.isNotBlank(columnLabel) ? formatComment(getString(columnLabel)) : StringPoolUtil.EMPTY;
+        return StringUtils.hasText(columnLabel) ? formatComment(getString(columnLabel)) : StringPoolUtil.EMPTY;
     }
 
     /**
@@ -58,6 +58,6 @@ public class ResultSetWrapper {
      * @return 格式化内容
      */
     private String formatComment(String comment) {
-        return StringUtils.isBlank(comment) ? StringPoolUtil.EMPTY : comment.replaceAll("\r\n", "\t");
+        return StringUtils.hasText(comment) ? comment.replaceAll("\r\n", "\t") : StringPoolUtil.EMPTY;
     }
 }

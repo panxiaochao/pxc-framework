@@ -1,5 +1,7 @@
 package io.github.panxiaochao.common.plugin.datasource.po;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * @author Lypxc
  * @since 2023-04-14
  */
+@Schema(description = "数据库表")
 public interface ITable {
 
     /**
@@ -17,6 +20,7 @@ public interface ITable {
      *
      * @return String
      */
+    @Schema(description = "数据库名")
     String getSchema();
 
     /**
@@ -24,6 +28,7 @@ public interface ITable {
      *
      * @return String
      */
+    @Schema(description = "表名")
     String getTableName();
 
     /**
@@ -31,6 +36,7 @@ public interface ITable {
      *
      * @return String
      */
+    @Schema(description = "表注释")
     String getTableComment();
 
     /**
@@ -38,6 +44,7 @@ public interface ITable {
      *
      * @return LocalDateTime
      */
+    @Schema(description = "表创建时间")
     LocalDateTime getCreateTime();
 
     /**
@@ -45,5 +52,6 @@ public interface ITable {
      *
      * @return the list of columns
      */
+    @Schema(description = "数据库字段数组")
     List<? extends IColumn> getColumns();
 }

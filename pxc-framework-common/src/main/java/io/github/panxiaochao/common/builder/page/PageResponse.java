@@ -41,12 +41,12 @@ public class PageResponse<T> {
     /**
      * 分页信息
      */
-    @Schema(name = "pagination", description = "分页信息")
+    @Schema(description = "分页信息")
     private Pagination pagination;
 
     /**
      * 列表数据
      */
-    @Schema(name = "list", description = "列表数据")
+    @Schema(description = "列表数据")
     private List<T> list;
 }

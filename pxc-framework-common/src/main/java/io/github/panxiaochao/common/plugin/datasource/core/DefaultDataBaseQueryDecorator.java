@@ -22,7 +22,6 @@ import java.util.Map;
  * @since 2023-04-18
  */
 public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
-    // private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public DefaultDataBaseQueryDecorator(DefaultDataSourceBuilder dataSourceBuilder, DefaultRulesBuilder rulesBuilder) {
         super(dataSourceBuilder, rulesBuilder);
@@ -35,27 +34,38 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
      */
     @Override
     public List<ITable> queryTables() {
+        return queryTables("");
+    }
+
+    /**
+     * 根据表名查询数据库表
+     *
+     * @param tableName the query name of the table
+     * @return the list of tables
+     */
+    private List<ITable> queryTables(String tableName) {
         List<ITable> tables = new ArrayList<>();
         try {
-            final String queryTableSql = querySqlDecorator.queryTablesSql();
+            final String queryTableSql =
+                    StringUtils.hasText(tableName) ? querySqlDecorator.queryTablesSql(tableName) : querySqlDecorator.queryTablesSql();
             querySqlDecorator.executeQuery(queryTableSql, resultSetWrapper -> {
-                String tableName = resultSetWrapper.getString(querySqlDecorator.getTableName());
-                if (StringUtils.hasText(tableName)) {
-                    String tableType = resultSetWrapper.getString(querySqlDecorator.getTableType());
-                    // 判断表类型, 是否跳过视图
-                    if (!(rulesBuilder.isSkipView() && "VIEW".equalsIgnoreCase(tableType))) {
-                        ITable tableMeta = databaseMetaDataWrapper.buildTableMeta(
-                                resultSetWrapper.getString(querySqlDecorator.getSchemaName()),
-                                tableName,
-                                resultSetWrapper.getComment(querySqlDecorator.getTableComment()),
-                                resultSetWrapper.getString(querySqlDecorator.getTableCreateTime())
-                        );
-                        tables.add(tableMeta);
-                    }
+                String iTableName = resultSetWrapper.getString(querySqlDecorator.getTableName());
+                String tableType = resultSetWrapper.getString(querySqlDecorator.getTableType());
+                // 判断表类型, 是否跳过视图
+                if (!(rulesBuilder.isSkipView() && "VIEW".equalsIgnoreCase(tableType))) {
+                    ITable tableMeta = databaseMetaDataWrapper.buildTableMeta(
+                            resultSetWrapper.getString(querySqlDecorator.getSchemaName()),
+                            iTableName,
+                            resultSetWrapper.getComment(querySqlDecorator.getTableComment()),
+                            resultSetWrapper.getString(querySqlDecorator.getTableCreateTime())
+                    );
+                    tables.add(tableMeta);
                 }
             });
-            // 加载套表字段
-            tables.forEach(this::fillTableColumns);
+            if (rulesBuilder.isFillColumns()) {
+                // 加载套表字段
+                tables.forEach(this::fillTableColumns);
+            }
         } catch (Exception e) {
             logger.error("queryTables is error", e);
         } finally {
@@ -68,20 +78,14 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
     /**
      * 根据表名查询表信息
      *
-     * @param queryTableName the query name of the table
+     * @param tableName the query name of the table
      * @return the ITable
      */
     @Override
-    public ITable queryTable(String queryTableName) {
-        List<ITable> tables = this.queryTables();
-        ITable tableMeta = null;
-        if (!CollectionUtils.isEmpty(tables)) {
-            tableMeta = tables.stream()
-                    .filter(s -> s.getTableName().equalsIgnoreCase(queryTableName))
-                    .findFirst()
-                    .orElseGet(TableMeta::new);
-        }
-        return tableMeta;
+    public ITable queryTable(String tableName) {
+        // 查询的结果 只有一条
+        List<ITable> tables = this.queryTables(tableName);
+        return CollectionUtils.isEmpty(tables) ? new TableMeta() : tables.get(0);
     }
 
     /**
@@ -128,6 +132,7 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
             querySqlDecorator.executeQuery(queryColumnSql, resultSetWrapper -> {
                 String columnName = resultSetWrapper.getString(querySqlDecorator.getColumnName());
                 ColumnMeta column = columnsMap.get(columnName);
+                column.setPrimaryKey(querySqlDecorator.isPrimaryKey(resultSetWrapper.getResultSet()));
                 column.setSchema(resultSetWrapper.getString(querySqlDecorator.getSchemaName()));
                 column.setTableName(resultSetWrapper.getString(querySqlDecorator.getTableName()));
                 column.setOrdinalPosition(resultSetWrapper.getInt("ORDINAL_POSITION"));
@@ -135,7 +140,7 @@ public class DefaultDataBaseQueryDecorator extends AbstractDataBaseQuery {
                 columns.add(column);
             });
         } catch (Exception e) {
-            logger.error("queryTableColumns is error", e);
+            logger.error("fillColumns is error", e);
         }
         return columns;
     }

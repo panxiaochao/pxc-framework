@@ -90,7 +90,6 @@ public class DatabaseMetaDataWrapper {
                 String columnName = resultSet.getString("COLUMN_NAME");
                 column.setColumnName(columnName);
                 column.setPrimaryKey(primaryKeys.contains(columnName));
-                System.out.println(columnName + " " + resultSet.getInt("DATA_TYPE") + " " + resultSet.getString("TYPE_NAME"));
                 column.setDataType(resultSet.getString("TYPE_NAME"));
                 column.setColumnLength(resultSet.getInt("COLUMN_SIZE"));
                 column.setScale(resultSet.getInt("DECIMAL_DIGITS"));
@@ -115,7 +114,7 @@ public class DatabaseMetaDataWrapper {
      * @return 格式化内容
      */
     private String formatComment(String comment) {
-        return org.apache.commons.lang3.StringUtils.isBlank(comment) ? StringPoolUtil.EMPTY : comment.replaceAll("\r\n", "\t");
+        return StringUtils.hasText(comment) ? comment.replaceAll("\r\n", "\t") : StringPoolUtil.EMPTY;
     }
 
 }

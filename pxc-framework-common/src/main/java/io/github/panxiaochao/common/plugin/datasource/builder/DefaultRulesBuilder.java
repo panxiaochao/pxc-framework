@@ -20,6 +20,13 @@ public class DefaultRulesBuilder {
     @Getter
     private boolean skipView;
 
+    /**
+     * <p>查询表的时候是否填充字段，默认 false
+     * <p>主要是考虑在数量很多表的情况下，有性能问题
+     */
+    @Getter
+    private boolean fillColumns;
+
     public static class Builder {
 
         private final DefaultRulesBuilder rulesBuilder;
@@ -32,10 +39,19 @@ public class DefaultRulesBuilder {
          * 开启跳过视图
          *
          * @return this
-         * @since 3.5.0
          */
         public Builder enableSkipView() {
             this.rulesBuilder.skipView = true;
+            return this;
+        }
+
+        /**
+         * 开启填充数据库表字段
+         *
+         * @return this
+         */
+        public Builder enableFillColumns() {
+            this.rulesBuilder.fillColumns = true;
             return this;
         }
 
@@ -45,6 +61,5 @@ public class DefaultRulesBuilder {
         public DefaultRulesBuilder build() {
             return this.rulesBuilder;
         }
-
     }
 }

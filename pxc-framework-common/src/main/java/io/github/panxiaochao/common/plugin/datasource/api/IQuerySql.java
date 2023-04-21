@@ -17,6 +17,11 @@ public interface IQuerySql {
     String queryTablesSql();
 
     /**
+     * 表信息查询 SQL
+     */
+    String queryTablesSql(String tableName);
+
+    /**
      * 表字段信息查询 SQL
      */
     String queryColumnSql();
