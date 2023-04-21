@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * {@code TableMeta}
- * <p> description:
+ * <p> description: 数字库表 元数据
  *
  * @author Lypxc
  * @since 2023-04-20

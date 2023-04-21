@@ -72,7 +72,7 @@ public interface IQuerySql {
      * @param resultSet resultSet
      * @return 主键是否为identity
      */
-    boolean isKeyIdentity(ResultSet resultSet);
+    boolean isAutoIncrement(ResultSet resultSet);
 
     /**
      * 是否是主键

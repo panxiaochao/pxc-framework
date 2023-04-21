@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -57,7 +58,7 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
      */
     public String queryColumnSql(String tableName) {
         String columnsSql = querySql.queryColumnSql();
-        return String.format(columnsSql, this.schema, tableName);
+        return String.format(columnsSql.replace("#schema", this.schema), tableName);
     }
 
     /**
@@ -163,5 +164,15 @@ public class DefaultQuerySqlDecorator extends AbstractQuerySql {
         } catch (SQLException e) {
             logger.error("execute is error", e);
         }
+    }
+
+    public void closeConnection() {
+        Optional.ofNullable(connection).ifPresent((con) -> {
+            try {
+                con.close();
+            } catch (SQLException sqlException) {
+                logger.error("close is error", sqlException);
+            }
+        });
     }
 }

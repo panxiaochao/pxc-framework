@@ -56,7 +56,7 @@ public class FastDbTool {
      *
      * @return the list of tables
      */
-    public List<? extends ITable> queryTables() {
+    public List<ITable> queryTables() {
         return dataBaseQueryDecorator.queryTables();
     }
 

@@ -20,12 +20,12 @@ public abstract class AbstractQuerySql implements IQuerySql {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public boolean isKeyIdentity(ResultSet results) {
+    public boolean isAutoIncrement(ResultSet resultSet) {
         return false;
     }
 
     @Override
-    public boolean isPrimaryKey(ResultSet results) {
+    public boolean isPrimaryKey(ResultSet resultSet) {
         return false;
     }
 }

@@ -35,6 +35,14 @@ public class ResultSetWrapper {
         }
     }
 
+    public int getInt(String columnLabel) {
+        try {
+            return resultSet.getInt(columnLabel);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(String.format("读取[%s]字段出错!", columnLabel), sqlException);
+        }
+    }
+
     /**
      * 获取格式化注释
      *

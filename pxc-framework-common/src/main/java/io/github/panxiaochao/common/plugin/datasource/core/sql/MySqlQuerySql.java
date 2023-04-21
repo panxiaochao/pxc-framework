@@ -32,7 +32,8 @@ public class MySqlQuerySql extends AbstractQuerySql {
     public String queryColumnSql() {
         return "SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE, COLLATION_NAME, COLUMN_TYPE, COLUMN_KEY, EXTRA, COLUMN_COMMENT " +
                 "FROM information_schema.COLUMNS " +
-                "WHERE TABLE_SCHEMA='#schema' and TABLE_NAME='%s'";
+                "WHERE TABLE_SCHEMA='#schema' and TABLE_NAME='%s' " +
+                "ORDER BY ORDINAL_POSITION";
     }
 
     @Override
@@ -44,7 +45,6 @@ public class MySqlQuerySql extends AbstractQuerySql {
     public String getTableName() {
         return "TABLE_NAME";
     }
-
 
     @Override
     public String getTableComment() {
@@ -66,18 +66,15 @@ public class MySqlQuerySql extends AbstractQuerySql {
         return "COLUMN_NAME";
     }
 
-
     @Override
     public String getColumnType() {
         return "COLUMN_TYPE";
     }
 
-
     @Override
     public String getColumnComment() {
         return "COLUMN_COMMENT";
     }
-
 
     @Override
     public String getColumnKey() {
@@ -91,7 +88,7 @@ public class MySqlQuerySql extends AbstractQuerySql {
      * @return boolean
      */
     @Override
-    public boolean isKeyIdentity(ResultSet resultSet) {
+    public boolean isAutoIncrement(ResultSet resultSet) {
         try {
             return "auto_increment".equals(resultSet.getString("Extra"));
         } catch (SQLException e) {

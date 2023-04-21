@@ -28,14 +28,14 @@ public interface IColumn {
      *
      * @return boolean
      */
-    boolean getPrimaryKey();
+    boolean isPrimaryKey();
 
     /**
      * 是否自增
      *
      * @return boolean
      */
-    boolean getAutoIncrement();
+    boolean isAutoIncrement();
 
     /**
      * 字段 名称
@@ -63,14 +63,14 @@ public interface IColumn {
      *
      * @return boolean
      */
-    boolean getNullable();
+    boolean isNullable();
 
     /**
      * 字段数据类型
      *
      * @return String
      */
-    String getColumnDataType();
+    String getDataType();
 
     /**
      * 获取列长度
@@ -93,11 +93,11 @@ public interface IColumn {
     int getScale();
 
     /**
-     * 字段数据类型名
+     * 字段数据类型, 全称
      *
      * @return String
      */
-    String getColumnDataTypeName();
+    String getColumnType();
 
     /**
      * 字段注释
