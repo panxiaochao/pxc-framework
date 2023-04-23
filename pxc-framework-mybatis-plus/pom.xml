@@ -11,7 +11,7 @@
     </parent>
     <artifactId>pxc-framework-mybatis-plus</artifactId>
     <packaging>jar</packaging>
-    <description>Mybatis-Plus configuration jar</description>
+    <description>Mybatis-Plus Configuration Jar</description>
 
     <dependencies>
         <dependency>

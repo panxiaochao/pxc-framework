@@ -31,6 +31,12 @@
 
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-database-metadata</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-file-storage</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>

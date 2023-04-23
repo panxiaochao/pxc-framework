@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-springdoc</artifactId>
     <packaging>jar</packaging>
 
-    <description>SpringDoc with swagger3 configuration jar</description>
+    <description>SpringDoc with swagger3 Configuration Jar</description>
 
     <properties>
         <knife4j-dependencies.version>4.1.0</knife4j-dependencies.version>

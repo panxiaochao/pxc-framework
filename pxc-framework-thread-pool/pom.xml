@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-thread-pool</artifactId>
     <packaging>jar</packaging>
 
-    <description>Framework Schedule configuration jar</description>
+    <description>Framework Schedule Configuration Jar</description>
 
     <dependencies>
         <dependency>

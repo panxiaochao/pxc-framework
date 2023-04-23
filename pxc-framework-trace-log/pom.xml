@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-trace-log</artifactId>
     <packaging>jar</packaging>
 
-    <description>Trace Log configuration jar</description>
+    <description>Trace Log Configuration Jar</description>
 
     <properties>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>

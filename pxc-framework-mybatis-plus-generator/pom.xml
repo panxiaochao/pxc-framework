@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-mybatis-plus-generator</artifactId>
     <packaging>jar</packaging>
 
-    <description>Mybatis-Plus Generator configuration jar</description>
+    <description>Mybatis-Plus Generator Configuration Jar</description>
 
     <dependencies>
         <dependency>

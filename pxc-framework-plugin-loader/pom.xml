@@ -11,7 +11,7 @@
 
     <artifactId>pxc-framework-plugin-loader</artifactId>
     <packaging>jar</packaging>
-    <description>Plugin Loader configuration jar</description>
+    <description>Plugin Loader Configuration Jar</description>
 
     <dependencies>
         <dependency>

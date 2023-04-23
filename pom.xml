@@ -62,8 +62,9 @@
         <module>pxc-framework-trace-log</module>
         <module>pxc-framework-log4j2</module>
         <module>pxc-framework-file-storage</module>
-        <module>pxc-framework-mybatis-flex</module>
         <module>pxc-framework-plugin-loader</module>
+        <module>pxc-framework-ip2region</module>
+        <module>pxc-framework-database-metadata</module>
     </modules>
 
     <!-- properties -->

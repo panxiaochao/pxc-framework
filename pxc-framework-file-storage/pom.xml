@@ -12,7 +12,7 @@
 
     <artifactId>pxc-framework-file-storage</artifactId>
     <packaging>jar</packaging>
-    <description>File storage configuration jar</description>
+    <description>File storage Configuration Jar</description>
 
     <properties>
         <commons-fileupload.version>1.5</commons-fileupload.version>

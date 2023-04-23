@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-redis</artifactId>
     <packaging>jar</packaging>
 
-    <description>Redis configuration jar</description>
+    <description>Redis Configuration Jar</description>
 
     <dependencies>
         <dependency>

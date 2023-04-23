@@ -13,7 +13,7 @@
     <artifactId>pxc-framework-web</artifactId>
     <packaging>jar</packaging>
 
-    <description>WebMvc configuration jar</description>
+    <description>WebMvc Configuration Jar</description>
 
     <dependencies>
         <dependency>
