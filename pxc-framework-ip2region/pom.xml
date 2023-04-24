@@ -14,4 +14,21 @@
 
     <description>Ip2region Configuration Jar</description>
 
+    <properties>
+        <ip2region.version>2.7.0</ip2region.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.github.panxiaochao.ip2region.config.Ip2regionAutoConfiguration
