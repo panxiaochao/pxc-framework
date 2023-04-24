@@ -43,6 +43,12 @@
 
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-ip2region</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-trace-log</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>

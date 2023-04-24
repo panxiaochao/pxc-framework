@@ -16,19 +16,35 @@
 package io.github.panxiaochao.web.config;
 
 import io.github.panxiaochao.web.filter.CorsFilter;
+import io.github.panxiaochao.web.filter.RequestWrapperFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * {@code CorsConfiguration}
- * <p> description:
+ * <p> description: Filter configuration
  *
  * @author Lypxc
  * @since 2023-03-07
  */
 @Configuration
-public class CorsConfiguration {
+public class FilterConfiguration {
+
+    /**
+     * RequestWrapper Filter
+     *
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    public FilterRegistrationBean<RequestWrapperFilter> requestWrapperFilter() {
+        FilterRegistrationBean<RequestWrapperFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new RequestWrapperFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("requestWrapperFilter");
+        registrationBean.setOrder(1);
+        return registrationBean;
+    }
 
     /**
      * Cors Filter
@@ -41,7 +57,7 @@ public class CorsConfiguration {
         registrationBean.setFilter(new CorsFilter());
         registrationBean.addUrlPatterns("/*");
         registrationBean.addServletNames("corsFilter");
-        registrationBean.setOrder(1);
+        registrationBean.setOrder(2);
         return registrationBean;
     }
 }
