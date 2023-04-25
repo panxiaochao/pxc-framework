@@ -33,19 +33,20 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
+@Schema(description = "请求排序")
 public class OrderItems implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * 排序字段
      */
-    @Schema(name = "column", description = "排序字段")
+    @Schema(description = "排序字段")
     private String column;
 
     /**
      * 是否正序排列，默认 true
      */
-    @Schema(name = "asc", description = "是否正序排列，默认true")
+    @Schema(description = "是否正序排列，默认true")
     private boolean asc = true;
 
     public OrderItems() {

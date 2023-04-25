@@ -28,30 +28,31 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Schema(description = "分页对象")
 public class Pagination {
 
     /**
      * 页码
      */
-    @Schema(name = "pageNo", description = "页码，不小于1")
+    @Schema(description = "页码，不小于1")
     private long pageNo = 1;
 
     /**
      * 页数
      */
-    @Schema(name = "pageSize", description = "页数")
+    @Schema(description = "页数")
     private long pageSize = 10;
 
     /**
      * 总数
      */
-    @Schema(name = "total", description = "总数")
+    @Schema(description = "总数")
     private long total = 0;
 
     /**
      * 总页码数
      */
-    @Schema(name = "totalPages", description = "总页码数")
+    @Schema(description = "总页码数")
     private long totalPages = 0;
 
     public Pagination() {

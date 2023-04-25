@@ -6,14 +6,14 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4-SNAPSHOT</version>
+        <version>2022-2.7-1.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>pxc-framework-db-document</artifactId>
     <packaging>jar</packaging>
 
-    <description>Db Document configuration jar</description>
+    <description>Db Document Configuration Jar</description>
 
     <properties>
         <screw-core.version>1.0.5</screw-core.version>

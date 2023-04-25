@@ -6,13 +6,13 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4-SNAPSHOT</version>
+        <version>2022-2.7-1.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>pxc-framework-file-storage</artifactId>
     <packaging>jar</packaging>
-    <description>File storage configuration jar</description>
+    <description>File storage Configuration Jar</description>
 
     <properties>
         <commons-fileupload.version>1.5</commons-fileupload.version>
@@ -54,6 +54,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

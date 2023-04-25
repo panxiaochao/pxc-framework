@@ -30,34 +30,35 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Schema(description = "分页请求参数")
 public class RequestPage<T> {
     /**
      * 页号
      */
-    @Schema(name = "pageNo", description = "页码，不小于1")
+    @Schema(description = "页码，不小于1")
     private long pageNo = 1;
 
     /**
      * 页数
      */
-    @Schema(name = "pageSize", description = "页数")
+    @Schema(description = "页数")
     private long pageSize = 10;
 
     /**
      * 获取排序信息
      */
-    @Schema(name = "orderItems", description = "排序字段")
+    @Schema(description = "排序字段")
     private List<OrderItems> orderItems;
 
     /**
      * 对象
      */
-    @Schema(name = "paramsObject", description = "请求参数对象")
-    private T paramsObject = null;
+    @Schema(description = "请求参数对象")
+    private T paramsObject;
 
     /**
      * 是否查询总数
      */
-    @Schema(name = "searchCount", description = "页码")
+    @Schema(description = "页码")
     private boolean searchCount = true;
 }

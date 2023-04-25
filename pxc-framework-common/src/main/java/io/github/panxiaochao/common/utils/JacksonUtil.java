@@ -127,7 +127,7 @@ public class JacksonUtil {
             try {
                 return OBJECT_MAPPER.writeValueAsString(obj);
             } catch (JsonProcessingException e) {
-                LOGGER.error("json序列化出错：{},{}", obj, e);
+                LOGGER.error("json序列化出错：{}", obj, e);
                 return null;
             }
         }
@@ -144,7 +144,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, tClass);
         } catch (IOException e) {
-            LOGGER.error("json解析出错：{},{}", json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -159,7 +159,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(inputStream, tClass);
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + inputStream.toString(), e);
+            LOGGER.error("json解析出错：{}", inputStream.toString(), e);
             return null;
         }
     }
@@ -174,7 +174,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.writeValueAsBytes(obj);
         } catch (JsonProcessingException e) {
-            LOGGER.error("json解析出错：" + obj, e);
+            LOGGER.error("json解析出错：{}", obj, e);
             return null;
         }
     }
@@ -191,7 +191,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(bytes, tClass);
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + new String(bytes), e);
+            LOGGER.error("json解析出错：{}", new String(bytes), e);
             return null;
         }
     }
@@ -208,7 +208,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, typeReference);
         } catch (Exception e) {
-            LOGGER.error("json解析出错：{},{}", json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -225,7 +225,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, typeReference);
         } catch (IOException e) {
-            LOGGER.error("json解析出错：{},{}", json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -242,7 +242,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.constructType(cls));
         } catch (Exception e) {
-            LOGGER.error("json解析出错：{},{}", json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -257,7 +257,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, eClass));
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -272,7 +272,7 @@ public class JacksonUtil {
             return OBJECT_MAPPER.readValue(json, new TypeReference<T>() {
             });
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -289,7 +289,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.getTypeFactory().constructMapType(Map.class, kClass, vClass));
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }
@@ -304,7 +304,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, type);
         } catch (IOException e) {
-            LOGGER.error("json解析出错：" + json, e);
+            LOGGER.error("json解析出错：{}", json, e);
             return null;
         }
     }

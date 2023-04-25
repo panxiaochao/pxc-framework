@@ -15,13 +15,14 @@
  */
 package io.github.panxiaochao.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
-
-import java.util.Objects;
+import org.springframework.lang.NonNull;
 
 /**
  * <p> 获取Spring容器工具类
@@ -29,78 +30,166 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2022-05-05
  */
-@Component
-public class SpringContextUtil implements ApplicationContextAware {
-    private final static Logger LOGGER = LoggerFactory.getLogger(SpringContextUtil.class);
-    private static ApplicationContext APPLICATIONCONTEXT = null;
+public class SpringContextUtil {
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        if (Objects.isNull(SpringContextUtil.APPLICATIONCONTEXT)) {
-            SpringContextUtil.APPLICATIONCONTEXT = applicationContext;
-        }
-        if (Objects.nonNull(SpringContextUtil.APPLICATIONCONTEXT)) {
-            LOGGER.info(">>> ApplicationContext init success");
-        }
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+    private static final SpringContextUtil INSTANCE = new SpringContextUtil();
+
+    private ApplicationContext applicationContext;
+
+    private SpringContextUtil() {
     }
 
     /**
+     * get SpringContextUtil.
+     *
+     * @return SpringContextUtil instance
+     */
+    public static SpringContextUtil getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * get ApplicationContext instance
+     *
      * @return ApplicationContext
      */
-    public static ApplicationContext getApplicationContext() {
-        checkApplicationContext();
-        return APPLICATIONCONTEXT;
+    public ApplicationContext getApplicationContext() {
+        return this.applicationContext;
     }
 
     /**
-     * @param name
-     * @param <T>
-     * @return T
+     * @param beanName bean name
+     * @param <T>      type
+     * @return bean class
      */
-    public static <T> T getBean(String name) {
-        return (T) getApplicationContext().getBean(name);
+    @SuppressWarnings("all")
+    public <T> T getBean(String beanName) {
+        return (T) this.applicationContext.getBean(beanName);
     }
 
     /**
-     * @param tClass
-     * @param <T>
-     * @return T
+     * @param type type
+     * @param <T>  class
+     * @return bean class
      */
-    public static <T> T getBean(Class<T> tClass) {
-        return getApplicationContext().getBean(tClass);
+    public <T> T getBean(Class<T> type) {
+        return this.applicationContext.getBean(type);
     }
 
     /**
+     * Get bean by class name.
      *
+     * @param className the class name
+     * @param <T>       type
+     * @return bean by class name
      */
-    private static void checkApplicationContext() {
-        if (APPLICATIONCONTEXT == null) {
-            throw new IllegalStateException("ApplicationContext 未注入");
-        }
-    }
-
-    public static String getProperty(String key) {
-        if (null == APPLICATIONCONTEXT) {
+    @SuppressWarnings("all")
+    public <T> T getBeanByClassName(final String className) {
+        String beanName = this.getBeanName(className);
+        try {
+            return this.getBean(beanName);
+        } catch (BeansException e) {
             return null;
         }
-        return APPLICATIONCONTEXT.getEnvironment().getProperty(key);
     }
 
-    public static String getApplicationName() {
-        return getProperty("spring.application.name");
+    /**
+     * Exist spring bean boolean.
+     *
+     * @param beanName bean name
+     * @return the boolean
+     */
+    public boolean existBean(final String beanName) {
+        return this.applicationContext.containsBean(beanName);
     }
 
-    public static String[] getActiveProfiles() {
-        if (null == APPLICATIONCONTEXT) {
-            return null;
+    /**
+     * Exist spring bean boolean.
+     *
+     * @param className class name
+     * @return the boolean
+     */
+    public boolean existBeanByClassName(final String className) {
+        String beanName = this.getBeanName(className);
+        return this.applicationContext.containsBean(beanName);
+    }
+
+    /**
+     * get bean name
+     *
+     * @param className class name
+     * @return class name
+     */
+    public String getBeanName(final String className) {
+        String name = className.substring(className.lastIndexOf(".") + 1);
+        String start = name.substring(0, 1);
+        String end = name.substring(1);
+        return start.toLowerCase() + end;
+    }
+
+    /**
+     * Register bean.
+     *
+     * @param beanDefinition the bean definition
+     * @param classLoader    the class loader
+     * @return the beanName
+     */
+    public String registerBeanDefinition(final GenericBeanDefinition beanDefinition, final ClassLoader classLoader) {
+        String beanClassName = beanDefinition.getBeanClassName();
+        if (StringUtils.isBlank(beanClassName)) {
+            throw new NullPointerException("beanDefinition.beanClassName is null");
         }
-        return APPLICATIONCONTEXT.getEnvironment().getActiveProfiles();
+        String beanName = getBeanName(beanClassName);
+        // 创建Bean工厂
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+        beanFactory.setBeanClassLoader(classLoader);
+        beanFactory.registerBeanDefinition(beanName, beanDefinition);
+        return beanName;
     }
 
-    public static String getActiveProfile() {
+    /**
+     * find properties by key
+     *
+     * @param key key
+     * @return properties
+     */
+    public String getProperty(String key) {
+        return this.applicationContext.getEnvironment().getProperty(key);
+    }
+
+    /**
+     * get application name
+     *
+     * @return application name
+     */
+    public String getApplicationName() {
+        return this.getProperty("spring.application.name");
+    }
+
+    /**
+     * get Active profile
+     *
+     * @return the array of active profiles
+     */
+    public String[] getActiveProfiles() {
+        return this.applicationContext.getEnvironment().getActiveProfiles();
+    }
+
+    /**
+     * get current Active profile
+     *
+     * @return the current active profile
+     */
+    public String getActiveProfile() {
         final String[] activeProfiles = getActiveProfiles();
         return activeProfiles != null && activeProfiles.length > 0 ? activeProfiles[0] : null;
     }
 
 
+    public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+        LOGGER.info(">>> ApplicationContext init success");
+    }
 }

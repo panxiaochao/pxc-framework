@@ -6,14 +6,14 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4-SNAPSHOT</version>
+        <version>2022-2.7-1.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>pxc-framework-redis</artifactId>
     <packaging>jar</packaging>
 
-    <description>Redis configuration jar</description>
+    <description>Redis Configuration Jar</description>
 
     <dependencies>
         <dependency>

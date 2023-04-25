@@ -6,7 +6,7 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4-SNAPSHOT</version>
+        <version>2022-2.7-1.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,19 @@
 
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-database-metadata</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-file-storage</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-ip2region</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 
@@ -50,6 +62,18 @@
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-mybatis-plus</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-mybatis-plus-generator</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-plugin-loader</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 

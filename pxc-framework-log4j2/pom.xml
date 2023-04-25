@@ -6,14 +6,14 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4-SNAPSHOT</version>
+        <version>2022-2.7-1.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>pxc-framework-log4j2</artifactId>
     <packaging>jar</packaging>
 
-    <description>Log4j2 configuration jar</description>
+    <description>Log4j2 Configuration Jar</description>
 
     <properties>
         <log4j2.version>2.19.0</log4j2.version>

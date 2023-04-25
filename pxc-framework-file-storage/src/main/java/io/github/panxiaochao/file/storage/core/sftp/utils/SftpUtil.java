@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2022-2023 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.panxiaochao.file.storage.core.sftp.utils;
 
 import com.jcraft.jsch.*;
@@ -134,7 +149,6 @@ public class SftpUtil {
      * @param passphrase     口令
      * @param timeout        链接超时时间
      * @return Session
-     * @
      */
     public static Session openSession(String userName, String password, String host, int port, String privateKeyFile, String passphrase, int timeout) {
         Session session = createSession(userName, password, host, port, privateKeyFile, passphrase);
@@ -212,7 +226,6 @@ public class SftpUtil {
      * @param session     session
      * @param channelType ChannelType
      * @return Channel
-     * @
      */
     public static Channel createChannel(Session session, ChannelType channelType) {
         try {
@@ -231,7 +244,6 @@ public class SftpUtil {
      *
      * @param session session
      * @return ChannelSftp
-     * @
      */
     public static ChannelSftp createSftp(Session session) {
         return (ChannelSftp) createChannel(session, ChannelType.SFTP);
@@ -242,7 +254,6 @@ public class SftpUtil {
      *
      * @param session session
      * @return ChannelShell
-     * @
      */
     public static ChannelShell createShell(Session session) {
         return (ChannelShell) createChannel(session, ChannelType.SHELL);
@@ -255,7 +266,6 @@ public class SftpUtil {
      * @param channelType channelType
      * @param timeout     timeout
      * @return Session
-     * @
      */
     public static Channel openChannel(Session session, ChannelType channelType, int timeout) {
         Channel channel = createChannel(session, channelType);
@@ -277,7 +287,6 @@ public class SftpUtil {
      * @param session session
      * @param timeout timeout
      * @return Session
-     * @
      */
     public static ChannelSftp openSftpChannel(Session session, int timeout) {
         return (ChannelSftp) openChannel(session, ChannelType.SFTP, timeout);
@@ -289,7 +298,6 @@ public class SftpUtil {
      * @param session session
      * @param timeout timeout
      * @return Session
-     * @
      */
     public static ChannelShell openShellChannel(Session session, int timeout) {
         return (ChannelShell) openChannel(session, ChannelType.SHELL, timeout);

@@ -52,11 +52,8 @@ public abstract class AbstractProcessTraceHandler {
     public void processAfterTrace() {
     }
 
-    ;
-
     /**
      * 清除日志记录
      */
     public abstract void cleanTrace();
-
 }

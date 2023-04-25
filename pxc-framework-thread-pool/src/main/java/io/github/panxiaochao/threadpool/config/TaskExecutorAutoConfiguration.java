@@ -21,7 +21,6 @@ import io.github.panxiaochao.threadpool.properties.ThreadPoolProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,7 +41,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableConfigurationProperties(ThreadPoolProperties.class)
 @ConditionalOnProperty(name = ThreadPoolProperties.THREAD_POOL_ENABLED, havingValue = "true")
 @ConditionalOnWebApplication
-public class TaskExecutorAutoConfiguration implements InitializingBean {
+public class TaskExecutorAutoConfiguration {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TaskExecutorAutoConfiguration.class);
 
@@ -58,6 +57,7 @@ public class TaskExecutorAutoConfiguration implements InitializingBean {
      */
     @Bean(name = "threadPoolTaskManager")
     public ThreadPoolTaskManager threadPoolTaskManager() {
+        LOGGER.info(">>> ThreadPoolTaskManager is init success");
         return new ThreadPoolTaskManager(threadPoolProperties);
     }
 
@@ -68,11 +68,7 @@ public class TaskExecutorAutoConfiguration implements InitializingBean {
      */
     @Bean(name = "threadPoolTaskSchedulerManager")
     public ThreadPoolTaskSchedulerManager threadPoolTaskSchedulerManager() {
+        LOGGER.info(">>> ThreadPoolTaskSchedulerManager is init success");
         return new ThreadPoolTaskSchedulerManager(threadPoolProperties);
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        LOGGER.info(">>> TaskExecutor is init success <<<");
     }
 }

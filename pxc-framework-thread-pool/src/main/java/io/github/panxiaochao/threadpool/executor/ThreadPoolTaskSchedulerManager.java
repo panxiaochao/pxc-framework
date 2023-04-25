@@ -38,6 +38,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 public class ThreadPoolTaskSchedulerManager extends ThreadPoolTaskScheduler {
 
+    private static final long serialVersionUID = -3482428057958160591L;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(ThreadPoolTaskSchedulerManager.class);
 
     /**
