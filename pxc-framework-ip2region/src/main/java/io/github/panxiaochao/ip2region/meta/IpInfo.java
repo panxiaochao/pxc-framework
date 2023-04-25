@@ -54,6 +54,10 @@ public class IpInfo {
      * 运营商
      */
     private String isp;
+    /**
+     * ip
+     */
+    private String ip;
 
     /**
      * 拼接完整的地址

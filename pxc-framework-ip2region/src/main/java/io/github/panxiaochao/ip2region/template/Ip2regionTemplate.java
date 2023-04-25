@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 /**
@@ -41,23 +40,6 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
 
     private Searcher searcher;
 
-    private static final byte[] SHIFT_INDEX = {24, 16, 8, 0};
-
-    /**
-     * ip 位置 搜索
-     *
-     * @param ip ip
-     * @return 位置
-     */
-    public IpInfo memorySearch(long ip) {
-        try {
-            return IpInfoUtil.toIpInfo(searcher.search(ip));
-        } catch (IOException e) {
-            logger.error("memorySearch ip {} is error", ip, e);
-        }
-        return null;
-    }
-
     /**
      * ip 位置 搜索
      *
@@ -65,34 +47,14 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
      * @return 位置
      */
     public IpInfo memorySearch(String ip) {
-        String[] ipV4Part = IpInfoUtil.getIpV4Part(ip);
-        if (ipV4Part.length == 4) {
-            return memorySearch(getIpAdder(ipV4Part));
+        try {
+            IpInfo ipInfo = IpInfoUtil.toIpInfo(searcher.search(ip));
+            ipInfo.setIp(ip);
+            return ipInfo;
+        } catch (Exception e) {
+            logger.error("memorySearch ip {} is error", ip, e);
         }
         return null;
-    }
-
-    private long getIpAdder(String[] ipParts) {
-        long ipAdder = 0;
-        for (int i = 0; i < ipParts.length; i++) {
-            int val = Integer.parseInt(ipParts[i]);
-            if (val > 255) {
-                throw new IllegalArgumentException("ip part `" + ipParts[i] + "` should be less then 256");
-            }
-            ipAdder |= ((long) val << SHIFT_INDEX[i]);
-        }
-        return ipAdder & 0xFFFFFFFFL;
-    }
-
-    /**
-     * 读取 ipInfo 中的信息
-     *
-     * @param ip       ip
-     * @param function Function
-     * @return 地址
-     */
-    public String getInfo(long ip, Function<IpInfo, String> function) {
-        return IpInfoUtil.readInfo(memorySearch(ip), function);
     }
 
     /**
@@ -105,47 +67,6 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
     public String getInfo(String ip, Function<IpInfo, String> function) {
         return IpInfoUtil.readInfo(memorySearch(ip), function);
     }
-
-    /**
-     * 获取地址信息
-     *
-     * @param ip ip
-     * @return 地址
-     */
-    public String getAddress(long ip) {
-        return getInfo(ip, IpInfo::getAddress);
-    }
-
-    /**
-     * 获取地址信息
-     *
-     * @param ip ip
-     * @return 地址
-     */
-    public String getAddress(String ip) {
-        return getInfo(ip, IpInfo::getAddress);
-    }
-
-    /**
-     * 获取地址信息包含 isp
-     *
-     * @param ip ip
-     * @return 地址
-     */
-    public String getAddressAndIsp(long ip) {
-        return getInfo(ip, IpInfo::getAddressAndIsp);
-    }
-
-    /**
-     * 获取地址信息包含 isp
-     *
-     * @param ip ip
-     * @return 地址
-     */
-    public String getAddressAndIsp(String ip) {
-        return getInfo(ip, IpInfo::getAddressAndIsp);
-    }
-
 
     @Override
     public void afterPropertiesSet() {
