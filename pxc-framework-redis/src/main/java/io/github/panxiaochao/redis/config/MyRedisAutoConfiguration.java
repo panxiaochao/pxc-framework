@@ -53,6 +53,8 @@ import java.util.Objects;
 @ConditionalOnWebApplication
 public class MyRedisAutoConfiguration {
 
+    private static final String STRING_EMPTY = "";
+
     /**
      * 单实例, 返回 RedissonClient
      *
@@ -63,7 +65,7 @@ public class MyRedisAutoConfiguration {
     public RedissonClient redissonClient(ObjectProvider<RedisProperties> redisPropertiesObjectProvider) {
         RedisProperties redisProperties = redisPropertiesObjectProvider.getIfAvailable();
         Objects.requireNonNull(redisProperties, () -> "spring.redis properties is null!");
-        String address = String.join("", "redis://", redisProperties.getHost(), ":" + redisProperties.getPort());
+        String address = String.join(STRING_EMPTY, "redis://", redisProperties.getHost(), ":" + redisProperties.getPort());
         Config config = new Config();
         config.useSingleServer()
                 .setAddress(address)

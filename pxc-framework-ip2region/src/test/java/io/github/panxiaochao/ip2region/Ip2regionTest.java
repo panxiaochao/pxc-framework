@@ -16,11 +16,11 @@ import java.io.IOException;
  */
 public class Ip2regionTest {
     public static void main(String[] args) throws IOException {
-        String ip = "127.0.0.1";
+        String ip = "61.130.8.5";
         Searcher searcher = null;
         try {
             searcher = Ip2regionUtil.loadSearcherFromFile("classpath:ip2region/ip2region.xdb");
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 long sTime = System.nanoTime();
                 String region = searcher.search(ip);
                 IpInfo ipInfo = IpInfoUtil.toIpInfo(region);
