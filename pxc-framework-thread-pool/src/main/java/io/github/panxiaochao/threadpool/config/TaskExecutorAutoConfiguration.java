@@ -39,7 +39,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @EnableScheduling
 @EnableConfigurationProperties(ThreadPoolProperties.class)
-@ConditionalOnProperty(name = ThreadPoolProperties.THREAD_POOL_ENABLED, havingValue = "true")
+@ConditionalOnProperty(name = "spring.thread.enabled", havingValue = "true")
 @ConditionalOnWebApplication
 public class TaskExecutorAutoConfiguration {
 

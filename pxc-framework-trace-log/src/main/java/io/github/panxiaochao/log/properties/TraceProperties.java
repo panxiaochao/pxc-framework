@@ -39,5 +39,5 @@ public class TraceProperties {
     /**
      * 是否开启
      */
-    public static final String PXC_TRACE_ENABLE = "pxc.trace.enabled";
+    private boolean enabled;
 }

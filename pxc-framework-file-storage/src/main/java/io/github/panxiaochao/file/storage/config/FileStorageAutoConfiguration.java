@@ -40,7 +40,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(FileStorageProperties.class)
-@ConditionalOnProperty(name = FileStorageProperties.FILE_STORAGE_ENABLE, havingValue = "true")
+@ConditionalOnProperty(name = "file-storage.enabled", havingValue = "true")
 @AutoConfigureBefore(name = "org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration")
 public class FileStorageAutoConfiguration {
 

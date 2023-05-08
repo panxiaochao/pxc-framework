@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,9 +43,9 @@ public class RestTemplateUtil {
             }
         });
         // 加入拦截器
-        // List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-        // interceptors.add(new LoggingClientHttpRequestInterceptor());
-        // REST_TEMPLATE.setInterceptors(interceptors);
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+        interceptors.add(new LoggingClientHttpRequestInterceptor());
+        REST_TEMPLATE.setInterceptors(interceptors);
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setReadTimeout(10 * 1000);
         factory.setConnectTimeout(10 * 1000);

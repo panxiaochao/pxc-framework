@@ -49,7 +49,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SpringDocProperties.class)
-@ConditionalOnProperty(name = SpringDocProperties.SPRING_DOC_ENABLE, matchIfMissing = true)
+@ConditionalOnProperty(name = "springdoc.api-docs.enabled", matchIfMissing = true)
 @ConditionalOnWebApplication
 public class SpringDocAutoConfiguration {
 

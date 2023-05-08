@@ -40,7 +40,7 @@ public class ThreadPoolProperties {
     /**
      * 是否开启多线程
      */
-    public static final String THREAD_POOL_ENABLED = THREAD_POOL_PREFIX + ".enabled";
+    private boolean enabled;
 
     /**
      * 多线程任务配置
