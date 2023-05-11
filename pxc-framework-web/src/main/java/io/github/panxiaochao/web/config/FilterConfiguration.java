@@ -32,21 +32,6 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfiguration {
 
     /**
-     * RequestWrapper Filter
-     *
-     * @return FilterRegistrationBean
-     */
-    @Bean
-    public FilterRegistrationBean<RequestWrapperFilter> requestWrapperFilter() {
-        FilterRegistrationBean<RequestWrapperFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new RequestWrapperFilter());
-        registrationBean.addUrlPatterns("/*");
-        registrationBean.addServletNames("requestWrapperFilter");
-        registrationBean.setOrder(1);
-        return registrationBean;
-    }
-
-    /**
      * Cors Filter
      *
      * @return FilterRegistrationBean
@@ -57,6 +42,21 @@ public class FilterConfiguration {
         registrationBean.setFilter(new CorsFilter());
         registrationBean.addUrlPatterns("/*");
         registrationBean.addServletNames("corsFilter");
+        registrationBean.setOrder(1);
+        return registrationBean;
+    }
+
+    /**
+     * RequestWrapper Filter
+     *
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    public FilterRegistrationBean<RequestWrapperFilter> requestWrapperFilter() {
+        FilterRegistrationBean<RequestWrapperFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new RequestWrapperFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("requestWrapperFilter");
         registrationBean.setOrder(2);
         return registrationBean;
     }

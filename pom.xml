@@ -65,6 +65,7 @@
         <module>pxc-framework-plugin-loader</module>
         <module>pxc-framework-ip2region</module>
         <module>pxc-framework-database-metadata</module>
+        <module>pxc-framework-minio</module>
     </modules>
 
     <!-- properties -->
