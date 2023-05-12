@@ -27,9 +27,14 @@ public class MinioProperties {
     private boolean enabled;
 
     /**
-     * Minio 端点地址URL
+     * Minio 端点地址，不包含端口
      */
     private String endpoint;
+
+    /**
+     * 端口
+     */
+    private int port;
 
     /**
      * 秘钥
@@ -40,6 +45,11 @@ public class MinioProperties {
      * 秘匙
      */
     private String secretKey;
+
+    /**
+     * schema 是否是 https
+     */
+    private boolean secure = false;
 
     /**
      * 桶名

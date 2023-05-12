@@ -1,6 +1,7 @@
 package io.github.panxiaochao.minio.template;
 
 import io.github.panxiaochao.minio.properties.MinioProperties;
+import io.github.panxiaochao.minio.utils.MinioUtil;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -41,10 +42,13 @@ public class MinioTemplate {
     public MinioTemplate(MinioProperties minioProperties) {
         this.minioProperties = minioProperties;
         this.bucketName = minioProperties.getBucket();
-        this.minioClient = MinioClient.builder()
-                .endpoint(minioProperties.getEndpoint())
-                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
-                .build();
+        this.minioClient = MinioUtil.createMinioClient(
+                minioProperties.getEndpoint(),
+                minioProperties.getPort(),
+                minioProperties.isSecure(),
+                minioProperties.getAccessKey(),
+                minioProperties.getSecretKey()
+        );
     }
 
     // ---------------------------- 下面是方法 ----------------------------
