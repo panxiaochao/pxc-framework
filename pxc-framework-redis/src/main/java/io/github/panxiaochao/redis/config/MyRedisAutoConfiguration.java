@@ -19,12 +19,15 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import io.github.panxiaochao.redis.aop.CustomizeDefaultPointcutAdvisor;
+import io.github.panxiaochao.redis.properties.MyRedisProperties;
 import io.github.panxiaochao.redis.service.IRedisService;
 import io.github.panxiaochao.redis.service.impl.RedisServiceImpl;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -32,6 +35,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -49,7 +53,7 @@ import java.util.Objects;
  */
 @Configuration
 @AutoConfigureBefore(name = "org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration")
-@ConditionalOnProperty(prefix = "spring.redis")
+@EnableConfigurationProperties(MyRedisProperties.class)
 @ConditionalOnWebApplication
 public class MyRedisAutoConfiguration {
 
@@ -83,8 +87,8 @@ public class MyRedisAutoConfiguration {
      */
     @Bean("redisTemplate")
     @ConditionalOnBean(RedissonClient.class)
-    public RedisTemplate<Object, Object> redisTemplate(RedissonClient redissonClient) {
-        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate(RedissonClient redissonClient) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         RedissonConnectionFactory redissonConnectionFactory = new RedissonConnectionFactory(redissonClient);
         template.setConnectionFactory(redissonConnectionFactory);
         // 使用Jackson2JsonRedisSerialize 替换默认序列化(默认采用的是JDK序列化)
@@ -101,13 +105,25 @@ public class MyRedisAutoConfiguration {
         // Hash的key也采用StringRedisSerializer的序列化方式
         template.setHashKeySerializer(stringRedisSerializer);
         template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        // afterPropertiesSet
         template.afterPropertiesSet();
         return template;
     }
 
     @Bean
     @ConditionalOnBean(RedisTemplate.class)
-    public IRedisService redisService(RedisTemplate<Object, Object> redisTemplate) {
+    public IRedisService redisService(RedisTemplate<String, Object> redisTemplate) {
         return new RedisServiceImpl(redisTemplate);
+    }
+
+    /**
+     * 前置环绕
+     *
+     * @return DefaultPointcutAdvisor
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.redis", name = "accessRateLimit", havingValue = "true")
+    public DefaultPointcutAdvisor doBefore(RedisTemplate<String, Object> redisTemplate) {
+        return new CustomizeDefaultPointcutAdvisor(redisTemplate).doBefore();
     }
 }

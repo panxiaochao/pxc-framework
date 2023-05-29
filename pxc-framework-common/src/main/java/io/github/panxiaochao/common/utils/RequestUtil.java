@@ -18,8 +18,13 @@ package io.github.panxiaochao.common.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.InetAddress;
 
 /**
  * {@code RequestUtil}
@@ -37,6 +42,22 @@ public class RequestUtil {
      */
     public static final String UNKNOWN = "unknown";
 
+    private static final String LOCAL_HOST_IP_1 = "0:0:0:0:0:0:0:1";
+
+    private static final String LOCAL_HOST_IP_2 = "127.0.0.1";
+
+    /**
+     * 获取请求 IP
+     *
+     * <p>使用Nginx等反向代理软件， 则不能通过request.getRemoteAddr()获取IP地址
+     * <p>使用Nginx等反向代理软件， 则不能通过request.getRemoteAddr()获取IP地址如果使用了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP地址，X-Forwarded-For中第一个非unknown的有效IP字符串，则为真实IP地址
+     *
+     * @return 返回IP
+     */
+    public static String ofRequestIp() {
+        return ofRequestIp(getRequest());
+    }
+
     /**
      * 获取请求 IP
      *
@@ -49,21 +70,52 @@ public class RequestUtil {
     public static String ofRequestIp(HttpServletRequest request) {
         String ip = null;
         try {
-            ip = request.getHeader("x-forwarded-for");
+            // 以下两个获取在k8s中，将真实的客户端IP，放到了x-Original-Forwarded-For。
+            // 而将 WAF 的回源地址放到了x-Forwarded-For 了。
+            ip = request.getHeader("X-Original-Forwarded-For");
+            if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("X-Forwarded-For");
+            }
+            // 获取 nginx 等代理的 IP
+            if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("x-forwarded-for");
+            }
             if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("Proxy-Client-IP");
+                if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
+                    return null;
+                }
             }
-            if (!StringUtils.hasText(ip) || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+            if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("WL-Proxy-Client-IP");
+                if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
+                    return null;
+                }
             }
             if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("HTTP_CLIENT_IP");
+                if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
+                    return null;
+                }
             }
             if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+                if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
+                    return null;
+                }
             }
             if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
                 ip = request.getRemoteAddr();
+            }
+            if (LOCAL_HOST_IP_1.equalsIgnoreCase(ip) || LOCAL_HOST_IP_2.equalsIgnoreCase(ip)) {
+                // 根据网卡取本机配置的IP
+                InetAddress iNet = null;
+                try {
+                    iNet = InetAddress.getLocalHost();
+                } catch (Exception e) {
+                    logger.error("getClientIp error", e);
+                }
+                ip = iNet.getHostAddress();
             }
         } catch (Exception e) {
             logger.error("IPUtils ERROR ", e);
@@ -75,5 +127,60 @@ public class RequestUtil {
 //			}
 //		}
         return ip;
+    }
+
+    /**
+     * validate the ip
+     *
+     * @param ip ip
+     * @return true or false
+     */
+    private static boolean isValidAddress(String ip) {
+        if (ip == null) {
+            return false;
+        }
+        for (int i = 0; i < ip.length(); ++i) {
+            char ch = ip.charAt(i);
+            if (ch >= '0' && ch <= '9') {
+                // ignored
+            } else if (ch >= 'A' && ch <= 'F') {
+                // ignored
+            } else if (ch >= 'a' && ch <= 'f') {
+                // ignored
+            } else if (ch == '.' || ch == ':') {
+                //
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * obtain HttpServletRequest
+     *
+     * @return HttpServletRequest
+     */
+    public static HttpServletRequest getRequest() {
+        return getRequestAttributes().getRequest();
+    }
+
+    /**
+     * obtain HttpServletResponse
+     *
+     * @return HttpServletResponse
+     */
+    public static HttpServletResponse getResponse() {
+        return getRequestAttributes().getResponse();
+    }
+
+    /**
+     * obtain ServerRequestAttributes
+     *
+     * @return ServletRequestAttributes
+     */
+    public static ServletRequestAttributes getRequestAttributes() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        return (ServletRequestAttributes) attributes;
     }
 }

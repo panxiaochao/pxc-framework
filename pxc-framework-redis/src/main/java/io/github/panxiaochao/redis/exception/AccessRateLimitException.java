@@ -13,47 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.file.storage.excetion;
+package io.github.panxiaochao.redis.exception;
 
 import io.github.panxiaochao.common.exception.BaseRuntimeException;
 import io.github.panxiaochao.common.ienums.IResponseEnum;
 
 /**
- * {@code FileStorageRuntimeException}
+ * {@code AccessRateLimitException}
  * <p> description:
  *
  * @author Lypxc
- * @since 2023-03-13
+ * @since 2023-05-26
  */
-public class FileStorageRuntimeException extends BaseRuntimeException {
+public class AccessRateLimitException extends BaseRuntimeException {
+    private static final long serialVersionUID = -2293325649017181202L;
 
-    private static final long serialVersionUID = 3535550296824509656L;
-
-    public FileStorageRuntimeException() {
+    public AccessRateLimitException() {
         super();
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum) {
         super(responseEnum);
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum, Throwable cause) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum, Throwable cause) {
         super(responseEnum, cause);
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum, String message) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum, String message) {
         super(responseEnum, message);
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum, String message, Throwable cause) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum, String message, Throwable cause) {
         super(responseEnum, message, cause);
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum, Object[] args, String message) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum, Object[] args, String message) {
         super(responseEnum, args, message);
     }
 
-    public FileStorageRuntimeException(IResponseEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
+    public AccessRateLimitException(IResponseEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
         super(responseEnum, args, message, cause);
     }
 }
