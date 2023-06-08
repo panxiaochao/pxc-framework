@@ -23,16 +23,8 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import io.github.panxiaochao.common.jsonserializer.NullValueJsonSerializer;
+import io.github.panxiaochao.common.jackson.CustomizerJavaTimeModule;
+import io.github.panxiaochao.common.jackson.jsonserializer.NullValueJsonSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -78,8 +66,8 @@ public class JacksonUtil {
     private static final String DATE_TIME_FORMAT = "HH:mm:ss";
 
     static {
+        OBJECT_MAPPER.setLocale(Locale.CHINA);
         // 对象的所有字段全部列入，还是其他的选项，可以忽略null等
-        // Since 2.9 use
         OBJECT_MAPPER.setDefaultPropertyInclusion(Include.ALWAYS);
         // 设置时区
         OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -90,18 +78,7 @@ public class JacksonUtil {
         // 忽略未知属性，防止json字符串中存在，java对象中不存在对应属性的情况出现错误
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 注册一个时间序列化及反序列化的处理模块，用于解决jdk8中localDateTime等的序列化问题
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        /** 序列化配置,针对java8 时间 **/
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        javaTimeModule.addSerializer(Instant.class, InstantSerializer.INSTANCE);
-        /** 反序列化配置,针对java8 时间 **/
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        javaTimeModule.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
-        OBJECT_MAPPER.registerModule(javaTimeModule);
+        OBJECT_MAPPER.registerModule(new CustomizerJavaTimeModule());
         // 空值处理
         OBJECT_MAPPER.getSerializerProvider().setNullValueSerializer(NullValueJsonSerializer.INSTANCE);
     }

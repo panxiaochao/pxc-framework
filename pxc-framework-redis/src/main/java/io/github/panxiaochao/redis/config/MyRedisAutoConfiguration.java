@@ -25,7 +25,9 @@ import io.github.panxiaochao.redis.service.IRedisService;
 import io.github.panxiaochao.redis.service.impl.RedisServiceImpl;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.ObjectProvider;
@@ -41,6 +43,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -71,10 +74,14 @@ public class MyRedisAutoConfiguration {
         Objects.requireNonNull(redisProperties, () -> "spring.redis properties is null!");
         String address = String.join(STRING_EMPTY, "redis://", redisProperties.getHost(), ":" + redisProperties.getPort());
         Config config = new Config();
-        config.useSingleServer()
-                .setAddress(address)
-                .setPassword(redisProperties.getPassword())
-                .setDatabase(redisProperties.getDatabase());
+        SingleServerConfig singleServerConfig =
+                config.useSingleServer()
+                        .setAddress(address)
+                        .setDatabase(redisProperties.getDatabase());
+        if (StringUtils.hasText(redisProperties.getPassword())) {
+            singleServerConfig.setPassword(redisProperties.getPassword());
+        }
+        config.setCodec(new StringCodec());
         return Redisson.create(config);
     }
 

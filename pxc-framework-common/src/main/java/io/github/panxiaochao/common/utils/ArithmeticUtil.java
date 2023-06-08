@@ -16,6 +16,7 @@
 package io.github.panxiaochao.common.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * {@code ArithmeticUtils}
@@ -38,9 +39,8 @@ public final class ArithmeticUtil {
      * @param x
      * @param y
      * @return int
-     * @throws ArithmeticException
      */
-    public static int addAndCheck(int x, int y) throws ArithmeticException {
+    public static int addAndCheck(int x, int y) {
         long s = (long) x + (long) y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
             throw new ArithmeticException(String.format("overflow in addition: %d + %d", x, y));
@@ -52,9 +52,8 @@ public final class ArithmeticUtil {
      * @param a
      * @param b
      * @return long
-     * @throws ArithmeticException
      */
-    public static long addAndCheck(long a, long b) throws ArithmeticException {
+    public static long addAndCheck(long a, long b) {
         final long result = a + b;
         if (!((a ^ b) < 0 | (a ^ result) >= 0)) {
             throw new ArithmeticException(String.format("overflow in addition: %d + %d", a, b));
@@ -103,7 +102,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.add(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.add(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -147,7 +146,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.subtract(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.subtract(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -205,7 +204,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.multiply(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.multiply(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -236,7 +235,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -254,7 +253,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v1);
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -269,7 +268,7 @@ public final class ArithmeticUtil {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
         BigDecimal b = new BigDecimal(Double.toString(v));
-        return b.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b.setScale(scale, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**
@@ -285,7 +284,7 @@ public final class ArithmeticUtil {
                     "The scale must be a positive integer or zero");
         }
         BigDecimal b = new BigDecimal(v);
-        return b.setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b.setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -303,7 +302,7 @@ public final class ArithmeticUtil {
         }
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
-        return b1.remainder(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+        return b1.remainder(b2).setScale(scale, RoundingMode.HALF_UP).toString();
     }
 
     /**
@@ -319,7 +318,7 @@ public final class ArithmeticUtil {
             throw new IllegalArgumentException(
                     "The scale must be a positive integer or zero");
         }
-        return v1.remainder(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+        return v1.remainder(v2).setScale(scale, RoundingMode.HALF_UP);
     }
 
     /**
@@ -333,12 +332,6 @@ public final class ArithmeticUtil {
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
         int bj = b1.compareTo(b2);
-        boolean res;
-        if (bj > 0) {
-            res = true;
-        } else {
-            res = false;
-        }
-        return res;
+        return bj > 0;
     }
 }

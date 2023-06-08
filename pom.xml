@@ -66,6 +66,7 @@
         <module>pxc-framework-ip2region</module>
         <module>pxc-framework-database-metadata</module>
         <module>pxc-framework-minio</module>
+        <module>pxc-framework-operate-log</module>
     </modules>
 
     <!-- properties -->
@@ -79,10 +80,9 @@
         <spring-boot.version>2.7.12</spring-boot.version>
         <spring-cloud.version>2021.0.6</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-        <springdoc-openapi.version>1.6.15</springdoc-openapi.version>
+        <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
-        <redisson.version>3.19.1</redisson.version>
     </properties>
 
     <dependencyManagement>

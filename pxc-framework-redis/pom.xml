@@ -17,6 +17,7 @@
 
     <properties>
         <aspectj.version>1.9.19</aspectj.version>
+        <redisson.version>3.22.0</redisson.version>
     </properties>
 
     <dependencies>
