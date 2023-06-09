@@ -27,4 +27,8 @@ public interface Ip2regionConstant {
      * ip2region.db 文件路径
      */
     String IP2REGION_DB_FILE_LOCATION = "classpath:ip2region/ip2region.xdb";
+    /**
+     * ipv6wry.db 文件路径
+     */
+    String IPV6WRY_DB_FILE_LOCATION = "classpath:ip2region/ipv6wry.db";
 }

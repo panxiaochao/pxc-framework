@@ -18,6 +18,7 @@ package io.github.panxiaochao.ip2region.meta;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -32,6 +33,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@ToString
 @Schema(name = "IpInfo对象类", description = "IpInfo对象响应类")
 public class IpInfo {
     /**
