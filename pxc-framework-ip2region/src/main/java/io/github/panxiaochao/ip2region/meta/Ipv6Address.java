@@ -1,5 +1,7 @@
 package io.github.panxiaochao.ip2region.meta;
 
+import java.util.Arrays;
+
 /**
  * {@code Ipv6Address}
  * <p> description: 基于 ipv6 address
@@ -48,11 +50,25 @@ public class Ipv6Address {
 
     @Override
     public String toString() {
-        if (mIp.length == INADDR4SZ) {
+        if (mIp == null) {
+            return "";
+        } else if (mIp.length == INADDR4SZ) {
             return numericToTextFormatV4(mIp);
-        } else {
+        } else if (mIp.length == INADDR16SZ) {
             return numericToTextFormatV6(mIp);
+        } else {
+            throw new RuntimeException("INTERNAL ERROR");
         }
+    }
+
+    public boolean equals(Ipv6Address anIp) {
+        if (mIp == null || anIp == null) {
+            return false;
+        }
+        if (this == anIp) {
+            return true;
+        }
+        return Arrays.equals(mIp, anIp.getBytes());
     }
 
     public int compareTo(Ipv6Address anIp) {
@@ -224,8 +240,9 @@ public class Ipv6Address {
             return null;
         }
         if (sawXdigit) {
-            if (j + INT16SZ > INADDR16SZ)
+            if (j + INT16SZ > INADDR16SZ) {
                 return null;
+            }
             dst[j++] = (byte) ((val >> 8) & 0xff);
             dst[j++] = (byte) (val & 0xff);
         }
