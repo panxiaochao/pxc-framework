@@ -13,31 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.operate.log.properties;
+package io.github.panxiaochao.operate.log.context;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.alibaba.ttl.TransmittableThreadLocal;
 
 /**
- * {@code OperateLogProperties}
- * <p> description: OperateLog properties
+ * {@code MethodContext}
+ * <p> description: 上下文
  *
  * @author Lypxc
- * @since 2023-06-08
+ * @since 2023-06-12
  */
-@Getter
-@Setter
-@ConfigurationProperties(prefix = OperateLogProperties.OPERATE_LOG_PREFIX, ignoreInvalidFields = true)
-public class OperateLogProperties {
+public final class MethodContext {
 
     /**
-     * 属性前缀
+     * 存储毫秒
      */
-    public static final String OPERATE_LOG_PREFIX = "spring.operatelog";
+    private static final TransmittableThreadLocal<Long> METHOD_COST_TIME_LOCAL = new TransmittableThreadLocal<>();
+
+    public static void setMethodCostTime(long costTime) {
+        METHOD_COST_TIME_LOCAL.set(costTime);
+    }
 
     /**
-     * 是否开启
+     * 获取时间毫秒数
      */
-    private boolean enabled;
+    public static long getMethodCostTime() {
+        return METHOD_COST_TIME_LOCAL.get();
+    }
+
+    public static void removeMethodCostTime() {
+        METHOD_COST_TIME_LOCAL.remove();
+    }
 }

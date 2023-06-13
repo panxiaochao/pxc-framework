@@ -15,10 +15,10 @@
  */
 package io.github.panxiaochao.file.storage.config;
 
+import io.github.panxiaochao.common.filemeta.FileMetadata;
 import io.github.panxiaochao.common.unit.DataOfSize;
 import io.github.panxiaochao.file.storage.core.sftp.client.SftpClient;
 import io.github.panxiaochao.file.storage.engine.FileStorageEngine;
-import io.github.panxiaochao.file.storage.meta.FileMetadata;
 import io.github.panxiaochao.file.storage.processor.DelegatingFileStorageProcessor;
 import io.github.panxiaochao.file.storage.processor.FileStorageProcessor;
 import io.github.panxiaochao.file.storage.processor.LocalStorageProcessor;

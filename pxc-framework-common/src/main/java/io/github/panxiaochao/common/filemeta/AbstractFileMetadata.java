@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.file.storage.meta;
+package io.github.panxiaochao.common.filemeta;
 
+import io.github.panxiaochao.common.utils.StrUtil;
 import io.github.panxiaochao.common.utils.StringPoolUtil;
 import io.github.panxiaochao.common.utils.UuidUtil;
-import io.github.panxiaochao.file.storage.utils.FileNameUtil;
 import lombok.Getter;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -67,10 +67,9 @@ public abstract class AbstractFileMetadata implements FileMetadata, Serializable
     private final String realName;
 
     protected AbstractFileMetadata(String uuid, long size, String originalFilename, String storagePath, String fileSuffix, String realName) {
-        Assert.hasText(uuid, "uuid cannot be empty");
         Assert.hasText(originalFilename, "originalFilename cannot be empty");
         if (!StringUtils.hasText(fileSuffix)) {
-            fileSuffix = FileNameUtil.getSuffix(originalFilename);
+            fileSuffix = getSuffix(originalFilename);
         }
         if (!StringUtils.hasText(realName)) {
             realName = UuidUtil.getSimpleUUID() + StringPoolUtil.DOT + fileSuffix;
@@ -78,7 +77,7 @@ public abstract class AbstractFileMetadata implements FileMetadata, Serializable
         this.uuid = uuid;
         this.size = size;
         this.originalFilename = originalFilename;
-        this.storagePath = verifyPath(storagePath);
+        this.storagePath = StringUtils.hasText(storagePath) ? verifyPath(storagePath) : null;
         this.fileSuffix = fileSuffix;
         this.realName = realName;
     }
@@ -91,10 +90,29 @@ public abstract class AbstractFileMetadata implements FileMetadata, Serializable
      * @return 存储路径
      */
     private String verifyPath(String storagePath) {
-        storagePath = storagePath.replaceAll(StringPoolUtil.BACK_SLASH, StringPoolUtil.SLASH);
+        storagePath = storagePath.replaceAll("\\\\", StringPoolUtil.SLASH);
         if (!storagePath.endsWith(StringPoolUtil.SLASH)) {
             storagePath += StringPoolUtil.SLASH;
         }
         return storagePath;
+    }
+
+    protected String getSuffix(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+        int index = fileName.lastIndexOf(StringPoolUtil.DOT);
+        if (index == -1) {
+            return StringPoolUtil.EMPTY;
+        } else {
+            final CharSequence[] specialSuffix = {"tar.bz2", "tar.Z", "tar.gz", "tar.xz"};
+            int secondToLastIndex = fileName.substring(0, index).lastIndexOf(StringPoolUtil.DOT);
+            String substr = fileName.substring(secondToLastIndex == -1 ? index : secondToLastIndex + 1);
+            if (StrUtil.containsAny(substr, specialSuffix)) {
+                return substr;
+            }
+            String ext = fileName.substring(index + 1);
+            return StrUtil.containsAny(ext, '/', '\\') ? StringPoolUtil.EMPTY : ext;
+        }
     }
 }

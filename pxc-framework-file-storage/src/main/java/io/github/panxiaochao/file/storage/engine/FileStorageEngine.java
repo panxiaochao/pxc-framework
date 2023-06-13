@@ -15,12 +15,12 @@
  */
 package io.github.panxiaochao.file.storage.engine;
 
+import io.github.panxiaochao.common.filemeta.FileMetadata;
 import io.github.panxiaochao.common.utils.StringPoolUtil;
 import io.github.panxiaochao.common.utils.UuidUtil;
 import io.github.panxiaochao.file.storage.context.DefaultFileStorageContext;
 import io.github.panxiaochao.file.storage.context.FileStorageContext;
 import io.github.panxiaochao.file.storage.core.FileStorageType;
-import io.github.panxiaochao.file.storage.meta.FileMetadata;
 import io.github.panxiaochao.file.storage.meta.FileProcessMetadata;
 import io.github.panxiaochao.file.storage.processor.FileStorageProcessor;
 import io.github.panxiaochao.file.storage.properties.FileStorageProperties;

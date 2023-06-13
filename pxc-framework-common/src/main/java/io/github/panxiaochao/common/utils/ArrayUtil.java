@@ -18,7 +18,7 @@ package io.github.panxiaochao.common.utils;
 import java.lang.reflect.Array;
 
 /**
- * {@code ArrayUtils}
+ * {@code ArrayUtil}
  * <p> description:
  *
  * @author Lypxc
@@ -59,12 +59,12 @@ public class ArrayUtil {
      * <p>If the input array is {@code null}, {@code 0} is returned.
      *
      * <pre>
-     * ArrayUtils.getLength(null)            = 0
-     * ArrayUtils.getLength([])              = 0
-     * ArrayUtils.getLength([null])          = 1
-     * ArrayUtils.getLength([true, false])   = 2
-     * ArrayUtils.getLength([1, 2, 3])       = 3
-     * ArrayUtils.getLength(["a", "b", "c"]) = 3
+     * ArrayUtil.getLength(null)            = 0
+     * ArrayUtil.getLength([])              = 0
+     * ArrayUtil.getLength([null])          = 1
+     * ArrayUtil.getLength([true, false])   = 2
+     * ArrayUtil.getLength([1, 2, 3])       = 3
+     * ArrayUtil.getLength(["a", "b", "c"]) = 3
      * </pre>
      *
      * @param array the array to retrieve the length from, may be null

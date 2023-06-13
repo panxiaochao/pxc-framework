@@ -15,11 +15,11 @@
  */
 package io.github.panxiaochao.file.storage.meta;
 
+import io.github.panxiaochao.common.filemeta.AbstractFileMetadata;
 import io.github.panxiaochao.common.utils.StringPoolUtil;
 import io.github.panxiaochao.file.storage.enums.FileStorageResponseEnum;
 import io.github.panxiaochao.file.storage.excetion.FileStorageRuntimeException;
 import io.github.panxiaochao.file.storage.properties.FileStorageProperties;
-import io.github.panxiaochao.file.storage.utils.FileNameUtil;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,7 +59,7 @@ public final class FileProcessMetadata extends AbstractFileMetadata {
      */
     @Override
     public String getRealName() {
-        return System.currentTimeMillis() + StringPoolUtil.DOT + FileNameUtil.getSuffix(super.getOriginalFilename());
+        return System.currentTimeMillis() + StringPoolUtil.DOT + getSuffix(super.getOriginalFilename());
     }
 
     /**

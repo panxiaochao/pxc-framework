@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import io.github.panxiaochao.redis.aop.CustomizeDefaultPointcutAdvisor;
+import io.github.panxiaochao.redis.aop.AccessRateLimitPointcutAdvisor;
 import io.github.panxiaochao.redis.properties.MyRedisProperties;
 import io.github.panxiaochao.redis.service.IRedisService;
 import io.github.panxiaochao.redis.service.impl.RedisServiceImpl;
@@ -131,6 +131,6 @@ public class MyRedisAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "spring.redis", name = "accessRateLimit", havingValue = "true")
     public DefaultPointcutAdvisor doBefore(RedisTemplate<String, Object> redisTemplate) {
-        return new CustomizeDefaultPointcutAdvisor(redisTemplate).doBefore();
+        return new AccessRateLimitPointcutAdvisor(redisTemplate).doBefore();
     }
 }

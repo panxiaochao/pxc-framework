@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2022-2023 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.panxiaochao.common.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -18,13 +33,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * {@code CustomizerJavaTimeModule}
+ * {@code CustomizeJavaTimeModule}
  * <p> description: jackson TimeModule
  *
  * @author Lypxc
  * @since 2023-06-06
  */
-public class CustomizerJavaTimeModule extends SimpleModule {
+public class CustomizeJavaTimeModule extends SimpleModule {
 
     private static final long serialVersionUID = -7425869912487751834L;
 
@@ -41,7 +56,7 @@ public class CustomizerJavaTimeModule extends SimpleModule {
      */
     private static final String DATE_TIME_FORMAT = "HH:mm:ss";
 
-    public CustomizerJavaTimeModule() {
+    public CustomizeJavaTimeModule() {
         super(PackageVersion.VERSION);
         this.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
         this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));

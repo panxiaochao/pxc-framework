@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.panxiaochao.common.jackson.CustomizerJavaTimeModule;
+import io.github.panxiaochao.common.jackson.CustomizeJavaTimeModule;
 import io.github.panxiaochao.common.jackson.jsonserializer.NullValueJsonSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +78,7 @@ public class JacksonUtil {
         // 忽略未知属性，防止json字符串中存在，java对象中不存在对应属性的情况出现错误
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 注册一个时间序列化及反序列化的处理模块，用于解决jdk8中localDateTime等的序列化问题
-        OBJECT_MAPPER.registerModule(new CustomizerJavaTimeModule());
+        OBJECT_MAPPER.registerModule(new CustomizeJavaTimeModule());
         // 空值处理
         OBJECT_MAPPER.getSerializerProvider().setNullValueSerializer(NullValueJsonSerializer.INSTANCE);
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.file.storage.meta;
+package io.github.panxiaochao.common.filemeta;
 
 /**
  * {@code FileInfoMeta}

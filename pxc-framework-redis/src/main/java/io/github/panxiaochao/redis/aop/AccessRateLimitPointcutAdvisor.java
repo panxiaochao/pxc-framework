@@ -24,15 +24,14 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * s
- * {@code CustomizeDefaultPointcutAdvisor}
- * <p> description:
+ * {@code AccessRateLimitPointcutAdvisor}
+ * <p> description: 自定义切点切面
  *
  * @author Lypxc
  * @since 2023-05-26
  */
 @RequiredArgsConstructor
-public class CustomizeDefaultPointcutAdvisor {
+public class AccessRateLimitPointcutAdvisor {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.file.storage.meta;
+package io.github.panxiaochao.operate.log.aop.before;
 
-import io.github.panxiaochao.common.filemeta.AbstractFileMetadata;
+import io.github.panxiaochao.operate.log.context.MethodContext;
+import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.lang.Nullable;
+
+import java.lang.reflect.Method;
 
 /**
- * {@code FileObjectInfo}
- * <p> description: 文件对象信息
+ * {@code OperateLogMethodBeforeAdvice}
+ * <p> description: aop before method
  *
  * @author Lypxc
- * @since 2023-03-17
+ * @since 2023-06-12
  */
-public final class FileObjectInfo extends AbstractFileMetadata {
+public class OperateLogMethodBeforeAdvice implements MethodBeforeAdvice {
 
-    private static final long serialVersionUID = 2355445362725794577L;
-
-    public FileObjectInfo(String uuid, long size, String originalFilename, String storagePath, String fileSuffix, String realName) {
-        super(uuid, size, originalFilename, storagePath, fileSuffix, realName);
+    @Override
+    public void before(Method method, Object[] args, @Nullable Object target) {
+        // 设置请求方法执行开始时间
+        MethodContext.setMethodCostTime(System.currentTimeMillis());
     }
 }

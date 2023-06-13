@@ -25,6 +25,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * {@code RequestUtil}
@@ -118,7 +120,7 @@ public class RequestUtil {
                 ip = iNet.getHostAddress();
             }
         } catch (Exception e) {
-            logger.error("IPUtils ERROR ", e);
+            logger.error("RequestUtil ERROR ", e);
         }
 //        //使用代理，则获取第一个IP地址
 //        if(StringUtils.isEmpty(ip) && ip.length() > 15) {
@@ -183,4 +185,54 @@ public class RequestUtil {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }
+
+    /**
+     * 获得所有请求参数
+     *
+     * @return Map
+     */
+    public static Map<String, String[]> getParams() {
+        final Map<String, String[]> map = getRequest().getParameterMap();
+        return Collections.unmodifiableMap(map);
+
+    }
+
+    /**
+     * 获得所有请求参数
+     *
+     * @param request 请求对象{@link HttpServletRequest}
+     * @return Map
+     */
+    public static Map<String, String[]> getParams(HttpServletRequest request) {
+        final Map<String, String[]> map = request.getParameterMap();
+        return Collections.unmodifiableMap(map);
+    }
+
+    /**
+     * 获得所有请求参数
+     *
+     * @return Map
+     */
+    public static Map<String, String> getParamMap() {
+        Map<String, String> params = MapUtil.newHashMap();
+        for (Map.Entry<String, String[]> entry : getParams().entrySet()) {
+            params.put(entry.getKey(), String.join(StringPoolUtil.COMMA, entry.getValue()));
+        }
+        return params;
+    }
+
+    /**
+     * 获得所有请求参数
+     *
+     * @param request 请求对象{@link HttpServletRequest}
+     * @return Map
+     */
+    public static Map<String, String> getParamMap(HttpServletRequest request) {
+        Map<String, String> params = MapUtil.newHashMap();
+        for (Map.Entry<String, String[]> entry : getParams(request).entrySet()) {
+            params.put(entry.getKey(), String.join(StringPoolUtil.COMMA, entry.getValue()));
+        }
+        return params;
+    }
+
 }

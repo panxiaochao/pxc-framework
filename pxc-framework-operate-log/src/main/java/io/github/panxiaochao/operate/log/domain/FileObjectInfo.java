@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.file.storage.meta;
+package io.github.panxiaochao.operate.log.domain;
 
 import io.github.panxiaochao.common.filemeta.AbstractFileMetadata;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * {@code FileObjectInfo}
@@ -28,7 +29,7 @@ public final class FileObjectInfo extends AbstractFileMetadata {
 
     private static final long serialVersionUID = 2355445362725794577L;
 
-    public FileObjectInfo(String uuid, long size, String originalFilename, String storagePath, String fileSuffix, String realName) {
-        super(uuid, size, originalFilename, storagePath, fileSuffix, realName);
+    public FileObjectInfo(MultipartFile multipartFile) {
+        super(null, multipartFile.getSize(), multipartFile.getOriginalFilename(), null, null, null);
     }
 }

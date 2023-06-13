@@ -16,8 +16,12 @@
 package io.github.panxiaochao.common.utils;
 
 import io.github.panxiaochao.common.function.ToBooleanBiFunction;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -60,11 +64,11 @@ public class StrUtil {
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
      * <pre>
-     * StringUtils.isBlank(null)      = true
-     * StringUtils.isBlank("")        = true
-     * StringUtils.isBlank(" ")       = true
-     * StringUtils.isBlank("bob")     = false
-     * StringUtils.isBlank("  bob  ") = false
+     * StrUtil.isBlank(null)      = true
+     * StrUtil.isBlank("")        = true
+     * StrUtil.isBlank(" ")       = true
+     * StrUtil.isBlank("bob")     = false
+     * StrUtil.isBlank("  bob  ") = false
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -87,11 +91,11 @@ public class StrUtil {
      * <p>Checks if a CharSequence is empty ("") or null.</p>
      *
      * <pre>
-     * StringUtils.isEmpty(null)      = true
-     * StringUtils.isEmpty("")        = true
-     * StringUtils.isEmpty(" ")       = false
-     * StringUtils.isEmpty("bob")     = false
-     * StringUtils.isEmpty("  bob  ") = false
+     * StrUtil.isEmpty(null)      = true
+     * StrUtil.isEmpty("")        = true
+     * StrUtil.isEmpty(" ")       = false
+     * StrUtil.isEmpty("bob")     = false
+     * StrUtil.isEmpty("  bob  ") = false
      * </pre>
      *
      * <p>NOTE: This method changed in Lang version 2.0.
@@ -123,11 +127,11 @@ public class StrUtil {
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
      * <pre>
-     * StringUtils.isNotBlank(null)      = false
-     * StringUtils.isNotBlank("")        = false
-     * StringUtils.isNotBlank(" ")       = false
-     * StringUtils.isNotBlank("bob")     = true
-     * StringUtils.isNotBlank("  bob  ") = true
+     * StrUtil.isNotBlank(null)      = false
+     * StrUtil.isNotBlank("")        = false
+     * StrUtil.isNotBlank(" ")       = false
+     * StrUtil.isNotBlank("bob")     = true
+     * StrUtil.isNotBlank("  bob  ") = true
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -142,11 +146,11 @@ public class StrUtil {
      * <p>Checks if a CharSequence is not empty ("") and not null.</p>
      *
      * <pre>
-     * StringUtils.isNotEmpty(null)      = false
-     * StringUtils.isNotEmpty("")        = false
-     * StringUtils.isNotEmpty(" ")       = true
-     * StringUtils.isNotEmpty("bob")     = true
-     * StringUtils.isNotEmpty("  bob  ") = true
+     * StrUtil.isNotEmpty(null)      = false
+     * StrUtil.isNotEmpty("")        = false
+     * StrUtil.isNotEmpty(" ")       = true
+     * StrUtil.isNotEmpty("bob")     = true
+     * StrUtil.isNotEmpty("  bob  ") = true
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -169,17 +173,17 @@ public class StrUtil {
      * for int or long respectively.</p>
      *
      * <pre>
-     * StringUtils.isNumeric(null)   = false
-     * StringUtils.isNumeric("")     = false
-     * StringUtils.isNumeric("  ")   = false
-     * StringUtils.isNumeric("123")  = true
-     * StringUtils.isNumeric("\u0967\u0968\u0969")  = true
-     * StringUtils.isNumeric("12 3") = false
-     * StringUtils.isNumeric("ab2c") = false
-     * StringUtils.isNumeric("12-3") = false
-     * StringUtils.isNumeric("12.3") = false
-     * StringUtils.isNumeric("-123") = false
-     * StringUtils.isNumeric("+123") = false
+     * StrUtil.isNumeric(null)   = false
+     * StrUtil.isNumeric("")     = false
+     * StrUtil.isNumeric("  ")   = false
+     * StrUtil.isNumeric("123")  = true
+     * StrUtil.isNumeric("\u0967\u0968\u0969")  = true
+     * StrUtil.isNumeric("12 3") = false
+     * StrUtil.isNumeric("ab2c") = false
+     * StrUtil.isNumeric("12-3") = false
+     * StrUtil.isNumeric("12.3") = false
+     * StrUtil.isNumeric("-123") = false
+     * StrUtil.isNumeric("+123") = false
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -207,16 +211,16 @@ public class StrUtil {
      * An empty CharSequence (length()=0) will return {@code true}.</p>
      *
      * <pre>
-     * StringUtils.isNumericSpace(null)   = false
-     * StringUtils.isNumericSpace("")     = true
-     * StringUtils.isNumericSpace("  ")   = true
-     * StringUtils.isNumericSpace("123")  = true
-     * StringUtils.isNumericSpace("12 3") = true
-     * StringUtils.isNumericSpace("\u0967\u0968\u0969")  = true
-     * StringUtils.isNumericSpace("\u0967\u0968 \u0969")  = true
-     * StringUtils.isNumericSpace("ab2c") = false
-     * StringUtils.isNumericSpace("12-3") = false
-     * StringUtils.isNumericSpace("12.3") = false
+     * StrUtil.isNumericSpace(null)   = false
+     * StrUtil.isNumericSpace("")     = true
+     * StrUtil.isNumericSpace("  ")   = true
+     * StrUtil.isNumericSpace("123")  = true
+     * StrUtil.isNumericSpace("12 3") = true
+     * StrUtil.isNumericSpace("\u0967\u0968\u0969")  = true
+     * StrUtil.isNumericSpace("\u0967\u0968 \u0969")  = true
+     * StrUtil.isNumericSpace("ab2c") = false
+     * StrUtil.isNumericSpace("12-3") = false
+     * StrUtil.isNumericSpace("12.3") = false
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -246,12 +250,12 @@ public class StrUtil {
      * An empty CharSequence (length()=0) will return {@code true}.</p>
      *
      * <pre>
-     * StringUtils.isWhitespace(null)   = false
-     * StringUtils.isWhitespace("")     = true
-     * StringUtils.isWhitespace("  ")   = true
-     * StringUtils.isWhitespace("abc")  = false
-     * StringUtils.isWhitespace("ab2c") = false
-     * StringUtils.isWhitespace("ab-c") = false
+     * StrUtil.isWhitespace(null)   = false
+     * StrUtil.isWhitespace("")     = true
+     * StrUtil.isWhitespace("  ")   = true
+     * StrUtil.isWhitespace("abc")  = false
+     * StrUtil.isWhitespace("ab2c") = false
+     * StrUtil.isWhitespace("ab-c") = false
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -276,17 +280,17 @@ public class StrUtil {
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
      * <pre>
-     * StringUtils.isAnyBlank((String) null)    = true
-     * StringUtils.isAnyBlank((String[]) null)  = false
-     * StringUtils.isAnyBlank(null, "foo")      = true
-     * StringUtils.isAnyBlank(null, null)       = true
-     * StringUtils.isAnyBlank("", "bar")        = true
-     * StringUtils.isAnyBlank("bob", "")        = true
-     * StringUtils.isAnyBlank("  bob  ", null)  = true
-     * StringUtils.isAnyBlank(" ", "bar")       = true
-     * StringUtils.isAnyBlank(new String[] {})  = false
-     * StringUtils.isAnyBlank(new String[]{""}) = true
-     * StringUtils.isAnyBlank("foo", "bar")     = false
+     * StrUtil.isAnyBlank((String) null)    = true
+     * StrUtil.isAnyBlank((String[]) null)  = false
+     * StrUtil.isAnyBlank(null, "foo")      = true
+     * StrUtil.isAnyBlank(null, null)       = true
+     * StrUtil.isAnyBlank("", "bar")        = true
+     * StrUtil.isAnyBlank("bob", "")        = true
+     * StrUtil.isAnyBlank("  bob  ", null)  = true
+     * StrUtil.isAnyBlank(" ", "bar")       = true
+     * StrUtil.isAnyBlank(new String[] {})  = false
+     * StrUtil.isAnyBlank(new String[]{""}) = true
+     * StrUtil.isAnyBlank("foo", "bar")     = false
      * </pre>
      *
      * @param css the CharSequences to check, may be null or empty
@@ -308,16 +312,16 @@ public class StrUtil {
      * <p>Checks if any of the CharSequences are empty ("") or null.</p>
      *
      * <pre>
-     * StringUtils.isAnyEmpty((String) null)    = true
-     * StringUtils.isAnyEmpty((String[]) null)  = false
-     * StringUtils.isAnyEmpty(null, "foo")      = true
-     * StringUtils.isAnyEmpty("", "bar")        = true
-     * StringUtils.isAnyEmpty("bob", "")        = true
-     * StringUtils.isAnyEmpty("  bob  ", null)  = true
-     * StringUtils.isAnyEmpty(" ", "bar")       = false
-     * StringUtils.isAnyEmpty("foo", "bar")     = false
-     * StringUtils.isAnyEmpty(new String[]{})   = false
-     * StringUtils.isAnyEmpty(new String[]{""}) = true
+     * StrUtil.isAnyEmpty((String) null)    = true
+     * StrUtil.isAnyEmpty((String[]) null)  = false
+     * StrUtil.isAnyEmpty(null, "foo")      = true
+     * StrUtil.isAnyEmpty("", "bar")        = true
+     * StrUtil.isAnyEmpty("bob", "")        = true
+     * StrUtil.isAnyEmpty("  bob  ", null)  = true
+     * StrUtil.isAnyEmpty(" ", "bar")       = false
+     * StrUtil.isAnyEmpty("foo", "bar")     = false
+     * StrUtil.isAnyEmpty(new String[]{})   = false
+     * StrUtil.isAnyEmpty(new String[]{""}) = true
      * </pre>
      *
      * @param css the CharSequences to check, may be null or empty
@@ -341,17 +345,17 @@ public class StrUtil {
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
      * <pre>
-     * StringUtils.isNoneBlank((String) null)    = false
-     * StringUtils.isNoneBlank((String[]) null)  = true
-     * StringUtils.isNoneBlank(null, "foo")      = false
-     * StringUtils.isNoneBlank(null, null)       = false
-     * StringUtils.isNoneBlank("", "bar")        = false
-     * StringUtils.isNoneBlank("bob", "")        = false
-     * StringUtils.isNoneBlank("  bob  ", null)  = false
-     * StringUtils.isNoneBlank(" ", "bar")       = false
-     * StringUtils.isNoneBlank(new String[] {})  = true
-     * StringUtils.isNoneBlank(new String[]{""}) = false
-     * StringUtils.isNoneBlank("foo", "bar")     = true
+     * StrUtil.isNoneBlank((String) null)    = false
+     * StrUtil.isNoneBlank((String[]) null)  = true
+     * StrUtil.isNoneBlank(null, "foo")      = false
+     * StrUtil.isNoneBlank(null, null)       = false
+     * StrUtil.isNoneBlank("", "bar")        = false
+     * StrUtil.isNoneBlank("bob", "")        = false
+     * StrUtil.isNoneBlank("  bob  ", null)  = false
+     * StrUtil.isNoneBlank(" ", "bar")       = false
+     * StrUtil.isNoneBlank(new String[] {})  = true
+     * StrUtil.isNoneBlank(new String[]{""}) = false
+     * StrUtil.isNoneBlank("foo", "bar")     = true
      * </pre>
      *
      * @param css the CharSequences to check, may be null or empty
@@ -365,16 +369,16 @@ public class StrUtil {
      * <p>Checks if none of the CharSequences are empty ("") or null.</p>
      *
      * <pre>
-     * StringUtils.isNoneEmpty((String) null)    = false
-     * StringUtils.isNoneEmpty((String[]) null)  = true
-     * StringUtils.isNoneEmpty(null, "foo")      = false
-     * StringUtils.isNoneEmpty("", "bar")        = false
-     * StringUtils.isNoneEmpty("bob", "")        = false
-     * StringUtils.isNoneEmpty("  bob  ", null)  = false
-     * StringUtils.isNoneEmpty(new String[] {})  = true
-     * StringUtils.isNoneEmpty(new String[]{""}) = false
-     * StringUtils.isNoneEmpty(" ", "bar")       = true
-     * StringUtils.isNoneEmpty("foo", "bar")     = true
+     * StrUtil.isNoneEmpty((String) null)    = false
+     * StrUtil.isNoneEmpty((String[]) null)  = true
+     * StrUtil.isNoneEmpty(null, "foo")      = false
+     * StrUtil.isNoneEmpty("", "bar")        = false
+     * StrUtil.isNoneEmpty("bob", "")        = false
+     * StrUtil.isNoneEmpty("  bob  ", null)  = false
+     * StrUtil.isNoneEmpty(new String[] {})  = true
+     * StrUtil.isNoneEmpty(new String[]{""}) = false
+     * StrUtil.isNoneEmpty(" ", "bar")       = true
+     * StrUtil.isNoneEmpty("foo", "bar")     = true
      * </pre>
      *
      * @param css the CharSequences to check, may be null or empty
@@ -405,12 +409,12 @@ public class StrUtil {
      *
      * <pre>
      * {@code
-     * StringUtils.getIfBlank(null, () -> "NULL")   = "NULL"
-     * StringUtils.getIfBlank("", () -> "NULL")     = "NULL"
-     * StringUtils.getIfBlank(" ", () -> "NULL")    = "NULL"
-     * StringUtils.getIfBlank("bat", () -> "NULL")  = "bat"
-     * StringUtils.getIfBlank("", () -> null)       = null
-     * StringUtils.getIfBlank("", null)             = null
+     * StrUtil.getIfBlank(null, () -> "NULL")   = "NULL"
+     * StrUtil.getIfBlank("", () -> "NULL")     = "NULL"
+     * StrUtil.getIfBlank(" ", () -> "NULL")    = "NULL"
+     * StrUtil.getIfBlank("bat", () -> "NULL")  = "bat"
+     * StrUtil.getIfBlank("", () -> null)       = null
+     * StrUtil.getIfBlank("", null)             = null
      * }</pre>
      *
      * @param <T>             the specific kind of CharSequence
@@ -431,12 +435,12 @@ public class StrUtil {
      *
      * <pre>
      * {@code
-     * StringUtils.getIfEmpty(null, () -> "NULL")    = "NULL"
-     * StringUtils.getIfEmpty("", () -> "NULL")      = "NULL"
-     * StringUtils.getIfEmpty(" ", () -> "NULL")     = " "
-     * StringUtils.getIfEmpty("bat", () -> "NULL")   = "bat"
-     * StringUtils.getIfEmpty("", () -> null)        = null
-     * StringUtils.getIfEmpty("", null)              = null
+     * StrUtil.getIfEmpty(null, () -> "NULL")    = "NULL"
+     * StrUtil.getIfEmpty("", () -> "NULL")      = "NULL"
+     * StrUtil.getIfEmpty(" ", () -> "NULL")     = " "
+     * StrUtil.getIfEmpty("bat", () -> "NULL")   = "bat"
+     * StrUtil.getIfEmpty("", () -> null)        = null
+     * StrUtil.getIfEmpty("", null)              = null
      * }
      * </pre>
      *
@@ -457,11 +461,11 @@ public class StrUtil {
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
      * <pre>
-     * StringUtils.defaultIfBlank(null, "NULL")  = "NULL"
-     * StringUtils.defaultIfBlank("", "NULL")    = "NULL"
-     * StringUtils.defaultIfBlank(" ", "NULL")   = "NULL"
-     * StringUtils.defaultIfBlank("bat", "NULL") = "bat"
-     * StringUtils.defaultIfBlank("", null)      = null
+     * StrUtil.defaultIfBlank(null, "NULL")  = "NULL"
+     * StrUtil.defaultIfBlank("", "NULL")    = "NULL"
+     * StrUtil.defaultIfBlank(" ", "NULL")   = "NULL"
+     * StrUtil.defaultIfBlank("bat", "NULL") = "bat"
+     * StrUtil.defaultIfBlank("", null)      = null
      * </pre>
      *
      * @param <T>        the specific kind of CharSequence
@@ -479,11 +483,11 @@ public class StrUtil {
      * empty or {@code null}, the value of {@code defaultStr}.</p>
      *
      * <pre>
-     * StringUtils.defaultIfEmpty(null, "NULL")  = "NULL"
-     * StringUtils.defaultIfEmpty("", "NULL")    = "NULL"
-     * StringUtils.defaultIfEmpty(" ", "NULL")   = " "
-     * StringUtils.defaultIfEmpty("bat", "NULL") = "bat"
-     * StringUtils.defaultIfEmpty("", null)      = null
+     * StrUtil.defaultIfEmpty(null, "NULL")  = "NULL"
+     * StrUtil.defaultIfEmpty("", "NULL")    = "NULL"
+     * StrUtil.defaultIfEmpty(" ", "NULL")   = " "
+     * StrUtil.defaultIfEmpty("bat", "NULL") = "bat"
+     * StrUtil.defaultIfEmpty("", null)      = null
      * </pre>
      *
      * @param <T>        the specific kind of CharSequence
@@ -501,9 +505,9 @@ public class StrUtil {
      * or if the String is {@code null}, an empty String ("").</p>
      *
      * <pre>
-     * StringUtils.defaultString(null)  = ""
-     * StringUtils.defaultString("")    = ""
-     * StringUtils.defaultString("bat") = "bat"
+     * StrUtil.defaultString(null)  = ""
+     * StrUtil.defaultString("")    = ""
+     * StrUtil.defaultString("bat") = "bat"
      * </pre>
      *
      * @param str the String to check, may be null
@@ -519,9 +523,9 @@ public class StrUtil {
      * {@code null}, the value of {@code defaultStr}.</p>
      *
      * <pre>
-     * StringUtils.defaultString(null, "NULL")  = "NULL"
-     * StringUtils.defaultString("", "NULL")    = ""
-     * StringUtils.defaultString("bat", "NULL") = "bat"
+     * StrUtil.defaultString(null, "NULL")  = "NULL"
+     * StrUtil.defaultString("", "NULL")    = ""
+     * StrUtil.defaultString("bat", "NULL") = "bat"
      * </pre>
      *
      * @param str        the String to check, may be null
@@ -575,14 +579,14 @@ public class StrUtil {
      * A {@code null} or zero length search array will return {@code false}.</p>
      *
      * <pre>
-     * StringUtils.containsAny(null, *)                  = false
-     * StringUtils.containsAny("", *)                    = false
-     * StringUtils.containsAny(*, null)                  = false
-     * StringUtils.containsAny(*, [])                    = false
-     * StringUtils.containsAny("zzabyycdxx", ['z', 'a']) = true
-     * StringUtils.containsAny("zzabyycdxx", ['b', 'y']) = true
-     * StringUtils.containsAny("zzabyycdxx", ['z', 'y']) = true
-     * StringUtils.containsAny("aba", ['z'])             = false
+     * StrUtil.containsAny(null, *)                  = false
+     * StrUtil.containsAny("", *)                    = false
+     * StrUtil.containsAny(*, null)                  = false
+     * StrUtil.containsAny(*, [])                    = false
+     * StrUtil.containsAny("zzabyycdxx", ['z', 'a']) = true
+     * StrUtil.containsAny("zzabyycdxx", ['b', 'y']) = true
+     * StrUtil.containsAny("zzabyycdxx", ['z', 'y']) = true
+     * StrUtil.containsAny("aba", ['z'])             = false
      * </pre>
      *
      * @param cs          the CharSequence to check, may be null
@@ -630,16 +634,16 @@ public class StrUtil {
      * </p>
      *
      * <pre>
-     * StringUtils.containsAny(null, *)               = false
-     * StringUtils.containsAny("", *)                 = false
-     * StringUtils.containsAny(*, null)               = false
-     * StringUtils.containsAny(*, "")                 = false
-     * StringUtils.containsAny("zzabyycdxx", "za")    = true
-     * StringUtils.containsAny("zzabyycdxx", "by")    = true
-     * StringUtils.containsAny("zzabyycdxx", "zy")    = true
-     * StringUtils.containsAny("zzabyycdxx", "\tx")   = true
-     * StringUtils.containsAny("zzabyycdxx", "$.#yF") = true
-     * StringUtils.containsAny("aba", "z")            = false
+     * StrUtil.containsAny(null, *)               = false
+     * StrUtil.containsAny("", *)                 = false
+     * StrUtil.containsAny(*, null)               = false
+     * StrUtil.containsAny(*, "")                 = false
+     * StrUtil.containsAny("zzabyycdxx", "za")    = true
+     * StrUtil.containsAny("zzabyycdxx", "by")    = true
+     * StrUtil.containsAny("zzabyycdxx", "zy")    = true
+     * StrUtil.containsAny("zzabyycdxx", "\tx")   = true
+     * StrUtil.containsAny("zzabyycdxx", "$.#yF") = true
+     * StrUtil.containsAny("aba", "z")            = false
      * </pre>
      *
      * @param cs          the CharSequence to check, may be null
@@ -664,13 +668,13 @@ public class StrUtil {
      * </p>
      *
      * <pre>
-     * StringUtils.containsAny(null, *)            = false
-     * StringUtils.containsAny("", *)              = false
-     * StringUtils.containsAny(*, null)            = false
-     * StringUtils.containsAny(*, [])              = false
-     * StringUtils.containsAny("abcd", "ab", null) = true
-     * StringUtils.containsAny("abcd", "ab", "cd") = true
-     * StringUtils.containsAny("abc", "d", "abc")  = true
+     * StrUtil.containsAny(null, *)            = false
+     * StrUtil.containsAny("", *)              = false
+     * StrUtil.containsAny(*, null)            = false
+     * StrUtil.containsAny(*, [])              = false
+     * StrUtil.containsAny("abcd", "ab", null) = true
+     * StrUtil.containsAny("abcd", "ab", "cd") = true
+     * StrUtil.containsAny("abc", "d", "abc")  = true
      * </pre>
      *
      * @param cs                  The CharSequence to check, may be null
@@ -733,6 +737,500 @@ public class StrUtil {
             return str;
         }
         return new String(chs, 0, count);
+    }
+
+    /**
+     * <p>Gets a substring from the specified String avoiding exceptions.</p>
+     *
+     * <p>A negative start position can be used to start {@code n}
+     * characters from the end of the String.</p>
+     *
+     * <p>A {@code null} String will return {@code null}.
+     * An empty ("") String will return "".</p>
+     *
+     * <pre>
+     * StrUtil.substring(null, *)   = null
+     * StrUtil.substring("", *)     = ""
+     * StrUtil.substring("abc", 0)  = "abc"
+     * StrUtil.substring("abc", 2)  = "c"
+     * StrUtil.substring("abc", 4)  = ""
+     * StrUtil.substring("abc", -2) = "bc"
+     * StrUtil.substring("abc", -4) = "abc"
+     * </pre>
+     *
+     * @param str   the String to get the substring from, may be null
+     * @param start the position to start from, negative means
+     *              count back from the end of the String by this many characters
+     * @return substring from start position, {@code null} if null String input
+     */
+    public static String substring(final String str, int start) {
+        if (str == null) {
+            return null;
+        }
+        if (start < 0) {
+            start = str.length() + start;
+        }
+        if (start < 0) {
+            start = 0;
+        }
+        if (start > str.length()) {
+            return EMPTY;
+        }
+        return str.substring(start);
+    }
+
+    /**
+     * <p>Gets a substring from the specified String avoiding exceptions.</p>
+     *
+     * <p>A negative start position can be used to start/end {@code n}
+     * characters from the end of the String.</p>
+     *
+     * <p>The returned substring starts with the character in the {@code start}
+     * position and ends before the {@code end} position. All position counting is
+     * zero-based -- i.e., to start at the beginning of the string use
+     * {@code start = 0}. Negative start and end positions can be used to
+     * specify offsets relative to the end of the String.</p>
+     *
+     * <p>If {@code start} is not strictly to the left of {@code end}, ""
+     * is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substring(null, *, *)    = null
+     * StrUtil.substring("", * ,  *)    = "";
+     * StrUtil.substring("abc", 0, 2)   = "ab"
+     * StrUtil.substring("abc", 2, 0)   = ""
+     * StrUtil.substring("abc", 2, 4)   = "c"
+     * StrUtil.substring("abc", 4, 6)   = ""
+     * StrUtil.substring("abc", 2, 2)   = ""
+     * StrUtil.substring("abc", -2, -1) = "b"
+     * StrUtil.substring("abc", -4, 2)  = "ab"
+     * </pre>
+     *
+     * @param str   the String to get the substring from, may be null
+     * @param start the position to start from, negative means
+     *              count back from the end of the String by this many characters
+     * @param end   the position to end at (exclusive), negative means
+     *              count back from the end of the String by this many characters
+     * @return substring from start position to end position,
+     * {@code null} if null String input
+     */
+    public static String substring(final String str, int start, int end) {
+        if (str == null) {
+            return null;
+        }
+        if (end < 0) {
+            end = str.length() + end;
+        }
+        if (start < 0) {
+            start = str.length() + start;
+        }
+        if (end > str.length()) {
+            end = str.length();
+        }
+        if (start > end) {
+            return EMPTY;
+        }
+        if (start < 0) {
+            start = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+        return str.substring(start, end);
+    }
+
+    /**
+     * <p>Gets the substring after the first occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     *
+     * <p>If nothing is found, the empty string is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringAfter(null, *)      = null
+     * StrUtil.substringAfter("", *)        = ""
+     * StrUtil.substringAfter("abc", 'a')   = "bc"
+     * StrUtil.substringAfter("abcba", 'b') = "cba"
+     * StrUtil.substringAfter("abc", 'c')   = ""
+     * StrUtil.substringAfter("abc", 'd')   = ""
+     * StrUtil.substringAfter(" abc", 32)   = "abc"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the character to search.
+     * @return the substring after the first occurrence of the separator,
+     * {@code null} if null String input
+     * @since 3.11
+     */
+    public static String substringAfter(final String str, final int separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == INDEX_NOT_FOUND) {
+            return EMPTY;
+        }
+        return str.substring(pos + 1);
+    }
+
+    /**
+     * <p>Gets the substring after the first occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     * A {@code null} separator will return the empty string if the
+     * input string is not {@code null}.</p>
+     *
+     * <p>If nothing is found, the empty string is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringAfter(null, *)      = null
+     * StrUtil.substringAfter("", *)        = ""
+     * StrUtil.substringAfter(*, null)      = ""
+     * StrUtil.substringAfter("abc", "a")   = "bc"
+     * StrUtil.substringAfter("abcba", "b") = "cba"
+     * StrUtil.substringAfter("abc", "c")   = ""
+     * StrUtil.substringAfter("abc", "d")   = ""
+     * StrUtil.substringAfter("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring after the first occurrence of the separator,
+     * {@code null} if null String input
+     * @since 2.0
+     */
+    public static String substringAfter(final String str, final String separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        if (separator == null) {
+            return EMPTY;
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == INDEX_NOT_FOUND) {
+            return EMPTY;
+        }
+        return str.substring(pos + separator.length());
+    }
+
+    /**
+     * <p>Gets the substring after the last occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     *
+     * <p>If nothing is found, the empty string is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringAfterLast(null, *)      = null
+     * StrUtil.substringAfterLast("", *)        = ""
+     * StrUtil.substringAfterLast("abc", 'a')   = "bc"
+     * StrUtil.substringAfterLast(" bc", 32)    = "bc"
+     * StrUtil.substringAfterLast("abcba", 'b') = "a"
+     * StrUtil.substringAfterLast("abc", 'c')   = ""
+     * StrUtil.substringAfterLast("a", 'a')     = ""
+     * StrUtil.substringAfterLast("a", 'z')     = ""
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring after the last occurrence of the separator,
+     * {@code null} if null String input
+     * @since 3.11
+     */
+    public static String substringAfterLast(final String str, final int separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        final int pos = str.lastIndexOf(separator);
+        if (pos == INDEX_NOT_FOUND || pos == str.length() - 1) {
+            return EMPTY;
+        }
+        return str.substring(pos + 1);
+    }
+
+    /**
+     * <p>Gets the substring after the last occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     * An empty or {@code null} separator will return the empty string if
+     * the input string is not {@code null}.</p>
+     *
+     * <p>If nothing is found, the empty string is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringAfterLast(null, *)      = null
+     * StrUtil.substringAfterLast("", *)        = ""
+     * StrUtil.substringAfterLast(*, "")        = ""
+     * StrUtil.substringAfterLast(*, null)      = ""
+     * StrUtil.substringAfterLast("abc", "a")   = "bc"
+     * StrUtil.substringAfterLast("abcba", "b") = "a"
+     * StrUtil.substringAfterLast("abc", "c")   = ""
+     * StrUtil.substringAfterLast("a", "a")     = ""
+     * StrUtil.substringAfterLast("a", "z")     = ""
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring after the last occurrence of the separator,
+     * {@code null} if null String input
+     * @since 2.0
+     */
+    public static String substringAfterLast(final String str, final String separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        if (isEmpty(separator)) {
+            return EMPTY;
+        }
+        final int pos = str.lastIndexOf(separator);
+        if (pos == INDEX_NOT_FOUND || pos == str.length() - separator.length()) {
+            return EMPTY;
+        }
+        return str.substring(pos + separator.length());
+    }
+
+    /**
+     * <p>
+     * Gets the substring before the first occurrence of a separator. The separator is not returned.
+     * </p>
+     *
+     * <p>
+     * A {@code null} string input will return {@code null}. An empty ("") string input will return the empty string.
+     * </p>
+     *
+     * <p>
+     * If nothing is found, the string input is returned.
+     * </p>
+     *
+     * <pre>
+     * StrUtil.substringBefore(null, *)      = null
+     * StrUtil.substringBefore("", *)        = ""
+     * StrUtil.substringBefore("abc", 'a')   = ""
+     * StrUtil.substringBefore("abcba", 'b') = "a"
+     * StrUtil.substringBefore("abc", 'c')   = "ab"
+     * StrUtil.substringBefore("abc", 'd')   = "abc"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring before the first occurrence of the separator, {@code null} if null String input
+     * @since 3.12.0
+     */
+    public static String substringBefore(final String str, final int separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == INDEX_NOT_FOUND) {
+            return str;
+        }
+        return str.substring(0, pos);
+    }
+
+    /**
+     * <p>Gets the substring before the first occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     * A {@code null} separator will return the input string.</p>
+     *
+     * <p>If nothing is found, the string input is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringBefore(null, *)      = null
+     * StrUtil.substringBefore("", *)        = ""
+     * StrUtil.substringBefore("abc", "a")   = ""
+     * StrUtil.substringBefore("abcba", "b") = "a"
+     * StrUtil.substringBefore("abc", "c")   = "ab"
+     * StrUtil.substringBefore("abc", "d")   = "abc"
+     * StrUtil.substringBefore("abc", "")    = ""
+     * StrUtil.substringBefore("abc", null)  = "abc"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring before the first occurrence of the separator,
+     * {@code null} if null String input
+     * @since 2.0
+     */
+    public static String substringBefore(final String str, final String separator) {
+        if (isEmpty(str) || separator == null) {
+            return str;
+        }
+        if (separator.isEmpty()) {
+            return EMPTY;
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == INDEX_NOT_FOUND) {
+            return str;
+        }
+        return str.substring(0, pos);
+    }
+
+    /**
+     * <p>Gets the substring before the last occurrence of a separator.
+     * The separator is not returned.</p>
+     *
+     * <p>A {@code null} string input will return {@code null}.
+     * An empty ("") string input will return the empty string.
+     * An empty or {@code null} separator will return the input string.</p>
+     *
+     * <p>If nothing is found, the string input is returned.</p>
+     *
+     * <pre>
+     * StrUtil.substringBeforeLast(null, *)      = null
+     * StrUtil.substringBeforeLast("", *)        = ""
+     * StrUtil.substringBeforeLast("abcba", "b") = "abc"
+     * StrUtil.substringBeforeLast("abc", "c")   = "ab"
+     * StrUtil.substringBeforeLast("a", "a")     = ""
+     * StrUtil.substringBeforeLast("a", "z")     = "a"
+     * StrUtil.substringBeforeLast("a", null)    = "a"
+     * StrUtil.substringBeforeLast("a", "")      = "a"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring before the last occurrence of the separator,
+     * {@code null} if null String input
+     * @since 2.0
+     */
+    public static String substringBeforeLast(final String str, final String separator) {
+        if (isEmpty(str) || isEmpty(separator)) {
+            return str;
+        }
+        final int pos = str.lastIndexOf(separator);
+        if (pos == INDEX_NOT_FOUND) {
+            return str;
+        }
+        return str.substring(0, pos);
+    }
+
+    /**
+     * <p>Gets the String that is nested in between two instances of the
+     * same String.</p>
+     *
+     * <p>A {@code null} input String returns {@code null}.
+     * A {@code null} tag returns {@code null}.</p>
+     *
+     * <pre>
+     * StrUtil.substringBetween(null, *)            = null
+     * StrUtil.substringBetween("", "")             = ""
+     * StrUtil.substringBetween("", "tag")          = null
+     * StrUtil.substringBetween("tagabctag", null)  = null
+     * StrUtil.substringBetween("tagabctag", "")    = ""
+     * StrUtil.substringBetween("tagabctag", "tag") = "abc"
+     * </pre>
+     *
+     * @param str the String containing the substring, may be null
+     * @param tag the String before and after the substring, may be null
+     * @return the substring, {@code null} if no match
+     * @since 2.0
+     */
+    public static String substringBetween(final String str, final String tag) {
+        return substringBetween(str, tag, tag);
+    }
+
+    /**
+     * <p>Gets the String that is nested in between two Strings.
+     * Only the first match is returned.</p>
+     *
+     * <p>A {@code null} input String returns {@code null}.
+     * A {@code null} open/close returns {@code null} (no match).
+     * An empty ("") open and close returns an empty string.</p>
+     *
+     * <pre>
+     * StrUtil.substringBetween("wx[b]yz", "[", "]") = "b"
+     * StrUtil.substringBetween(null, *, *)          = null
+     * StrUtil.substringBetween(*, null, *)          = null
+     * StrUtil.substringBetween(*, *, null)          = null
+     * StrUtil.substringBetween("", "", "")          = ""
+     * StrUtil.substringBetween("", "", "]")         = null
+     * StrUtil.substringBetween("", "[", "]")        = null
+     * StrUtil.substringBetween("yabcz", "", "")     = ""
+     * StrUtil.substringBetween("yabcz", "y", "z")   = "abc"
+     * StrUtil.substringBetween("yabczyabcz", "y", "z")   = "abc"
+     * </pre>
+     *
+     * @param str   the String containing the substring, may be null
+     * @param open  the String before the substring, may be null
+     * @param close the String after the substring, may be null
+     * @return the substring, {@code null} if no match
+     * @since 2.0
+     */
+    public static String substringBetween(final String str, final String open, final String close) {
+        if (!ObjectUtils.allNotNull(str, open, close)) {
+            return null;
+        }
+        final int start = str.indexOf(open);
+        if (start != INDEX_NOT_FOUND) {
+            final int end = str.indexOf(close, start + open.length());
+            if (end != INDEX_NOT_FOUND) {
+                return str.substring(start + open.length(), end);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * <p>Searches a String for substrings delimited by a start and end tag,
+     * returning all matching substrings in an array.</p>
+     *
+     * <p>A {@code null} input String returns {@code null}.
+     * A {@code null} open/close returns {@code null} (no match).
+     * An empty ("") open/close returns {@code null} (no match).</p>
+     *
+     * <pre>
+     * StrUtil.substringsBetween("[a][b][c]", "[", "]") = ["a","b","c"]
+     * StrUtil.substringsBetween(null, *, *)            = null
+     * StrUtil.substringsBetween(*, null, *)            = null
+     * StrUtil.substringsBetween(*, *, null)            = null
+     * StrUtil.substringsBetween("", "[", "]")          = []
+     * </pre>
+     *
+     * @param str   the String containing the substrings, null returns null, empty returns empty
+     * @param open  the String identifying the start of the substring, empty returns null
+     * @param close the String identifying the end of the substring, empty returns null
+     * @return a String Array of substrings, or {@code null} if no match
+     * @since 2.3
+     */
+    public static String[] substringsBetween(final String str, final String open, final String close) {
+        if (str == null || isEmpty(open) || isEmpty(close)) {
+            return null;
+        }
+        final int strLen = str.length();
+        if (strLen == 0) {
+            return ArrayUtils.EMPTY_STRING_ARRAY;
+        }
+        final int closeLen = close.length();
+        final int openLen = open.length();
+        final List<String> list = new ArrayList<>();
+        int pos = 0;
+        while (pos < strLen - closeLen) {
+            int start = str.indexOf(open, pos);
+            if (start < 0) {
+                break;
+            }
+            start += openLen;
+            final int end = str.indexOf(close, start);
+            if (end < 0) {
+                break;
+            }
+            list.add(str.substring(start, end));
+            pos = end + closeLen;
+        }
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
 }

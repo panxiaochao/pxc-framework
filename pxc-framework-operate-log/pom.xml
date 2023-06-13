@@ -15,8 +15,18 @@
 
     <description>Operate Log Configuration Jar</description>
 
+    <properties>
+        <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
+        <aspectj.version>1.9.19</aspectj.version>
+    </properties>
 
     <dependencies>
+        <!-- transmittable-thread-local -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>${transmittable-thread-local.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.panxiaochao</groupId>
             <artifactId>pxc-framework-common</artifactId>
@@ -27,11 +37,23 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- aspectj -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
