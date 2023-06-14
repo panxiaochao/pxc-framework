@@ -46,12 +46,17 @@ public @interface RedisLock {
     String key() default "";
 
     /**
-     * 过期时间，默认5毫秒
+     * 等待锁时间, 默认0秒
      */
-    int expire() default 5000;
+    long waitTime() default 0;
 
     /**
-     * 时间单位
+     * 释放时间, 默认5秒
+     */
+    long leaseTime() default 5000;
+
+    /**
+     * 时间单位, 默认毫秒
      */
     TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 }

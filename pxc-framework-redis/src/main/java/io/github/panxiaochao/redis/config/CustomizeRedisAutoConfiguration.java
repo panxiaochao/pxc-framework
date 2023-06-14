@@ -21,8 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import io.github.panxiaochao.redis.aop.AccessRateLimitPointcutAdvisor;
 import io.github.panxiaochao.redis.properties.MyRedisProperties;
-import io.github.panxiaochao.redis.service.IRedisService;
-import io.github.panxiaochao.redis.service.impl.RedisServiceImpl;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
@@ -48,7 +46,7 @@ import org.springframework.util.StringUtils;
 import java.util.Objects;
 
 /**
- * {@code RedisConfig}
+ * {@code CustomizeRedisAutoConfiguration}
  * <p> description: Redis Config
  *
  * @author Lypxc
@@ -58,7 +56,7 @@ import java.util.Objects;
 @AutoConfigureBefore(name = "org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration")
 @EnableConfigurationProperties(MyRedisProperties.class)
 @ConditionalOnWebApplication
-public class MyRedisAutoConfiguration {
+public class CustomizeRedisAutoConfiguration {
 
     private static final String STRING_EMPTY = "";
 
@@ -115,12 +113,6 @@ public class MyRedisAutoConfiguration {
         // afterPropertiesSet
         template.afterPropertiesSet();
         return template;
-    }
-
-    @Bean
-    @ConditionalOnBean(RedisTemplate.class)
-    public IRedisService redisService(RedisTemplate<String, Object> redisTemplate) {
-        return new RedisServiceImpl(redisTemplate);
     }
 
     /**

@@ -67,18 +67,15 @@ public class AccessRateLimitMethodBefore implements MethodBeforeAdvice {
             LOGGER.info("count:{}", count);
             // 第一次进入
             if (Objects.isNull(count)) {
-                LOGGER.info("第一次进入");
                 redisTemplate.boundValueOps(key).set(1, limitSecond, TimeUnit.SECONDS);
             } else if (count < maxCount) {
-                LOGGER.info("允许访问");
                 // 每访问一次接口更新一次对应的值，加1操作
                 redisTemplate.boundValueOps(key).increment();
             } else {
-                LOGGER.info("超出限制了");
                 throw new AccessRateLimitException(AccessRateLimitEnum.ACCESS_RATE_LIMIT_FREQUENT_ERROR);
             }
         } else {
-            LOGGER.info("Access rate limit is null");
+            LOGGER.error("Access rate limit is null");
         }
     }
 
