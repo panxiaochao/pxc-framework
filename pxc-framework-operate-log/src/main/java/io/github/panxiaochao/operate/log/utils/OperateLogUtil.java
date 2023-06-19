@@ -82,6 +82,7 @@ public class OperateLogUtil {
         operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
         operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
         operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
+        operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
         operateLogDomain.setIp(RequestUtil.ofRequestIp());
         operateLogDomain.setRequestDateTime(LocalDateTime.now());
         if (ex != null) {

@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.operate.log.aop.before;
+package io.github.panxiaochao.common.comsumer;
 
-import io.github.panxiaochao.operate.log.context.MethodContext;
-import org.springframework.aop.MethodBeforeAdvice;
-import org.springframework.lang.Nullable;
-
-import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * {@code OperateLogMethodBeforeAdvice}
- * <p> description: aop before method
+ * {@code ResultSetConsumer}
+ * <p> description: ResultSetConsumer
  *
  * @author Lypxc
- * @since 2023-06-12
+ * @since 2023-06-15
  */
-public class OperateLogMethodBeforeAdvice implements MethodBeforeAdvice {
+public interface ResultSetConsumer<T> {
 
-    @Override
-    public void before(Method method, Object[] args, @Nullable Object target) {
-        // 设置请求方法执行开始时间
-        MethodContext.setMethodCostTime(System.currentTimeMillis());
-    }
+    T apply(ResultSet rs) throws SQLException;
+
+    void accept(T object);
 }

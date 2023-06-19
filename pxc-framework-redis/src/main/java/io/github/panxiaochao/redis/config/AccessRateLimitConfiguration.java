@@ -13,41 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.operate.log.config;
+package io.github.panxiaochao.redis.config;
 
 import io.github.panxiaochao.common.abstracts.CustomizeAnnotationPointAdvisor;
-import io.github.panxiaochao.operate.log.annotation.OperateLog;
-import io.github.panxiaochao.operate.log.aop.OperateLogAdvice;
-import lombok.RequiredArgsConstructor;
+import io.github.panxiaochao.redis.annotation.AccessRateLimit;
+import io.github.panxiaochao.redis.aop.AccessRateLimitAdvice;
 import org.springframework.aop.Advisor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * {@code OperateLogAutoConfiguration}
- * <p> description: OperateLog AutoConfiguration
+ * {@code AccessRateLimitConfiguration}
+ * <p> description: AccessRateLimitConfiguration
  *
  * @author Lypxc
- * @since 2023-06-08
+ * @since 2023-06-19
  */
-@RequiredArgsConstructor
 @Configuration
-@ConditionalOnProperty(name = "spring.operatelog.enabled", havingValue = "true")
-@ConditionalOnWebApplication
-public class OperateLogAutoConfiguration {
+public class AccessRateLimitConfiguration {
 
     /**
-     * OperateLogAdvisor 切面+切点
+     * AccessRateLimit 切面+切点
      */
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Bean
-    public Advisor operateLogAdvisor() {
+    @ConditionalOnProperty(prefix = "spring.redis", name = "accessRateLimit", havingValue = "true")
+    public Advisor accessRateLimitPointcutAdvisor(ObjectProvider<RedisTemplate<String, Object>> redisTemplateObjectProvider) {
+        RedisTemplate<String, Object> redisTemplate = redisTemplateObjectProvider.getIfAvailable();
         CustomizeAnnotationPointAdvisor advisor =
-                new CustomizeAnnotationPointAdvisor(new OperateLogAdvice(), OperateLog.class);
+                new CustomizeAnnotationPointAdvisor(new AccessRateLimitAdvice(redisTemplate), AccessRateLimit.class);
         advisor.setOrder(-1);
         return advisor;
     }

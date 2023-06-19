@@ -72,6 +72,11 @@ public class OperateLogDomain implements Serializable {
     private String requestMethod;
 
     /**
+     * 请求类型
+     */
+    private String requestContentType;
+
+    /**
      * 请求Ip
      */
     private String ip;

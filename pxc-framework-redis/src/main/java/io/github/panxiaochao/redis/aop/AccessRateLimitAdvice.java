@@ -33,16 +33,16 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@code AccessRateLimitMethodBefore}
- * <p> description:
+ * {@code AccessRateLimitAdvice}
+ * <p> description: AccessRateLimitAdvice
  *
  * @author Lypxc
  * @since 2023-05-26
  */
 @RequiredArgsConstructor
-public class AccessRateLimitMethodBefore implements MethodBeforeAdvice {
+public class AccessRateLimitAdvice implements MethodBeforeAdvice {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessRateLimitMethodBefore.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccessRateLimitAdvice.class);
 
     private final RedisTemplate<String, Object> redisTemplate;
 

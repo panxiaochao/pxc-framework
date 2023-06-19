@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2023-05-29
  */
 @Documented
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RedisLock {
 
