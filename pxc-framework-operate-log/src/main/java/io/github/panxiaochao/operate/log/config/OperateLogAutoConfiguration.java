@@ -18,7 +18,6 @@ package io.github.panxiaochao.operate.log.config;
 import io.github.panxiaochao.common.abstracts.CustomizeAnnotationPointAdvisor;
 import io.github.panxiaochao.operate.log.annotation.OperateLog;
 import io.github.panxiaochao.operate.log.aop.OperateLogAdvice;
-import lombok.RequiredArgsConstructor;
 import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,7 +33,6 @@ import org.springframework.context.annotation.Role;
  * @author Lypxc
  * @since 2023-06-08
  */
-@RequiredArgsConstructor
 @Configuration
 @ConditionalOnProperty(name = "spring.operatelog.enabled", havingValue = "true")
 @ConditionalOnWebApplication

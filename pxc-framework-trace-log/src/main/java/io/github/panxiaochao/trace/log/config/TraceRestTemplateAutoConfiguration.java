@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceRestTemplateAuoConfiguration}
  * <p> description: Spring RestTemplate Configurer Log Configuration
@@ -40,8 +38,8 @@ public class TraceRestTemplateAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceRestTemplateAutoConfiguration.class);
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceRestTemplate init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceRestTemplate init");
+    // }
 }

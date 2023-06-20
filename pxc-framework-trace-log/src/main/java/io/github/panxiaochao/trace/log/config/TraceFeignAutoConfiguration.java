@@ -23,8 +23,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceFeignAutoConfiguration}
  * <p> description: OpenFeign Log Trace Configuration
@@ -44,8 +42,8 @@ public class TraceFeignAutoConfiguration {
         return new TraceFeignInterceptor();
     }
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceFeign init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceFeign init");
+    // }
 }

@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Lypxc
  * @since 2023-03-07
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class FilterConfiguration {
 
     /**

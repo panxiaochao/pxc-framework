@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceOkHttpAuoConfiguration}
  * <p> description: OkHttp Log Configuration
@@ -35,8 +33,8 @@ public class TraceOkHttpAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceOkHttpAutoConfiguration.class);
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceOkHttp init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceOkHttp init");
+    // }
 }

@@ -16,10 +16,10 @@
 package io.github.panxiaochao.redis.aop;
 
 import io.github.panxiaochao.common.utils.RequestUtil;
+import io.github.panxiaochao.common.utils.SpringContextUtil;
 import io.github.panxiaochao.redis.annotation.AccessRateLimit;
 import io.github.panxiaochao.redis.enums.AccessRateLimitEnum;
 import io.github.panxiaochao.redis.exception.AccessRateLimitException;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.MethodBeforeAdvice;
@@ -39,15 +39,13 @@ import java.util.concurrent.TimeUnit;
  * @author Lypxc
  * @since 2023-05-26
  */
-@RequiredArgsConstructor
 public class AccessRateLimitAdvice implements MethodBeforeAdvice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccessRateLimitAdvice.class);
 
-    private final RedisTemplate<String, Object> redisTemplate;
-
     @Override
     public void before(Method method, Object[] args, @Nullable Object target) {
+        RedisTemplate<String, Object> redisTemplate = SpringContextUtil.getInstance().getBean("redisTemplate");
         AccessRateLimit accessRateLimit = null;
         // 得到访问的方法对象
         if (method.isAnnotationPresent(AccessRateLimit.class)) {

@@ -18,8 +18,6 @@ package io.github.panxiaochao.trace.log.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceAspectAutoConfiguration}
  * <p> description: Aspect Log Trace Configuration
@@ -32,8 +30,8 @@ public class TraceAspectAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceAspectAutoConfiguration.class);
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceAspect init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceAspect init");
+    // }
 }

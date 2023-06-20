@@ -27,8 +27,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceWebMvcAutoConfiguration}
  * <p> description: Spring WebMvc Configurer Log Configuration
@@ -53,8 +51,8 @@ public class TraceWebMvcAutoConfiguration {
         return new TraceMvcConfigurer();
     }
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceWebMvc init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceWebMvc init");
+    // }
 }

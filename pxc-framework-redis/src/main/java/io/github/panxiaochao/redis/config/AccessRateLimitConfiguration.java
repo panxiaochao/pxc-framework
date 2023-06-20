@@ -19,13 +19,11 @@ import io.github.panxiaochao.common.abstracts.CustomizeAnnotationPointAdvisor;
 import io.github.panxiaochao.redis.annotation.AccessRateLimit;
 import io.github.panxiaochao.redis.aop.AccessRateLimitAdvice;
 import org.springframework.aop.Advisor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * {@code AccessRateLimitConfiguration}
@@ -34,7 +32,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @author Lypxc
  * @since 2023-06-19
  */
-@Configuration
+@AutoConfiguration
 public class AccessRateLimitConfiguration {
 
     /**
@@ -43,10 +41,9 @@ public class AccessRateLimitConfiguration {
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Bean
     @ConditionalOnProperty(prefix = "spring.redis", name = "accessRateLimit", havingValue = "true")
-    public Advisor accessRateLimitPointcutAdvisor(ObjectProvider<RedisTemplate<String, Object>> redisTemplateObjectProvider) {
-        RedisTemplate<String, Object> redisTemplate = redisTemplateObjectProvider.getIfAvailable();
+    public Advisor accessRateLimitPointcutAdvisor() {
         CustomizeAnnotationPointAdvisor advisor =
-                new CustomizeAnnotationPointAdvisor(new AccessRateLimitAdvice(redisTemplate), AccessRateLimit.class);
+                new CustomizeAnnotationPointAdvisor(new AccessRateLimitAdvice(), AccessRateLimit.class);
         advisor.setOrder(-1);
         return advisor;
     }
