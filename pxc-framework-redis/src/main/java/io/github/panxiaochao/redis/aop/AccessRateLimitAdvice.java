@@ -62,7 +62,6 @@ public class AccessRateLimitAdvice implements MethodBeforeAdvice {
             int limitSecond = accessRateLimit.limitSecond();
             //
             Integer count = (Integer) redisTemplate.boundValueOps(key).get();
-            LOGGER.info("count:{}", count);
             // 第一次进入
             if (Objects.isNull(count)) {
                 redisTemplate.boundValueOps(key).set(1, limitSecond, TimeUnit.SECONDS);

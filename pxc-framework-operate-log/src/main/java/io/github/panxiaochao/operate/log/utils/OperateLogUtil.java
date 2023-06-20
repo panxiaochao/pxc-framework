@@ -18,16 +18,19 @@ package io.github.panxiaochao.operate.log.utils;
 import io.github.panxiaochao.common.utils.*;
 import io.github.panxiaochao.operate.log.annotation.OperateLog;
 import io.github.panxiaochao.operate.log.context.MethodContext;
-import io.github.panxiaochao.operate.log.domain.FileObjectInfo;
 import io.github.panxiaochao.operate.log.domain.OperateLogDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -132,15 +135,44 @@ public class OperateLogUtil {
         if (ObjectUtil.isNotEmpty(args)) {
             for (Object object : args) {
                 // 附件类型
-                if (object instanceof MultipartFile) {
-                    FileObjectInfo fileObjectInfo = new FileObjectInfo((MultipartFile) object);
-                    params.append(JacksonUtil.toString(fileObjectInfo)).append(" ");
-                } else if (ObjectUtil.isNotEmpty(object)) {
+                // if (object instanceof MultipartFile) {
+                //     FileObjectInfo fileObjectInfo = new FileObjectInfo((MultipartFile) object);
+                //     params.append(JacksonUtil.toString(fileObjectInfo)).append(" ");
+                // } else
+                if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
                     String jsonObj = JacksonUtil.toString(object);
                     params.append(jsonObj).append(" ");
                 }
             }
         }
         return params.toString();
+    }
+
+    /**
+     * 判断是否需要过滤的对象。
+     *
+     * @param o 对象信息。
+     * @return 如果是需要过滤的对象，则返回true；否则返回false。
+     */
+    private static boolean isFilterObject(final Object o) {
+        Class<?> clazz = o.getClass();
+        if (clazz.isArray()) {
+            return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
+        } else if (Collection.class.isAssignableFrom(clazz)) {
+            Collection collection = (Collection) o;
+            for (Object value : collection) {
+                return value instanceof MultipartFile;
+            }
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Map map = (Map) o;
+            for (Object value : map.entrySet()) {
+                Map.Entry entry = (Map.Entry) value;
+                return entry.getValue() instanceof MultipartFile;
+            }
+        }
+        return (o instanceof MultipartFile ||
+                o instanceof HttpServletRequest ||
+                o instanceof HttpServletResponse ||
+                o instanceof BindingResult);
     }
 }

@@ -15,7 +15,6 @@
  */
 package io.github.panxiaochao.common.utils;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import io.github.panxiaochao.common.comsumer.ResultSetConsumer;
 import io.github.panxiaochao.common.enums.DbType;
 import org.slf4j.Logger;
@@ -89,9 +88,7 @@ public class JdbcUtil implements JdbcConstant {
         } catch (Exception e) {
             boolean printError = true;
 
-            if (e instanceof java.sql.SQLRecoverableException
-                    && "Closed Connection".equals(e.getMessage())
-            ) {
+            if (e instanceof java.sql.SQLRecoverableException && "Closed Connection".equals(e.getMessage())) {
                 printError = false;
             }
 
@@ -156,10 +153,7 @@ public class JdbcUtil implements JdbcConstant {
         printResultSet(rs, out, true, "\t");
     }
 
-    public static void printResultSet(ResultSet rs,
-                                      PrintStream out,
-                                      boolean printHeader,
-                                      String seperator) throws SQLException {
+    public static void printResultSet(ResultSet rs, PrintStream out, boolean printHeader, String seperator) throws SQLException {
         ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
         if (printHeader) {
@@ -264,7 +258,7 @@ public class JdbcUtil implements JdbcConstant {
                     } else {
                         if (object instanceof byte[]) {
                             byte[] bytes = (byte[]) object;
-                            String text = HexBin.encode(bytes);
+                            String text = HexBinUtil.encode(bytes);
                             out.print(text);
                         } else {
                             out.print(String.valueOf(object));
@@ -537,8 +531,7 @@ public class JdbcUtil implements JdbcConstant {
 
         if (rawUrl.startsWith("jdbc:derby:") || rawUrl.startsWith("jdbc:log4jdbc:derby:")) {
             return DbType.derby;
-        } else if (rawUrl.startsWith("jdbc:mysql:") || rawUrl.startsWith("jdbc:cobar:")
-                || rawUrl.startsWith("jdbc:log4jdbc:mysql:")) {
+        } else if (rawUrl.startsWith("jdbc:mysql:") || rawUrl.startsWith("jdbc:cobar:") || rawUrl.startsWith("jdbc:log4jdbc:mysql:")) {
             return DbType.mysql;
         } else if (rawUrl.startsWith("jdbc:mariadb:")) {
             return DbType.mariadb;
@@ -753,13 +746,11 @@ public class JdbcUtil implements JdbcConstant {
         }
     }
 
-    public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, Object... parameters)
-            throws SQLException {
+    public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, Object... parameters) throws SQLException {
         return executeQuery(dataSource, sql, Arrays.asList(parameters));
     }
 
-    public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, List<Object> parameters)
-            throws SQLException {
+    public static List<Map<String, Object>> executeQuery(DataSource dataSource, String sql, List<Object> parameters) throws SQLException {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
@@ -769,8 +760,7 @@ public class JdbcUtil implements JdbcConstant {
         }
     }
 
-    public static List<Map<String, Object>> executeQuery(Connection conn, String sql, List<Object> parameters)
-            throws SQLException {
+    public static List<Map<String, Object>> executeQuery(Connection conn, String sql, List<Object> parameters) throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
 
         PreparedStatement stmt = null;
@@ -810,8 +800,7 @@ public class JdbcUtil implements JdbcConstant {
         }
     }
 
-    public static void insertToTable(DataSource dataSource, String tableName, Map<String, Object> data)
-            throws SQLException {
+    public static void insertToTable(DataSource dataSource, String tableName, Map<String, Object> data) throws SQLException {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
@@ -852,12 +841,7 @@ public class JdbcUtil implements JdbcConstant {
         return sql.toString();
     }
 
-    public static <T> void executeQuery(
-            DataSource dataSource,
-            ResultSetConsumer<T> consumer,
-            String sql,
-            Object... parameters
-    ) throws SQLException {
+    public static <T> void executeQuery(DataSource dataSource, ResultSetConsumer<T> consumer, String sql, Object... parameters) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -883,9 +867,7 @@ public class JdbcUtil implements JdbcConstant {
 
     public static boolean isMySqlDriver(String driverClassName) {
         return driverClassName.equals(JdbcConstant.MYSQL_DRIVER) //
-                || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_6)
-                || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_603)
-                || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_REPLICATE);
+                || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_6) || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_603) || driverClassName.equals(JdbcConstant.MYSQL_DRIVER_REPLICATE);
     }
 
     public static boolean isOracleDbType(String dbType) {
@@ -901,8 +883,7 @@ public class JdbcUtil implements JdbcConstant {
     }
 
     public static boolean isMysqlDbType(String dbTypeName) {
-        return isMysqlDbType(
-                DbType.of(dbTypeName));
+        return isMysqlDbType(DbType.of(dbTypeName));
     }
 
     public static boolean isMysqlDbType(DbType dbType) {
@@ -925,9 +906,7 @@ public class JdbcUtil implements JdbcConstant {
     }
 
     public static boolean isPgsqlDbType(String dbTypeName) {
-        return isPgsqlDbType(
-                DbType.of(dbTypeName)
-        );
+        return isPgsqlDbType(DbType.of(dbTypeName));
     }
 
     public static boolean isPgsqlDbType(DbType dbType) {
@@ -948,8 +927,7 @@ public class JdbcUtil implements JdbcConstant {
     }
 
     public static boolean isSqlserverDbType(String dbTypeName) {
-        return isSqlserverDbType(
-                DbType.of(dbTypeName));
+        return isSqlserverDbType(DbType.of(dbTypeName));
     }
 
     public static boolean isSqlserverDbType(DbType dbType) {
