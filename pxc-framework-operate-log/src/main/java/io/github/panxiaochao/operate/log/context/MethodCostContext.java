@@ -18,13 +18,13 @@ package io.github.panxiaochao.operate.log.context;
 import com.alibaba.ttl.TransmittableThreadLocal;
 
 /**
- * {@code MethodContext}
- * <p> description: 上下文
+ * {@code MethodCostContext}
+ * <p> description: 方法时间上下文
  *
  * @author Lypxc
  * @since 2023-06-12
  */
-public final class MethodContext {
+public final class MethodCostContext {
 
     /**
      * 存储毫秒

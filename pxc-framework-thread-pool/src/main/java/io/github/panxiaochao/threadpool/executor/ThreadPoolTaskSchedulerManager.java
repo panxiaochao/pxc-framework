@@ -30,7 +30,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- * {@code MyThreadPoolTaskExecutor}
+ * {@code ThreadPoolTaskSchedulerManager}
  * <p> 自定义多线程执行
  *
  * @author Lypxc
@@ -49,15 +49,15 @@ public class ThreadPoolTaskSchedulerManager extends ThreadPoolTaskScheduler {
      */
     public ThreadPoolTaskSchedulerManager(ThreadPoolProperties threadPoolProperties) {
         // 核心线程数目
-        super.setPoolSize(threadPoolProperties.getThreadPoolTaskScheduler().getPoolSize());
+        super.setPoolSize(threadPoolProperties.getScheduler().getPoolSize());
         // 调度器shutdown被调用时等待当前被调度的任务完成
-        super.setAwaitTerminationSeconds(threadPoolProperties.getThreadPoolTaskScheduler().getAwaitTerminationSeconds());
+        super.setAwaitTerminationSeconds(threadPoolProperties.getScheduler().getAwaitTerminationSeconds());
         // 线程名称前缀
-        super.setThreadNamePrefix(threadPoolProperties.getThreadPoolTaskScheduler().getThreadNamePrefix());
+        super.setThreadNamePrefix(threadPoolProperties.getScheduler().getThreadNamePrefix());
         // 线程名称前缀
-        super.setWaitForTasksToCompleteOnShutdown(threadPoolProperties.getThreadPoolTaskScheduler().isWaitForTasksToCompleteOnShutdown());
+        super.setWaitForTasksToCompleteOnShutdown(threadPoolProperties.getScheduler().isWaitForTasksToCompleteOnShutdown());
         // 线程拒绝策略
-        super.setRejectedExecutionHandler(threadPoolProperties.getThreadPoolTaskScheduler().getRejectedExecutionHandler());
+        super.setRejectedExecutionHandler(threadPoolProperties.getScheduler().getRejectedExecutionHandler());
         // 初始化
         super.initialize();
     }

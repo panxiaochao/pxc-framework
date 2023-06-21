@@ -30,11 +30,11 @@ import java.lang.annotation.*;
 public @interface OperateLog {
 
     /**
-     * A module of the operate log.
+     * The name of this OperateLog.
      *
-     * @return the operate log module
+     * @return the name of this OperateLog
      */
-    String module() default "";
+    String name() default "";
 
     /**
      * A description of the operate log.

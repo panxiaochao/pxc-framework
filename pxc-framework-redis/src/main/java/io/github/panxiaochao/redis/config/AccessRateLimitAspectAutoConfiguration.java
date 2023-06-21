@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.redis.aop;
+package io.github.panxiaochao.redis.config;
 
 import io.github.panxiaochao.common.utils.RequestUtil;
-import io.github.panxiaochao.common.utils.SpringContextUtil;
 import io.github.panxiaochao.redis.annotation.AccessRateLimit;
 import io.github.panxiaochao.redis.enums.AccessRateLimitEnum;
 import io.github.panxiaochao.redis.exception.AccessRateLimitException;
+import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
@@ -33,19 +38,33 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@code AccessRateLimitAdvice}
- * <p> description: AccessRateLimitAdvice
+ * {@code AccessRateLimitAspectAutoConfiguration}
+ * <p> description: AccessRateLimitAspectAutoConfiguration
  *
  * @author Lypxc
- * @since 2023-05-26
+ * @since 2023-06-19
  */
-public class AccessRateLimitAdvice implements MethodBeforeAdvice {
+@RequiredArgsConstructor
+@Aspect
+@AutoConfiguration
+@ConditionalOnProperty(prefix = "spring.redis", name = "accessRateLimit", havingValue = "true")
+public class AccessRateLimitAspectAutoConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessRateLimitAdvice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccessRateLimitAspectAutoConfiguration.class);
 
-    @Override
-    public void before(Method method, Object[] args, @Nullable Object target) {
-        RedisTemplate<String, Object> redisTemplate = SpringContextUtil.getInstance().getBean("redisTemplate");
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 设置拦截切点
+     */
+    @Pointcut("@annotation(io.github.panxiaochao.redis.annotation.AccessRateLimit) || @within(io.github.panxiaochao.redis.annotation.AccessRateLimit)")
+    public void accessRateLimitPointCut() {
+    }
+
+    @Before("accessRateLimitPointCut()")
+    public void before(JoinPoint joinPoint) {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
         AccessRateLimit accessRateLimit = null;
         // 得到访问的方法对象
         if (method.isAnnotationPresent(AccessRateLimit.class)) {
@@ -84,9 +103,8 @@ public class AccessRateLimitAdvice implements MethodBeforeAdvice {
      * @return obtain the key
      */
     private String getAccessRateLimitKey(Method method, AccessRateLimit accessRateLimit) {
-        String key = method.getDeclaringClass().getName() + "." + method.getName();
+        String key = RequestUtil.ofRequestIp() + "." + method.getDeclaringClass().getName() + "." + method.getName();
         key = Base64.getEncoder().encodeToString(key.getBytes(StandardCharsets.UTF_8));
-        // LOGGER.info("key: {}", Base64.getEncoder().encodeToString(key.getBytes(StandardCharsets.UTF_8)));
-        return accessRateLimit.key() + RequestUtil.ofRequestIp() + ":" + key;
+        return accessRateLimit.key() + ":" + key;
     }
 }

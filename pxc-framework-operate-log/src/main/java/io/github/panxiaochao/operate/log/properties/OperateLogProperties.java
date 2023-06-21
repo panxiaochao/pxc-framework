@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.operate.log.properties;
 
+import io.github.panxiaochao.operate.log.enums.OperateLogType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -36,5 +37,10 @@ public class OperateLogProperties {
     /**
      * 是否开启
      */
-    private boolean enabled;
+    public boolean enabled;
+
+    /**
+     * 存储日志类型
+     */
+    public OperateLogType logType = OperateLogType.LOGGER;
 }

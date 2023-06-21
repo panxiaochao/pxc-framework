@@ -37,9 +37,9 @@ public class OperateLogDomain implements Serializable {
     private static final long serialVersionUID = -8831737354114961499L;
 
     /**
-     * 操作模块
+     * 名称
      */
-    private String module;
+    private String name;
 
     /**
      * 描述
@@ -82,6 +82,11 @@ public class OperateLogDomain implements Serializable {
     private String ip;
 
     /**
+     * 请求类名
+     */
+    private String className;
+
+    /**
      * 请求类方法
      */
     private String classMethod;
@@ -120,4 +125,9 @@ public class OperateLogDomain implements Serializable {
      * 错误原因
      */
     private String errorMessage;
+
+    /**
+     * 日志类型
+     */
+    private String logType;
 }

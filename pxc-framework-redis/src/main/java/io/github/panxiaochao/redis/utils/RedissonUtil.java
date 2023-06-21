@@ -43,11 +43,6 @@ public class RedissonUtil {
     }
 
     /**
-     * obtain Redisson client
-     */
-    private final RedissonClient redissonClient = SpringContextUtil.getInstance().getBean(RedissonClient.class);
-
-    /**
      * 初始化
      */
     private static final RedissonUtil REDISSON_UTIL = new RedissonUtil();
@@ -68,6 +63,7 @@ public class RedissonUtil {
      * @return RLock object
      */
     public RLock rLock(String lockName) {
+        final RedissonClient redissonClient = SpringContextUtil.getInstance().getBean(RedissonClient.class);
         return redissonClient.getLock(lockName);
     }
 

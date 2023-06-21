@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.panxiaochao.operate.log.config.OperateLogAutoConfiguration
-
-  

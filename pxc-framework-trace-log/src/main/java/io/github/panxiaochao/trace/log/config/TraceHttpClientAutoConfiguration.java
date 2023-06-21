@@ -18,8 +18,6 @@ package io.github.panxiaochao.trace.log.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-
 /**
  * {@code TraceHttpClientAuoConfiguration}
  * <p> description: HttpClient Log Trace Configuration
@@ -33,8 +31,8 @@ public class TraceHttpClientAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceHttpClientAutoConfiguration.class);
 
-    @PostConstruct
-    public void init() {
-        LOGGER.info(">>> TraceHttpClient init");
-    }
+    // @PostConstruct
+    // public void init() {
+    //     LOGGER.info(">>> TraceHttpClient init");
+    // }
 }

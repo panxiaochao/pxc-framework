@@ -43,14 +43,25 @@ public class ThreadPoolProperties {
     private boolean enabled;
 
     /**
+     * 是否开启异步
+     */
+    private boolean async;
+
+    /**
+     * 异步任务配置，采用多线程同一个配置
+     */
+    @NestedConfigurationProperty
+    private ThreadPoolTaskConfig asyncpool = new ThreadPoolTaskConfig();
+
+    /**
      * 多线程任务配置
      */
     @NestedConfigurationProperty
-    private ThreadPoolTaskConfig threadPoolTask = new ThreadPoolTaskConfig();
+    private ThreadPoolTaskConfig threadpool = new ThreadPoolTaskConfig();
 
     /**
      * 定时任务多线程任务配置
      */
     @NestedConfigurationProperty
-    private ThreadPoolTaskSchedulerConfig threadPoolTaskScheduler = new ThreadPoolTaskSchedulerConfig();
+    private ThreadPoolTaskSchedulerConfig scheduler = new ThreadPoolTaskSchedulerConfig();
 }

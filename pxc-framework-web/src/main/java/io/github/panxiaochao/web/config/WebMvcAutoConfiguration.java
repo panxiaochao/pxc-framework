@@ -15,20 +15,23 @@
  */
 package io.github.panxiaochao.web.config;
 
-import io.github.panxiaochao.common.handler.RestExceptionHandler;
-import io.github.panxiaochao.common.handler.RestResponseEntityExceptionHandler;
+import io.github.panxiaochao.web.handler.RestExceptionHandler;
+import io.github.panxiaochao.web.handler.RestResponseEntityExceptionHandler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 /**
  * {@code WebMvcAutoConfiguration}
  * <p> description: WebMvcAutoConfiguration
+ * <p> exposeProxy = true 通过aop框架暴露该代理对象, AopContext能够访问
  *
  * @author Lypxc
  * @since 2023-06-20
  */
 @AutoConfiguration
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @Import({WebMvcConfiguration.class, FilterConfiguration.class, SpringApplicationContextConfiguration.class})
 public class WebMvcAutoConfiguration {
 

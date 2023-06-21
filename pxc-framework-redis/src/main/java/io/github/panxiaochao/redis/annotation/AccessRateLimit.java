@@ -36,7 +36,7 @@ import java.lang.annotation.*;
  * @since 2023-05-26
  */
 @Documented
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AccessRateLimit {
 

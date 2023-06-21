@@ -20,7 +20,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 /**
  * {@code MapUtil}
@@ -188,16 +187,19 @@ public class MapUtil {
     }
 
     /**
-     * remove value, Thread safety depends on whether the Map is a thread-safe Map.
+     * 去掉Map中指定key的键值对，修改原Map
      *
-     * @param map         map
-     * @param key         key
-     * @param removeJudge judge this key can be remove
-     * @param <K>         key type
-     * @param <V>         value type
-     * @return value
+     * @param <K>  Key类型
+     * @param <V>  Value类型
+     * @param map  Map
+     * @param keys 键列表
+     * @return 修改后的key
      */
-    public static <K, V> V removeKey(Map<K, V> map, K key, Predicate<V> removeJudge) {
-        return map.computeIfPresent(key, (k, v) -> removeJudge.test(v) ? null : v);
+    @SuppressWarnings("unchecked")
+    public static <K, V> Map<K, V> removeAny(Map<K, V> map, final K... keys) {
+        for (K key : keys) {
+            map.remove(key);
+        }
+        return map;
     }
 }
