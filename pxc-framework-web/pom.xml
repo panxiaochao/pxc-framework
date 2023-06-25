@@ -4,27 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.5</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>pxc-framework-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>pxc-framework-web</artifactId>
-    <packaging>jar</packaging>
-
-    <description>WebMvc Configuration Jar</description>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.github.panxiaochao</groupId>
-            <artifactId>pxc-framework-common</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-    </dependencies>
 
 </project>

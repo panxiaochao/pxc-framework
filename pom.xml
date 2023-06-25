@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.panxiaochao</groupId>
     <artifactId>pxc-framework-parent</artifactId>
-    <version>2022-2.7-1.5</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>pxc-framework Converged Project, base on spring boot 2.7.X up-to-date</description>
@@ -51,38 +51,26 @@
     <!-- modules -->
     <modules>
         <module>pxc-framework-bom</module>
-        <module>pxc-framework-mybatis-plus</module>
-        <module>pxc-framework-common</module>
-        <module>pxc-framework-springdoc</module>
+        <module>pxc-framework-core</module>
         <module>pxc-framework-web</module>
-        <module>pxc-framework-thread-pool</module>
-        <module>pxc-framework-mybatis-plus-generator</module>
-        <module>pxc-framework-redis</module>
-        <module>pxc-framework-db-document</module>
-        <module>pxc-framework-trace-log</module>
-        <module>pxc-framework-log4j2</module>
-        <module>pxc-framework-file-storage</module>
-        <module>pxc-framework-plugin-loader</module>
-        <module>pxc-framework-ip2region</module>
-        <module>pxc-framework-database-metadata</module>
-        <module>pxc-framework-minio</module>
-        <module>pxc-framework-operate-log</module>
     </modules>
 
     <!-- properties -->
     <properties>
+        <revision>2.0.0-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2021.0.x 版本支持 2.6.x, 2.7.x (Starting with 2021.0.3) -->
-        <spring-boot.version>2.7.12</spring-boot.version>
-        <spring-cloud.version>2021.0.6</spring-cloud.version>
+        <spring-boot.version>2.7.13</spring-boot.version>
+        <spring-cloud.version>2021.0.7</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
+        <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
+        <lombok.version>1.18.26</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -161,6 +149,18 @@
                     <target>${java.version}</target>
                     <encoding>UTF-8</encoding>
                     <skip>true</skip>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring-boot.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 
