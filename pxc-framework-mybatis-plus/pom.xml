@@ -6,7 +6,7 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.5-SNAPSHOT</version>
+        <version>2022-2.7-1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>pxc-framework-mybatis-plus</artifactId>

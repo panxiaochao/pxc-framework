@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.panxiaochao</groupId>
     <artifactId>pxc-framework-parent</artifactId>
-    <version>2022-2.7-1.5-SNAPSHOT</version>
+    <version>2022-2.7-1.5</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>pxc-framework Converged Project, base on spring boot 2.7.X up-to-date</description>
