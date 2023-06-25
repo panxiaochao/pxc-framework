@@ -55,4 +55,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public ObjectMapper objectMapper() {
         return JacksonUtil.objectMapper();
     }
+
+    // @Bean
+    // @ConditionalOnMissingBean
+    // public Jackson2ObjectMapperBuilderCustomizer customizer() {
+    //     return builder -> builder.configure(JacksonUtil.objectMapper());
+    // }
 }

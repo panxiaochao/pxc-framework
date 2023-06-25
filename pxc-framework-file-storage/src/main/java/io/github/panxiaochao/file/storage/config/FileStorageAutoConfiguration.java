@@ -15,9 +15,10 @@
  */
 package io.github.panxiaochao.file.storage.config;
 
+import io.github.panxiaochao.common.filemeta.FileMetadata;
+import io.github.panxiaochao.common.unit.DataOfSize;
 import io.github.panxiaochao.file.storage.core.sftp.client.SftpClient;
 import io.github.panxiaochao.file.storage.engine.FileStorageEngine;
-import io.github.panxiaochao.file.storage.meta.FileMetadata;
 import io.github.panxiaochao.file.storage.processor.DelegatingFileStorageProcessor;
 import io.github.panxiaochao.file.storage.processor.FileStorageProcessor;
 import io.github.panxiaochao.file.storage.processor.LocalStorageProcessor;
@@ -31,6 +32,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * {@code FileStorageAuto}
  * <p> description: 文件存储配置类
@@ -40,7 +43,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(FileStorageProperties.class)
-@ConditionalOnProperty(name = FileStorageProperties.FILE_STORAGE_ENABLE, havingValue = "true")
+@ConditionalOnProperty(name = "file-storage.enabled", havingValue = "true")
 @AutoConfigureBefore(name = "org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration")
 public class FileStorageAutoConfiguration {
 
@@ -53,11 +56,12 @@ public class FileStorageAutoConfiguration {
     @Bean(name = "multipartResolver")
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
-        commonsMultipartResolver.setMaxUploadSize(50 * 1024);
-        commonsMultipartResolver.setMaxInMemorySize(50 * 1024);
+        commonsMultipartResolver.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        commonsMultipartResolver.setMaxUploadSize(DataOfSize.ofMegabytes(50).toBytes());
+        // 低于这个大小的文件暂存内存中， 默认是1K
+        commonsMultipartResolver.setMaxInMemorySize(20 * 1024 * 1024);
         return commonsMultipartResolver;
     }
-
 
     /**
      * 上传附件模版引擎

@@ -21,11 +21,10 @@ import io.github.panxiaochao.threadpool.properties.ThreadPoolProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -36,11 +35,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @since 2022/11/7
  */
 @RequiredArgsConstructor
-@Configuration
+@AutoConfiguration
 @EnableScheduling
 @EnableConfigurationProperties(ThreadPoolProperties.class)
-@ConditionalOnProperty(name = ThreadPoolProperties.THREAD_POOL_ENABLED, havingValue = "true")
-@ConditionalOnWebApplication
+@ConditionalOnProperty(name = "spring.thread.enabled", havingValue = "true")
 public class TaskExecutorAutoConfiguration {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TaskExecutorAutoConfiguration.class);

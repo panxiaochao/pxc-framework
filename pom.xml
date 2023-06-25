@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.panxiaochao</groupId>
     <artifactId>pxc-framework-parent</artifactId>
-    <version>2022-2.7-1.4</version>
+    <version>2022-2.7-1.5</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>pxc-framework Converged Project, base on spring boot 2.7.X up-to-date</description>
@@ -65,6 +65,8 @@
         <module>pxc-framework-plugin-loader</module>
         <module>pxc-framework-ip2region</module>
         <module>pxc-framework-database-metadata</module>
+        <module>pxc-framework-minio</module>
+        <module>pxc-framework-operate-log</module>
     </modules>
 
     <!-- properties -->
@@ -75,13 +77,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2021.0.x 版本支持 2.6.x, 2.7.x (Starting with 2021.0.3) -->
-        <spring-boot.version>2.7.11</spring-boot.version>
+        <spring-boot.version>2.7.12</spring-boot.version>
         <spring-cloud.version>2021.0.6</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-        <springdoc-openapi.version>1.6.15</springdoc-openapi.version>
+        <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
-        <redisson.version>3.19.1</redisson.version>
     </properties>
 
     <dependencyManagement>

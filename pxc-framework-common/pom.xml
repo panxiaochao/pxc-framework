@@ -6,7 +6,7 @@
     <parent>
         <artifactId>pxc-framework-parent</artifactId>
         <groupId>io.github.panxiaochao</groupId>
-        <version>2022-2.7-1.4</version>
+        <version>2022-2.7-1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -24,6 +24,16 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

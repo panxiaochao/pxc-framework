@@ -15,8 +15,8 @@
  */
 package io.github.panxiaochao.file.storage.context;
 
+import io.github.panxiaochao.common.filemeta.FileMetadata;
 import io.github.panxiaochao.file.storage.core.FileStorageType;
-import io.github.panxiaochao.file.storage.meta.FileMetadata;
 import io.github.panxiaochao.file.storage.properties.FileStorageProperties;
 import org.springframework.util.Assert;
 

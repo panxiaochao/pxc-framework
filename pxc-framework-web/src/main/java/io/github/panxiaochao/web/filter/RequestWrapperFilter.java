@@ -16,6 +16,7 @@
 package io.github.panxiaochao.web.filter;
 
 import io.github.panxiaochao.web.wrapper.RequestWrapper;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -33,10 +34,23 @@ public class RequestWrapperFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
-        // 重新包装 Request Wrapper
-        HttpServletRequest request = new RequestWrapper((HttpServletRequest) servletRequest);
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        filterChain.doFilter(request, response);
+        String contentType = request.getContentType();
+        // 判断请求类型
+        if (!StringUtils.hasText(contentType)) {
+            filterChain.doFilter(request, response);
+        } else if (StringUtils.hasText(contentType) || contentType.contains("multipart/form-data")) {
+            filterChain.doFilter(request, response);
+        } else {
+            // 重新包装 Request Wrapper
+            request = new RequestWrapper(request);
+            if (null == request) {
+                filterChain.doFilter(servletRequest, response);
+            } else {
+                filterChain.doFilter(request, response);
+            }
+        }
     }
 
     @Override

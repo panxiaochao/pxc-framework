@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.ip2region.meta;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -33,30 +34,37 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Schema(name = "IpInfo对象类", description = "IpInfo对象响应类")
 public class IpInfo {
     /**
      * 国家
      */
+    @Schema(description = "国家")
     private String country;
     /**
      * 区域
      */
+    @Schema(description = "区域")
     private String region;
     /**
      * 省
      */
+    @Schema(description = "省")
     private String province;
     /**
      * 城市
      */
+    @Schema(description = "城市")
     private String city;
     /**
      * 运营商
      */
+    @Schema(description = "运营商")
     private String isp;
     /**
      * ip
      */
+    @Schema(description = "ip")
     private String ip;
 
     /**

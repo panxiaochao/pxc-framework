@@ -41,12 +41,12 @@ public class ObjectUtil {
      * </ul>
      *
      * <pre>
-     * ObjectUtils.isEmpty(null)             = true
-     * ObjectUtils.isEmpty("")               = true
-     * ObjectUtils.isEmpty("ab")             = false
-     * ObjectUtils.isEmpty(new int[]{})      = true
-     * ObjectUtils.isEmpty(new int[]{1,2,3}) = false
-     * ObjectUtils.isEmpty(1234)             = false
+     * ObjectUtil.isEmpty(null)             = true
+     * ObjectUtil.isEmpty("")               = true
+     * ObjectUtil.isEmpty("ab")             = false
+     * ObjectUtil.isEmpty(new int[]{})      = true
+     * ObjectUtil.isEmpty(new int[]{1,2,3}) = false
+     * ObjectUtil.isEmpty(1234)             = false
      * </pre>
      *
      * @param object the {@code Object} to test, may be {@code null}
@@ -90,12 +90,12 @@ public class ObjectUtil {
      * </ul>
      *
      * <pre>
-     * ObjectUtils.isNotEmpty(null)             = false
-     * ObjectUtils.isNotEmpty("")               = false
-     * ObjectUtils.isNotEmpty("ab")             = true
-     * ObjectUtils.isNotEmpty(new int[]{})      = false
-     * ObjectUtils.isNotEmpty(new int[]{1,2,3}) = true
-     * ObjectUtils.isNotEmpty(1234)             = true
+     * ObjectUtil.isNotEmpty(null)             = false
+     * ObjectUtil.isNotEmpty("")               = false
+     * ObjectUtil.isNotEmpty("ab")             = true
+     * ObjectUtil.isNotEmpty(new int[]{})      = false
+     * ObjectUtil.isNotEmpty(new int[]{1,2,3}) = true
+     * ObjectUtil.isNotEmpty(1234)             = true
      * </pre>
      *
      * @param object the {@code Object} to test, may be {@code null}
@@ -110,11 +110,11 @@ public class ObjectUtil {
      * <p>Returns a default value if the object passed is {@code null}.</p>
      *
      * <pre>
-     * ObjectUtils.defaultIfNull(null, null)      = null
-     * ObjectUtils.defaultIfNull(null, "")        = ""
-     * ObjectUtils.defaultIfNull(null, "zz")      = "zz"
-     * ObjectUtils.defaultIfNull("abc", *)        = "abc"
-     * ObjectUtils.defaultIfNull(Boolean.TRUE, *) = Boolean.TRUE
+     * ObjectUtil.defaultIfNull(null, null)      = null
+     * ObjectUtil.defaultIfNull(null, "")        = ""
+     * ObjectUtil.defaultIfNull(null, "zz")      = "zz"
+     * ObjectUtil.defaultIfNull("abc", *)        = "abc"
+     * ObjectUtil.defaultIfNull(Boolean.TRUE, *) = Boolean.TRUE
      * </pre>
      *
      * @param <T>          the type of the object

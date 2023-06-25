@@ -44,7 +44,7 @@ public class SpringDocProperties {
     /**
      * 是否开启
      */
-    public static final String SPRING_DOC_ENABLE = "springdoc.api-docs.enabled";
+    private boolean enabled;
 
     /**
      * 基本信息

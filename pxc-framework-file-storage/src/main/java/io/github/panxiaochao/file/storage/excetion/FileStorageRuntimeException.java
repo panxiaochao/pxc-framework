@@ -26,6 +26,9 @@ import io.github.panxiaochao.common.ienums.IResponseEnum;
  * @since 2023-03-13
  */
 public class FileStorageRuntimeException extends BaseRuntimeException {
+
+    private static final long serialVersionUID = 3535550296824509656L;
+
     public FileStorageRuntimeException() {
         super();
     }

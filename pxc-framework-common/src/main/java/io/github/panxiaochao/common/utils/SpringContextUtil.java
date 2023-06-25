@@ -22,6 +22,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.NonNull;
 
 /**
@@ -191,5 +192,28 @@ public class SpringContextUtil {
     public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         LOGGER.info(">>> ApplicationContext init success");
+    }
+
+    /**
+     * 发布事件
+     *
+     * @param event 待发布的事件，事件必须是{@link ApplicationEvent}的子类
+     */
+    public void publishEvent(ApplicationEvent event) {
+        if (null != applicationContext) {
+            applicationContext.publishEvent(event);
+        }
+    }
+
+    /**
+     * 发布事件
+     * Spring 4.2+ 版本事件可以不再是{@link ApplicationEvent}的子类
+     *
+     * @param event 待发布的事件
+     */
+    public void publishEvent(Object event) {
+        if (null != applicationContext) {
+            applicationContext.publishEvent(event);
+        }
     }
 }

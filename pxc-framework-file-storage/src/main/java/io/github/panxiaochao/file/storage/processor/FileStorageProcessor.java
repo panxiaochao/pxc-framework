@@ -15,8 +15,8 @@
  */
 package io.github.panxiaochao.file.storage.processor;
 
+import io.github.panxiaochao.common.filemeta.FileMetadata;
 import io.github.panxiaochao.file.storage.context.FileStorageContext;
-import io.github.panxiaochao.file.storage.meta.FileMetadata;
 import org.springframework.lang.Nullable;
 
 /**

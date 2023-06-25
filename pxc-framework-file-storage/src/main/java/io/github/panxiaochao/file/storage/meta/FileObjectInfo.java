@@ -15,6 +15,8 @@
  */
 package io.github.panxiaochao.file.storage.meta;
 
+import io.github.panxiaochao.common.filemeta.AbstractFileMetadata;
+
 /**
  * {@code FileObjectInfo}
  * <p> description: 文件对象信息

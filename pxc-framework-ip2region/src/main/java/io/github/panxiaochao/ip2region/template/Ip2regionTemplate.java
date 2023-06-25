@@ -19,12 +19,14 @@ import io.github.panxiaochao.ip2region.constants.Ip2regionConstant;
 import io.github.panxiaochao.ip2region.meta.IpInfo;
 import io.github.panxiaochao.ip2region.utils.Ip2regionUtil;
 import io.github.panxiaochao.ip2region.utils.IpInfoUtil;
+import io.github.panxiaochao.ip2region.utils.Ipv6SearcherUtil;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.io.IOException;
 import java.util.function.Function;
 
 /**
@@ -40,6 +42,8 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
 
     private Searcher searcher;
 
+    private Ipv6SearcherUtil ipv6SearcherUtil;
+
     /**
      * ip 位置 搜索
      *
@@ -48,13 +52,26 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
      */
     public IpInfo memorySearch(String ip) {
         try {
-            IpInfo ipInfo = IpInfoUtil.toIpInfo(searcher.search(ip));
-            ipInfo.setIp(ip);
-            return ipInfo;
+            // 1.ipv4
+            String[] ipV4Part = IpInfoUtil.getIpv4Part(ip);
+            if (ipV4Part.length == 4) {
+                IpInfo ipInfo = IpInfoUtil.toIpInfo(searcher.search(ip));
+                ipInfo.setIp(ip);
+                return ipInfo;
+            } else {
+                return null;
+            }
+            // 2.非 ipv6
+            // if (!ip.contains(":")) {
+            //     logger.error("invalid ipv6 address {}", ip);
+            //     return null;
+            // }
+            // // 3. ipv6
+            // return ipv6SearcherUtil.query(ip);
         } catch (Exception e) {
             logger.error("memorySearch ip {} is error", ip, e);
+            return null;
         }
-        return null;
     }
 
     /**
@@ -69,8 +86,13 @@ public class Ip2regionTemplate implements InitializingBean, DisposableBean {
     }
 
     @Override
-    public void afterPropertiesSet() {
-        this.searcher = Ip2regionUtil.loadSearcherFromFile(Ip2regionConstant.IP2REGION_DB_FILE_LOCATION);
+    public void afterPropertiesSet() throws IOException {
+        // load IP2REGION_DB_FILE_LOCATION
+        byte[] ip2regionBytes = Ip2regionUtil.loadByteFromFile(Ip2regionConstant.IP2REGION_DB_FILE_LOCATION);
+        this.searcher = Searcher.newWithBuffer(ip2regionBytes);
+        // load IPV6WRY_DB_FILE_LOCATION
+        byte[] ipv6Bytes = Ip2regionUtil.loadByteFromFile(Ip2regionConstant.IPV6WRY_DB_FILE_LOCATION);
+        this.ipv6SearcherUtil = Ipv6SearcherUtil.newWithBuffer(ipv6Bytes);
     }
 
     @Override

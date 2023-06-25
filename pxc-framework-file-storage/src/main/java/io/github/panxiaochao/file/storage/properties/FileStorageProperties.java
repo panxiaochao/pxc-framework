@@ -42,7 +42,7 @@ public class FileStorageProperties {
     /**
      * 是否开启
      */
-    public static final String FILE_STORAGE_ENABLE = FILE_STORAGE_PREFIX + ".enabled";
+    private boolean enabled;
 
     /**
      * （必填）存储路径

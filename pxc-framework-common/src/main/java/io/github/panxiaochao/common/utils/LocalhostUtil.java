@@ -78,21 +78,21 @@ public class LocalhostUtil {
     /**
      * 根据ip地址计算出long型的数据
      *
-     * @param strIP IP V4 地址
+     * @param strIp IP V4 地址
      * @return long值
      */
-    public static long ipv4ToLong(String strIP) {
-        if (isMatch(strIP)) {
+    public static long ipv4ToLong(String strIp) {
+        if (isMatch(strIp)) {
             long[] ip = new long[4];
             // 先找到IP地址字符串中.的位置
-            int position1 = strIP.indexOf(".");
-            int position2 = strIP.indexOf(".", position1 + 1);
-            int position3 = strIP.indexOf(".", position2 + 1);
+            int position1 = strIp.indexOf(".");
+            int position2 = strIp.indexOf(".", position1 + 1);
+            int position3 = strIp.indexOf(".", position2 + 1);
             // 将每个.之间的字符串转换成整型
-            ip[0] = Long.parseLong(strIP.substring(0, position1));
-            ip[1] = Long.parseLong(strIP.substring(position1 + 1, position2));
-            ip[2] = Long.parseLong(strIP.substring(position2 + 1, position3));
-            ip[3] = Long.parseLong(strIP.substring(position3 + 1));
+            ip[0] = Long.parseLong(strIp.substring(0, position1));
+            ip[1] = Long.parseLong(strIp.substring(position1 + 1, position2));
+            ip[2] = Long.parseLong(strIp.substring(position2 + 1, position3));
+            ip[3] = Long.parseLong(strIp.substring(position3 + 1));
             return (ip[0] << 24) + (ip[1] << 16) + (ip[2] << 8) + ip[3];
         }
         return 0;
@@ -173,7 +173,6 @@ public class LocalhostUtil {
      * <p>
      * 此方法不会抛出异常，获取失败将返回<code>null</code><br>
      * <p>
-     * 见：https://github.com/looly/hutool/issues/428
      *
      * @return 本机网卡IP地址，获取失败返回<code>null</code>
      */

@@ -28,7 +28,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * {@code MyThreadPoolTaskExecutor}
+ * {@code ThreadPoolTaskManager}
  * <p> 自定义多线程执行
  *
  * @author Lypxc
@@ -61,21 +61,21 @@ public class ThreadPoolTaskManager extends ThreadPoolTaskExecutor {
      */
     public ThreadPoolTaskManager(ThreadPoolProperties threadPoolProperties) {
         // 核心线程数
-        super.setCorePoolSize(threadPoolProperties.getThreadPoolTask().getCorePoolSize());
+        super.setCorePoolSize(threadPoolProperties.getThreadpool().getCorePoolSize());
         // 最大线程数
-        super.setMaxPoolSize(threadPoolProperties.getThreadPoolTask().getMaxPoolSize());
+        super.setMaxPoolSize(threadPoolProperties.getThreadpool().getMaxPoolSize());
         // 队列大小
-        super.setQueueCapacity(threadPoolProperties.getThreadPoolTask().getQueueCapacity());
+        super.setQueueCapacity(threadPoolProperties.getThreadpool().getQueueCapacity());
         // 线程活跃时间(秒)
-        super.setKeepAliveSeconds(threadPoolProperties.getThreadPoolTask().getKeepAliveSeconds());
+        super.setKeepAliveSeconds(threadPoolProperties.getThreadpool().getKeepAliveSeconds());
         // 线程前缀
-        super.setThreadNamePrefix(threadPoolProperties.getThreadPoolTask().getThreadNamePrefix());
+        super.setThreadNamePrefix(threadPoolProperties.getThreadpool().getThreadNamePrefix());
         // 线程分组名称
-        super.setThreadGroupName(threadPoolProperties.getThreadPoolTask().getThreadGroupName());
+        super.setThreadGroupName(threadPoolProperties.getThreadpool().getThreadGroupName());
         // 所有任务结束后关闭线程池
-        super.setWaitForTasksToCompleteOnShutdown(threadPoolProperties.getThreadPoolTask().isWaitForJobsToCompleteOnShutdown());
+        super.setWaitForTasksToCompleteOnShutdown(threadPoolProperties.getThreadpool().isWaitForJobsToCompleteOnShutdown());
         // 现场拒绝策略
-        super.setRejectedExecutionHandler(threadPoolProperties.getThreadPoolTask().getRejectedExecutionHandler());
+        super.setRejectedExecutionHandler(threadPoolProperties.getThreadpool().getRejectedExecutionHandler());
         // 添加装饰器，上文传递
         super.setTaskDecorator(new TraceCopyContextTaskDecorator());
         // 初始化

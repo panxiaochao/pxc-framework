@@ -38,12 +38,12 @@ public class IpInfoUtil {
      *
      * @return 是否 ipv4
      */
-    public static String[] getIpV4Part(String ip) {
+    public static String[] getIpv4Part(String ip) {
         return DOT_PATTERN.split(ip);
     }
 
     /**
-     * 将 DataBlock 转化为 IpInfo
+     * 将 region 转化为 IpInfo
      *
      * @param region region
      * @return IpInfo
@@ -72,10 +72,10 @@ public class IpInfoUtil {
      * @param ipRecord ipRecord
      * @return IpInfo
      */
-    public static IpInfo toIpV6Info(String[] ipRecord) {
+    public static IpInfo toIpv6Info(String[] ipRecord) {
         IpInfo ipInfo = new IpInfo();
-        String info1 = ipRecord[0];
-        String[] splitInfoArr = T_PATTERN.split(info1);
+        String ipRecords = ipRecord[0];
+        String[] splitInfoArr = T_PATTERN.split(ipRecords);
         // 补齐5位
         if (splitInfoArr.length < 4) {
             splitInfoArr = Arrays.copyOf(splitInfoArr, 4);
@@ -96,7 +96,7 @@ public class IpInfoUtil {
      */
     private static String filterZero(String info) {
         // null 或 0 返回 null
-        if (info == null || "0".equals(info)) {
+        if (null == info || "0".equals(info)) {
             return null;
         }
         return info;

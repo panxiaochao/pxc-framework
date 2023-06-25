@@ -1,0 +1,3 @@
+io.github.panxiaochao.redis.config.PxcRedisAutoConfiguration
+io.github.panxiaochao.redis.config.PxcRedisCacheAutoConfiguration
+io.github.panxiaochao.redis.config.AccessRateLimitAspectAutoConfiguration

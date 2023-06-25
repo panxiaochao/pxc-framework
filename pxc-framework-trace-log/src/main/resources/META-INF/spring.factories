@@ -1,12 +1,12 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.panxiaochao.log.config.TraceAspectAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceDubboAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceFeignAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceGatewayAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceHttpClientAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceOkHttpAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceRestTemplateAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceWebClientAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceWebFluxAutoConfiguration,\
-  io.github.panxiaochao.log.config.TraceWebMvcAutoConfiguration
+  io.github.panxiaochao.trace.log.config.TraceAspectAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceDubboAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceFeignAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceGatewayAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceHttpClientAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceOkHttpAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceRestTemplateAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceWebClientAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceWebFluxAutoConfiguration,\
+  io.github.panxiaochao.trace.log.config.TraceWebMvcAutoConfiguration
   
