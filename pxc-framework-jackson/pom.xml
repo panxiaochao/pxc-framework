@@ -10,17 +10,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pxc-framework-web</artifactId>
-    <description>pxc framework web 模块</description>
+    <artifactId>pxc-framework-jackson</artifactId>
+    <description>pxc framework jackson 模块</description>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.github.panxiaochao</groupId>
-            <artifactId>pxc-framework-jackson</artifactId>
+            <artifactId>pxc-framework-core</artifactId>
         </dependency>
     </dependencies>
 

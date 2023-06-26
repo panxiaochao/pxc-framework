@@ -62,6 +62,15 @@ public class SpringContextUtil {
     }
 
     /**
+     * obtain BeanFactory instance
+     *
+     * @return DefaultListableBeanFactory
+     */
+    public DefaultListableBeanFactory getBeanFactory() {
+        return (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+    }
+
+    /**
      * @param beanName bean name
      * @param <T>      type
      * @return bean class
@@ -189,12 +198,6 @@ public class SpringContextUtil {
         return activeProfiles != null && activeProfiles.length > 0 ? activeProfiles[0] : null;
     }
 
-
-    public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-        LOGGER.info(">>> ApplicationContext init success");
-    }
-
     /**
      * 获取aop代理对象
      */
@@ -224,5 +227,10 @@ public class SpringContextUtil {
         if (null != applicationContext) {
             applicationContext.publishEvent(event);
         }
+    }
+
+    public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+        LOGGER.info("配置[ApplicationContext]成功！");
     }
 }

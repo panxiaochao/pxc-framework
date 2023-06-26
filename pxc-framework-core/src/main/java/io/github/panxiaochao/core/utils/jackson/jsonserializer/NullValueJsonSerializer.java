@@ -18,6 +18,7 @@ package io.github.panxiaochao.core.utils.jackson.jsonserializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.IOException;
@@ -33,7 +34,9 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2022/8/30
  */
+@JacksonStdImpl
 public class NullValueJsonSerializer extends JsonSerializer<Object> {
+
     private static final String EMPTY_STRING = "";
 
     public static final NullValueJsonSerializer INSTANCE = new NullValueJsonSerializer();
@@ -80,8 +83,8 @@ public class NullValueJsonSerializer extends JsonSerializer<Object> {
     /**
      * 是否是数组
      *
-     * @param rawClass
-     * @return
+     * @param rawClass rawClass
+     * @return boolean
      */
     private boolean isArrayType(Class<?> rawClass) {
         return rawClass.isArray() || Collection.class.isAssignableFrom(rawClass);
@@ -90,8 +93,8 @@ public class NullValueJsonSerializer extends JsonSerializer<Object> {
     /**
      * 是否是map
      *
-     * @param rawClass
-     * @return
+     * @param rawClass rawClass
+     * @return boolean
      */
     private boolean isMapType(Class<?> rawClass) {
         return Map.class.isAssignableFrom(rawClass);

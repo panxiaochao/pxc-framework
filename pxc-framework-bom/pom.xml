@@ -7,7 +7,8 @@
     <groupId>io.github.panxiaochao</groupId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <description>pxc-framework依赖项管理</description>
+
+    <description>pxc framework 依赖项管理</description>
 
     <properties>
         <revision>2.0.0-SNAPSHOT</revision>
@@ -15,6 +16,24 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 核心模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- Jackson 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-jackson</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- Mvc Web 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
