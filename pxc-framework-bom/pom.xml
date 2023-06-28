@@ -28,6 +28,12 @@
                 <artifactId>pxc-framework-jackson</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- Redis 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Mvc Web 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

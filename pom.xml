@@ -54,6 +54,7 @@
         <module>pxc-framework-core</module>
         <module>pxc-framework-jackson</module>
         <module>pxc-framework-web</module>
+        <module>pxc-framework-redis</module>
     </modules>
 
     <!-- properties -->
