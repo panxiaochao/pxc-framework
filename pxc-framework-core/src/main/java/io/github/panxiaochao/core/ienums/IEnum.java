@@ -44,5 +44,7 @@ public interface IEnum<T> {
      * @param code 码值
      * @return 返回信息
      */
-    String ofCode(T code);
+    default String ofCode(T code) {
+        return null;
+    }
 }

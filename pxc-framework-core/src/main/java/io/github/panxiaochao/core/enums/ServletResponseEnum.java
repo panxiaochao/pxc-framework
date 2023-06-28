@@ -15,7 +15,7 @@
  */
 package io.github.panxiaochao.core.enums;
 
-import io.github.panxiaochao.core.exception.IExceptionAssert;
+import io.github.panxiaochao.core.ienums.IResponseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -28,7 +28,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ServletResponseEnum implements IExceptionAssert {
+public enum ServletResponseEnum implements IResponseEnum<Integer> {
     /**
      * code message
      */

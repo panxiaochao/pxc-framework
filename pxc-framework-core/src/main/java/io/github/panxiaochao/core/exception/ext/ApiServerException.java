@@ -16,8 +16,8 @@
 package io.github.panxiaochao.core.exception.ext;
 
 
-import io.github.panxiaochao.core.exception.BaseException;
-import io.github.panxiaochao.core.ienums.IResponseEnum;
+import io.github.panxiaochao.core.exception.ServerException;
+import io.github.panxiaochao.core.ienums.IEnum;
 
 /**
  * {@code ApiServerException}
@@ -26,26 +26,26 @@ import io.github.panxiaochao.core.ienums.IResponseEnum;
  * @author Lypxc
  * @since 2022-11-28
  */
-public class ApiServerException extends BaseException {
+public class ApiServerException extends ServerException {
 
     private static final long serialVersionUID = -4367714276298639594L;
 
     public ApiServerException() {
     }
 
-    public ApiServerException(IResponseEnum<Integer> responseEnum, String message) {
+    public ApiServerException(IEnum<Integer> responseEnum, String message) {
         super(responseEnum, null, message);
     }
 
-    public ApiServerException(IResponseEnum<Integer> responseEnum, String message, Throwable cause) {
+    public ApiServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
         super(responseEnum, null, message, cause);
     }
 
-    public ApiServerException(IResponseEnum<Integer> responseEnum, Object[] args, String message) {
+    public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message) {
         super(responseEnum, args, message);
     }
 
-    public ApiServerException(IResponseEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
+    public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
         super(responseEnum, args, message, cause);
     }
 

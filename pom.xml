@@ -55,6 +55,7 @@
         <module>pxc-framework-jackson</module>
         <module>pxc-framework-web</module>
         <module>pxc-framework-redis</module>
+        <module>pxc-framework-ratelimiter</module>
     </modules>
 
     <!-- properties -->

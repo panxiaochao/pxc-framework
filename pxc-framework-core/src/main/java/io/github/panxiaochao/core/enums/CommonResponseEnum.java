@@ -15,7 +15,7 @@
  */
 package io.github.panxiaochao.core.enums;
 
-import io.github.panxiaochao.core.exception.IExceptionAssert;
+import io.github.panxiaochao.core.ienums.IResponseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @AllArgsConstructor
-public enum CommonResponseEnum implements IExceptionAssert {
+public enum CommonResponseEnum implements IResponseEnum<Integer> {
 
     /**
      * 成功, 兼容 {code: 0} 的情况

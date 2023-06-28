@@ -1,8 +1,8 @@
 package io.github.panxiaochao.web.handler;
 
 import io.github.panxiaochao.core.enums.CommonResponseEnum;
-import io.github.panxiaochao.core.exception.BaseException;
-import io.github.panxiaochao.core.exception.BaseRuntimeException;
+import io.github.panxiaochao.core.exception.ServerException;
+import io.github.panxiaochao.core.exception.ServerRuntimeException;
 import io.github.panxiaochao.core.exception.ext.ApiServerException;
 import io.github.panxiaochao.core.response.R;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ public class RestExceptionHandler {
      * @return 异常结果
      */
     @ExceptionHandler(value = ApiServerException.class)
-    public R<String> handleBusinessException(BaseException e) {
+    public R<String> handleBusinessException(ServerException e) {
         LOG.error(e.getMessage(), e);
         return R.fail(e.getMessage(), null);
     }
@@ -71,8 +71,8 @@ public class RestExceptionHandler {
      * @param e 异常
      * @return 异常结果
      */
-    @ExceptionHandler(value = BaseException.class)
-    public R<String> handleBaseException(BaseException e) {
+    @ExceptionHandler(value = ServerException.class)
+    public R<String> handleBaseException(ServerException e) {
         LOG.error(e.getMessage(), e);
         return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
     }
@@ -83,8 +83,8 @@ public class RestExceptionHandler {
      * @param e 异常
      * @return 异常结果
      */
-    @ExceptionHandler(value = BaseRuntimeException.class)
-    public R<String> handleBaseException(BaseRuntimeException e) {
+    @ExceptionHandler(value = ServerRuntimeException.class)
+    public R<String> handleBaseException(ServerRuntimeException e) {
         LOG.error(e.getMessage(), e);
         return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
     }

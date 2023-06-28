@@ -7,6 +7,7 @@ import org.redisson.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -129,6 +130,42 @@ public class RedissonUtil {
      */
     private <T> RBucket<T> getRBucket(String name) {
         return ofRedissonClient().getBucket(name);
+    }
+
+    // ------------------------------- 限流    类型操作 --------------------------------
+
+    /**
+     * 限流
+     *
+     * @param key          限流key
+     * @param rateType     限流类型
+     * @param rate         速率
+     * @param rateInterval 速率间隔
+     * @return -1 表示失败
+     */
+    public long setRateLimiter(String key, RateType rateType, long rate, long rateInterval) {
+        RRateLimiter rateLimiter = getRRateLimiter(key);
+        boolean trySetRateSuccess = rateLimiter.trySetRate(rateType, rate, rateInterval, RateIntervalUnit.SECONDS);
+        // 第一次成功 拿锁后进行设置过期时间
+        if (trySetRateSuccess) {
+            // 设置过期时间，和速率一样，防止缓存残留
+            rateLimiter.expire(Duration.ofSeconds(rateInterval));
+        }
+        if (rateLimiter.tryAcquire()) {
+            return rateLimiter.availablePermits();
+        } else {
+            return -1L;
+        }
+    }
+
+    /**
+     * obtain the RRateLimiter
+     *
+     * @param name name of object
+     * @return RRateLimiter
+     */
+    private RRateLimiter getRRateLimiter(String name) {
+        return ofRedissonClient().getRateLimiter(name);
     }
 
     // ------------------------------- 二进制流 类型操作 --------------------------------
