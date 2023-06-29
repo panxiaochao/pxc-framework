@@ -56,6 +56,7 @@
         <module>pxc-framework-web</module>
         <module>pxc-framework-redis</module>
         <module>pxc-framework-ratelimiter</module>
+        <module>pxc-framework-repeatsubmit</module>
     </modules>
 
     <!-- properties -->

@@ -40,6 +40,12 @@
                 <artifactId>pxc-framework-ratelimiter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 幂等重复提交 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-repeatsubmit</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Mvc Web 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

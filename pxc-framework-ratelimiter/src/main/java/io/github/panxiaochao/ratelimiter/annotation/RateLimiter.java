@@ -26,7 +26,7 @@ import java.lang.annotation.*;
 public @interface RateLimiter {
 
     /**
-     * 限流Key, 支持 Spring EL 表达式, 例如 #{id}, #{user.id}
+     * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
      */
     String key() default "";
 
@@ -39,4 +39,34 @@ public @interface RateLimiter {
      * 限定时间范围, 单位秒
      */
     int limitSecond() default 60;
+
+    /**
+     * 限流类型
+     */
+    RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+
+    /**
+     * 限流类型
+     */
+    enum RateLimiterType {
+        /**
+         * 根据 IP 进行限流
+         */
+        IP,
+
+        /**
+         * 根据 METHOD 进行限流
+         */
+        METHOD,
+
+        /**
+         * 根据 IP+METHOD 进行限流
+         */
+        IP_METHOD,
+
+        /**
+         * 单机/单实例限流
+         */
+        SINGLE
+    }
 }

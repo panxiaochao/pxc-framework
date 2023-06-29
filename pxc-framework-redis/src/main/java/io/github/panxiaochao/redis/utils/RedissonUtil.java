@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -123,6 +124,44 @@ public class RedissonUtil {
     }
 
     /**
+     * Set the value
+     *
+     * @param key      key
+     * @param value    T value
+     * @param duration duration
+     */
+    public <T> void set(String key, T value, Duration duration) {
+        RBatch batch = ofRBatch();
+        RBucketAsync<T> bucket = batch.getBucket(key);
+        bucket.setAsync(value);
+        bucket.expireAsync(duration);
+        batch.execute();
+    }
+
+    /**
+     * delete the object from the key
+     *
+     * @param key key
+     * @return true or false
+     */
+    public boolean delete(String key) {
+        return getRBucket(key).delete();
+    }
+
+    /**
+     * delete the Collection object from the key
+     *
+     * @param collection collection
+     */
+    public void delete(Collection<?> collection) {
+        RBatch batch = ofRBatch();
+        collection.forEach(key -> {
+            batch.getBucket(key.toString()).deleteAsync();
+        });
+        batch.execute();
+    }
+
+    /**
      * obtain the RBucket
      *
      * @param name name of object
@@ -130,6 +169,17 @@ public class RedissonUtil {
      */
     private <T> RBucket<T> getRBucket(String name) {
         return ofRedissonClient().getBucket(name);
+    }
+
+    // ------------------------------- 管道    类型操作 --------------------------------
+
+    /**
+     * obtain the RBatch
+     *
+     * @return RBatch
+     */
+    private RBatch ofRBatch() {
+        return ofRedissonClient().createBatch();
     }
 
     // ------------------------------- 限流    类型操作 --------------------------------
