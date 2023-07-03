@@ -1,7 +1,8 @@
-package io.github.panxiaochao.operate.log.event;
+package io.github.panxiaochao.operate.log.core.event;
 
-import io.github.panxiaochao.operate.log.domain.OperateLogDomain;
-import io.github.panxiaochao.operate.log.enums.OperateLogType;
+import io.github.panxiaochao.operate.log.core.OperateLogDao;
+import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
+import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
 import io.github.panxiaochao.operate.log.properties.OperateLogProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,22 +28,26 @@ public class OperateLogEventListener {
 
     private final OperateLogProperties operateLogProperties;
 
+    private final OperateLogDao operateLogDao;
+
     /**
-     * 可以支持使用异步存储或者打印日志
-     *
+     * <pre>
+     * 1、可以支持使用异步存储操作
+     * 2、自定义存储(数据库、大数据等都可以)或者打印日志
+     * </pre
      * @param operateLogDomain 操作日志领域
      */
     @Async
     @EventListener
     public void operateLog(OperateLogDomain operateLogDomain) {
-        if (operateLogProperties.logType.equals(OperateLogType.LOGGER)) {
-            LOGGER.info("[ip]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
-                    operateLogDomain.getIp(),
-                    operateLogDomain.getClassMethod(),
-                    operateLogDomain.getRequestDateTime(),
-                    operateLogDomain.getCostTime());
-        } else {
-            LOGGER.info("OperateLogEventListener DB");
+        LOGGER.info("[ip]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
+                operateLogDomain.getIp(),
+                operateLogDomain.getClassMethod(),
+                operateLogDomain.getRequestDateTime(),
+                operateLogDomain.getCostTime());
+        // 如果是数据库操作
+        if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
+            operateLogDao.handle(operateLogDomain);
         }
     }
 }

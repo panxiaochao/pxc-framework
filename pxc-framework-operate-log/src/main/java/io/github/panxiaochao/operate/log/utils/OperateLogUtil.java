@@ -1,9 +1,9 @@
 package io.github.panxiaochao.operate.log.utils;
 
 import io.github.panxiaochao.core.utils.*;
-import io.github.panxiaochao.operate.log.annotation.OperateLog;
-import io.github.panxiaochao.operate.log.context.MethodCostContext;
-import io.github.panxiaochao.operate.log.domain.OperateLogDomain;
+import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
+import io.github.panxiaochao.operate.log.core.context.MethodCostContext;
+import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.http.HttpMethod;
@@ -47,7 +47,7 @@ public class OperateLogUtil {
         OperateLogDomain operateLogDomain = new OperateLogDomain();
         operateLogDomain.setClassName(target.getClass().getSimpleName());
         operateLogDomain.setClassMethod(className + "." + methodName + "()");
-        operateLogDomain.setName(operateLog.name());
+        operateLogDomain.setTitle(operateLog.title());
         operateLogDomain.setDescription(operateLog.description());
         operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
         operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
@@ -57,10 +57,10 @@ public class OperateLogUtil {
         operateLogDomain.setIp(RequestUtil.ofRequestIp());
         operateLogDomain.setRequestDateTime(LocalDateTime.now());
         if (ex != null) {
-            operateLogDomain.setSuccess(0);
+            operateLogDomain.setCode(0);
             operateLogDomain.setErrorMessage(StrUtil.substring(ExceptionUtil.getMessage(ex), 0, 2000));
         } else {
-            operateLogDomain.setSuccess(1);
+            operateLogDomain.setCode(1);
         }
         // 设置请求参数
         if (operateLog.saveReqParams()) {
@@ -75,7 +75,7 @@ public class OperateLogUtil {
         // 使用完清除，以免内存泄漏
         MethodCostContext.removeMethodCostTime();
         // 发布事件保存数据库
-        SpringContextUtil.getInstance().publishEvent(operateLogDomain);
+        SpringContextUtil.publishEvent(operateLogDomain);
     }
 
 

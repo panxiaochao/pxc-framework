@@ -1,4 +1,4 @@
-package io.github.panxiaochao.operate.log.annotation;
+package io.github.panxiaochao.operate.log.core.annotation;
 
 import java.lang.annotation.*;
 
@@ -15,16 +15,12 @@ import java.lang.annotation.*;
 public @interface OperateLog {
 
     /**
-     * The name of this OperateLog.
-     *
-     * @return the name of this OperateLog
+     * 模块名
      */
-    String name() default "";
+    String title() default "";
 
     /**
-     * A description of the operate log.
-     *
-     * @return the operate log description
+     * 描述操作日志
      **/
     String description() default "";
 

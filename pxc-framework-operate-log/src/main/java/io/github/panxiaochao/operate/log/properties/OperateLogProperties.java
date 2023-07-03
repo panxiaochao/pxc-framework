@@ -1,6 +1,7 @@
 package io.github.panxiaochao.operate.log.properties;
 
-import io.github.panxiaochao.operate.log.enums.OperateLogType;
+import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
+import io.github.panxiaochao.operate.log.core.handler.AbstractOperateLogHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,4 +24,9 @@ public class OperateLogProperties {
      * 存储日志类型
      */
     public OperateLogType logType = OperateLogType.LOGGER;
+
+    /**
+     * 自定义日志处理器,
+     */
+    private Class<? extends AbstractOperateLogHandler> handler;
 }

@@ -23,33 +23,26 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * <p> 获取Spring容器工具类
+ * <p> 这种方式让 ApplicationContext 更早的初始化
  *
  * @author Lypxc
  * @since 2022-05-05
  */
-public class SpringContextUtil {
+@Component
+public class SpringContextUtil implements ApplicationContextAware {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    private static final SpringContextUtil INSTANCE = new SpringContextUtil();
-
-    private ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
 
     private SpringContextUtil() {
-    }
-
-    /**
-     * get SpringContextUtil.
-     *
-     * @return SpringContextUtil instance
-     */
-    public static SpringContextUtil getInstance() {
-        return INSTANCE;
     }
 
     /**
@@ -57,8 +50,8 @@ public class SpringContextUtil {
      *
      * @return ApplicationContext
      */
-    public ApplicationContext getApplicationContext() {
-        return this.applicationContext;
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     /**
@@ -66,7 +59,7 @@ public class SpringContextUtil {
      *
      * @return DefaultListableBeanFactory
      */
-    public DefaultListableBeanFactory getBeanFactory() {
+    public static DefaultListableBeanFactory getBeanFactory() {
         return (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
     }
 
@@ -76,8 +69,12 @@ public class SpringContextUtil {
      * @return bean class
      */
     @SuppressWarnings("all")
-    public <T> T getBean(String beanName) {
-        return (T) this.applicationContext.getBean(beanName);
+    public static <T> T getBean(String beanName) {
+        try {
+            return (T) applicationContext.getBean(beanName);
+        } catch (BeansException e) {
+            return null;
+        }
     }
 
     /**
@@ -85,8 +82,12 @@ public class SpringContextUtil {
      * @param <T>  class
      * @return bean class
      */
-    public <T> T getBean(Class<T> type) {
-        return this.applicationContext.getBean(type);
+    public static <T> T getBean(Class<T> type) {
+        try {
+            return applicationContext.getBean(type);
+        } catch (BeansException e) {
+            return null;
+        }
     }
 
     /**
@@ -97,10 +98,10 @@ public class SpringContextUtil {
      * @return bean by class name
      */
     @SuppressWarnings("all")
-    public <T> T getBeanByClassName(final String className) {
-        String beanName = this.getBeanName(className);
+    public static <T> T getBeanByClassName(final String className) {
+        String beanName = getBeanName(className);
         try {
-            return this.getBean(beanName);
+            return getBean(beanName);
         } catch (BeansException e) {
             return null;
         }
@@ -112,8 +113,8 @@ public class SpringContextUtil {
      * @param beanName bean name
      * @return the boolean
      */
-    public boolean existBean(final String beanName) {
-        return this.applicationContext.containsBean(beanName);
+    public static boolean existBean(final String beanName) {
+        return applicationContext.containsBean(beanName);
     }
 
     /**
@@ -122,9 +123,9 @@ public class SpringContextUtil {
      * @param className class name
      * @return the boolean
      */
-    public boolean existBeanByClassName(final String className) {
-        String beanName = this.getBeanName(className);
-        return this.applicationContext.containsBean(beanName);
+    public static boolean existBeanByClassName(final String className) {
+        String beanName = getBeanName(className);
+        return applicationContext.containsBean(beanName);
     }
 
     /**
@@ -133,7 +134,7 @@ public class SpringContextUtil {
      * @param className class name
      * @return class name
      */
-    public String getBeanName(final String className) {
+    public static String getBeanName(final String className) {
         String name = className.substring(className.lastIndexOf(".") + 1);
         String start = name.substring(0, 1);
         String end = name.substring(1);
@@ -147,7 +148,7 @@ public class SpringContextUtil {
      * @param classLoader    the class loader
      * @return the beanName
      */
-    public String registerBeanDefinition(final GenericBeanDefinition beanDefinition, final ClassLoader classLoader) {
+    public static String registerBeanDefinition(final GenericBeanDefinition beanDefinition, final ClassLoader classLoader) {
         String beanClassName = beanDefinition.getBeanClassName();
         if (StringUtils.isBlank(beanClassName)) {
             throw new NullPointerException("beanDefinition.beanClassName is null");
@@ -166,8 +167,8 @@ public class SpringContextUtil {
      * @param key key
      * @return properties
      */
-    public String getProperty(String key) {
-        return this.applicationContext.getEnvironment().getProperty(key);
+    public static String getProperty(String key) {
+        return applicationContext.getEnvironment().getProperty(key);
     }
 
     /**
@@ -176,7 +177,7 @@ public class SpringContextUtil {
      * @return application name
      */
     public String getApplicationName() {
-        return this.getProperty("spring.application.name");
+        return getProperty("spring.application.name");
     }
 
     /**
@@ -184,8 +185,8 @@ public class SpringContextUtil {
      *
      * @return the array of active profiles
      */
-    public String[] getActiveProfiles() {
-        return this.applicationContext.getEnvironment().getActiveProfiles();
+    public static String[] getActiveProfiles() {
+        return applicationContext.getEnvironment().getActiveProfiles();
     }
 
     /**
@@ -193,7 +194,7 @@ public class SpringContextUtil {
      *
      * @return the current active profile
      */
-    public String getActiveProfile() {
+    public static String getActiveProfile() {
         final String[] activeProfiles = getActiveProfiles();
         return activeProfiles != null && activeProfiles.length > 0 ? activeProfiles[0] : null;
     }
@@ -211,7 +212,7 @@ public class SpringContextUtil {
      *
      * @param event 待发布的事件，事件必须是{@link ApplicationEvent}的子类
      */
-    public void publishEvent(ApplicationEvent event) {
+    public static void publishEvent(ApplicationEvent event) {
         if (null != applicationContext) {
             applicationContext.publishEvent(event);
         }
@@ -223,14 +224,15 @@ public class SpringContextUtil {
      *
      * @param event 待发布的事件
      */
-    public void publishEvent(Object event) {
+    public static void publishEvent(Object event) {
         if (null != applicationContext) {
             applicationContext.publishEvent(event);
         }
     }
 
+    @Override
     public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+        SpringContextUtil.applicationContext = applicationContext;
         LOGGER.info("配置[ApplicationContext]成功！");
     }
 }

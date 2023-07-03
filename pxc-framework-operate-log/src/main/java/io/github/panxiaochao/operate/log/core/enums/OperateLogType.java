@@ -1,4 +1,4 @@
-package io.github.panxiaochao.operate.log.enums;
+package io.github.panxiaochao.operate.log.core.enums;
 
 /**
  * {@code OperateLogType}
@@ -8,6 +8,5 @@ package io.github.panxiaochao.operate.log.enums;
  * @since 2023-07-03
  */
 public enum OperateLogType {
-    LOGGER
-    // , DB
+    LOGGER, OTHER
 }

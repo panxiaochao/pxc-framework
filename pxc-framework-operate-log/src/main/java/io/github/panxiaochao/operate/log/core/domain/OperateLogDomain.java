@@ -1,4 +1,4 @@
-package io.github.panxiaochao.operate.log.domain;
+package io.github.panxiaochao.operate.log.core.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +24,7 @@ public class OperateLogDomain implements Serializable {
     /**
      * 名称
      */
-    private String name;
+    private String title;
 
     /**
      * 描述
@@ -99,15 +99,10 @@ public class OperateLogDomain implements Serializable {
     /**
      * 是否成功 1=成功, 0=失败
      */
-    private Integer success;
+    private Integer code;
 
     /**
      * 错误原因
      */
     private String errorMessage;
-
-    /**
-     * 日志类型
-     */
-    private String logType;
 }

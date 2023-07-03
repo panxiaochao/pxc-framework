@@ -70,7 +70,7 @@ public class RedissonUtil {
     public RedissonClient ofRedissonClient() {
         final RedissonClient redissonClient =
                 Optional.ofNullable(this.redissonClient)
-                        .orElseGet(() -> SpringContextUtil.getInstance().getBean(RedissonClient.class));
+                        .orElseGet(() -> SpringContextUtil.getBean(RedissonClient.class));
         Objects.requireNonNull(redissonClient, "RedissonClient is null, check env is a web application or iniRedissonClient ！");
         return redissonClient;
     }
