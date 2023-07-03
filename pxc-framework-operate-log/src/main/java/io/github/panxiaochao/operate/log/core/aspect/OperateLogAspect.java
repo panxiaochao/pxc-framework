@@ -26,7 +26,7 @@ public class OperateLogAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogAspect.class);
 
     public OperateLogAspect() {
-        LOGGER.info("配置[RepeatSubmitLimiterAspect]成功！");
+        LOGGER.info("配置[OperateLogAspect]成功！");
     }
 
     /**
