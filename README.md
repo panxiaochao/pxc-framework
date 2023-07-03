@@ -6,7 +6,9 @@ New Reconstruction 2.0, base on spring framework.
 
 # Platform Introduction
 
-[![JDK-8](https://img.shields.io/badge/JDK-8-green.svg)]()
+![Static Badge](https://img.shields.io/badge/1.8%2B-green?logo=oracle&logoColor=%23F80000&label=JDK&link=https%3A%2F%2Fwww.oracle.com%2Fjava%2Ftechnologies%2Fdownloads%2F%23java8)
+![GitHub](https://img.shields.io/github/license/panxiaochao/pxc-framework?color=%230094F5)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.panxiaochao/pxc-framework-parent?color=%2300B388)
 
 ### current version
 

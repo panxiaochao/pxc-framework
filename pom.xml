@@ -57,6 +57,7 @@
         <module>pxc-framework-redis</module>
         <module>pxc-framework-ratelimiter</module>
         <module>pxc-framework-repeatsubmit</module>
+        <module>pxc-framework-operate-log</module>
     </modules>
 
     <!-- properties -->
@@ -75,6 +76,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
         <lombok.version>1.18.26</lombok.version>
+        <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -143,6 +145,13 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+
+            <!-- alibaba ttl 管理 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

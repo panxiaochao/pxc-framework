@@ -46,6 +46,12 @@
                 <artifactId>pxc-framework-repeatsubmit</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 操作日志 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-operate-log</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Mvc Web 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

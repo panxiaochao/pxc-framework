@@ -1,0 +1,155 @@
+package io.github.panxiaochao.operate.log.utils;
+
+import io.github.panxiaochao.core.utils.*;
+import io.github.panxiaochao.operate.log.annotation.OperateLog;
+import io.github.panxiaochao.operate.log.context.MethodCostContext;
+import io.github.panxiaochao.operate.log.domain.OperateLogDomain;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Map;
+
+/**
+ * {@code OperateLogUtil}
+ * <p> 操作日志工具类
+ *
+ * @author Lypxc
+ * @since 2023-07-03
+ */
+public class OperateLogUtil {
+
+    /**
+     * 处理日志方式
+     *
+     * @param joinPoint   joinPoint
+     * @param returnValue 返回值
+     * @param ex          报错信息
+     */
+    public static void handleOperateLog(final JoinPoint joinPoint, OperateLog operateLog, Object returnValue, Exception ex) {
+        Object target = joinPoint.getTarget();
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        // 参数
+        Object[] args = joinPoint.getArgs();
+        // Method
+        Method method = methodSignature.getMethod();
+        // 设置方法名称
+        String className = target.getClass().getName();
+        String methodName = method.getName();
+        OperateLogDomain operateLogDomain = new OperateLogDomain();
+        operateLogDomain.setClassName(target.getClass().getSimpleName());
+        operateLogDomain.setClassMethod(className + "." + methodName + "()");
+        operateLogDomain.setName(operateLog.name());
+        operateLogDomain.setDescription(operateLog.description());
+        operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
+        operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
+        operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
+        operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
+        operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
+        operateLogDomain.setIp(RequestUtil.ofRequestIp());
+        operateLogDomain.setRequestDateTime(LocalDateTime.now());
+        if (ex != null) {
+            operateLogDomain.setSuccess(0);
+            operateLogDomain.setErrorMessage(StrUtil.substring(ExceptionUtil.getMessage(ex), 0, 2000));
+        } else {
+            operateLogDomain.setSuccess(1);
+        }
+        // 设置请求参数
+        if (operateLog.saveReqParams()) {
+            setRequestParam(args, operateLogDomain, operateLog.excludeParamNames());
+        }
+        // 设置返回值
+        if (operateLog.saveResData() && ObjectUtil.isNotEmpty(returnValue)) {
+            operateLogDomain.setResponseData(StrUtil.substring(JacksonUtil.toString(returnValue), 0, 2000));
+        }
+        // 设置消耗时间
+        operateLogDomain.setCostTime(System.currentTimeMillis() - MethodCostContext.getMethodCostTime());
+        // 使用完清除，以免内存泄漏
+        MethodCostContext.removeMethodCostTime();
+        // 发布事件保存数据库
+        SpringContextUtil.getInstance().publishEvent(operateLogDomain);
+    }
+
+
+    /**
+     * 设置参数
+     */
+    private static void setRequestParam(Object[] args, OperateLogDomain operateLogDomain, String[] excludeProperties) {
+        String requestMethod = operateLogDomain.getRequestMethod();
+        Map<String, String> paramsMap = RequestUtil.getParamMap();
+        if (HttpMethod.POST.name().equals(requestMethod) || HttpMethod.PUT.name().equals(requestMethod)) {
+            String params = argsArrayToString(args, excludeProperties);
+            if (StringUtils.hasText(params)) {
+                operateLogDomain.setRequestBody(StrUtil.substring(params, 0, 2000));
+            }
+        }
+        // 会出现混合模式，POST 中用跟参数的情况
+        if (MapUtil.isNotEmpty(paramsMap)) {
+            if (MapUtil.isNotEmpty(paramsMap)) {
+                MapUtil.removeAny(paramsMap, excludeProperties);
+            }
+            operateLogDomain.setRequestParam(StrUtil.substring(JacksonUtil.toString(paramsMap), 0, 2000));
+        }
+    }
+
+    /**
+     * 参数拼装
+     */
+    private static String argsArrayToString(Object[] args, String[] excludeProperties) {
+        StringBuilder params = new StringBuilder();
+        if (ObjectUtil.isNotEmpty(args)) {
+            for (Object object : args) {
+                if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
+                    String jsonObj = JacksonUtil.toString(object);
+                    // 排除自定义属性
+                    if (!ArrayUtil.isEmpty(excludeProperties) && StrUtil.isNotBlank(jsonObj)) {
+                        Map<String, Object> objectMap = JacksonUtil.toMap(jsonObj);
+                        if (MapUtil.isNotEmpty(objectMap)) {
+                            MapUtil.removeAny(objectMap, excludeProperties);
+                            jsonObj = JacksonUtil.toString(objectMap);
+                        }
+                    }
+                    params.append(jsonObj).append(" ");
+                }
+            }
+        }
+        return params.toString();
+    }
+
+    /**
+     * 判断是否需要过滤的对象。
+     *
+     * @param o 对象信息。
+     * @return 如果是需要过滤的对象，则返回true；否则返回false。
+     */
+    @SuppressWarnings("rawtypes")
+    private static boolean isFilterObject(final Object o) {
+        Class<?> clazz = o.getClass();
+        if (clazz.isArray()) {
+            return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
+        } else if (Collection.class.isAssignableFrom(clazz)) {
+            Collection<?> collection = (Collection<?>) o;
+            for (Object value : collection) {
+                return value instanceof MultipartFile;
+            }
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Map map = (Map) o;
+            for (Object value : map.entrySet()) {
+                Map.Entry entry = (Map.Entry) value;
+                return entry.getValue() instanceof MultipartFile;
+            }
+        }
+        return (o instanceof MultipartFile ||
+                o instanceof HttpServletRequest ||
+                o instanceof HttpServletResponse ||
+                o instanceof BindingResult);
+    }
+}
