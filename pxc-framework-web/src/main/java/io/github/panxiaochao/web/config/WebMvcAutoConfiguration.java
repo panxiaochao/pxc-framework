@@ -1,7 +1,6 @@
 package io.github.panxiaochao.web.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,7 +16,6 @@ import java.util.List;
  * @since 2023-06-26
  */
 @AutoConfiguration
-@EnableAspectJAutoProxy(exposeProxy = true)
 public class WebMvcAutoConfiguration implements WebMvcConfigurer {
 
     /**

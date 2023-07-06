@@ -21,6 +21,7 @@ import java.util.Objects;
 public class YmlPropertySourceFactory extends DefaultPropertySourceFactory {
 
     @Override
+    @Nullable
     public PropertySource<?> createPropertySource(@Nullable String name, EncodedResource resource) throws IOException {
         String sourceName = resource.getResource().getFilename();
         if (StringUtils.hasText(sourceName)

@@ -1,6 +1,6 @@
-package io.github.panxiaochao.web.config;
+package io.github.panxiaochao.core.config;
 
-import io.github.panxiaochao.web.properties.PxcFrameWorkProperties;
+import io.github.panxiaochao.core.properties.PxcFrameWorkProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

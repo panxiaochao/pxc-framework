@@ -1,7 +1,6 @@
-package io.github.panxiaochao.web.config;
+package io.github.panxiaochao.core.config;
 
 import io.github.panxiaochao.core.utils.SpringContextUtil;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -23,7 +22,6 @@ import java.util.concurrent.Executor;
  * @since 2023-07-06
  */
 @AutoConfiguration
-@RequiredArgsConstructor
 @EnableAsync(proxyTargetClass = true)
 @ConditionalOnProperty(name = "spring.pxc-framework.async", havingValue = "true")
 public class AsyncExecutorAutoConfiguration implements AsyncConfigurer {

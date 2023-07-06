@@ -1,4 +1,4 @@
-package io.github.panxiaochao.web.properties;
+package io.github.panxiaochao.core.properties;
 
 import lombok.Getter;
 import lombok.Setter;

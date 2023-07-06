@@ -1,7 +1,4 @@
 io.github.panxiaochao.web.config.FilterAutoConfiguration
 io.github.panxiaochao.web.config.WebMvcAutoConfiguration
-io.github.panxiaochao.web.config.ThreadPoolAutoConfiguration
-io.github.panxiaochao.web.config.AsyncExecutorAutoConfiguration
-io.github.panxiaochao.core.utils.SpringContextUtil
 io.github.panxiaochao.web.handler.RestExceptionHandler
 io.github.panxiaochao.web.handler.RestResponseEntityExceptionHandler
