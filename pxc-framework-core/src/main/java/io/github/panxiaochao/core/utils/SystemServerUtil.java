@@ -108,7 +108,6 @@ public class SystemServerUtil {
         return mem;
     }
 
-
     /**
      * 获取JVM信息
      *
