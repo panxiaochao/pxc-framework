@@ -77,6 +77,7 @@
         <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
         <lombok.version>1.18.26</lombok.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
+        <oshi.version>6.4.4</oshi.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -152,6 +153,13 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable-thread-local.version}</version>
+            </dependency>
+
+            <!-- 系统信息 依赖管理 -->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

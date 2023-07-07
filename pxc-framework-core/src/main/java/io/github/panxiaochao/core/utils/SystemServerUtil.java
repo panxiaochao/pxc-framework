@@ -1,0 +1,166 @@
+package io.github.panxiaochao.core.utils;
+
+import io.github.panxiaochao.core.utils.sysinfo.*;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.GlobalMemory;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.software.os.FileSystem;
+import oshi.software.os.OSFileStore;
+import oshi.software.os.OperatingSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+/**
+ * {@code SystemServerUtil}
+ * <p> 系统服务器相关信息(CPU, 内存, JVM, 硬盘等) 工具类
+ *
+ * @author Lypxc
+ * @since 2023-07-07
+ */
+public class SystemServerUtil {
+    /**
+     * 单例
+     */
+    private final static SystemServerUtil SYSTEM_SERVER_UTIL = new SystemServerUtil();
+
+    /**
+     * SystemInfo 初始化
+     */
+    private final oshi.SystemInfo systemInfo = new oshi.SystemInfo();
+
+    private SystemServerUtil() {
+    }
+
+    /**
+     * @return SystemServerUtil
+     */
+    public static SystemServerUtil INSTANCE() {
+        return SYSTEM_SERVER_UTIL;
+    }
+
+    public ServerInfo getServerInfo() {
+        ServerInfo serverInfo = new ServerInfo();
+        serverInfo.setCpu(ofCpuInfo());
+        serverInfo.setMem(ofMemInfo());
+        serverInfo.setJvm(ofJvmInfo());
+        serverInfo.setSys(ofSysInfo());
+        serverInfo.setDiskInfos(ofDiskInfosInfo());
+        return serverInfo;
+    }
+
+
+    public Cpu ofCpuInfo() {
+        HardwareAbstractionLayer hal = systemInfo.getHardware();
+        CentralProcessor centralProcessor = hal.getProcessor();
+        // CPU信息
+        long[] prevTicks = centralProcessor.getSystemCpuLoadTicks();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        long[] ticks = centralProcessor.getSystemCpuLoadTicks();
+        long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
+        long irq = ticks[CentralProcessor.TickType.IRQ.getIndex()] - prevTicks[CentralProcessor.TickType.IRQ.getIndex()];
+        long softIrq = ticks[CentralProcessor.TickType.SOFTIRQ.getIndex()] - prevTicks[CentralProcessor.TickType.SOFTIRQ.getIndex()];
+        long steal = ticks[CentralProcessor.TickType.STEAL.getIndex()] - prevTicks[CentralProcessor.TickType.STEAL.getIndex()];
+        long cSys = ticks[CentralProcessor.TickType.SYSTEM.getIndex()] - prevTicks[CentralProcessor.TickType.SYSTEM.getIndex()];
+        long user = ticks[CentralProcessor.TickType.USER.getIndex()] - prevTicks[CentralProcessor.TickType.USER.getIndex()];
+        long ioWait = ticks[CentralProcessor.TickType.IOWAIT.getIndex()] - prevTicks[CentralProcessor.TickType.IOWAIT.getIndex()];
+        long idle = ticks[CentralProcessor.TickType.IDLE.getIndex()] - prevTicks[CentralProcessor.TickType.IDLE.getIndex()];
+        long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
+        Cpu cpu = new Cpu();
+        cpu.setCpuNum(centralProcessor.getLogicalProcessorCount());
+        cpu.setTotal(totalCpu);
+        cpu.setSys(cSys);
+        cpu.setUsed(user);
+        cpu.setWait(ioWait);
+        cpu.setFree(idle);
+        return cpu;
+    }
+
+    public Mem ofMemInfo() {
+        GlobalMemory memory = systemInfo.getHardware().getMemory();
+        // 内存信息
+        Mem mem = new Mem();
+        mem.setTotal(memory.getTotal());
+        mem.setUsed(memory.getTotal() - memory.getAvailable());
+        mem.setFree(memory.getAvailable());
+        return mem;
+    }
+
+
+    public Jvm ofJvmInfo() {
+        Jvm jvm = new Jvm();
+        Properties props = System.getProperties();
+        jvm.setTotal(Runtime.getRuntime().totalMemory());
+        jvm.setMax(Runtime.getRuntime().maxMemory());
+        jvm.setFree(Runtime.getRuntime().freeMemory());
+        jvm.setVersion(props.getProperty("java.version"));
+        jvm.setHome(props.getProperty("java.home"));
+        return jvm;
+    }
+
+    public SysInfo ofSysInfo() {
+        SysInfo sys = new SysInfo();
+        Properties props = System.getProperties();
+        sys.setComputerName(LocalhostUtil.getHostName());
+        sys.setComputerIp(LocalhostUtil.getHostIp());
+        sys.setOsName(props.getProperty("os.name"));
+        sys.setOsArch(props.getProperty("os.arch"));
+        sys.setUserDir(props.getProperty("user.dir"));
+        return sys;
+    }
+
+
+    public List<DiskInfo> ofDiskInfosInfo() {
+        OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
+        FileSystem fileSystem = operatingSystem.getFileSystem();
+        List<OSFileStore> fsArray = fileSystem.getFileStores();
+        List<DiskInfo> diskInfos = new ArrayList<>();
+        for (OSFileStore fs : fsArray) {
+            long free = fs.getUsableSpace();
+            long total = fs.getTotalSpace();
+            long used = total - free;
+            DiskInfo diskInfo = new DiskInfo();
+            diskInfo.setDirName(fs.getMount());
+            diskInfo.setSysTypeName(fs.getType());
+            diskInfo.setTypeName(fs.getName());
+            diskInfo.setTotal(convertFileSize(total));
+            diskInfo.setFree(convertFileSize(free));
+            diskInfo.setUsed(convertFileSize(used));
+            diskInfo.setUsage(ArithmeticUtil.mul(ArithmeticUtil.div(used, total, 4), 100));
+            diskInfos.add(diskInfo);
+        }
+        return diskInfos;
+    }
+
+    /**
+     * 字节转换
+     *
+     * @param size 字节大小
+     * @return 转换后值
+     */
+    private String convertFileSize(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+        if (size >= gb) {
+            return String.format("%.1f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            return String.format(f > 100 ? "%.0f MB" : "%.1f MB", f);
+        } else if (size >= kb) {
+            float f = (float) size / kb;
+            return String.format(f > 100 ? "%.0f KB" : "%.1f KB", f);
+        } else {
+            return String.format("%d B", size);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(SystemServerUtil.INSTANCE().ofCpuInfo().toString());
+    }
+}
