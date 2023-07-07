@@ -283,7 +283,7 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>4.2.rc3</version>
+                <version>4.2</version>
                 <configuration>
                     <properties>
                         <year>2022-2023</year>

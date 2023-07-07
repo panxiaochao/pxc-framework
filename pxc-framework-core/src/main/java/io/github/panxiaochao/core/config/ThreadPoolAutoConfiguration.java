@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2022-2023 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.panxiaochao.core.config;
 
 import io.github.panxiaochao.core.properties.PxcFrameWorkProperties;
@@ -52,10 +67,10 @@ public class ThreadPoolAutoConfiguration {
      * 5.allowCoreThreadTimeOut：设置为true的话，keepAliveSeconds参数设置的有效时间对corePoolSize线程也有效，默认是flase
      * 6.threadFactory：：用于设置创建线程的工厂，可以通过线程工厂给每个创建出来的线程设置更有意义的名字。使用开源框架guava提供的ThreadFactoryBuilder可以快速给线程池里的线程设置有意义的名字
      * 7.rejectedExecutionHandler：拒绝策略，当队列workQueue和线程池maxPoolSize都满了，说明线程池处于饱和状态，那么必须采取一种策略处理提交的新任务。这个策略默认情况下是AbortPolicy，表示无法处理新任务时抛出异常，有以下四种策略，当然也可以根据实际业务需求类实现RejectedExecutionHandler接口实现自己的处理策略
-     *     1.AbortPolicy：丢弃任务，并且抛出RejectedExecutionException异常
-     *     2.DiscardPolicy：丢弃任务，不处理，不抛出异常
-     *     3.CallerRunsPolicy：直接在execute方法的调用线程中运行被拒绝的任务
-     *     4.DiscardOldestPolicy：丢弃队列中最前面的任务，然后重新尝试执行任务
+     *     7.1.AbortPolicy：丢弃任务，并且抛出RejectedExecutionException异常
+     *     7.2.DiscardPolicy：丢弃任务，不处理，不抛出异常
+     *     7.3.CallerRunsPolicy：直接在execute方法的调用线程中运行被拒绝的任务
+     *     7.4.DiscardOldestPolicy：丢弃队列中最前面的任务，然后重新尝试执行任务
      * </pre>
      */
     @Bean(name = "threadPoolTaskExecutor")
