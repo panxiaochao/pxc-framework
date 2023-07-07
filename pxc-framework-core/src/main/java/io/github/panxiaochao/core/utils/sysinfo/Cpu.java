@@ -6,7 +6,7 @@ import lombok.ToString;
 
 /**
  * {@code Cpu}
- * <p>
+ * <p> Cpu Entity
  *
  * @author Lypxc
  * @since 2023-07-07

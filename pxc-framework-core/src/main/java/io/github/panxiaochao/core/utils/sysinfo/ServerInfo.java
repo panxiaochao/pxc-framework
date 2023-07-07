@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * {@code SystemInfo}
- * <p>
+ * {@code ServerInfo}
+ * <p> ServerInfo Entity
  *
  * @author Lypxc
  * @since 2023-07-07

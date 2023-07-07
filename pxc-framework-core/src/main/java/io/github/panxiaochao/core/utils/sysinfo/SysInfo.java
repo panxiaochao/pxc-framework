@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * {@code ServerInfo}
- * <p>
+ * <p> SysInfo Entity
  *
  * @author Lypxc
  * @since 2023-07-07
@@ -22,6 +22,16 @@ public class SysInfo {
      * 服务器Ip
      */
     private String computerIp;
+
+    /**
+     * DNS
+     */
+    private String dns;
+
+    /**
+     * 默认网关
+     */
+    private String gateway;
 
     /**
      * 项目路径

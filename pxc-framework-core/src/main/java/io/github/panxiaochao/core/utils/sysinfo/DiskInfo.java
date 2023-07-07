@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * {@code DiskInfo}
- * <p>
+ * <p> DiskInfo Entity
  *
  * @author Lypxc
  * @since 2023-07-07

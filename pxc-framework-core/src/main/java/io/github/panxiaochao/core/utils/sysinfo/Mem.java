@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * {@code Mem}
- * <p>
+ * <p> Mem Entity
  *
  * @author Lypxc
  * @since 2023-07-07

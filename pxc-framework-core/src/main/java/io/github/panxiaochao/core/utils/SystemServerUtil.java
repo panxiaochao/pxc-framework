@@ -5,10 +5,12 @@ import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.FileSystem;
+import oshi.software.os.NetworkParams;
 import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -40,6 +42,11 @@ public class SystemServerUtil {
         return SYSTEM_SERVER_UTIL;
     }
 
+    /**
+     * 获取系统服务器信息，包括CPU, 内存, JVM, 硬盘等等信息
+     *
+     * @return ServerInfo
+     */
     public ServerInfo getServerInfo() {
         ServerInfo serverInfo = new ServerInfo();
         serverInfo.setCpu(ofCpuInfo());
@@ -50,29 +57,33 @@ public class SystemServerUtil {
         return serverInfo;
     }
 
-
+    /**
+     * 获取CPU信息
+     *
+     * @return Cpu
+     */
     public Cpu ofCpuInfo() {
         HardwareAbstractionLayer hal = systemInfo.getHardware();
-        CentralProcessor centralProcessor = hal.getProcessor();
+        CentralProcessor processor = hal.getProcessor();
         // CPU信息
-        long[] prevTicks = centralProcessor.getSystemCpuLoadTicks();
+        long[] prevTicks = processor.getSystemCpuLoadTicks();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        long[] ticks = centralProcessor.getSystemCpuLoadTicks();
+        long[] ticks = processor.getSystemCpuLoadTicks();
+        long user = ticks[CentralProcessor.TickType.USER.getIndex()] - prevTicks[CentralProcessor.TickType.USER.getIndex()];
         long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
+        long cSys = ticks[CentralProcessor.TickType.SYSTEM.getIndex()] - prevTicks[CentralProcessor.TickType.SYSTEM.getIndex()];
+        long idle = ticks[CentralProcessor.TickType.IDLE.getIndex()] - prevTicks[CentralProcessor.TickType.IDLE.getIndex()];
+        long ioWait = ticks[CentralProcessor.TickType.IOWAIT.getIndex()] - prevTicks[CentralProcessor.TickType.IOWAIT.getIndex()];
         long irq = ticks[CentralProcessor.TickType.IRQ.getIndex()] - prevTicks[CentralProcessor.TickType.IRQ.getIndex()];
         long softIrq = ticks[CentralProcessor.TickType.SOFTIRQ.getIndex()] - prevTicks[CentralProcessor.TickType.SOFTIRQ.getIndex()];
         long steal = ticks[CentralProcessor.TickType.STEAL.getIndex()] - prevTicks[CentralProcessor.TickType.STEAL.getIndex()];
-        long cSys = ticks[CentralProcessor.TickType.SYSTEM.getIndex()] - prevTicks[CentralProcessor.TickType.SYSTEM.getIndex()];
-        long user = ticks[CentralProcessor.TickType.USER.getIndex()] - prevTicks[CentralProcessor.TickType.USER.getIndex()];
-        long ioWait = ticks[CentralProcessor.TickType.IOWAIT.getIndex()] - prevTicks[CentralProcessor.TickType.IOWAIT.getIndex()];
-        long idle = ticks[CentralProcessor.TickType.IDLE.getIndex()] - prevTicks[CentralProcessor.TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
         Cpu cpu = new Cpu();
-        cpu.setCpuNum(centralProcessor.getLogicalProcessorCount());
+        cpu.setCpuNum(processor.getLogicalProcessorCount());
         cpu.setTotal(totalCpu);
         cpu.setSys(cSys);
         cpu.setUsed(user);
@@ -81,8 +92,14 @@ public class SystemServerUtil {
         return cpu;
     }
 
+    /**
+     * 获取内存信息
+     *
+     * @return Mem
+     */
     public Mem ofMemInfo() {
         GlobalMemory memory = systemInfo.getHardware().getMemory();
+        memory.getVirtualMemory();
         // 内存信息
         Mem mem = new Mem();
         mem.setTotal(memory.getTotal());
@@ -92,6 +109,11 @@ public class SystemServerUtil {
     }
 
 
+    /**
+     * 获取JVM信息
+     *
+     * @return Jvm
+     */
     public Jvm ofJvmInfo() {
         Jvm jvm = new Jvm();
         Properties props = System.getProperties();
@@ -103,18 +125,31 @@ public class SystemServerUtil {
         return jvm;
     }
 
+    /**
+     * 获取系统信息
+     *
+     * @return SysInfo
+     */
     public SysInfo ofSysInfo() {
+        OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
+        NetworkParams networkParams = operatingSystem.getNetworkParams();
         SysInfo sys = new SysInfo();
         Properties props = System.getProperties();
-        sys.setComputerName(LocalhostUtil.getHostName());
+        sys.setComputerName(networkParams.getHostName());
         sys.setComputerIp(LocalhostUtil.getHostIp());
+        sys.setDns(Arrays.toString(networkParams.getDnsServers()));
+        sys.setGateway(networkParams.getIpv4DefaultGateway());
         sys.setOsName(props.getProperty("os.name"));
         sys.setOsArch(props.getProperty("os.arch"));
         sys.setUserDir(props.getProperty("user.dir"));
         return sys;
     }
 
-
+    /**
+     * 获取文件存储信息
+     *
+     * @return DiskInfo
+     */
     public List<DiskInfo> ofDiskInfosInfo() {
         OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
         FileSystem fileSystem = operatingSystem.getFileSystem();
@@ -158,9 +193,5 @@ public class SystemServerUtil {
         } else {
             return String.format("%d B", size);
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(SystemServerUtil.INSTANCE().ofCpuInfo().toString());
     }
 }
