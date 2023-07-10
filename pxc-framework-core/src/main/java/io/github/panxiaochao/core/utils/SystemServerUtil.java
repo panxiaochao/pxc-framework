@@ -1,6 +1,7 @@
 package io.github.panxiaochao.core.utils;
 
 import io.github.panxiaochao.core.utils.sysinfo.*;
+import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -30,7 +31,7 @@ public class SystemServerUtil {
     /**
      * SystemInfo 初始化
      */
-    private final oshi.SystemInfo systemInfo = new oshi.SystemInfo();
+    private final SystemInfo systemInfo = new SystemInfo();
 
     private SystemServerUtil() {
     }
@@ -193,4 +194,13 @@ public class SystemServerUtil {
             return String.format("%d B", size);
         }
     }
+
+    // public static void main(String[] args) {
+    //     Properties props = System.getProperties();
+    //     //遍历所有的属性
+    //     for (String key : props.stringPropertyNames()) {
+    //         //输出对应的键和值
+    //         System.out.println(key + " = " + props.getProperty(key));
+    //     }
+    // }
 }

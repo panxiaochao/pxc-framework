@@ -78,6 +78,7 @@
         <lombok.version>1.18.26</lombok.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <oshi.version>6.4.4</oshi.version>
+        <ip2region.version>2.7.0</ip2region.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -160,6 +161,13 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
+            </dependency>
+
+            <!-- ip2region 依赖管理 -->
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

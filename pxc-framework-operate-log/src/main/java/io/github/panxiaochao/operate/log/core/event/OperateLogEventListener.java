@@ -15,6 +15,8 @@
  */
 package io.github.panxiaochao.operate.log.core.event;
 
+import io.github.panxiaochao.core.utils.Ip2regionUtil;
+import io.github.panxiaochao.core.utils.ipregion.IpInfo;
 import io.github.panxiaochao.operate.log.core.OperateLogDao;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
 import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
@@ -26,6 +28,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.StringUtils;
 
 /**
  * {@code OperateLogEventListener}
@@ -55,8 +58,15 @@ public class OperateLogEventListener {
     @Async
     @EventListener
     public void operateLog(OperateLogDomain operateLogDomain) {
-        LOGGER.info("[ip]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
+        if (StringUtils.hasText(operateLogDomain.getIp())) {
+            IpInfo info = Ip2regionUtil.memorySearch(operateLogDomain.getIp());
+            if (info != null) {
+                operateLogDomain.setAddress(info.getAddressAndIsp());
+            }
+        }
+        LOGGER.info("[ip]: {}, [address]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
                 operateLogDomain.getIp(),
+                operateLogDomain.getAddress(),
                 operateLogDomain.getClassMethod(),
                 operateLogDomain.getRequestDateTime(),
                 operateLogDomain.getCostTime());
