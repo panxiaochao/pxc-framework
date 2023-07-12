@@ -15,121 +15,123 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 /**
  * {@code OptionalUtils}
- * <p> Optional 自定义工具类
+ * <p>
+ * Optional 自定义工具类
  *
  * @author Lypxc
  * @since 2022/1/29
  */
 public class OptionalUtil {
 
-    /**
-     * list == null               = true
-     * list == new ArrayList<>()  = true
-     *
-     * @param list list
-     * @return true or false
-     */
-    public static boolean isCollectionEmpty(List<?> list) {
-        List<?> newList = Optional.ofNullable(list).filter(t -> !t.isEmpty()).orElseGet(ArrayList::new);
-        return newList.isEmpty();
-    }
+  /**
+   * list == null = true list == new ArrayList<>() = true
+   *
+   * @param list list
+   * @return true or false
+   */
+  public static boolean isCollectionEmpty(List<?> list) {
+    List<?> newList = Optional.ofNullable(list).filter(t -> !t.isEmpty()).orElseGet(ArrayList::new);
+    return newList.isEmpty();
+  }
 
-    /**
-     * list != null               = true
-     * list != new ArrayList<>()  = true
-     *
-     * @param list list
-     * @return true or false
-     */
-    public static boolean isCollectionNotEmpty(List<?> list) {
-        return !isCollectionEmpty(list);
-    }
+  /**
+   * list != null = true list != new ArrayList<>() = true
+   *
+   * @param list list
+   * @return true or false
+   */
+  public static boolean isCollectionNotEmpty(List<?> list) {
+    return !isCollectionEmpty(list);
+  }
 
-    /**
-     * list == null               = true
-     * list == new ArrayList<>()  = true
-     *
-     * @param list list
-     * @return true or false
-     */
-    public static boolean isCollectionEmpty(ArrayList<?> list) {
-        List<?> newList = Optional.ofNullable(list).filter(t -> !t.isEmpty()).orElseGet(ArrayList::new);
-        return newList.isEmpty();
-    }
+  /**
+   * list == null = true list == new ArrayList<>() = true
+   *
+   * @param list list
+   * @return true or false
+   */
+  public static boolean isCollectionEmpty(ArrayList<?> list) {
+    List<?> newList = Optional.ofNullable(list).filter(t -> !t.isEmpty()).orElseGet(ArrayList::new);
+    return newList.isEmpty();
+  }
 
-    /**
-     * list != null               = true
-     * list != new ArrayList<>()  = true
-     *
-     * @param list list
-     * @return true or false
-     */
-    public static boolean isCollectionNotEmpty(ArrayList<?> list) {
-        return !isCollectionEmpty(list);
-    }
+  /**
+   * list != null = true list != new ArrayList<>() = true
+   *
+   * @param list list
+   * @return true or false
+   */
+  public static boolean isCollectionNotEmpty(ArrayList<?> list) {
+    return !isCollectionEmpty(list);
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isIntEmpty(int value) {
-        return OptionalInt.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isIntEmpty(int value) {
+    return OptionalInt.of(value).isPresent();
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isIntEmpty(Integer value) {
-        return OptionalInt.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isIntEmpty(Integer value) {
+    return OptionalInt.of(value).isPresent();
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isDoubleEmpty(double value) {
-        return OptionalDouble.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isDoubleEmpty(double value) {
+    return OptionalDouble.of(value).isPresent();
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isDoubleEmpty(Double value) {
-        return OptionalDouble.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isDoubleEmpty(Double value) {
+    return OptionalDouble.of(value).isPresent();
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isLongEmpty(long value) {
-        return OptionalLong.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isLongEmpty(long value) {
+    return OptionalLong.of(value).isPresent();
+  }
 
-    /**
-     * value == null true
-     *
-     * @param value value
-     * @return true or false
-     */
-    public static boolean isLongEmpty(Long value) {
-        return OptionalLong.of(value).isPresent();
-    }
+  /**
+   * value == null true
+   *
+   * @param value value
+   * @return true or false
+   */
+  public static boolean isLongEmpty(Long value) {
+    return OptionalLong.of(value).isPresent();
+  }
+
 }
-

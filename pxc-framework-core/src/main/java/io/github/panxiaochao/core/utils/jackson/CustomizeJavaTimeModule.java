@@ -27,7 +27,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import io.github.panxiaochao.core.utils.jackson.jsonserializer.BigNumberSerializer;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -38,42 +37,52 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * {@code CustomizeJavaTimeModule}
- * <p> description: jackson TimeModule
+ * <p>
+ * description: jackson TimeModule
  *
  * @author Lypxc
  * @since 2023-06-06
  */
 public class CustomizeJavaTimeModule extends SimpleModule {
 
-    private static final long serialVersionUID = -7425869912487751834L;
+  private static final long serialVersionUID = -7425869912487751834L;
 
-    /**
-     * 默认日期时间格式
-     */
-    private static final String LOCAL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    /**
-     * 默认日期格式
-     */
-    private static final String LOCAL_DATE_FORMAT = "yyyy-MM-dd";
-    /**
-     * 默认时间格式
-     */
-    private static final String DATE_TIME_FORMAT = "HH:mm:ss";
+  /**
+   * 默认日期时间格式
+   */
+  private static final String LOCAL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public CustomizeJavaTimeModule() {
-        super(PackageVersion.VERSION);
-        this.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
-        this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
-        this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        this.addSerializer(Instant.class, InstantSerializer.INSTANCE);
-        this.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
-        this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
-        this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-        this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
-        // 数值型
-        this.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
-        this.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
-        this.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
-        this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
-    }
+  /**
+   * 默认日期格式
+   */
+  private static final String LOCAL_DATE_FORMAT = "yyyy-MM-dd";
+
+  /**
+   * 默认时间格式
+   */
+  private static final String DATE_TIME_FORMAT = "HH:mm:ss";
+
+  public CustomizeJavaTimeModule() {
+    super(PackageVersion.VERSION);
+    this.addSerializer(LocalDateTime.class,
+        new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
+    this.addSerializer(LocalDate.class,
+        new LocalDateSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
+    this.addSerializer(LocalTime.class,
+        new LocalTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    this.addSerializer(Instant.class, InstantSerializer.INSTANCE);
+    this.addDeserializer(LocalDateTime.class,
+        new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
+    this.addDeserializer(LocalDate.class,
+        new LocalDateDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
+    this.addDeserializer(LocalTime.class,
+        new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
+    // 数值型
+    this.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
+    this.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
+    this.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
+    this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
+  }
+
 }

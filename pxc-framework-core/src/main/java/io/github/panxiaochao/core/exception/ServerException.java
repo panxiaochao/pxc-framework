@@ -15,14 +15,14 @@
  */
 package io.github.panxiaochao.core.exception;
 
-
 import io.github.panxiaochao.core.ienums.IEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * {@code ServerException}
- * <p> 基础错误异常类
+ * <p>
+ * 基础错误异常类
  *
  * @author Lypxc
  * @since 2022/4/19
@@ -30,51 +30,54 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServerException extends Exception {
-    private static final long serialVersionUID = 9012390889969142663L;
 
-    /**
-     * 自定义枚举
-     */
-    private IEnum<Integer> responseEnum;
+  private static final long serialVersionUID = 9012390889969142663L;
 
-    /**
-     * 参数
-     */
-    private Object[] args;
+  /**
+   * 自定义枚举
+   */
+  private IEnum<Integer> responseEnum;
 
-    private Integer code;
+  /**
+   * 参数
+   */
+  private Object[] args;
 
-    private String errMsg;
+  private Integer code;
 
-    public ServerException() {
-        super();
-    }
+  private String errMsg;
 
-    public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg) {
-        super(errMsg);
-        this.responseEnum = responseEnum;
-        this.args = args;
-        this.errMsg = errMsg;
-        this.code = responseEnum.getCode();
-    }
+  public ServerException() {
+    super();
+  }
 
-    public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg, Throwable cause) {
-        super(errMsg, cause);
-        this.responseEnum = responseEnum;
-        this.args = args;
-        this.errMsg = errMsg;
-        this.code = responseEnum.getCode();
-    }
+  public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg) {
+    super(errMsg);
+    this.responseEnum = responseEnum;
+    this.args = args;
+    this.errMsg = errMsg;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerException(int code, String errMsg) {
-        super(errMsg);
-        this.code = code;
-        this.errMsg = errMsg;
-    }
+  public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg,
+      Throwable cause) {
+    super(errMsg, cause);
+    this.responseEnum = responseEnum;
+    this.args = args;
+    this.errMsg = errMsg;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerException(int code, String errMsg, Throwable cause) {
-        super(errMsg, cause);
-        this.code = code;
-        this.errMsg = errMsg;
-    }
+  public ServerException(int code, String errMsg) {
+    super(errMsg);
+    this.code = code;
+    this.errMsg = errMsg;
+  }
+
+  public ServerException(int code, String errMsg, Throwable cause) {
+    super(errMsg, cause);
+    this.code = code;
+    this.errMsg = errMsg;
+  }
+
 }

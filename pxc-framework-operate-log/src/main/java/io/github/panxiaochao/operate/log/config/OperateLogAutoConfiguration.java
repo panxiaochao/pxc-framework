@@ -23,15 +23,19 @@ import io.github.panxiaochao.operate.log.core.enums.OperateLogErrorEnum;
 import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
 import io.github.panxiaochao.operate.log.core.handler.AbstractOperateLogHandler;
 import io.github.panxiaochao.operate.log.properties.OperateLogProperties;
+import java.util.Objects;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Objects;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * {@code OperateLogAutoConfiguration}
- * <p> OperateLog 自动配置类
+ * <p>
+ * OperateLog 自动配置类
  *
  * @author Lypxc
  * @since 2023-07-03
@@ -39,22 +43,35 @@ import java.util.Objects;
 @AutoConfiguration
 @EnableConfigurationProperties(OperateLogProperties.class)
 public class OperateLogAutoConfiguration {
-    @Bean
-    public OperateLogAspect operateLogAspect() {
-        return new OperateLogAspect();
-    }
 
-    @Bean
-    public OperateLogDao operateLogDao(OperateLogProperties operateLogProperties) {
-        if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
-            if (!Objects.isNull(operateLogProperties.getHandler())) {
-                AbstractOperateLogHandler handler = SpringContextUtil.getBean(operateLogProperties.getHandler());
-                Objects.requireNonNull(handler, "请在自定义处理器[" + operateLogProperties.getHandler().getSimpleName() + "]类中加入@Component注解");
-                return new OperateLogDao(handler);
-            } else {
-                throw new ServerRuntimeException(OperateLogErrorEnum.OPERATE_LOG_ERROR);
-            }
+  @Bean
+  public OperateLogAspect operateLogAspect() {
+    return new OperateLogAspect();
+  }
+
+  @Bean
+  public OperateLogDao operateLogDao(OperateLogProperties operateLogProperties) {
+    if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
+      if (!Objects.isNull(operateLogProperties.getHandler())) {
+        AbstractOperateLogHandler handler;
+        Component cpt = AnnotationUtils.findAnnotation(operateLogProperties.getHandler(),
+            Component.class);
+        if (cpt != null) {
+          handler = SpringContextUtil.getBean(operateLogProperties.getHandler());
+        } else {
+          GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+          beanDefinition.setBeanClass(operateLogProperties.getHandler());
+          beanDefinition.setAutowireCandidate(true);
+          beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+          String beanName = SpringContextUtil.registerBeanDefinition(beanDefinition,
+              operateLogProperties.getHandler().getClassLoader());
+          handler = SpringContextUtil.getBeanByClassName(beanName);
         }
-        return null;
+        return new OperateLogDao(handler);
+      } else {
+        throw new ServerRuntimeException(OperateLogErrorEnum.OPERATE_LOG_HANDLER_ERROR);
+      }
     }
+    return null;
+  }
 }

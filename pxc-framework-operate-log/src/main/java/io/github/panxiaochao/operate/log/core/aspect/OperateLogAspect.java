@@ -29,7 +29,8 @@ import org.springframework.core.annotation.Order;
 
 /**
  * {@code OperateLogAspect}
- * <p> 操作日志 Aspect处理
+ * <p>
+ * 操作日志 Aspect处理
  *
  * @author Lypxc
  * @since 2023-07-03
@@ -38,34 +39,35 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 public class OperateLogAspect {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogAspect.class);
 
-    public OperateLogAspect() {
-        LOGGER.info("配置[OperateLogAspect]成功！");
-    }
+	public OperateLogAspect() {
+		LOGGER.info("配置[OperateLogAspect]成功！");
+	}
 
-    /**
-     * 前置拦截
-     */
-    @Before("@annotation(operatorLog)")
-    public void before(JoinPoint joinPoint, OperateLog operatorLog) {
-        // 设置请求方法执行开始时间
-        MethodCostContext.setMethodCostTime(System.currentTimeMillis());
-    }
+	/**
+	 * 前置拦截
+	 */
+	@Before("@annotation(operatorLog)")
+	public void before(JoinPoint joinPoint, OperateLog operatorLog) {
+		// 设置请求方法执行开始时间
+		MethodCostContext.setMethodCostTime(System.currentTimeMillis());
+	}
 
-    /**
-     * 返回拦截
-     */
-    @AfterReturning(pointcut = "@annotation(operatorLog)", returning = "returnValue")
-    public void afterReturning(JoinPoint joinPoint, OperateLog operatorLog, Object returnValue) {
-        OperateLogUtil.handleOperateLog(joinPoint, operatorLog, returnValue, null);
-    }
+	/**
+	 * 返回拦截
+	 */
+	@AfterReturning(pointcut = "@annotation(operatorLog)", returning = "returnValue")
+	public void afterReturning(JoinPoint joinPoint, OperateLog operatorLog, Object returnValue) {
+		OperateLogUtil.handleOperateLog(joinPoint, operatorLog, returnValue, null);
+	}
 
-    /**
-     * 错误异常拦截
-     */
-    @AfterThrowing(pointcut = "@annotation(operatorLog)", throwing = "ex")
-    public void afterThrowing(JoinPoint joinPoint, OperateLog operatorLog, Exception ex) {
-        OperateLogUtil.handleOperateLog(joinPoint, operatorLog, null, ex);
-    }
+	/**
+	 * 错误异常拦截
+	 */
+	@AfterThrowing(pointcut = "@annotation(operatorLog)", throwing = "ex")
+	public void afterThrowing(JoinPoint joinPoint, OperateLog operatorLog, Exception ex) {
+		OperateLogUtil.handleOperateLog(joinPoint, operatorLog, null, ex);
+	}
+
 }

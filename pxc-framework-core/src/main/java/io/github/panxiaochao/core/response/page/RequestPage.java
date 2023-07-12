@@ -16,13 +16,13 @@
 package io.github.panxiaochao.core.response.page;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
- * <p> 请求分页参数
+ * <p>
+ * 请求分页参数
  *
  * @param <T> 泛型参数
  * @author Lypxc
@@ -32,33 +32,35 @@ import java.util.List;
 @Setter
 @Schema(description = "请求分页参数")
 public class RequestPage<T> {
-    /**
-     * 页号
-     */
-    @Schema(description = "页码，不小于1")
-    private long pageNo = 1;
 
-    /**
-     * 页数
-     */
-    @Schema(description = "页数")
-    private long pageSize = 10;
+  /**
+   * 页号
+   */
+  @Schema(description = "页码，不小于1")
+  private long pageNo = 1;
 
-    /**
-     * 获取排序信息
-     */
-    @Schema(description = "排序字段")
-    private List<OrderItems> orderItems;
+  /**
+   * 页数
+   */
+  @Schema(description = "页数")
+  private long pageSize = 10;
 
-    /**
-     * 对象
-     */
-    @Schema(description = "请求参数对象")
-    private T paramsObject;
+  /**
+   * 获取排序信息
+   */
+  @Schema(description = "排序字段")
+  private List<OrderItems> orderItems;
 
-    /**
-     * 是否查询总数
-     */
-    @Schema(description = "页码")
-    private boolean searchCount = true;
+  /**
+   * 对象
+   */
+  @Schema(description = "请求参数对象")
+  private T paramsObject;
+
+  /**
+   * 是否查询总数
+   */
+  @Schema(description = "页码")
+  private boolean searchCount = true;
+
 }

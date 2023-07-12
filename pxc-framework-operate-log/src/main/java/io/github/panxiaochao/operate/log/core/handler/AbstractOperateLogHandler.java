@@ -20,11 +20,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * {@code AbstractOperateLogHandler}
- * <p> 抽象类
+ * <p>
+ * 抽象类
  *
  * @author Lypxc
  * @since 2023-07-03
  */
 public abstract class AbstractOperateLogHandler implements IOperateLogHandler {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
+
 }

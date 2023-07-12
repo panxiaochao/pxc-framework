@@ -5,7 +5,8 @@ import lombok.Setter;
 
 /**
  * {@code ServerInfo}
- * <p> SysInfo Entity
+ * <p>
+ * SysInfo Entity
  *
  * @author Lypxc
  * @since 2023-07-07
@@ -13,38 +14,40 @@ import lombok.Setter;
 @Setter
 @Getter
 public class SysInfo {
-    /**
-     * 服务器名称
-     */
-    private String computerName;
 
-    /**
-     * 服务器Ip
-     */
-    private String computerIp;
+  /**
+   * 服务器名称
+   */
+  private String computerName;
 
-    /**
-     * DNS
-     */
-    private String dns;
+  /**
+   * 服务器Ip
+   */
+  private String computerIp;
 
-    /**
-     * 默认网关
-     */
-    private String gateway;
+  /**
+   * DNS
+   */
+  private String dns;
 
-    /**
-     * 项目路径
-     */
-    private String userDir;
+  /**
+   * 默认网关
+   */
+  private String gateway;
 
-    /**
-     * 操作系统
-     */
-    private String osName;
+  /**
+   * 项目路径
+   */
+  private String userDir;
 
-    /**
-     * 系统架构
-     */
-    private String osArch;
+  /**
+   * 操作系统
+   */
+  private String osName;
+
+  /**
+   * 系统架构
+   */
+  private String osArch;
+
 }

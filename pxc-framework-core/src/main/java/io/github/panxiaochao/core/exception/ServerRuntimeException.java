@@ -15,14 +15,14 @@
  */
 package io.github.panxiaochao.core.exception;
 
-
 import io.github.panxiaochao.core.ienums.IEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * {@code ServerRuntimeException}
- * <p> 基础运行时异常类
+ * <p>
+ * 基础运行时异常类
  *
  * @author Lypxc
  * @since 2022/4/19
@@ -30,59 +30,62 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServerRuntimeException extends RuntimeException {
-    private static final long serialVersionUID = -2307670685197783604L;
 
-    /**
-     * 自定义枚举
-     */
-    private IEnum<Integer> responseEnum;
+  private static final long serialVersionUID = -2307670685197783604L;
 
-    /**
-     * 参数
-     */
-    private Object[] args;
+  /**
+   * 自定义枚举
+   */
+  private IEnum<Integer> responseEnum;
 
-    private Integer code;
+  /**
+   * 参数
+   */
+  private Object[] args;
 
-    public ServerRuntimeException() {
-        super();
-    }
+  private Integer code;
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum) {
-        super(responseEnum.getMessage());
-        this.responseEnum = responseEnum;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException() {
+    super();
+  }
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum, Throwable cause) {
-        super(responseEnum.getMessage(), cause);
-        this.responseEnum = responseEnum;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException(IEnum<Integer> responseEnum) {
+    super(responseEnum.getMessage());
+    this.responseEnum = responseEnum;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum, String message) {
-        super(message);
-        this.responseEnum = responseEnum;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException(IEnum<Integer> responseEnum, Throwable cause) {
+    super(responseEnum.getMessage(), cause);
+    this.responseEnum = responseEnum;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum, String message, Throwable cause) {
-        super(message, cause);
-        this.responseEnum = responseEnum;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException(IEnum<Integer> responseEnum, String message) {
+    super(message);
+    this.responseEnum = responseEnum;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum, Object[] args, String message) {
-        super(message);
-        this.responseEnum = responseEnum;
-        this.args = args;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException(IEnum<Integer> responseEnum, String message, Throwable cause) {
+    super(message, cause);
+    this.responseEnum = responseEnum;
+    this.code = responseEnum.getCode();
+  }
 
-    public ServerRuntimeException(IEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
-        super(message, cause);
-        this.responseEnum = responseEnum;
-        this.args = args;
-        this.code = responseEnum.getCode();
-    }
+  public ServerRuntimeException(IEnum<Integer> responseEnum, Object[] args, String message) {
+    super(message);
+    this.responseEnum = responseEnum;
+    this.args = args;
+    this.code = responseEnum.getCode();
+  }
+
+  public ServerRuntimeException(IEnum<Integer> responseEnum, Object[] args, String message,
+      Throwable cause) {
+    super(message, cause);
+    this.responseEnum = responseEnum;
+    this.args = args;
+    this.code = responseEnum.getCode();
+  }
+
 }

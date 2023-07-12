@@ -5,7 +5,8 @@ import lombok.Setter;
 
 /**
  * {@code DiskInfo}
- * <p> DiskInfo Entity
+ * <p>
+ * DiskInfo Entity
  *
  * @author Lypxc
  * @since 2023-07-07
@@ -13,38 +14,40 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DiskInfo {
-    /**
-     * 盘符路径
-     */
-    private String dirName;
 
-    /**
-     * 盘符类型
-     */
-    private String sysTypeName;
+  /**
+   * 盘符路径
+   */
+  private String dirName;
 
-    /**
-     * 文件类型
-     */
-    private String typeName;
+  /**
+   * 盘符类型
+   */
+  private String sysTypeName;
 
-    /**
-     * 总大小
-     */
-    private String total;
+  /**
+   * 文件类型
+   */
+  private String typeName;
 
-    /**
-     * 剩余大小
-     */
-    private String free;
+  /**
+   * 总大小
+   */
+  private String total;
 
-    /**
-     * 已经使用量
-     */
-    private String used;
+  /**
+   * 剩余大小
+   */
+  private String free;
 
-    /**
-     * 资源的使用率
-     */
-    private double usage;
+  /**
+   * 已经使用量
+   */
+  private String used;
+
+  /**
+   * 资源的使用率
+   */
+  private double usage;
+
 }

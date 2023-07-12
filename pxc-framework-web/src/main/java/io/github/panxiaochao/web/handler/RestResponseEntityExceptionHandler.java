@@ -30,8 +30,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 /**
  * {@code RestResponseEntityExceptionHandler}
- * <p>默认情况下，标准的 Spring MVC 异常会通过 DefaultHandlerExceptionResolver 来处理
- * <p>继承自定义处理一些特殊错误
+ * <p>
+ * 默认情况下，标准的 Spring MVC 异常会通过 DefaultHandlerExceptionResolver 来处理
+ * <p>
+ * 继承自定义处理一些特殊错误
  *
  * @author Lypxc
  * @since 2023-06-26
@@ -39,25 +41,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      RestResponseEntityExceptionHandler.class);
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception e,
-                                                             @Nullable Object body,
-                                                             HttpHeaders headers,
-                                                             HttpStatus status,
-                                                             WebRequest request) {
-        LOGGER.error(e.getMessage(), e);
-        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
-            request.setAttribute("javax.servlet.error.exception", e, 0);
-        }
-        ServletResponseEnum servletExceptionEnum = null;
-        try {
-            servletExceptionEnum = ServletResponseEnum.valueOf(e.getClass().getSimpleName());
-        } catch (IllegalArgumentException e1) {
-            LOGGER.error("class [{}] not defined in enum {}", e.getClass().getName(), ServletResponseEnum.class.getName());
-            return new ResponseEntity<>(R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(), CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), body), headers, status);
-        }
-        return new ResponseEntity<>(R.fail(servletExceptionEnum.getCode(), servletExceptionEnum.getMessage(), body), headers, status);
+  @Override
+  protected ResponseEntity<Object> handleExceptionInternal(Exception e, @Nullable Object body,
+      HttpHeaders headers,
+      HttpStatus status, WebRequest request) {
+    LOGGER.error(e.getMessage(), e);
+    if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+      request.setAttribute("javax.servlet.error.exception", e, 0);
     }
+    ServletResponseEnum servletExceptionEnum = null;
+    try {
+      servletExceptionEnum = ServletResponseEnum.valueOf(e.getClass().getSimpleName());
+    } catch (IllegalArgumentException e1) {
+      LOGGER.error("class [{}] not defined in enum {}", e.getClass().getName(),
+          ServletResponseEnum.class.getName());
+      return new ResponseEntity<>(R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(),
+          CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), body), headers, status);
+    }
+    return new ResponseEntity<>(
+        R.fail(servletExceptionEnum.getCode(), servletExceptionEnum.getMessage(), body),
+        headers, status);
+  }
+
 }

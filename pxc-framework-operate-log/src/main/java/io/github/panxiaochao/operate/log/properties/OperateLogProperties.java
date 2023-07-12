@@ -24,7 +24,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * {@code OperateLogProperties}
- * <p> 操作日志属性
+ * <p>
+ * 操作日志属性
  *
  * @author Lypxc
  * @since 2023-07-03
@@ -35,13 +36,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.operatelog", ignoreInvalidFields = true)
 public class OperateLogProperties {
 
-    /**
-     * 存储日志类型
-     */
-    public OperateLogType logType = OperateLogType.LOGGER;
+  /**
+   * 存储日志类型
+   */
+  public OperateLogType logType = OperateLogType.LOGGER;
 
-    /**
-     * 自定义日志处理器,
-     */
-    private Class<? extends AbstractOperateLogHandler> handler;
+  /**
+   * 自定义日志处理器,
+   */
+  private Class<? extends AbstractOperateLogHandler> handler;
+
 }

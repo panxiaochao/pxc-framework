@@ -15,12 +15,17 @@
  */
 package io.github.panxiaochao.repeatsubmit.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.concurrent.TimeUnit;
 
 /**
  * {@code RepeatSubmitLimiter}
- * <p> 限制重复提交注解
+ * <p>
+ * 限制重复提交注解
  *
  * @author Lypxc
  * @since 2023-06-29

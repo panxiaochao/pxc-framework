@@ -16,16 +16,16 @@
 package io.github.panxiaochao.core.enums;
 
 import io.github.panxiaochao.core.ienums.IResponseEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * {@code CommonResponseEnum}
- * <p> 通用枚举异常
+ * <p>
+ * 通用枚举异常
  *
  * @author Lypxc
  * @since 2022/11/27
@@ -34,55 +34,56 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum CommonResponseEnum implements IResponseEnum<Integer> {
 
-    /**
-     * 成功, 兼容 {code: 0} 的情况
-     */
-    OK_0(0, "成功！"),
+  /**
+   * 成功, 兼容 {code: 0} 的情况
+   */
+  OK_0(0, "成功！"),
 
-    /**
-     * 成功
-     */
-    OK(200, "成功！"),
+  /**
+   * 成功
+   */
+  OK(200, "成功！"),
 
-    /**
-     * 错误请求
-     */
-    BAD_REQUEST(400, "错误请求！"),
+  /**
+   * 错误请求
+   */
+  BAD_REQUEST(400, "错误请求！"),
 
-    /**
-     * 未授权
-     */
-    UNAUTHORIZED(401, "未授权！"),
+  /**
+   * 未授权
+   */
+  UNAUTHORIZED(401, "未授权！"),
 
-    /**
-     * 资源不存在
-     */
-    NOT_FOUND(404, "资源不存在！"),
+  /**
+   * 资源不存在
+   */
+  NOT_FOUND(404, "资源不存在！"),
 
-    /**
-     * 请求方式错误
-     */
-    METHOD_NOT_ALLOWED(405, "请求方式错误！"),
+  /**
+   * 请求方式错误
+   */
+  METHOD_NOT_ALLOWED(405, "请求方式错误！"),
 
-    /**
-     * 服务器忙，请稍候重试
-     */
-    INTERNAL_SERVER_ERROR(500, "服务器异常，请联系管理员！");
+  /**
+   * 服务器忙，请稍候重试
+   */
+  INTERNAL_SERVER_ERROR(500, "服务器异常，请联系管理员！");
 
-    private final Integer code;
+  private final Integer code;
 
-    private final String message;
+  private final String message;
 
-    public static final Map<Integer, String> MAP_VALUES =
-            Arrays.stream(CommonResponseEnum.values()).collect(Collectors.toMap(CommonResponseEnum::getCode, CommonResponseEnum::getMessage));
+  public static final Map<Integer, String> MAP_VALUES = Arrays.stream(CommonResponseEnum.values())
+      .collect(Collectors.toMap(CommonResponseEnum::getCode, CommonResponseEnum::getMessage));
 
-    @Override
-    public String ofCode(Integer code) {
-        for (CommonResponseEnum value : CommonResponseEnum.values()) {
-            if (value.getCode().equals(code)) {
-                return value.getMessage();
-            }
-        }
-        return null;
+  @Override
+  public String ofCode(Integer code) {
+    for (CommonResponseEnum value : CommonResponseEnum.values()) {
+      if (value.getCode().equals(code)) {
+        return value.getMessage();
+      }
     }
+    return null;
+  }
+
 }

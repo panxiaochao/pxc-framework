@@ -21,7 +21,8 @@ import lombok.Getter;
 
 /**
  * {@code OperateLogErrorEnum}
- * <p> 操作日志错误枚举
+ * <p>
+ * 操作日志错误枚举
  *
  * @author Lypxc
  * @since 2023-07-03
@@ -29,12 +30,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OperateLogErrorEnum implements IEnum<Integer> {
-    /**
-     * 请配置操作日志处理类
-     */
-    OPERATE_LOG_ERROR(6061, "请配置操作日志处理类！");
 
-    private final Integer code;
+  /**
+   * 请配置操作日志处理类
+   */
+  OPERATE_LOG_HANDLER_ERROR(6061, "请配置操作日志处理类！");
 
-    private final String message;
+  private final Integer code;
+
+  private final String message;
+
 }

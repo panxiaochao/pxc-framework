@@ -17,34 +17,36 @@ package io.github.panxiaochao.core.ienums;
 
 /**
  * {@code IEnum}
- * <p> 枚举基类
+ * <p>
+ * 枚举基类
  *
  * @author LyPxc
  * @since 2023-03-13
  */
 public interface IEnum<T> {
 
-    /**
-     * 码值
-     *
-     * @return T类型
-     */
-    T getCode();
+  /**
+   * 码值
+   *
+   * @return T类型
+   */
+  T getCode();
 
-    /**
-     * 码值对应描述
-     *
-     * @return 返回信息
-     */
-    String getMessage();
+  /**
+   * 码值对应描述
+   *
+   * @return 返回信息
+   */
+  String getMessage();
 
-    /**
-     * 根据code获取描述
-     *
-     * @param code 码值
-     * @return 返回信息
-     */
-    default String ofCode(T code) {
-        return null;
-    }
+  /**
+   * 根据code获取描述
+   *
+   * @param code 码值
+   * @return 返回信息
+   */
+  default String ofCode(T code) {
+    return null;
+  }
+
 }

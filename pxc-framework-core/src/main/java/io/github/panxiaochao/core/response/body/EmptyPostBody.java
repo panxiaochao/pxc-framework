@@ -17,10 +17,12 @@ package io.github.panxiaochao.core.response.body;
 
 /**
  * {@code EmptyPostBody}
- * <p>空对象
+ * <p>
+ * 空对象
  *
  * @author Lypxc
  * @since 2022/1/24
  */
 public class EmptyPostBody {
+
 }

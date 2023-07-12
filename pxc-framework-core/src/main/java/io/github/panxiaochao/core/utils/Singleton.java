@@ -20,42 +20,44 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@code Singleton}
- * <p> 静态工具类
+ * <p>
+ * 静态工具类
  *
  * @author Lypxc
  * @since 2022/8/25
  */
 public enum Singleton {
 
-    /**
-     * Inst singleton.
-     */
-    INST;
+  /**
+   * Inst singleton.
+   */
+  INST;
 
-    /**
-     * The Singles.
-     */
-    private static final Map<String, Object> SINGLES = new ConcurrentHashMap<>();
+  /**
+   * The Singles.
+   */
+  private static final Map<String, Object> SINGLES = new ConcurrentHashMap<>();
 
-    /**
-     * Single.
-     *
-     * @param key the String key
-     * @param o   the o
-     */
-    public void single(final String key, final Object o) {
-        SINGLES.put(key, o);
-    }
+  /**
+   * Single.
+   *
+   * @param key the String key
+   * @param o   the o
+   */
+  public void single(final String key, final Object o) {
+    SINGLES.put(key, o);
+  }
 
-    /**
-     * Get t.
-     *
-     * @param <T> the type parameter
-     * @param key String key
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T get(final String key) {
-        return (T) SINGLES.get(key);
-    }
+  /**
+   * Get t.
+   *
+   * @param <T> the type parameter
+   * @param key String key
+   * @return the t
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T get(final String key) {
+    return (T) SINGLES.get(key);
+  }
+
 }

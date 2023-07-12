@@ -16,17 +16,16 @@
 package io.github.panxiaochao.core.response.page;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-
 /**
  * {@code PageResponse}
- * <p> description: 分页数组响应实体
+ * <p>
+ * description: 分页数组响应实体
  *
  * @author Lypxc
  * @since 2023-01-03
@@ -38,15 +37,16 @@ import java.util.List;
 @Schema(description = "分页响应")
 public class PageResponse<T> {
 
-    /**
-     * 分页信息
-     */
-    @Schema(description = "分页信息")
-    private Pagination pagination;
+  /**
+   * 分页信息
+   */
+  @Schema(description = "分页信息")
+  private Pagination pagination;
 
-    /**
-     * 数组数据
-     */
-    @Schema(description = "数组数据")
-    private List<T> list;
+  /**
+   * 数组数据
+   */
+  @Schema(description = "数组数据")
+  private List<T> list;
+
 }

@@ -15,18 +15,22 @@
  */
 package io.github.panxiaochao.ratelimiter.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * {@code RateLimiter}
- * <p>防刷、限流注解, 应用于字段、类、方法
- * <pre>
+ * <p>
+ * 防刷、限流注解, 应用于字段、类、方法 <pre>
  *  ElementType.TYPE：能修饰类、接口或枚举类型
  *  ElementType.FIELD：能修饰成员变量
  *  ElementType.METHOD：能修饰方法
  * </pre>
- * <p>限流的思路:
- * <pre>
+ * <p>
+ * 限流的思路: <pre>
  * 1、 通过[请求路径或者方法名:访问ip]的作为key，[访问次数]为value的方式对某一请求进行唯一标识
  * 2、 每次访问的时候判断key是否存在，是否count超过了限制的访问次数
  * 3、 若访问超出限制，则返回限制报错信息
@@ -40,48 +44,51 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimiter {
 
-    /**
-     * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
-     */
-    String key() default "";
+  /**
+   * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
+   */
+  String key() default "";
+
+  /**
+   * 指定second时间内, API最大请求次数
+   */
+  int maxCount() default 10;
+
+  /**
+   * 限定时间范围, 单位秒
+   */
+  int limitSecond() default 60;
+
+  /**
+   * 限流类型
+   */
+  RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+
+  /**
+   * 限流类型
+   */
+  enum RateLimiterType {
 
     /**
-     * 指定second时间内, API最大请求次数
+     * 根据 IP 进行限流
      */
-    int maxCount() default 10;
+    IP,
 
     /**
-     * 限定时间范围, 单位秒
+     * 根据 METHOD 进行限流
      */
-    int limitSecond() default 60;
+    METHOD,
 
     /**
-     * 限流类型
+     * 根据 IP+METHOD 进行限流
      */
-    RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+    IP_METHOD,
 
     /**
-     * 限流类型
+     * 单机/单实例限流
      */
-    enum RateLimiterType {
-        /**
-         * 根据 IP 进行限流
-         */
-        IP,
+    SINGLE
 
-        /**
-         * 根据 METHOD 进行限流
-         */
-        METHOD,
+  }
 
-        /**
-         * 根据 IP+METHOD 进行限流
-         */
-        IP_METHOD,
-
-        /**
-         * 单机/单实例限流
-         */
-        SINGLE
-    }
 }
