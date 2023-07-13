@@ -31,36 +31,30 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ServletResponseEnum implements IResponseEnum<Integer> {
 
-  /**
-   * code message
-   */
-  NoHandlerFoundException(5001, "请求地址无效！"), HttpRequestMethodNotSupportedException(5002,
-      "请求方法不支持！"),
-  HttpMediaTypeNotSupportedException(5003, "请求头不支持！"), MissingPathVariableException(5004,
-      "未检测到参数路径！"),
-  MissingServletRequestParameterException(5005, "请求方法不支持！"), TypeMismatchException(5006,
-      "参数类型匹配失败！"),
-  HttpMessageNotReadableException(5007, "无效接收参数@RequestBody, 序列化失败！"),
-  HttpMessageNotWritableException(5008, "返回序列化失败！"), HttpMediaTypeNotAcceptableException(
-      5009, "找不到可接收MediaType！"),
-  ServletRequestBindingException(5010, "输入参数有误！"), ConversionNotSupportedException(5011,
-      "请求方法不支持！"),
-  MissingServletRequestPartException(5012, "输入参数有误！"), AsyncRequestTimeoutException(5013,
-      "异步请求超时！"),
-  InvalidArgumentException(5014, "无效参数！");
+	/**
+	 * code message
+	 */
+	NoHandlerFoundException(5001, "请求地址无效！"), HttpRequestMethodNotSupportedException(5002, "请求方法不支持！"),
+	HttpMediaTypeNotSupportedException(5003, "请求头不支持！"), MissingPathVariableException(5004, "未检测到参数路径！"),
+	MissingServletRequestParameterException(5005, "请求方法不支持！"), TypeMismatchException(5006, "参数类型匹配失败！"),
+	HttpMessageNotReadableException(5007, "无效接收参数@RequestBody, 序列化失败！"),
+	HttpMessageNotWritableException(5008, "返回序列化失败！"), HttpMediaTypeNotAcceptableException(5009, "找不到可接收MediaType！"),
+	ServletRequestBindingException(5010, "输入参数有误！"), ConversionNotSupportedException(5011, "请求方法不支持！"),
+	MissingServletRequestPartException(5012, "输入参数有误！"), AsyncRequestTimeoutException(5013, "异步请求超时！"),
+	InvalidArgumentException(5014, "无效参数！");
 
-  private final Integer code;
+	private final Integer code;
 
-  private final String message;
+	private final String message;
 
-  @Override
-  public String ofCode(Integer code) {
-    for (ServletResponseEnum value : ServletResponseEnum.values()) {
-      if (value.getCode().equals(code)) {
-        return value.getMessage();
-      }
-    }
-    return null;
-  }
+	@Override
+	public String ofCode(Integer code) {
+		for (ServletResponseEnum value : ServletResponseEnum.values()) {
+			if (value.getCode().equals(code)) {
+				return value.getMessage();
+			}
+		}
+		return null;
+	}
 
 }

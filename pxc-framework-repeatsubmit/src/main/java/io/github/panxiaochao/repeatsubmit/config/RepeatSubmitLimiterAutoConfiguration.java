@@ -31,9 +31,9 @@ import org.springframework.data.redis.connection.RedisConfiguration;
 @AutoConfiguration(after = RedisConfiguration.class)
 public class RepeatSubmitLimiterAutoConfiguration {
 
-  @Bean
-  public RepeatSubmitLimiterAspect repeatSubmitLimiterAspect() {
-    return new RepeatSubmitLimiterAspect();
-  }
+	@Bean
+	public RepeatSubmitLimiterAspect repeatSubmitLimiterAspect() {
+		return new RepeatSubmitLimiterAspect();
+	}
 
 }

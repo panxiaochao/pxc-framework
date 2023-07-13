@@ -42,110 +42,103 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-  private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
 
-  /**
-   * 生产环境
-   */
-  private final static String ENV_PROD = "prod";
+	/**
+	 * 生产环境
+	 */
+	private final static String ENV_PROD = "prod";
 
-  /**
-   * 当前环境
-   */
-  @Value("${spring.profiles.active:}")
-  private String profile;
+	/**
+	 * 当前环境
+	 */
+	@Value("${spring.profiles.active:}")
+	private String profile;
 
-  /**
-   * 常规兜底报错
-   *
-   * @param e Exception
-   * @return R
-   */
-  @ExceptionHandler(value = Exception.class)
-  public R<String> exception(Exception e) {
-    LOG.error(e.getMessage(), e);
-    if (ENV_PROD.equals(profile)) {
-      return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), null);
-    }
-    return R.fail(e.getMessage(), null);
-  }
+	/**
+	 * 常规兜底报错
+	 * @param e Exception
+	 * @return R
+	 */
+	@ExceptionHandler(value = Exception.class)
+	public R<String> exception(Exception e) {
+		LOG.error(e.getMessage(), e);
+		if (ENV_PROD.equals(profile)) {
+			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), null);
+		}
+		return R.fail(e.getMessage(), null);
+	}
 
-  /**
-   * 常规业务异常
-   *
-   * @param e 异常
-   * @return 异常结果
-   */
-  @ExceptionHandler(value = ApiServerException.class)
-  public R<String> handleBusinessException(ServerException e) {
-    LOG.error(e.getMessage(), e);
-    return R.fail(e.getMessage(), null);
-  }
+	/**
+	 * 常规业务异常
+	 * @param e 异常
+	 * @return 异常结果
+	 */
+	@ExceptionHandler(value = ApiServerException.class)
+	public R<String> handleBusinessException(ServerException e) {
+		LOG.error(e.getMessage(), e);
+		return R.fail(e.getMessage(), null);
+	}
 
-  /**
-   * 自定义异常 BaseException
-   *
-   * @param e 异常
-   * @return 异常结果
-   */
-  @ExceptionHandler(value = ServerException.class)
-  public R<String> handleBaseException(ServerException e) {
-    LOG.error(e.getMessage(), e);
-    return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
-  }
+	/**
+	 * 自定义异常 BaseException
+	 * @param e 异常
+	 * @return 异常结果
+	 */
+	@ExceptionHandler(value = ServerException.class)
+	public R<String> handleBaseException(ServerException e) {
+		LOG.error(e.getMessage(), e);
+		return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
+	}
 
-  /**
-   * 自定义异常 BaseRuntimeException
-   *
-   * @param e 异常
-   * @return 异常结果
-   */
-  @ExceptionHandler(value = ServerRuntimeException.class)
-  public R<String> handleBaseException(ServerRuntimeException e) {
-    LOG.error(e.getMessage(), e);
-    return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
-  }
+	/**
+	 * 自定义异常 BaseRuntimeException
+	 * @param e 异常
+	 * @return 异常结果
+	 */
+	@ExceptionHandler(value = ServerRuntimeException.class)
+	public R<String> handleBaseException(ServerRuntimeException e) {
+		LOG.error(e.getMessage(), e);
+		return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
+	}
 
-  /**
-   * 参数绑定异常
-   *
-   * @param e 异常
-   * @return 异常结果
-   */
-  @ExceptionHandler(value = BindException.class)
-  public R<String> handleBindException(BindException e) {
-    LOG.error(e.getMessage(), e);
-    return wrapperBindingResult(e.getBindingResult());
-  }
+	/**
+	 * 参数绑定异常
+	 * @param e 异常
+	 * @return 异常结果
+	 */
+	@ExceptionHandler(value = BindException.class)
+	public R<String> handleBindException(BindException e) {
+		LOG.error(e.getMessage(), e);
+		return wrapperBindingResult(e.getBindingResult());
+	}
 
-  /**
-   * 参数校验异常，将校验失败的所有异常组合成一条错误信息
-   *
-   * @param e 异常
-   * @return 异常结果
-   */
-  @ExceptionHandler(value = MethodArgumentNotValidException.class)
-  public R<String> handleValidException(MethodArgumentNotValidException e) {
-    LOG.error(e.getMessage(), e);
-    return wrapperBindingResult(e.getBindingResult());
-  }
+	/**
+	 * 参数校验异常，将校验失败的所有异常组合成一条错误信息
+	 * @param e 异常
+	 * @return 异常结果
+	 */
+	@ExceptionHandler(value = MethodArgumentNotValidException.class)
+	public R<String> handleValidException(MethodArgumentNotValidException e) {
+		LOG.error(e.getMessage(), e);
+		return wrapperBindingResult(e.getBindingResult());
+	}
 
-  /**
-   * 包装绑定异常结果
-   *
-   * @param bindingResult 绑定结果
-   * @return 异常结果
-   */
-  private R<String> wrapperBindingResult(BindingResult bindingResult) {
-    StringBuilder msg = new StringBuilder();
-    for (ObjectError error : bindingResult.getAllErrors()) {
-      msg.append(", ");
-      if (error instanceof FieldError) {
-        msg.append(((FieldError) error).getField()).append(": ");
-      }
-      msg.append(error.getDefaultMessage() == null ? "" : error.getDefaultMessage());
-    }
-    return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(), msg.substring(2), null);
-  }
+	/**
+	 * 包装绑定异常结果
+	 * @param bindingResult 绑定结果
+	 * @return 异常结果
+	 */
+	private R<String> wrapperBindingResult(BindingResult bindingResult) {
+		StringBuilder msg = new StringBuilder();
+		for (ObjectError error : bindingResult.getAllErrors()) {
+			msg.append(", ");
+			if (error instanceof FieldError) {
+				msg.append(((FieldError) error).getField()).append(": ");
+			}
+			msg.append(error.getDefaultMessage() == null ? "" : error.getDefaultMessage());
+		}
+		return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(), msg.substring(2), null);
+	}
 
 }

@@ -21,7 +21,9 @@ import lombok.Setter;
 
 /**
  * {@code Pagination}
- * <p>description: 分页对象属性.</p>
+ * <p>
+ * description: 分页对象属性.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-01-03
@@ -31,110 +33,106 @@ import lombok.Setter;
 @Schema(description = "分页对象属性")
 public class Pagination {
 
-  /**
-   * 页码.
-   */
-  private static final long PAGE_NO = 1;
+	/**
+	 * 页码.
+	 */
+	private static final long PAGE_NO = 1;
 
-  /**
-   * 页数.
-   */
-  private static final long PAGE_SIZE = 10;
+	/**
+	 * 页数.
+	 */
+	private static final long PAGE_SIZE = 10;
 
-  /**
-   * 页码.
-   */
-  @Schema(description = "页码，不小于1")
-  private long pageNo;
+	/**
+	 * 页码.
+	 */
+	@Schema(description = "页码，不小于1")
+	private long pageNo;
 
-  /**
-   * 页数.
-   */
-  @Schema(description = "页数")
-  private long pageSize;
+	/**
+	 * 页数.
+	 */
+	@Schema(description = "页数")
+	private long pageSize;
 
-  /**
-   * 总数.
-   */
-  @Schema(description = "总数")
-  private long total;
+	/**
+	 * 总数.
+	 */
+	@Schema(description = "总数")
+	private long total;
 
-  /**
-   * 总页码数.
-   */
-  @Schema(description = "总页码数")
-  private long totalPages;
+	/**
+	 * 总页码数.
+	 */
+	@Schema(description = "总页码数")
+	private long totalPages;
 
-  /**
-   * Construct.
-   */
-  public Pagination() {
-    this.pageNo = PAGE_NO;
-    this.pageSize = PAGE_SIZE;
-    this.total = 0;
-    this.totalPages = getTotalPages(0, pageSize);
-  }
+	/**
+	 * Construct.
+	 */
+	public Pagination() {
+		this.pageNo = PAGE_NO;
+		this.pageSize = PAGE_SIZE;
+		this.total = 0;
+		this.totalPages = getTotalPages(0, pageSize);
+	}
 
-  /**
-   * Construct.
-   *
-   * @param pageNo   页码
-   * @param pageSize 页数
-   */
-  public Pagination(final long pageNo, final long pageSize) {
-    this.pageNo = pageNo;
-    this.pageSize = pageSize;
-    this.total = 0;
-    this.totalPages = getTotalPages(getTotal(), pageSize);
-  }
+	/**
+	 * Construct.
+	 * @param pageNo 页码
+	 * @param pageSize 页数
+	 */
+	public Pagination(final long pageNo, final long pageSize) {
+		this.pageNo = pageNo;
+		this.pageSize = pageSize;
+		this.total = 0;
+		this.totalPages = getTotalPages(getTotal(), pageSize);
+	}
 
-  /**
-   * Construct.
-   *
-   * @param pageNo   页码
-   * @param pageSize 页数
-   * @param total    总数
-   */
-  public Pagination(final long pageNo, final long pageSize, final long total) {
-    this.pageNo = pageNo;
-    this.pageSize = pageSize;
-    this.total = total;
-    this.totalPages = getTotalPages(total, pageSize);
-  }
+	/**
+	 * Construct.
+	 * @param pageNo 页码
+	 * @param pageSize 页数
+	 * @param total 总数
+	 */
+	public Pagination(final long pageNo, final long pageSize, final long total) {
+		this.pageNo = pageNo;
+		this.pageSize = pageSize;
+		this.total = total;
+		this.totalPages = getTotalPages(total, pageSize);
+	}
 
-  /**
-   * 是否有上一页.
-   *
-   * @return boolean
-   */
-  public boolean getHasPrevious() {
-    return (getPageNo() > 1 && getPageNo() <= this.getTotalPages());
-  }
+	/**
+	 * 是否有上一页.
+	 * @return boolean
+	 */
+	public boolean getHasPrevious() {
+		return (getPageNo() > 1 && getPageNo() <= this.getTotalPages());
+	}
 
-  /**
-   * 是否有下一页.
-   *
-   * @return boolean
-   */
-  public boolean getHasNext() {
-    return getPageNo() < getTotalPages();
-  }
+	/**
+	 * 是否有下一页.
+	 * @return boolean
+	 */
+	public boolean getHasNext() {
+		return getPageNo() < getTotalPages();
+	}
 
-  /**
-   * 获取总页数.
-   *
-   * @param totalCount 总条数
-   * @param pageSize   分页
-   * @return ResponsePageBuilder
-   */
-  private long getTotalPages(final long totalCount, final long pageSize) {
-    if (totalCount == 0) {
-      return 0L;
-    }
-    long pages = totalCount / pageSize;
-    if (totalCount % pageSize != 0) {
-      pages++;
-    }
-    return pages;
-  }
+	/**
+	 * 获取总页数.
+	 * @param totalCount 总条数
+	 * @param pageSize 分页
+	 * @return ResponsePageBuilder
+	 */
+	private long getTotalPages(final long totalCount, final long pageSize) {
+		if (totalCount == 0) {
+			return 0L;
+		}
+		long pages = totalCount / pageSize;
+		if (totalCount % pageSize != 0) {
+			pages++;
+		}
+		return pages;
+	}
+
 }

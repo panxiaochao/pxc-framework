@@ -22,9 +22,6 @@ import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.StringPoolUtil;
 import io.github.panxiaochao.ratelimiter.annotation.RateLimiter;
 import io.github.panxiaochao.redis.utils.RedissonUtil;
-import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.aspectj.lang.JoinPoint;
@@ -47,6 +44,10 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
 /**
  * {@code RateLimiterAspect}
  * <p>
@@ -59,133 +60,137 @@ import org.springframework.util.StringUtils;
 @Order(2)
 public class RateLimiterAspect {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RateLimiterAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RateLimiterAspect.class);
 
-  public RateLimiterAspect() {
-    LOGGER.info("配置[RateLimiterAspect]成功！");
-  }
+	public RateLimiterAspect() {
+		LOGGER.info("配置[RateLimiterAspect]成功！");
+	}
 
-  /**
-   * 限流 redis key
-   */
-  private static final String RATE_LIMITER_KEY = "rate_limiter:";
+	/**
+	 * 限流 redis key
+	 */
+	private static final String RATE_LIMITER_KEY = "rate_limiter:";
 
-  /**
-   * 定义EL表达式解析器
-   */
-  private final ExpressionParser expressionParser = new SpelExpressionParser();
+	/**
+	 * 定义EL表达式解析器
+	 */
+	private final ExpressionParser expressionParser = new SpelExpressionParser();
 
-  /**
-   * 定义EL解析模版
-   */
-  private final ParserContext parserContext = new TemplateParserContext();
+	/**
+	 * 定义EL解析模版
+	 */
+	private final ParserContext parserContext = new TemplateParserContext();
 
-  /**
-   * 定义EL上下文对象进行解析
-   */
-  private final EvaluationContext evaluationContext = new StandardEvaluationContext();
+	/**
+	 * 定义EL上下文对象进行解析
+	 */
+	private final EvaluationContext evaluationContext = new StandardEvaluationContext();
 
-  /**
-   * 方法参数解析器
-   */
-  private final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+	/**
+	 * 方法参数解析器
+	 */
+	private final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
-  @Before("@annotation(rateLimiter)")
-  public void before(JoinPoint joinPoint, RateLimiter rateLimiter) {
-    int maxCount = rateLimiter.maxCount();
-    int limitSecond = rateLimiter.limitSecond();
-    // 获取限流 KEY
-    String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
-    // RateType.OVERALL 全局限流
-    // RateType.PER_CLIENT 客户端单独计算限流
-    long availableCount = RedissonUtil.INSTANCE()
-        .setRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount, limitSecond);
-    if (availableCount == -1) {
-      throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR);
-    }
-    LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
-  }
+	@Before("@annotation(rateLimiter)")
+	public void before(JoinPoint joinPoint, RateLimiter rateLimiter) {
+		int maxCount = rateLimiter.maxCount();
+		int limitSecond = rateLimiter.limitSecond();
+		// 获取限流 KEY
+		String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
+		// RateType.OVERALL 全局限流
+		// RateType.PER_CLIENT 客户端单独计算限流
+		long availableCount = RedissonUtil.INSTANCE()
+			.setRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount, limitSecond);
+		if (availableCount == -1) {
+			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR);
+		}
+		LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
+	}
 
-  /**
-   * 获取限流 key
-   *
-   * @param joinPoint   joinPoint
-   * @param rateLimiter rateLimiter
-   * @return obtain the key
-   */
-  private String getRateLimiterKey(JoinPoint joinPoint, RateLimiter rateLimiter) {
-    MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-    Method method = methodSignature.getMethod();
-    String key = rateLimiter.key();
-    String classMethodName = method.getDeclaringClass().getName() + "." + method.getName();
-    if (StrUtil.containsAny(key, StringPoolUtil.HASH)) {
-      // 参数
-      Object[] args = joinPoint.getArgs();
-      // 获取方法上参数的名称
-      String[] parameterNames = parameterNameDiscoverer.getParameterNames(method);
-      Objects.requireNonNull(parameterNames, "限流Key解析异常, 请确认方法体是否存在定义参数！");
-      for (int i = 0; i < parameterNames.length; i++) {
-        evaluationContext.setVariable(parameterNames[i], args[i]);
-      }
-      try {
-        Expression expression;
-        if (StringUtils.startsWithIgnoreCase(key, parserContext.getExpressionPrefix())
-            && StringUtils.endsWithIgnoreCase(key, parserContext.getExpressionSuffix())) {
-          expression = expressionParser.parseExpression(key, parserContext);
-        } else {
-          expression = expressionParser.parseExpression(key);
-        }
-        String value = expression.getValue(evaluationContext, String.class);
-        if (StringUtils.hasText(value)) {
-          key = value + ":";
-        } else {
-          key = StringPoolUtil.EMPTY;
-        }
-      } catch (Exception e) {
-        throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_PARSE_EXPRESSION_ERROR);
-      }
-    }
-    StringBuilder stringBuilder = new StringBuilder(RATE_LIMITER_KEY);
-    stringBuilder.append(key);
-    if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP) {
-      // 根据IP限流
-      stringBuilder.append(RequestUtil.ofRequestIp());
-    } else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.METHOD) {
-      // 根据METHOD限流
-      stringBuilder.append(
-          DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
-    } else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP_METHOD) {
-      // 根据IP+METHOD限流
-      stringBuilder.append(RequestUtil.ofRequestIp())
-          .append(":")
-          .append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
-    } else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.SINGLE) {
-      // 获取客户端实例id
-      stringBuilder.append(RedissonUtil.INSTANCE().getRedissonId());
-    }
-    return stringBuilder.toString();
-  }
+	/**
+	 * 获取限流 key
+	 * @param joinPoint joinPoint
+	 * @param rateLimiter rateLimiter
+	 * @return obtain the key
+	 */
+	private String getRateLimiterKey(JoinPoint joinPoint, RateLimiter rateLimiter) {
+		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+		Method method = methodSignature.getMethod();
+		String key = rateLimiter.key();
+		String classMethodName = method.getDeclaringClass().getName() + "." + method.getName();
+		if (StrUtil.containsAny(key, StringPoolUtil.HASH)) {
+			// 参数
+			Object[] args = joinPoint.getArgs();
+			// 获取方法上参数的名称
+			String[] parameterNames = parameterNameDiscoverer.getParameterNames(method);
+			Objects.requireNonNull(parameterNames, "限流Key解析异常, 请确认方法体是否存在定义参数！");
+			for (int i = 0; i < parameterNames.length; i++) {
+				evaluationContext.setVariable(parameterNames[i], args[i]);
+			}
+			try {
+				Expression expression;
+				if (StringUtils.startsWithIgnoreCase(key, parserContext.getExpressionPrefix())
+						&& StringUtils.endsWithIgnoreCase(key, parserContext.getExpressionSuffix())) {
+					expression = expressionParser.parseExpression(key, parserContext);
+				}
+				else {
+					expression = expressionParser.parseExpression(key);
+				}
+				String value = expression.getValue(evaluationContext, String.class);
+				if (StringUtils.hasText(value)) {
+					key = value + ":";
+				}
+				else {
+					key = StringPoolUtil.EMPTY;
+				}
+			}
+			catch (Exception e) {
+				throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_PARSE_EXPRESSION_ERROR);
+			}
+		}
+		StringBuilder stringBuilder = new StringBuilder(RATE_LIMITER_KEY);
+		stringBuilder.append(key);
+		if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP) {
+			// 根据IP限流
+			stringBuilder.append(RequestUtil.ofRequestIp());
+		}
+		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.METHOD) {
+			// 根据METHOD限流
+			stringBuilder.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
+		}
+		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP_METHOD) {
+			// 根据IP+METHOD限流
+			stringBuilder.append(RequestUtil.ofRequestIp())
+				.append(":")
+				.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
+		}
+		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.SINGLE) {
+			// 获取客户端实例id
+			stringBuilder.append(RedissonUtil.INSTANCE().getRedissonId());
+		}
+		return stringBuilder.toString();
+	}
 
-  /**
-   * 限流错误码
-   */
-  @Getter
-  @AllArgsConstructor
-  enum RateLimiterErrorEnum implements IEnum<Integer> {
+	/**
+	 * 限流错误码
+	 */
+	@Getter
+	@AllArgsConstructor
+	enum RateLimiterErrorEnum implements IEnum<Integer> {
 
-    /**
-     * 请求频繁，请过会儿再试
-     */
-    RATE_LIMITER_FREQUENT_ERROR(6001, "访问过于频繁，请稍后再试!"),
-    /**
-     * 限流KEY解析异常
-     */
-    RATE_LIMITER_PARSE_EXPRESSION_ERROR(6002, "限流KEY解析异常!");
+		/**
+		 * 请求频繁，请过会儿再试
+		 */
+		RATE_LIMITER_FREQUENT_ERROR(6001, "访问过于频繁，请稍后再试!"),
+		/**
+		 * 限流KEY解析异常
+		 */
+		RATE_LIMITER_PARSE_EXPRESSION_ERROR(6002, "限流KEY解析异常!");
 
-    private final Integer code;
+		private final Integer code;
 
-    private final String message;
+		private final String message;
 
-  }
+	}
 
 }

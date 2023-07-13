@@ -15,17 +15,12 @@
  */
 package io.github.panxiaochao.web.filter;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * {@code CorsFilter}
@@ -37,45 +32,43 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CorsFilter implements Filter {
 
-  /**
-   * 当前跨域请求最大有效时长，同一个域名不会再进行检查，默认3600
-   */
-  private static final String MAX_AGE = "3600";
+	/**
+	 * 当前跨域请求最大有效时长，同一个域名不会再进行检查，默认3600
+	 */
+	private static final String MAX_AGE = "3600";
 
-  /**
-   * 允许请求的方法
-   */
-  private static final List<String> ALLOWED_METHODS = Arrays.asList("OPTIONS", "HEAD", "GET", "PUT",
-      "POST", "DELETE",
-      "PATCH");
+	/**
+	 * 允许请求的方法
+	 */
+	private static final List<String> ALLOWED_METHODS = Arrays.asList("OPTIONS", "HEAD", "GET", "PUT", "POST", "DELETE",
+			"PATCH");
 
-  @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-      FilterChain filterChain)
-      throws IOException, ServletException {
-    HttpServletRequest request = (HttpServletRequest) servletRequest;
-    HttpServletResponse response = (HttpServletResponse) servletResponse;
-    // 解决跨域的问题
-    cors(request, response);
-    // 放行
-    filterChain.doFilter(request, response);
-  }
+	@Override
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		// 解决跨域的问题
+		cors(request, response);
+		// 放行
+		filterChain.doFilter(request, response);
+	}
 
-  private void cors(HttpServletRequest request, HttpServletResponse response) {
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Methods", String.join(",", ALLOWED_METHODS));
-    response.setHeader("Access-Control-Max-Age", MAX_AGE);
-  }
+	private void cors(HttpServletRequest request, HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Methods", String.join(",", ALLOWED_METHODS));
+		response.setHeader("Access-Control-Max-Age", MAX_AGE);
+	}
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    Filter.super.init(filterConfig);
-  }
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		Filter.super.init(filterConfig);
+	}
 
-  @Override
-  public void destroy() {
-    Filter.super.destroy();
-  }
+	@Override
+	public void destroy() {
+		Filter.super.destroy();
+	}
 
 }

@@ -28,34 +28,33 @@ import io.github.panxiaochao.core.ienums.IEnum;
  */
 public class ApiServerException extends ServerException {
 
-  private static final long serialVersionUID = -4367714276298639594L;
+	private static final long serialVersionUID = -4367714276298639594L;
 
-  public ApiServerException() {
-  }
+	public ApiServerException() {
+	}
 
-  public ApiServerException(IEnum<Integer> responseEnum, String message) {
-    super(responseEnum, null, message);
-  }
+	public ApiServerException(IEnum<Integer> responseEnum, String message) {
+		super(responseEnum, null, message);
+	}
 
-  public ApiServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
-    super(responseEnum, null, message, cause);
-  }
+	public ApiServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
+		super(responseEnum, null, message, cause);
+	}
 
-  public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message) {
-    super(responseEnum, args, message);
-  }
+	public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message) {
+		super(responseEnum, args, message);
+	}
 
-  public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message,
-      Throwable cause) {
-    super(responseEnum, args, message, cause);
-  }
+	public ApiServerException(IEnum<Integer> responseEnum, Object[] args, String message, Throwable cause) {
+		super(responseEnum, args, message, cause);
+	}
 
-  public ApiServerException(Integer code, String errMsg) {
-    super(code, errMsg);
-  }
+	public ApiServerException(Integer code, String errMsg) {
+		super(code, errMsg);
+	}
 
-  public ApiServerException(Integer code, String errMsg, Throwable cause) {
-    super(code, errMsg, cause);
-  }
+	public ApiServerException(Integer code, String errMsg, Throwable cause) {
+		super(code, errMsg, cause);
+	}
 
 }

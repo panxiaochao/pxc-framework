@@ -31,53 +31,52 @@ import lombok.Setter;
 @Setter
 public class ServerException extends Exception {
 
-  private static final long serialVersionUID = 9012390889969142663L;
+	private static final long serialVersionUID = 9012390889969142663L;
 
-  /**
-   * 自定义枚举
-   */
-  private IEnum<Integer> responseEnum;
+	/**
+	 * 自定义枚举
+	 */
+	private IEnum<Integer> responseEnum;
 
-  /**
-   * 参数
-   */
-  private Object[] args;
+	/**
+	 * 参数
+	 */
+	private Object[] args;
 
-  private Integer code;
+	private Integer code;
 
-  private String errMsg;
+	private String errMsg;
 
-  public ServerException() {
-    super();
-  }
+	public ServerException() {
+		super();
+	}
 
-  public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg) {
-    super(errMsg);
-    this.responseEnum = responseEnum;
-    this.args = args;
-    this.errMsg = errMsg;
-    this.code = responseEnum.getCode();
-  }
+	public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg) {
+		super(errMsg);
+		this.responseEnum = responseEnum;
+		this.args = args;
+		this.errMsg = errMsg;
+		this.code = responseEnum.getCode();
+	}
 
-  public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg,
-      Throwable cause) {
-    super(errMsg, cause);
-    this.responseEnum = responseEnum;
-    this.args = args;
-    this.errMsg = errMsg;
-    this.code = responseEnum.getCode();
-  }
+	public ServerException(IEnum<Integer> responseEnum, Object[] args, String errMsg, Throwable cause) {
+		super(errMsg, cause);
+		this.responseEnum = responseEnum;
+		this.args = args;
+		this.errMsg = errMsg;
+		this.code = responseEnum.getCode();
+	}
 
-  public ServerException(int code, String errMsg) {
-    super(errMsg);
-    this.code = code;
-    this.errMsg = errMsg;
-  }
+	public ServerException(int code, String errMsg) {
+		super(errMsg);
+		this.code = code;
+		this.errMsg = errMsg;
+	}
 
-  public ServerException(int code, String errMsg, Throwable cause) {
-    super(errMsg, cause);
-    this.code = code;
-    this.errMsg = errMsg;
-  }
+	public ServerException(int code, String errMsg, Throwable cause) {
+		super(errMsg, cause);
+		this.code = code;
+		this.errMsg = errMsg;
+	}
 
 }

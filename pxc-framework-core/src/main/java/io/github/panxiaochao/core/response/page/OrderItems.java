@@ -16,12 +16,13 @@
 package io.github.panxiaochao.core.response.page;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * {@code OrderItems}
@@ -36,67 +37,67 @@ import lombok.Setter;
 @Schema(description = "请求排序")
 public class OrderItems implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  /**
-   * 排序字段
-   */
-  @Schema(description = "排序字段")
-  private String column;
+	/**
+	 * 排序字段
+	 */
+	@Schema(description = "排序字段")
+	private String column;
 
-  /**
-   * 是否正序排列，默认 true
-   */
-  @Schema(description = "是否正序排列，默认true")
-  private boolean asc = true;
+	/**
+	 * 是否正序排列，默认 true
+	 */
+	@Schema(description = "是否正序排列，默认true")
+	private boolean asc = true;
 
-  private OrderItems() {
-  }
+	private OrderItems() {
+	}
 
-  public OrderItems(String column, boolean asc) {
-    this.column = column;
-    this.asc = asc;
-  }
+	public OrderItems(String column, boolean asc) {
+		this.column = column;
+		this.asc = asc;
+	}
 
-  /**
-   * @param column 字段
-   * @return OrderItems
-   */
-  public static OrderItems asc(String column) {
-    return build(column, true);
-  }
+	/**
+	 * @param column 字段
+	 * @return OrderItems
+	 */
+	public static OrderItems asc(String column) {
+		return build(column, true);
+	}
 
-  /**
-   * @param column 字段
-   * @return OrderItems
-   */
-  public static OrderItems desc(String column) {
-    return build(column, false);
-  }
+	/**
+	 * @param column 字段
+	 * @return OrderItems
+	 */
+	public static OrderItems desc(String column) {
+		return build(column, false);
+	}
 
-  /**
-   * @param columns 字段
-   * @return OrderItems
-   */
-  public static List<OrderItems> ascList(String... columns) {
-    return Arrays.stream(columns).map(OrderItems::asc).collect(Collectors.toList());
-  }
+	/**
+	 * @param columns 字段
+	 * @return OrderItems
+	 */
+	public static List<OrderItems> ascList(String... columns) {
+		return Arrays.stream(columns).map(OrderItems::asc).collect(Collectors.toList());
+	}
 
-  /**
-   * @param columns 字段
-   * @return OrderItems
-   */
-  public static List<OrderItems> descList(String... columns) {
-    return Arrays.stream(columns).map(OrderItems::desc).collect(Collectors.toList());
-  }
+	/**
+	 * @param columns 字段
+	 * @return OrderItems
+	 */
+	public static List<OrderItems> descList(String... columns) {
+		return Arrays.stream(columns).map(OrderItems::desc).collect(Collectors.toList());
+	}
 
-  /**
-   * @param column 字段
-   * @param asc    排序
-   * @return OrderItems
-   */
-  private static OrderItems build(String column, boolean asc) {
-    return new OrderItems(column, asc);
-  }
+	/**
+	 * @param column 字段
+	 * @param asc 排序
+	 * @return OrderItems
+	 */
+	private static OrderItems build(String column, boolean asc) {
+		return new OrderItems(column, asc);
+	}
 
 }

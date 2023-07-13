@@ -21,7 +21,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 /**
  * {@code FrameworkContextAutoConfiguration}
  * <p>
- * 框架容器 自定义皮配置 <pre>
+ * 框架容器 自定义皮配置
+ * </p>
+ * <pre>
  *     1. @EnableAspectJAutoProxy(exposeProxy = true) 暴露该代理对象, AopContext 能够访问
  * </pre>
  *

@@ -43,33 +43,32 @@ import org.springframework.util.StringUtils;
 @EnableConfigurationProperties(OperateLogProperties.class)
 public class OperateLogEventListener {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogEventListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogEventListener.class);
 
-  private final OperateLogProperties operateLogProperties;
+	private final OperateLogProperties operateLogProperties;
 
-  private final OperateLogDao operateLogDao;
+	private final OperateLogDao operateLogDao;
 
-  /**
-   * <pre> 1、可以支持使用异步存储操作 2、自定义存储(数据库、大数据等都可以)或者打印日志 </pre
-   * @param operateLogDomain 操作日志领域
-   */
-  @Async
-  @EventListener
-  public void operateLog(OperateLogDomain operateLogDomain) {
-    if (StringUtils.hasText(operateLogDomain.getIp())) {
-      IpInfo info = Ip2regionUtil.memorySearch(operateLogDomain.getIp());
-      if (info != null) {
-        operateLogDomain.setAddress(info.getAddressAndIsp());
-      }
-    }
-    LOGGER.info(
-        "[ip]: {}, [address]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
-        operateLogDomain.getIp(), operateLogDomain.getAddress(), operateLogDomain.getClassMethod(),
-        operateLogDomain.getRequestDateTime(), operateLogDomain.getCostTime());
-    // 如果是数据库操作
-    if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
-      operateLogDao.handle(operateLogDomain);
-    }
-  }
+	/**
+	 * <pre> 1、可以支持使用异步存储操作 2、自定义存储(数据库、大数据等都可以)或者打印日志 </pre
+	 * @param operateLogDomain 操作日志领域
+	 */
+	@Async
+	@EventListener
+	public void operateLog(OperateLogDomain operateLogDomain) {
+		if (StringUtils.hasText(operateLogDomain.getIp())) {
+			IpInfo info = Ip2regionUtil.memorySearch(operateLogDomain.getIp());
+			if (info != null) {
+				operateLogDomain.setAddress(info.getAddressAndIsp());
+			}
+		}
+		LOGGER.info("[ip]: {}, [address]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
+				operateLogDomain.getIp(), operateLogDomain.getAddress(), operateLogDomain.getClassMethod(),
+				operateLogDomain.getRequestDateTime(), operateLogDomain.getCostTime());
+		// 如果是数据库操作
+		if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
+			operateLogDao.handle(operateLogDomain);
+		}
+	}
 
 }

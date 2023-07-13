@@ -15,11 +15,7 @@
  */
 package io.github.panxiaochao.ratelimiter.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * {@code RateLimiter}
@@ -40,55 +36,55 @@ import java.lang.annotation.Target;
  * @since 2023-06-28
  */
 @Documented
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimiter {
 
-  /**
-   * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
-   */
-  String key() default "";
+	/**
+	 * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
+	 */
+	String key() default "";
 
-  /**
-   * 指定second时间内, API最大请求次数
-   */
-  int maxCount() default 10;
+	/**
+	 * 指定second时间内, API最大请求次数
+	 */
+	int maxCount() default 10;
 
-  /**
-   * 限定时间范围, 单位秒
-   */
-  int limitSecond() default 60;
+	/**
+	 * 限定时间范围, 单位秒
+	 */
+	int limitSecond() default 60;
 
-  /**
-   * 限流类型
-   */
-  RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+	/**
+	 * 限流类型
+	 */
+	RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
 
-  /**
-   * 限流类型
-   */
-  enum RateLimiterType {
+	/**
+	 * 限流类型
+	 */
+	enum RateLimiterType {
 
-    /**
-     * 根据 IP 进行限流
-     */
-    IP,
+		/**
+		 * 根据 IP 进行限流
+		 */
+		IP,
 
-    /**
-     * 根据 METHOD 进行限流
-     */
-    METHOD,
+		/**
+		 * 根据 METHOD 进行限流
+		 */
+		METHOD,
 
-    /**
-     * 根据 IP+METHOD 进行限流
-     */
-    IP_METHOD,
+		/**
+		 * 根据 IP+METHOD 进行限流
+		 */
+		IP_METHOD,
 
-    /**
-     * 单机/单实例限流
-     */
-    SINGLE
+		/**
+		 * 单机/单实例限流
+		 */
+		SINGLE
 
-  }
+	}
 
 }

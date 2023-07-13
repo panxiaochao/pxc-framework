@@ -28,6 +28,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractOperateLogHandler implements IOperateLogHandler {
 
-  protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 }

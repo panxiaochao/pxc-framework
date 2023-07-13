@@ -29,15 +29,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OperateLogDao {
 
-  private final AbstractOperateLogHandler handler;
+	private final AbstractOperateLogHandler handler;
 
-  /**
-   * 处理操作日志
-   *
-   * @param operateLogDomain operateLogDomain
-   */
-  public void handle(OperateLogDomain operateLogDomain) {
-    handler.saveOperateLog(operateLogDomain);
-  }
+	/**
+	 * 处理操作日志
+	 * @param operateLogDomain operateLogDomain
+	 */
+	public void handle(OperateLogDomain operateLogDomain) {
+		handler.saveOperateLog(operateLogDomain);
+	}
 
 }

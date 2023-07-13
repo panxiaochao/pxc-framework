@@ -32,9 +32,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.redis", ignoreInvalidFields = true)
 public class Redisson3Properties {
 
-  /**
-   * redis 缓存 key 前缀
-   */
-  private String keyPrefix;
+	/**
+	 * redis 缓存 key 前缀
+	 */
+	private String keyPrefix;
 
 }

@@ -29,34 +29,32 @@ import java.util.Locale;
  */
 public class DatePattern {
 
-  public static final long DAY_MILLI = 24 * 60 * 60 * 1000;
+	public static final long DAY_MILLI = 24 * 60 * 60 * 1000;
 
-  public static final long HOUR_MILLI = 60 * 60 * 1000;
+	public static final long HOUR_MILLI = 60 * 60 * 1000;
 
-  public static final long MINUTE_MILLI = 60 * 1000;
+	public static final long MINUTE_MILLI = 60 * 1000;
 
-  public static final long SECOND_MILLI = 1000;
+	public static final long SECOND_MILLI = 1000;
 
-  public static final String NORMAL_YEAR_PATTERN = "yyyy";
+	public static final String NORMAL_YEAR_PATTERN = "yyyy";
 
-  public static final String NORMAL_YEAR_MONTH_PATTERN = "yyyy-MM";
+	public static final String NORMAL_YEAR_MONTH_PATTERN = "yyyy-MM";
 
-  public static final String NORMAL_DATE_PATTERN = "yyyy-MM-dd";
+	public static final String NORMAL_DATE_PATTERN = "yyyy-MM-dd";
 
-  public static final DateTimeFormatter NORMAL_DATE_FORMATTER = buildFormatter(NORMAL_DATE_PATTERN);
+	public static final DateTimeFormatter NORMAL_DATE_FORMATTER = buildFormatter(NORMAL_DATE_PATTERN);
 
-  public static final String NORMAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	public static final String NORMAL_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-  public static final DateTimeFormatter NORMAL_DATE_TIME_FORMATTER = buildFormatter(
-      NORMAL_DATE_TIME_PATTERN);
+	public static final DateTimeFormatter NORMAL_DATE_TIME_FORMATTER = buildFormatter(NORMAL_DATE_TIME_PATTERN);
 
-  public static final String SIMPLE_DATE_TIME_PATTERN = "yyyy/MM/dd HH:mm:ss";
+	public static final String SIMPLE_DATE_TIME_PATTERN = "yyyy/MM/dd HH:mm:ss";
 
-  public static final String CN_DATE_PATTERN = "yyyy年MM月dd日";
+	public static final String CN_DATE_PATTERN = "yyyy年MM月dd日";
 
-  public static DateTimeFormatter buildFormatter(String datePattern) {
-    return DateTimeFormatter.ofPattern(datePattern, Locale.getDefault())
-        .withZone(ZoneId.systemDefault());
-  }
+	public static DateTimeFormatter buildFormatter(String datePattern) {
+		return DateTimeFormatter.ofPattern(datePattern, Locale.getDefault()).withZone(ZoneId.systemDefault());
+	}
 
 }

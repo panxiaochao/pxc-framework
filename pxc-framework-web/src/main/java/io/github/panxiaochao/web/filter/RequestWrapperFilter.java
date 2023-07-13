@@ -15,16 +15,12 @@
  */
 package io.github.panxiaochao.web.filter;
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.util.StringUtils;
+import java.io.IOException;
 
 /**
  * {@code RequestWrapperFilter}
@@ -36,37 +32,39 @@ import org.springframework.util.StringUtils;
  */
 public class RequestWrapperFilter implements Filter {
 
-  @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-      FilterChain filterChain)
-      throws ServletException, IOException {
-    HttpServletRequest request = (HttpServletRequest) servletRequest;
-    HttpServletResponse response = (HttpServletResponse) servletResponse;
-    String contentType = request.getContentType();
-    // 判断请求类型
-    if (!StringUtils.hasText(contentType)) {
-      filterChain.doFilter(request, response);
-    } else if (StringUtils.hasText(contentType) || contentType.contains("multipart/form-data")) {
-      filterChain.doFilter(request, response);
-    } else {
-      // 重新包装 Request Wrapper
-      request = new RequestWrapper(request);
-      if (null == request) {
-        filterChain.doFilter(servletRequest, response);
-      } else {
-        filterChain.doFilter(request, response);
-      }
-    }
-  }
+	@Override
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws ServletException, IOException {
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		String contentType = request.getContentType();
+		// 判断请求类型
+		if (!StringUtils.hasText(contentType)) {
+			filterChain.doFilter(request, response);
+		}
+		else if (StringUtils.hasText(contentType) || contentType.contains("multipart/form-data")) {
+			filterChain.doFilter(request, response);
+		}
+		else {
+			// 重新包装 Request Wrapper
+			request = new RequestWrapper(request);
+			if (null == request) {
+				filterChain.doFilter(servletRequest, response);
+			}
+			else {
+				filterChain.doFilter(request, response);
+			}
+		}
+	}
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    Filter.super.init(filterConfig);
-  }
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		Filter.super.init(filterConfig);
+	}
 
-  @Override
-  public void destroy() {
-    Filter.super.destroy();
-  }
+	@Override
+	public void destroy() {
+		Filter.super.destroy();
+	}
 
 }

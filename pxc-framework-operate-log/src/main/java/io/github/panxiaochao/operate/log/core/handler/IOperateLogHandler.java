@@ -26,11 +26,10 @@ import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
  */
 public interface IOperateLogHandler {
 
-  /**
-   * 日志存储数据库
-   *
-   * @param operateLogDomain 存储对象
-   */
-  void saveOperateLog(OperateLogDomain operateLogDomain);
+	/**
+	 * 日志存储数据库
+	 * @param operateLogDomain 存储对象
+	 */
+	void saveOperateLog(OperateLogDomain operateLogDomain);
 
 }

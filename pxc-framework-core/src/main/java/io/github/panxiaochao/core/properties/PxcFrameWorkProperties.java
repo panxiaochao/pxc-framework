@@ -32,101 +32,101 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.pxc-framework", ignoreInvalidFields = true)
 public class PxcFrameWorkProperties {
 
-  /**
-   * 是否开启异步
-   */
-  private boolean async;
+	/**
+	 * 是否开启异步
+	 */
+	private boolean async;
 
-  /**
-   * 线程池配置
-   */
-  private ThreadPoolConfig threadPool = new ThreadPoolConfig();
+	/**
+	 * 线程池配置
+	 */
+	private ThreadPoolConfig threadPool = new ThreadPoolConfig();
 
-  @Getter
-  @Setter
-  public static class ThreadPoolConfig {
+	@Getter
+	@Setter
+	public static class ThreadPoolConfig {
 
-    /**
-     * 是否开启
-     */
-    // private boolean enabled;
+		/**
+		 * 是否开启
+		 */
+		// private boolean enabled;
 
-    /**
-     * 核心线程数
-     */
-    private int corePoolSize = 5;
+		/**
+		 * 核心线程数
+		 */
+		private int corePoolSize = 5;
 
-    /**
-     * 最大线程数
-     */
-    private int maxPoolSize = 10;
+		/**
+		 * 最大线程数
+		 */
+		private int maxPoolSize = 10;
 
-    /**
-     * 线程活跃时间，单位秒
-     */
-    private int keepAliveSeconds = 60;
+		/**
+		 * 线程活跃时间，单位秒
+		 */
+		private int keepAliveSeconds = 60;
 
-    /**
-     * 队列大小
-     */
-    private int queueCapacity = 100;
+		/**
+		 * 队列大小
+		 */
+		private int queueCapacity = 100;
 
-    /**
-     * 设置为true的话，keepAliveSeconds参数设置的有效时间对corePoolSize线程也有效，默认是false
-     */
-    private boolean allowCoreThreadTimeOut = false;
+		/**
+		 * 设置为true的话，keepAliveSeconds参数设置的有效时间对corePoolSize线程也有效，默认是false
+		 */
+		private boolean allowCoreThreadTimeOut = false;
 
-    /**
-     * 所有任务结束后关闭线程池
-     */
-    private boolean waitForJobsToCompleteOnShutdown = true;
+		/**
+		 * 所有任务结束后关闭线程池
+		 */
+		private boolean waitForJobsToCompleteOnShutdown = true;
 
-    /**
-     * 等待终止时间，单位秒，默认60
-     */
-    private int awaitTerminationSeconds = 60;
+		/**
+		 * 等待终止时间，单位秒，默认60
+		 */
+		private int awaitTerminationSeconds = 60;
 
-    /**
-     * 线程前缀
-     */
-    private String threadNamePrefix = "framework-thread-pool-";
+		/**
+		 * 线程前缀
+		 */
+		private String threadNamePrefix = "framework-thread-pool-";
 
-    /**
-     * 线程分组名称
-     */
-    private String threadGroupName = "framework-group-thread-pool-";
+		/**
+		 * 线程分组名称
+		 */
+		private String threadGroupName = "framework-group-thread-pool-";
 
-  }
+	}
 
-  /**
-   * 线程池配置
-   */
-  private TaskSchedulerConfig taskScheduler = new TaskSchedulerConfig();
+	/**
+	 * 线程池配置
+	 */
+	private TaskSchedulerConfig taskScheduler = new TaskSchedulerConfig();
 
-  @Getter
-  @Setter
-  public static class TaskSchedulerConfig {
+	@Getter
+	@Setter
+	public static class TaskSchedulerConfig {
 
-    /**
-     * 是否开启
-     */
-    // private boolean enabled;
+		/**
+		 * 是否开启
+		 */
+		// private boolean enabled;
 
-    /**
-     * 调度器shutdown被调用时等待当前被调度的任务完成
-     */
-    private boolean waitForTasksToCompleteOnShutdown = true;
+		/**
+		 * 调度器shutdown被调用时等待当前被调度的任务完成
+		 */
+		private boolean waitForTasksToCompleteOnShutdown = true;
 
-    /**
-     * 等待终止时间，单位秒，默认60
-     */
-    private int awaitTerminationSeconds = 60;
+		/**
+		 * 等待终止时间，单位秒，默认60
+		 */
+		private int awaitTerminationSeconds = 60;
 
-    /**
-     * 线程前缀
-     */
-    private String threadNamePrefix = "framework-scheduler-";
+		/**
+		 * 线程前缀
+		 */
+		private String threadNamePrefix = "framework-scheduler-";
 
-  }
+	}
 
 }

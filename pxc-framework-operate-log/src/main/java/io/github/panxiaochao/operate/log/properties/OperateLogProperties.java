@@ -36,14 +36,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.operatelog", ignoreInvalidFields = true)
 public class OperateLogProperties {
 
-  /**
-   * 存储日志类型
-   */
-  public OperateLogType logType = OperateLogType.LOGGER;
+	/**
+	 * 存储日志类型
+	 */
+	public OperateLogType logType = OperateLogType.LOGGER;
 
-  /**
-   * 自定义日志处理器,
-   */
-  private Class<? extends AbstractOperateLogHandler> handler;
+	/**
+	 * 自定义日志处理器,
+	 */
+	private Class<? extends AbstractOperateLogHandler> handler;
 
 }

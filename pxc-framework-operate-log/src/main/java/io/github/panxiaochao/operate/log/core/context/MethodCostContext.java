@@ -27,24 +27,24 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  */
 public final class MethodCostContext {
 
-  /**
-   * 存储毫秒
-   */
-  private static final TransmittableThreadLocal<Long> METHOD_COST_TIME_LOCAL = new TransmittableThreadLocal<>();
+	/**
+	 * 存储毫秒
+	 */
+	private static final TransmittableThreadLocal<Long> METHOD_COST_TIME_LOCAL = new TransmittableThreadLocal<>();
 
-  public static void setMethodCostTime(long costTime) {
-    METHOD_COST_TIME_LOCAL.set(costTime);
-  }
+	public static void setMethodCostTime(long costTime) {
+		METHOD_COST_TIME_LOCAL.set(costTime);
+	}
 
-  /**
-   * 获取时间毫秒数
-   */
-  public static long getMethodCostTime() {
-    return METHOD_COST_TIME_LOCAL.get();
-  }
+	/**
+	 * 获取时间毫秒数
+	 */
+	public static long getMethodCostTime() {
+		return METHOD_COST_TIME_LOCAL.get();
+	}
 
-  public static void removeMethodCostTime() {
-    METHOD_COST_TIME_LOCAL.remove();
-  }
+	public static void removeMethodCostTime() {
+		METHOD_COST_TIME_LOCAL.remove();
+	}
 
 }

@@ -25,6 +25,6 @@ package io.github.panxiaochao.operate.log.core.enums;
  */
 public enum OperateLogType {
 
-  LOGGER, OTHER
+	LOGGER, OTHER
 
 }
