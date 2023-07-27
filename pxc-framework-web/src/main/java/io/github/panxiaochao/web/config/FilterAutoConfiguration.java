@@ -19,8 +19,10 @@ import io.github.panxiaochao.web.filter.CorsFilter;
 import io.github.panxiaochao.web.filter.EncodingFilter;
 import io.github.panxiaochao.web.filter.RequestWrapperFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 
 /**
  * {@code FilterAutoConfiguration}
@@ -56,12 +58,13 @@ public class FilterAutoConfiguration {
 	 * @return FilterRegistrationBean
 	 */
 	@Bean
+	@ConditionalOnProperty(name = "spring.pxc-web.cors", havingValue = "true")
 	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new CorsFilter());
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.addServletNames("corsFilter");
-		registrationBean.setOrder(1);
+		registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		return registrationBean;
 	}
 

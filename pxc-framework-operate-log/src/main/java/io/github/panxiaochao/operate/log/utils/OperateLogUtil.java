@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * {@code OperateLogUtil}
@@ -67,10 +68,12 @@ public class OperateLogUtil {
 		operateLogDomain.setDescription(operateLog.description());
 		operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
 		operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
-		operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
-		operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
-		operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
-		operateLogDomain.setIp(RequestUtil.ofRequestIp());
+		if (RequestUtil.getRequest() != null) {
+			operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
+			operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
+			operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
+			operateLogDomain.setIp(RequestUtil.ofRequestIp());
+		}
 		operateLogDomain.setRequestDateTime(LocalDateTime.now());
 		if (ex != null) {
 			operateLogDomain.setCode(0);
@@ -120,21 +123,22 @@ public class OperateLogUtil {
 	 * 参数拼装
 	 */
 	private static String argsArrayToString(Object[] args, String[] excludeProperties) {
-		StringBuilder params = new StringBuilder();
-		if (ObjectUtil.isNotEmpty(args)) {
-			for (Object object : args) {
-				if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
-					String jsonObj = JacksonUtil.toString(object);
-					// 排除自定义属性
-					if (!ArrayUtil.isEmpty(excludeProperties) && StrUtil.isNotBlank(jsonObj)) {
-						Map<String, Object> objectMap = JacksonUtil.toMap(jsonObj);
-						if (MapUtil.isNotEmpty(objectMap)) {
-							MapUtil.removeAny(objectMap, excludeProperties);
-							jsonObj = JacksonUtil.toString(objectMap);
-						}
+		StringJoiner params = new StringJoiner(" ");
+		if (ArrayUtil.isEmpty(args)) {
+			return params.toString();
+		}
+		for (Object object : args) {
+			if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
+				String jsonObj = JacksonUtil.toString(object);
+				// 排除自定义属性
+				if (!ArrayUtil.isEmpty(excludeProperties) && StrUtil.isNotBlank(jsonObj)) {
+					Map<String, Object> objectMap = JacksonUtil.toMap(jsonObj);
+					if (MapUtil.isNotEmpty(objectMap)) {
+						MapUtil.removeAny(objectMap, excludeProperties);
+						jsonObj = JacksonUtil.toString(objectMap);
 					}
-					params.append(jsonObj).append(" ");
 				}
+				params.add(jsonObj);
 			}
 		}
 		return params.toString();
@@ -159,9 +163,8 @@ public class OperateLogUtil {
 		}
 		else if (Map.class.isAssignableFrom(clazz)) {
 			Map map = (Map) o;
-			for (Object value : map.entrySet()) {
-				Map.Entry entry = (Map.Entry) value;
-				return entry.getValue() instanceof MultipartFile;
+			for (Object value : map.values()) {
+				return value instanceof MultipartFile;
 			}
 		}
 		return (o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse

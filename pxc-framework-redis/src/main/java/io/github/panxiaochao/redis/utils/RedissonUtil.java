@@ -135,6 +135,17 @@ public class RedissonUtil {
 	}
 
 	/**
+	 * Sets value with defined duration only if object holder doesn't exist.
+	 * @param key key
+	 * @param value value to set
+	 * @param duration expiration duration
+	 * @return {@code true} if successful, or {@code false} if element was already set
+	 */
+	public <T> boolean setIfAbsent(String key, T value, Duration duration) {
+		return getRBucket(key).setIfAbsent(value, duration);
+	}
+
+	/**
 	 * Set the value
 	 * @param key key
 	 * @param value T value

@@ -113,7 +113,7 @@ public class LocalhostUtil {
 		return null;
 	}
 
-	public static String bigIntegerToIPv6(BigInteger bigInteger) {
+	public static String bigIntegerToIpv6(BigInteger bigInteger) {
 		try {
 			return InetAddress.getByAddress(bigInteger.toByteArray()).toString().substring(1);
 		}

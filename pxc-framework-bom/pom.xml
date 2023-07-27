@@ -52,7 +52,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>2.0.0</revision>
+        <revision>2.0.1-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -104,6 +104,12 @@
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-operate-log</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- ORM 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-mybatis-plus</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- Mvc Web 模块 -->
@@ -248,62 +254,6 @@
                     </licenseSets>
                 </configuration>
             </plugin>
-
-            <!-- CheckStyle plugin -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
-            <!--                <version>${maven-checkstyle-plugin.version}</version>-->
-            <!--                <dependencies>-->
-            <!--                    <dependency>-->
-            <!--                        <groupId>com.puppycrawl.tools</groupId>-->
-            <!--                        <artifactId>checkstyle</artifactId>-->
-            <!--                        <version>9.2</version>-->
-            <!--                    </dependency>-->
-            <!--                </dependencies>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>validate</id>-->
-            <!--                        <phase>validate</phase>-->
-            <!--                        <inherited>true</inherited>-->
-            <!--                        <configuration>-->
-            <!--                            <configLocation>script/checkstyle/pxc_checkstyle.xml</configLocation>-->
-            <!--                            <suppressionsLocation>script/checkstyle/checkstyle-suppressions.xml-->
-            <!--                            </suppressionsLocation>-->
-            <!--                            <encoding>UTF-8</encoding>-->
-            <!--                            <consoleOutput>true</consoleOutput>-->
-            <!--                            <failsOnError>true</failsOnError>-->
-            <!--                            <violationSeverity>warning</violationSeverity>-->
-            <!--                            <includeTestSourceDirectory>false</includeTestSourceDirectory>-->
-            <!--                        </configuration>-->
-            <!--                        <goals>-->
-            <!--                            <goal>check</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
-            <!-- https://mvnrepository.com/artifact/io.spring.javaformat/spring-javaformat-maven-plugin -->
-            <!-- https://github.com/spring-io/spring-javaformat -->
-            <!--
-                    生效条件:
-                      1.springjavaformatconfig file exists
-                      2.For a Maven-based project, spring-javaformat-maven-plugin plugin is defined in pom.xml
-             -->
-            <!--            <plugin>-->
-            <!--                <groupId>io.spring.javaformat</groupId>-->
-            <!--                <artifactId>spring-javaformat-maven-plugin</artifactId>-->
-            <!--                <version>${spring-javaformat-maven-plugin.version}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>validate</phase>-->
-            <!--                        <inherited>true</inherited>-->
-            <!--                        <goals>-->
-            <!--                            <goal>validate</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 

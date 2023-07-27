@@ -15,23 +15,29 @@
  */
 package io.github.panxiaochao.core.utils;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
- * {@code RequestUtil}
  * <p>
- * description: 请求工具类
+ * Request相关请求工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-05-06
@@ -41,132 +47,127 @@ public class RequestUtil {
 	private static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
 
 	/**
-	 * <p>
 	 * 未知
 	 */
 	public static final String UNKNOWN = "unknown";
 
-	private static final String LOCAL_HOST_IP_1 = "0:0:0:0:0:0:0:1";
-
-	private static final String LOCAL_HOST_IP_2 = "127.0.0.1";
+	/**
+	 * Ipv4 和 Ipv6 本地地址
+	 */
+	private static final List<String> LOCAL_HOST_ARR = Arrays.asList("127.0.0.1", "0:0:0:0:0:0:0:1");
 
 	/**
-	 * 获取请求 IP
 	 *
 	 * <p>
-	 * 使用Nginx等反向代理软件， 则不能通过request.getRemoteAddr()获取IP地址
-	 * <p>
-	 * 使用Nginx等反向代理软件，
-	 * 则不能通过request.getRemoteAddr()获取IP地址如果使用了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP地址，X-Forwarded-For中第一个非unknown的有效IP字符串，则为真实IP地址
-	 * @return 返回IP
+	 * 获取客户端IP
+	 * </p>
+	 * <pre>
+	 *     1、x-Original-Forwarded-For（k8s）
+	 *     2、X-Forwarded-For
+	 *     3、X-Real-IP
+	 *     4、Proxy-Client-IP
+	 *     5、WL-Proxy-Client-IP
+	 *     6、HTTP_CLIENT_IP
+	 *     7、HTTP_X_FORWARDED_FOR
+	 * </pre>
+	 * @return IP
 	 */
 	public static String ofRequestIp() {
-		return ofRequestIp(getRequest());
+		return null == getRequest() ? "" : ofRequestIp(getRequest(), ArrayUtil.EMPTY_STRING_ARRAY);
 	}
 
 	/**
-	 * 获取请求 IP
 	 *
 	 * <p>
-	 * 使用Nginx等反向代理软件， 则不能通过request.getRemoteAddr()获取IP地址
-	 * <p>
-	 * 使用Nginx等反向代理软件，
-	 * 则不能通过request.getRemoteAddr()获取IP地址如果使用了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP地址，X-Forwarded-For中第一个非unknown的有效IP字符串，则为真实IP地址
-	 * @param request 请求包装
-	 * @return 返回IP
+	 * 获取客户端IP
+	 * </p>
+	 * <pre>
+	 *     1、x-Original-Forwarded-For（k8s）
+	 *     2、X-Forwarded-For
+	 *     3、X-Real-IP
+	 *     4、Proxy-Client-IP
+	 *     5、WL-Proxy-Client-IP
+	 *     6、HTTP_CLIENT_IP
+	 *     7、HTTP_X_FORWARDED_FOR
+	 * </pre>
+	 * @param request 请求对象
+	 * @return IP
 	 */
 	public static String ofRequestIp(HttpServletRequest request) {
-		String ip = null;
-		try {
-			// 以下两个获取在k8s中，将真实的客户端IP，放到了x-Original-Forwarded-For。
-			// 而将 WAF 的回源地址放到了x-Forwarded-For 了。
-			ip = request.getHeader("X-Original-Forwarded-For");
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("X-Forwarded-For");
+		return ofRequestIp(request, ArrayUtil.EMPTY_STRING_ARRAY);
+	}
+
+	/**
+	 * <p>
+	 * 获取客户端IP
+	 * </p>
+	 * @param request 请求对象
+	 * @param headerNames 自定义头，通常在Http服务器（例如Nginx）中配置
+	 * @return IP
+	 */
+	public static String ofRequestIp(HttpServletRequest request, String... headerNames) {
+		String[] headers = { "x-Original-Forwarded-For", "X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP",
+				"WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR" };
+		if (ArrayUtil.isNotEmpty(headerNames)) {
+			headers = ArrayUtil.addAll(headers, headerNames);
+		}
+		String ip;
+		for (String header : headers) {
+			ip = request.getHeader(header);
+			if (Boolean.FALSE.equals(isUnknown(ip))) {
+				return checkLocalHost(getMultistageReverseProxyIp(ip));
 			}
-			// 获取 nginx 等代理的 IP
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("x-forwarded-for");
-			}
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("Proxy-Client-IP");
-				if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
-					return null;
-				}
-			}
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("WL-Proxy-Client-IP");
-				if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
-					return null;
-				}
-			}
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("HTTP_CLIENT_IP");
-				if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
-					return null;
-				}
-			}
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-				if (StringUtils.hasText(ip) && !isValidAddress(ip)) {
-					return null;
-				}
-			}
-			if (!StringUtils.hasText(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
-				ip = request.getRemoteAddr();
-			}
-			if (LOCAL_HOST_IP_1.equalsIgnoreCase(ip) || LOCAL_HOST_IP_2.equalsIgnoreCase(ip)) {
-				// 根据网卡取本机配置的IP
-				InetAddress iNet = null;
-				try {
-					iNet = InetAddress.getLocalHost();
-				}
-				catch (Exception e) {
-					logger.error("getClientIp error", e);
-				}
+		}
+		ip = request.getRemoteAddr();
+		return checkLocalHost(getMultistageReverseProxyIp(ip));
+	}
+
+	/**
+	 * 检查是否是本地地址
+	 * @param ip ip
+	 * @return ip
+	 */
+	private static String checkLocalHost(String ip) {
+		if (LOCAL_HOST_ARR.contains(ip)) {
+			// 根据网卡取本机配置的IP
+			InetAddress iNet;
+			try {
+				iNet = InetAddress.getLocalHost();
 				ip = iNet.getHostAddress();
 			}
+			catch (Exception e) {
+				logger.error("checkLocalHost error", e);
+			}
 		}
-		catch (Exception e) {
-			logger.error("RequestUtil ERROR ", e);
-		}
-		// //使用代理，则获取第一个IP地址
-		// if(StringUtils.isEmpty(ip) && ip.length() > 15) {
-		// if(ip.indexOf(",") > 0) {
-		// ip = ip.substring(0, ip.indexOf(","));
-		// }
-		// }
 		return ip;
 	}
 
 	/**
-	 * validate the ip
-	 * @param ip ip
-	 * @return true or false
+	 * 从多级反向代理中获得第一个非unknown IP地址
+	 * @param ip 获得的IP地址
+	 * @return 第一个非unknown IP地址
 	 */
-	private static boolean isValidAddress(String ip) {
-		if (ip == null) {
-			return false;
-		}
-		for (int i = 0; i < ip.length(); ++i) {
-			char ch = ip.charAt(i);
-			if (ch >= '0' && ch <= '9') {
-				// ignored
-			}
-			else if (ch >= 'A' && ch <= 'F') {
-				// ignored
-			}
-			else if (ch >= 'a' && ch <= 'f') {
-				// ignored
-			}
-			else if (ch == '.' || ch == ':') {
-				//
-			}
-			else {
-				return false;
+	private static String getMultistageReverseProxyIp(String ip) {
+		// 多级反向代理检测
+		if (ip != null && StringUtils.indexOf(ip, ',') > 0) {
+			final String[] ips = StringUtils.split(ip, ',');
+			for (final String subIp : ips) {
+				if (Boolean.FALSE.equals(isUnknown(subIp))) {
+					ip = subIp;
+					break;
+				}
 			}
 		}
-		return true;
+		return ip;
+	}
+
+	/**
+	 * 检测给定字符串是否为 unknown，多用于检测HTTP请求相关
+	 * @param checkString 被检测的字符串
+	 * @return 是否未知
+	 */
+	private static Boolean isUnknown(String checkString) {
+		return StrUtil.isBlank(checkString) || UNKNOWN.equalsIgnoreCase(checkString);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class RequestUtil {
 	 * @return HttpServletRequest
 	 */
 	public static HttpServletRequest getRequest() {
-		return getRequestAttributes().getRequest();
+		return null == getRequestAttributes() ? null : getRequestAttributes().getRequest();
 	}
 
 	/**
@@ -182,7 +183,7 @@ public class RequestUtil {
 	 * @return HttpServletResponse
 	 */
 	public static HttpServletResponse getResponse() {
-		return getRequestAttributes().getResponse();
+		return null == getRequestAttributes() ? null : getRequestAttributes().getResponse();
 	}
 
 	/**
@@ -191,7 +192,7 @@ public class RequestUtil {
 	 */
 	public static ServletRequestAttributes getRequestAttributes() {
 		RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-		return (ServletRequestAttributes) attributes;
+		return null == attributes ? null : (ServletRequestAttributes) attributes;
 	}
 
 	/**
@@ -199,6 +200,9 @@ public class RequestUtil {
 	 * @return Map
 	 */
 	public static Map<String, String[]> getParams() {
+		if (null == getRequest()) {
+			return MapUtil.newHashMap();
+		}
 		final Map<String, String[]> map = getRequest().getParameterMap();
 		return Collections.unmodifiableMap(map);
 
@@ -237,6 +241,34 @@ public class RequestUtil {
 			params.put(entry.getKey(), String.join(StringPoolUtil.COMMA, entry.getValue()));
 		}
 		return params;
+	}
+
+	/**
+	 * 一次性获取请求体String - 注意：调用该方法后，getParam方法将失效
+	 * @param request request
+	 * @return byte[]
+	 */
+	public static String getBodyString(ServletRequest request) {
+		try {
+			return IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 一次性获取请求体byte[] - 注意：调用该方法后，getParam方法将失效
+	 * @param request request
+	 * @return byte[]
+	 */
+	public static byte[] getBodyBytes(ServletRequest request) {
+		try {
+			return IOUtils.toByteArray(request.getInputStream());
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

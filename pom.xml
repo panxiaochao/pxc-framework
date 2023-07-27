@@ -60,18 +60,19 @@
         <module>pxc-framework-ratelimiter</module>
         <module>pxc-framework-repeatsubmit</module>
         <module>pxc-framework-operate-log</module>
+        <module>pxc-framework-mybatis-plus</module>
     </modules>
 
     <!-- properties -->
     <properties>
-        <revision>2.0.0</revision>
+        <revision>2.0.1-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2021.0.x 版本支持 2.6.x, 2.7.x (Starting with 2021.0.3) -->
-        <spring-boot.version>2.7.13</spring-boot.version>
+        <spring-boot.version>2.7.14</spring-boot.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
@@ -79,6 +80,7 @@
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <oshi.version>6.4.4</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
+        <commons-io.version>2.13.0</commons-io.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>

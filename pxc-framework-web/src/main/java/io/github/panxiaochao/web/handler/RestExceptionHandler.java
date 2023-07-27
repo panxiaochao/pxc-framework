@@ -70,6 +70,20 @@ public class RestExceptionHandler {
 	}
 
 	/**
+	 * IllegalArgumentException 报错拦截
+	 * @param e Exception
+	 * @return R
+	 */
+	@ExceptionHandler(value = IllegalArgumentException.class)
+	public R<String> illegalArgumentException(IllegalArgumentException e) {
+		LOG.error(e.getMessage(), e);
+		if (ENV_PROD.equals(profile)) {
+			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), null);
+		}
+		return R.fail(e.getMessage(), null);
+	}
+
+	/**
 	 * 常规业务异常
 	 * @param e 异常
 	 * @return 异常结果

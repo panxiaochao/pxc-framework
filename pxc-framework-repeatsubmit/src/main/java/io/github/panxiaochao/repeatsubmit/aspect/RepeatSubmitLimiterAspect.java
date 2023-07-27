@@ -19,8 +19,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 import io.github.panxiaochao.core.exception.ServerRuntimeException;
 import io.github.panxiaochao.core.ienums.IEnum;
 import io.github.panxiaochao.core.response.R;
-import io.github.panxiaochao.core.utils.JacksonUtil;
-import io.github.panxiaochao.core.utils.ObjectUtil;
+import io.github.panxiaochao.core.utils.*;
 import io.github.panxiaochao.redis.utils.RedissonUtil;
 import io.github.panxiaochao.repeatsubmit.annotation.RepeatSubmitLimiter;
 import lombok.AllArgsConstructor;
@@ -45,7 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -82,9 +81,7 @@ public class RepeatSubmitLimiterAspect {
 		}
 		// 获取限重复提交KEY
 		String repeatSubmitLimiterKey = getRepeatSubmitLimiterKey(joinPoint, repeatSubmitLimiter);
-		String rslValue = RedissonUtil.INSTANCE().get(repeatSubmitLimiterKey);
-		if (Objects.isNull(rslValue)) {
-			RedissonUtil.INSTANCE().set(repeatSubmitLimiterKey, "", Duration.ofMillis(interval));
+		if (RedissonUtil.INSTANCE().setIfAbsent(repeatSubmitLimiterKey, "", Duration.ofMillis(interval))) {
 			CACHE_KEY_SET.set(repeatSubmitLimiterKey);
 		}
 		else {
@@ -102,7 +99,7 @@ public class RepeatSubmitLimiterAspect {
 	public void doAfterReturning(JoinPoint joinPoint, RepeatSubmitLimiter repeatSubmitLimiter, Object returnValue) {
 		try {
 			if (returnValue instanceof R) {
-				R r = (R) returnValue;
+				R<?> r = (R<?>) returnValue;
 				// 请求成功后不删除操作，保存还在有效时间内继续防止重复提交
 				if (R.isFail(r)) {
 					RedissonUtil.INSTANCE().delete(CACHE_KEY_SET.get());
@@ -139,7 +136,8 @@ public class RepeatSubmitLimiterAspect {
 		String methodName = method.getName();
 		String classMethodName = className + "." + methodName;
 		// 请求地址
-		// String requestUrl = RequestUtil.getRequest().getRequestURI();
+		String requestUrl = (null == RequestUtil.getRequest()) ? "" : RequestUtil.getRequest().getRequestURI();
+		RequestUtil.getRequest().getRequestURI();
 		// 拼接参数
 		String argsString = argsArrayToString(args);
 		// 是否自定义请求头
@@ -150,8 +148,9 @@ public class RepeatSubmitLimiterAspect {
 		// argsString += "."+ headerName;
 		// }
 		// }
-		String combineKey = DigestUtils
-			.md5DigestAsHex((classMethodName + "." + argsString).getBytes(StandardCharsets.UTF_8));
+		StringJoiner paramsString = new StringJoiner(StringPoolUtil.COLON);
+		paramsString.add(requestUrl).add(classMethodName).add(argsString);
+		String combineKey = DigestUtils.md5DigestAsHex(paramsString.toString().getBytes(StandardCharsets.UTF_8));
 		return RATE_LIMITER_KEY + combineKey;
 
 	}
@@ -160,12 +159,13 @@ public class RepeatSubmitLimiterAspect {
 	 * 参数拼装
 	 */
 	private static String argsArrayToString(Object[] args) {
-		StringBuilder params = new StringBuilder();
-		if (ObjectUtil.isNotEmpty(args)) {
-			for (Object object : args) {
-				if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
-					params.append(JacksonUtil.toString(object)).append(" ");
-				}
+		StringJoiner params = new StringJoiner(" ");
+		if (ArrayUtil.isEmpty(args)) {
+			return params.toString();
+		}
+		for (Object object : args) {
+			if (ObjectUtil.isNotEmpty(object) && !isFilterObject(object)) {
+				params.add(JacksonUtil.toString(object));
 			}
 		}
 		return params.toString();
@@ -176,6 +176,7 @@ public class RepeatSubmitLimiterAspect {
 	 * @param o 对象信息。
 	 * @return 如果是需要过滤的对象，则返回true；否则返回false。
 	 */
+	@SuppressWarnings("rawtypes")
 	private static boolean isFilterObject(final Object o) {
 		Class<?> clazz = o.getClass();
 		if (clazz.isArray()) {
@@ -189,9 +190,8 @@ public class RepeatSubmitLimiterAspect {
 		}
 		else if (Map.class.isAssignableFrom(clazz)) {
 			Map map = (Map) o;
-			for (Object value : map.entrySet()) {
-				Map.Entry entry = (Map.Entry) value;
-				return entry.getValue() instanceof MultipartFile;
+			for (Object value : map.values()) {
+				return value instanceof MultipartFile;
 			}
 		}
 		return (o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse
