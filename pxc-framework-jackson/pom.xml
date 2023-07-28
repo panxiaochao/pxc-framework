@@ -17,7 +17,7 @@
         <!-- 核心模块 -->
         <dependency>
             <groupId>io.github.panxiaochao</groupId>
-            <artifactId>pxc-framework-core</artifactId>
+            <artifactId>pxc-framework-util</artifactId>
         </dependency>
     </dependencies>
 

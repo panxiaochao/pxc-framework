@@ -44,7 +44,7 @@ public class DateUtil {
 	 */
 	private static SimpleDateFormat getDateFormat(String format) {
 		SimpleDateFormat simpleDateFormat = DateContext.get();
-		if (simpleDateFormat == null) {
+		if (null == simpleDateFormat) {
 			simpleDateFormat = new SimpleDateFormat(format);
 			DateContext.set(simpleDateFormat);
 		}

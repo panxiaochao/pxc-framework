@@ -76,6 +76,12 @@
                 <artifactId>pxc-framework-core</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 工具类 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-util</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Jackson 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

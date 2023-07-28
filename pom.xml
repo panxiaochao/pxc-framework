@@ -61,6 +61,7 @@
         <module>pxc-framework-repeatsubmit</module>
         <module>pxc-framework-operate-log</module>
         <module>pxc-framework-mybatis-plus</module>
+        <module>pxc-framework-util</module>
     </modules>
 
     <!-- properties -->
