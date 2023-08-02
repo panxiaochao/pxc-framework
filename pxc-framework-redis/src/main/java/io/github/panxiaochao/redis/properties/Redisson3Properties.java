@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.redis.properties;
 
+import io.github.panxiaochao.redis.constants.CacheManagerType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -36,5 +37,10 @@ public class Redisson3Properties {
 	 * redis 缓存 key 前缀
 	 */
 	private String keyPrefix;
+
+	/**
+	 * 缓存类型: redis（默认）、caffeine
+	 */
+	private CacheManagerType cacheType = CacheManagerType.redis;
 
 }

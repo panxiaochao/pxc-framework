@@ -32,7 +32,6 @@ import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -70,12 +69,10 @@ public class Redisson3AutoConfiguration {
 	 * @return RedissonAutoConfigurationCustomizer
 	 */
 	@Bean
-	public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers(
-			ObjectProvider<ObjectMapper> objectMapperObjectProvider) {
-		final ObjectMapper objectMapper = objectMapperObjectProvider.getIfAvailable(JacksonUtil::objectMapper);
+	public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers() {
 		return config -> {
 			// 序列化模式
-			config.setCodec(new JsonJacksonCodec(objectMapper));
+			config.setCodec(new JsonJacksonCodec(JacksonUtil.objectMapper()));
 			// 获取方法
 			Method singleServerMethod = ReflectionUtils.findMethod(Config.class, "getSingleServerConfig");
 			Method sentinelServersMethod = ReflectionUtils.findMethod(Config.class, "getSentinelServersConfig");

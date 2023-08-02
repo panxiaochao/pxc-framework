@@ -16,10 +16,9 @@
 package io.github.panxiaochao.core.utils.unit;
 
 /**
- * {@code DataOfSizeUnit}
  * <p>
  * A standard set of {@link DataOfUnit} units.
- *
+ * </p>
  * <p>
  * <table border="1">
  * <tr>

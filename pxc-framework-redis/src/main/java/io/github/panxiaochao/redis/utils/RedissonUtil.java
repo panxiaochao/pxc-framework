@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may Obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -70,7 +70,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain static RedissonUtil instance
+	 * Obtain static RedissonUtil instance
 	 * @return RedissonUtil
 	 */
 	public static RedissonUtil INSTANCE() {
@@ -78,7 +78,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain RedissonClient
+	 * Obtain RedissonClient
 	 * @return RedissonClient
 	 */
 	public RedissonClient ofRedissonClient() {
@@ -109,7 +109,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain the v
+	 * Obtain the v
 	 * @param key key
 	 * @return value
 	 */
@@ -181,7 +181,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain the RBucket
+	 * Obtain the RBucket
 	 * @param name name of object
 	 * @return RBucket
 	 */
@@ -192,7 +192,7 @@ public class RedissonUtil {
 	// ------------------------------- 管道 类型操作 --------------------------------
 
 	/**
-	 * obtain the RBatch
+	 * Obtain the RBatch
 	 * @return RBatch
 	 */
 	private RBatch ofRBatch() {
@@ -226,7 +226,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain the RRateLimiter
+	 * Obtain the RRateLimiter
 	 * @param name name of object
 	 * @return RRateLimiter
 	 */
@@ -237,7 +237,7 @@ public class RedissonUtil {
 	// ------------------------------- 二进制流 类型操作 --------------------------------
 
 	/**
-	 * obtain the RBinaryStream
+	 * Obtain the RBinaryStream
 	 * @param name name of object
 	 * @return RBinaryStream
 	 */
@@ -248,7 +248,7 @@ public class RedissonUtil {
 	// ------------------------------- List 类型操作 --------------------------------
 
 	/**
-	 * obtain the getRList
+	 * Obtain the getRList
 	 * @param name name of object
 	 * @return getRList
 	 */
@@ -259,7 +259,7 @@ public class RedissonUtil {
 	// ------------------------------- Set 类型操作 --------------------------------
 
 	/**
-	 * obtain the RSet
+	 * Obtain the RSet
 	 * @param name name of object
 	 * @return RSet
 	 */
@@ -270,7 +270,7 @@ public class RedissonUtil {
 	// ------------------------------- Map 类型操作 --------------------------------
 
 	/**
-	 * obtain the RMap
+	 * Obtain the RMap
 	 * @param name name of object
 	 * @return RMap
 	 */
@@ -278,10 +278,21 @@ public class RedissonUtil {
 		return ofRedissonClient().getMap(name);
 	}
 
+	// ------------------------------- MapCache 类型操作 --------------------------------
+
+	/**
+	 * Obtain the RMapCache
+	 * @param name name of object
+	 * @return RMapCache
+	 */
+	private <K, V> RMapCache<K, V> getRMapCache(String name) {
+		return ofRedissonClient().getMapCache(name);
+	}
+
 	// ------------------------------- 原子Long 类型操作 --------------------------------
 
 	/**
-	 * obtain the RAtomicLong
+	 * Obtain the RAtomicLong
 	 * @param name name of object
 	 * @return RAtomicLong
 	 */
@@ -292,7 +303,7 @@ public class RedissonUtil {
 	// ------------------------------- 字节 类型操作 --------------------------------
 
 	/**
-	 * obtain the RBitSet
+	 * Obtain the RBitSet
 	 * @param name name of object
 	 * @return RBitSet
 	 */
@@ -384,7 +395,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * obtain RLock
+	 * Obtain RLock
 	 * @param lockName the lock name
 	 * @return RLock object
 	 */

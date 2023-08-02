@@ -936,7 +936,7 @@ public class StrUtil {
 	 * @param separator the character to search.
 	 * @return the substring after the first occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 3.11
+	 * 
 	 */
 	public static String substringAfter(final String str, final int separator) {
 		if (isEmpty(str)) {
@@ -979,7 +979,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring after the first occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringAfter(final String str, final String separator) {
 		if (isEmpty(str)) {
@@ -1023,7 +1023,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring after the last occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 3.11
+	 * 
 	 */
 	public static String substringAfterLast(final String str, final int separator) {
 		if (isEmpty(str)) {
@@ -1067,7 +1067,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring after the last occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringAfterLast(final String str, final String separator) {
 		if (isEmpty(str)) {
@@ -1110,7 +1110,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring before the first occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 3.12.0
+	 * 
 	 */
 	public static String substringBefore(final String str, final int separator) {
 		if (isEmpty(str)) {
@@ -1153,7 +1153,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring before the first occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringBefore(final String str, final String separator) {
 		if (isEmpty(str) || separator == null) {
@@ -1199,7 +1199,7 @@ public class StrUtil {
 	 * @param separator the String to search for, may be null
 	 * @return the substring before the last occurrence of the separator, {@code null} if
 	 * null String input
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringBeforeLast(final String str, final String separator) {
 		if (isEmpty(str) || isEmpty(separator)) {
@@ -1233,7 +1233,7 @@ public class StrUtil {
 	 * @param str the String containing the substring, may be null
 	 * @param tag the String before and after the substring, may be null
 	 * @return the substring, {@code null} if no match
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringBetween(final String str, final String tag) {
 		return substringBetween(str, tag, tag);
@@ -1266,7 +1266,7 @@ public class StrUtil {
 	 * @param open the String before the substring, may be null
 	 * @param close the String after the substring, may be null
 	 * @return the substring, {@code null} if no match
-	 * @since 2.0
+	 * 
 	 */
 	public static String substringBetween(final String str, final String open, final String close) {
 		if (!ObjectUtils.allNotNull(str, open, close)) {
@@ -1305,7 +1305,7 @@ public class StrUtil {
 	 * @param open the String identifying the start of the substring, empty returns null
 	 * @param close the String identifying the end of the substring, empty returns null
 	 * @return a String Array of substrings, or {@code null} if no match
-	 * @since 2.3
+	 *
 	 */
 	public static String[] substringsBetween(final String str, final String open, final String close) {
 		if (str == null || isEmpty(open) || isEmpty(close)) {
@@ -1336,6 +1336,67 @@ public class StrUtil {
 			return null;
 		}
 		return list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+	}
+
+	/**
+	 * <p>
+	 * Removes control characters (char &lt;= 32) from both ends of this String, handling
+	 * {@code null} by returning {@code null}.
+	 * </p>
+	 *
+	 * <pre>
+	 * StringUtils.trim(null)          = null
+	 * StringUtils.trim("")            = ""
+	 * StringUtils.trim("     ")       = ""
+	 * StringUtils.trim("abc")         = "abc"
+	 * StringUtils.trim("    abc    ") = "abc"
+	 * </pre>
+	 * @param str the String to be trimmed, may be null
+	 * @return the trimmed string, {@code null} if null String input
+	 */
+	public static String trim(final String str) {
+		return str == null ? null : str.trim();
+	}
+
+	/**
+	 * <p>
+	 * Removes control characters (char &lt;= 32) from both ends of this String returning
+	 * an empty String ("") if the String is empty ("") after the trim or if it is
+	 * {@code null}.
+	 *
+	 * <pre>
+	 * StringUtils.trimToEmpty(null)          = ""
+	 * StringUtils.trimToEmpty("")            = ""
+	 * StringUtils.trimToEmpty("     ")       = ""
+	 * StringUtils.trimToEmpty("abc")         = "abc"
+	 * StringUtils.trimToEmpty("    abc    ") = "abc"
+	 * </pre>
+	 * @param str the String to be trimmed, may be null
+	 * @return the trimmed String, or an empty String if {@code null} input
+	 */
+	public static String trimToEmpty(final String str) {
+		return str == null ? EMPTY : str.trim();
+	}
+
+	/**
+	 * <p>
+	 * Removes control characters (char &lt;= 32) from both ends of this String returning
+	 * {@code null} if the String is empty ("") after the trim or if it is {@code null}.
+	 *
+	 * <pre>
+	 * StringUtils.trimToNull(null)          = null
+	 * StringUtils.trimToNull("")            = null
+	 * StringUtils.trimToNull("     ")       = null
+	 * StringUtils.trimToNull("abc")         = "abc"
+	 * StringUtils.trimToNull("    abc    ") = "abc"
+	 * </pre>
+	 * @param str the String to be trimmed, may be null
+	 * @return the trimmed String, {@code null} if only chars &lt;= 32, empty or null
+	 * String input
+	 */
+	public static String trimToNull(final String str) {
+		final String ts = trim(str);
+		return isEmpty(ts) ? null : ts;
 	}
 
 }
