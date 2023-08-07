@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * {@code RandomUtils}
  * <p>
  * 随机数工具
+ * </p>
  *
  * @author Lypxc
  * @since 2022/8/25

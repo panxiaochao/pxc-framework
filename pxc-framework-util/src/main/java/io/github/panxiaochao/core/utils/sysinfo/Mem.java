@@ -19,9 +19,9 @@ import io.github.panxiaochao.core.utils.ArithmeticUtil;
 import lombok.Setter;
 
 /**
- * {@code Mem}
  * <p>
  * Mem Entity
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

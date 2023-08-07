@@ -16,9 +16,9 @@
 package io.github.panxiaochao.core.utils;
 
 /**
- * {@code StringPoolUtil}
  * <p>
- * description: 字符串池
+ * 字符串池.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-02-17

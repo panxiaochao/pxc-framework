@@ -20,9 +20,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * {@code ServletResponseEnum}
  * <p>
  * 服务异常枚举, code以5000开始
+ * </p>
  *
  * @author Lypxc
  * @since 2022/11/27

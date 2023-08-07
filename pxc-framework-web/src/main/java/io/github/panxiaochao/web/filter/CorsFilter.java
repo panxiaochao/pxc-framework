@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * {@code CorsFilter}
  * <p>
- * description: CorsFilter过滤器
+ * CorsFilter过滤器
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

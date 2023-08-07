@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 
 /**
- * {@code FilterAutoConfiguration}
  * <p>
  * description: Filter过滤器自动装配
  * </p>

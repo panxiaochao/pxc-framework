@@ -23,9 +23,9 @@ import java.lang.management.ManagementFactory;
 import java.util.Date;
 
 /**
- * {@code Jvm}
  * <p>
  * Jvm Entity
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

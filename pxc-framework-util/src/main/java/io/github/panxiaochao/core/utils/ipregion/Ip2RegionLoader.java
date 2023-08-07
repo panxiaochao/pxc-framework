@@ -28,9 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * {@code Ip2RegionLoader}
  * <p>
  * Ip2RegionLoader 资源加载
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-10

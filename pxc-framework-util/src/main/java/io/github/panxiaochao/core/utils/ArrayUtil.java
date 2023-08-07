@@ -20,9 +20,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * {@code ArrayUtil}
  * <p>
- * description:
+ * 数组工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-03-10

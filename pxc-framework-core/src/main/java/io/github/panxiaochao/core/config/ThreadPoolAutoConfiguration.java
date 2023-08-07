@@ -35,9 +35,10 @@ import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * {@code ThreadPoolAutoConfiguration}
  * <p>
- * 线程池 自动配置类 <pre>
+ * 线程池 自动配置类
+ * </p>
+ * <pre>
  *     CPU密集型： 核心线程数 = CPU核心数 (或 核心线程数 = CPU核心数 + 1)
  *     I/O密集型： 核心线程数 = 2 * CPU核心数 (或 核心线程数 = CPU核心数 / (1 - 阻塞系数))
  *     混合型：    核心线程数 = (线程等待时间 / 线程CPU时间 + 1) * CPU核心数

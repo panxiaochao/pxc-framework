@@ -18,12 +18,13 @@ package io.github.panxiaochao.core.utils;
 import java.io.Serializable;
 
 /**
- * {@code SnowFlakeUtils}
  * <p>
- * Twitter_Snowflake算法
+ * Twitter_Snowflake算法.
+ * </p>
  * <p>
  * 分布式系统中，有一些需要使用全局唯一ID的场景，这种时候为了防止ID冲突可以使用36位的UUID，但是UUID有一些缺点，首先他相对比较长，另外UUID一般是无序的。
  * 有些时候我们希望能使用一种简单一些的ID，并且希望ID能够按照时间有序生成。
+ * </p>
  * <p>
  * 而twitter的snowflake解决了这种需求，最初Twitter把存储系统从MySQL迁移到Cassandra，因为Cassandra没有顺序ID生成机制，所以开发了这样一套全局唯一ID生成服务。
  * </p>
@@ -37,9 +38,11 @@ import java.io.Serializable;
  * 10位的数据机器位，可以部署在1024个节点，包括5位datacenterId和5位workerId<br>
  * 12位序列，毫秒内的计数，12位的计数顺序号支持每个节点每毫秒(同一机器，同一时间截)产生4096个ID序号<br>
  * 加起来刚好64位，为一个Long型。<br>
+ * </p>
  * <p>
  * datacenterId（分布式）（服务ID 1，2，3.....） 每个服务中写死 machineId（用于集群） 机器ID 读取机器的环境变量MACHINEID
  * 部署时每台服务器ID不一样
+ * </p>
  *
  * @author Lypxc
  * @since 2022-12-22

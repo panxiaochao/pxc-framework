@@ -22,9 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * {@code ServerInfo}
  * <p>
  * ServerInfo Entity
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

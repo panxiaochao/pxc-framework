@@ -18,9 +18,9 @@ package io.github.panxiaochao.core.utils.date;
 import java.text.SimpleDateFormat;
 
 /**
- * {@code DateContext}
  * <p>
  * new Date() 上下文，解决SimpleDateFormat多线程安全问题
+ * </p>
  *
  * @author Lypxc
  * @since 2022/4/12

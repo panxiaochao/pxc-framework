@@ -31,9 +31,9 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * {@code SystemServerUtil}
  * <p>
- * 系统服务器相关信息(CPU, 内存, JVM, 硬盘等) 工具类
+ * 系统服务器相关信息(CPU, 内存, JVM, 硬盘等) 工具类.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

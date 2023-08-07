@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 /**
- * {@code package-info}
- * <p>
- *
  * @author Lypxc
  * @since 2023-07-12
  */

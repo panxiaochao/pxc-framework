@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 import java.util.function.Function;
 
 /**
- * {@code Ip2regionUtil}
  * <p>
  * Ip2region 工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-10

@@ -24,9 +24,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * {@code WebMvcAutoConfiguration}
  * <p>
- * description: WebMvcAutoConfiguration is a AutoConfiguration
+ * WebMvcAutoConfiguration is a AutoConfiguration
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

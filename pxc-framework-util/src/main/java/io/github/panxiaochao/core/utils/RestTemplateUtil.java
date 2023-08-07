@@ -38,9 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@code RestTemplateUtil}
  * <p>
  * description: RestTemplateUtil 静态工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-05-06

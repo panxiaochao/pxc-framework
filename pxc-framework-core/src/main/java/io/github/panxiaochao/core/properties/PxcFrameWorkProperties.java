@@ -20,9 +20,9 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * {@code PxcFrameWorkProperties}
  * <p>
  * 框架属性
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-06

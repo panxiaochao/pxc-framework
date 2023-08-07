@@ -16,9 +16,9 @@
 package io.github.panxiaochao.core.utils;
 
 /**
- * {@code CharSequenceUtil}
  * <p>
- * description:
+ * 字符串工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-03-10

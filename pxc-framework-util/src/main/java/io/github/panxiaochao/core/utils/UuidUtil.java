@@ -18,9 +18,9 @@ package io.github.panxiaochao.core.utils;
 import java.util.UUID;
 
 /**
- * {@code UuidUtil}
  * <p>
- * description: UUID 生成
+ * UUID 生成.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-03-16

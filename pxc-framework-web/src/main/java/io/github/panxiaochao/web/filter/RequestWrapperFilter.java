@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * {@code RequestWrapperFilter}
  * <p>
- * description: RequestWrapper过滤器
+ * RequestWrapper过滤器
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

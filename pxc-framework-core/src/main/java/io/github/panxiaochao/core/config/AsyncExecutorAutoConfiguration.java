@@ -30,7 +30,6 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 
 /**
- * {@code AsyncExecutorAutoConfiguration}
  * <p>
  * 异步线程池 自动配置
  * </p>

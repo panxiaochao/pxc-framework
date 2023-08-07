@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * {@code NullObjectJsonSerializer}
  * <p>
  * 针对空对象的处理
+ * </p>
  *
  * @author Lypxc
  * @since 2022/8/30

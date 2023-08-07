@@ -19,7 +19,6 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
- * {@code FrameworkContextAutoConfiguration}
  * <p>
  * 框架容器 自定义皮配置
  * </p>

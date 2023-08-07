@@ -20,9 +20,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * {@code DatePattern}
  * <p>
  * 日期格式化相关统一格式类
+ * </p>
  *
  * @author Lypxc
  * @since 2022/4/12

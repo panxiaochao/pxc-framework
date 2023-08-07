@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * {@code CommonResponseEnum}
  * <p>
  * 通用枚举异常
+ * </p>
  *
  * @author Lypxc
  * @since 2022/11/27

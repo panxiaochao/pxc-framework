@@ -28,9 +28,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * {@code RequestWrapper}
  * <p>
- * description: 重新包装HttpServletRequest，解决是让其输入流可重复读
+ * 重新包装HttpServletRequest，解决是让其输入流可重复读
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

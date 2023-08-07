@@ -19,9 +19,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * {@code ServerInfo}
  * <p>
  * SysInfo Entity
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

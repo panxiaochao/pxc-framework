@@ -27,9 +27,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * {@code YmlPropertySourceFactory}
  * <p>
  * YML property factory
+ * </p>
  *
  * @author Lypxc
  * @since 2022/6/25

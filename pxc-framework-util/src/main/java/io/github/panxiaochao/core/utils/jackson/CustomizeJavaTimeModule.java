@@ -36,9 +36,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * {@code CustomizeJavaTimeModule}
  * <p>
- * description: jackson TimeModule
+ * jackson TimeModule
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-06

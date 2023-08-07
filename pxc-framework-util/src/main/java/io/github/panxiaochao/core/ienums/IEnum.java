@@ -16,9 +16,9 @@
 package io.github.panxiaochao.core.ienums;
 
 /**
- * {@code IEnum}
  * <p>
  * 枚举基类
+ * </p>
  *
  * @author LyPxc
  * @since 2023-03-13

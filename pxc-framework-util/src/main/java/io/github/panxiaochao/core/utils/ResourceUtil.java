@@ -24,9 +24,9 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * {@code ResourceUtil}
  * <p>
  * description: 资源工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-05-29

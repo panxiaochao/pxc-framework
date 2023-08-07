@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * {@code StrUtil}
  * <p>
- * description: String tools
+ * String tools
+ * </p>
  *
  * @author Lypxc
  * @since 2023-01-28

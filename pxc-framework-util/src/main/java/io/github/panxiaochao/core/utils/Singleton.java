@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * {@code Singleton}
  * <p>
  * 静态工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2022/8/25

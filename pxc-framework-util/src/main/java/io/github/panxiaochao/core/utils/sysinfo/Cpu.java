@@ -20,9 +20,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * {@code Cpu}
  * <p>
  * Cpu Entity
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-07

@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.ser.std.NumberSerializer;
 import java.io.IOException;
 
 /**
- * {@code BigNumberSerializer}
  * <p>
  * description: 大精度转换String, 根据前端 JS Number.MAX_SAFE_INTEGER 与 Number.MIN_SAFE_INTEGER
  * 百度得来
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

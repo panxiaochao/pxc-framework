@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * {@code ObjectUtil}
  * <p>
- * description: This class tries to handle {@code null} input gracefully
+ * This class tries to handle {@code null} input gracefully
+ * </p>
  *
  * @author Lypxc
  * @since 2023-01-28

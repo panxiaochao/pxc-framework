@@ -24,11 +24,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * {@code DataOfSize}
  * <p>
  * A data size, such as '12MB'.
- *
- * <p>
+ * </p>
  * <table border="1">
  * <tr>
  * <th>Term</th>

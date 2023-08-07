@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * {@code RestExceptionHandler}
  * <p>
  * 统一异常处理器类增强, 默认不拦截4xx错误, 比如(400,405,404)等
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

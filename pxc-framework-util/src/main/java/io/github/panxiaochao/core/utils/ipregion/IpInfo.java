@@ -27,9 +27,9 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
- * {@code IpInfo}
  * <p>
  * IpInfo 地址实体类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-10

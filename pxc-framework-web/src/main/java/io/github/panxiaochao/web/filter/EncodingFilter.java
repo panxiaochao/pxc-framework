@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * {@code EncodingFilter}
  * <p>
- * description: Encoding过滤器
+ * Encoding过滤器
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-26

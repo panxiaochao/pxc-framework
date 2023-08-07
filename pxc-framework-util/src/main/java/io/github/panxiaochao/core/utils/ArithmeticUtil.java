@@ -19,9 +19,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * {@code ArithmeticUtils}
  * <p>
  * 用于高精确处理常用的数学运算
+ * </p>
  *
  * @author Lypxc
  * @since 2022/4/19

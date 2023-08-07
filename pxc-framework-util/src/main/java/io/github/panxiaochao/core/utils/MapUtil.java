@@ -22,9 +22,9 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 /**
- * {@code MapUtil}
  * <p>
- * description: Map工具类
+ * Map工具类
+ * </p>
  *
  * @author Lypxc
  * @since 2022-11-28
