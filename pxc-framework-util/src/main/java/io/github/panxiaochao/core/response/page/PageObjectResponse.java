@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * {@code PageResponse}
  * <p>
- * description: 分页对象响应实体
+ * 分页对象响应实体
+ * </p>
  *
  * @author Lypxc
  * @since 2023-01-03

@@ -34,9 +34,9 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * {@code OperateLogAutoConfiguration}
  * <p>
  * OperateLog 自动配置类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

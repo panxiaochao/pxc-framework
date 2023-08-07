@@ -20,9 +20,9 @@ import org.redisson.api.NameMapper;
 import org.springframework.util.StringUtils;
 
 /**
- * {@code KeyPrefixNameMapper}
  * <p>
  * Redis 缓存 key 自定义前缀
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-27

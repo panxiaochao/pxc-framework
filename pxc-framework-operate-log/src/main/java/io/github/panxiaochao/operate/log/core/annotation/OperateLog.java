@@ -18,9 +18,9 @@ package io.github.panxiaochao.operate.log.core.annotation;
 import java.lang.annotation.*;
 
 /**
- * {@code OperateLog}
  * <p>
  * 操作日志注解
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

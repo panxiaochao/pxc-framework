@@ -47,9 +47,9 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * {@code Redisson3AutoConfiguration}
  * <p>
  * Redisson 自动配置类 3表示大版本号
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-27

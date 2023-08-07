@@ -3,16 +3,25 @@ package io.github.panxiaochao.mybatis.plus.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ParameterUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import io.github.panxiaochao.core.utils.LocalhostUtil;
-import io.github.panxiaochao.mybatis.plus.handler.MetaObjectCustomizeHandler;
+import io.github.panxiaochao.mybatis.plus.handler.CustomizerMetaObjectHandler;
 import io.github.panxiaochao.mybatis.plus.properties.MpProperties;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import java.sql.SQLException;
 
 /**
  * <p>
@@ -25,7 +34,7 @@ import org.springframework.context.annotation.Bean;
 @AutoConfiguration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(MpProperties.class)
-public class MybatisPlusCustomizeAutoConfiguration {
+public class CustomizerMybatisPlusAutoConfiguration {
 
 	private final MpProperties mpProperties;
 
@@ -46,8 +55,8 @@ public class MybatisPlusCustomizeAutoConfiguration {
 	/**
 	 * 分页插件
 	 */
-	public PaginationInnerInterceptor paginationInnerInterceptor() {
-		PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
+	private CustomizerPaginationInnerInterceptor paginationInnerInterceptor() {
+		CustomizerPaginationInnerInterceptor paginationInnerInterceptor = new CustomizerPaginationInnerInterceptor();
 		// 设置数据库类型
 		paginationInnerInterceptor.setDbType(mpProperties.getDbType());
 		paginationInnerInterceptor.setOptimizeJoin(false);
@@ -56,6 +65,24 @@ public class MybatisPlusCustomizeAutoConfiguration {
 		// 分页合理化
 		paginationInnerInterceptor.setOverflow(true);
 		return paginationInnerInterceptor;
+	}
+
+	/**
+	 * 自定义分页插件, 解决当 size 小于 0 时, 直接设置为 0, 防止错误查询全表
+	 */
+	static class CustomizerPaginationInnerInterceptor extends PaginationInnerInterceptor {
+
+		@Override
+		public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds,
+				ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+			IPage<?> page = ParameterUtils.findPage(parameter).orElse(null);
+			// size 小于 0 直接设置为 0
+			if (null != page && page.getSize() < 0) {
+				page.setSize(0);
+			}
+			super.beforeQuery(executor, ms, page, rowBounds, resultHandler, boundSql);
+		}
+
 	}
 
 	/**
@@ -71,7 +98,7 @@ public class MybatisPlusCustomizeAutoConfiguration {
 	 */
 	@Bean
 	public MetaObjectHandler metaObjectHandler() {
-		return new MetaObjectCustomizeHandler();
+		return new CustomizerMetaObjectHandler();
 	}
 
 	/**

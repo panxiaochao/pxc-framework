@@ -24,9 +24,9 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * {@code PageResponse}
  * <p>
- * description: 分页数组响应实体
+ * 分页数组响应实体
+ * </p>
  *
  * @author Lypxc
  * @since 2023-01-03

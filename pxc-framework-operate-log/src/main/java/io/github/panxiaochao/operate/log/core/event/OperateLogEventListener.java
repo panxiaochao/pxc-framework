@@ -31,9 +31,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 /**
- * {@code OperateLogEventListener}
  * <p>
  * 操作日志监听类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

@@ -20,8 +20,9 @@ import io.github.panxiaochao.operate.log.core.handler.AbstractOperateLogHandler;
 import lombok.RequiredArgsConstructor;
 
 /**
- * {@code OperateLogDao}
  * <p>
+ * 处理操作日志类.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

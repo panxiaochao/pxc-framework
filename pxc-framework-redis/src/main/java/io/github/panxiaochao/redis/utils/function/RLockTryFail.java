@@ -16,9 +16,9 @@
 package io.github.panxiaochao.redis.utils.function;
 
 /**
- * {@code RLockTryFail}
  * <p>
  * 获取锁失败处理
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-14

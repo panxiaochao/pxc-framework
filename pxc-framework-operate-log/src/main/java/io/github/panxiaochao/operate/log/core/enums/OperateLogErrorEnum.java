@@ -20,9 +20,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * {@code OperateLogErrorEnum}
  * <p>
  * 操作日志错误枚举
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

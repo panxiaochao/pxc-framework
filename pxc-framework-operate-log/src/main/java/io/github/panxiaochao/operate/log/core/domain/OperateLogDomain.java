@@ -23,9 +23,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * {@code OperateLogDomain}
  * <p>
  * 操作日志 domain
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

@@ -31,9 +31,10 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * {@code Jackson2AutoConfiguration}
  * <p>
- * Jackson2 自动化配置 <pre>
+ * Jackson2 自动化配置
+ * </p>
+ * <pre>
  *     注册顺序：
  *     JacksonAutoConfiguration
  *     ObjectMapper

@@ -19,9 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@code AbstractOperateLogHandler}
  * <p>
  * 抽象类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

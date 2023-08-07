@@ -48,9 +48,9 @@ import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@code RepeatSubmitLimiterAspect}
  * <p>
  * 重复提交 Aspect 处理
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-29

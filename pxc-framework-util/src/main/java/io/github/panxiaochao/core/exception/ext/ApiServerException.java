@@ -19,9 +19,9 @@ import io.github.panxiaochao.core.exception.ServerException;
 import io.github.panxiaochao.core.ienums.IEnum;
 
 /**
- * {@code ApiServerException}
  * <p>
- * description: Api and Server exception
+ * Api and Server exception
+ * </p>
  *
  * @author Lypxc
  * @since 2022-11-28

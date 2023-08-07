@@ -19,9 +19,9 @@ import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@code RepeatSubmitLimiter}
  * <p>
  * 限制重复提交注解
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-29

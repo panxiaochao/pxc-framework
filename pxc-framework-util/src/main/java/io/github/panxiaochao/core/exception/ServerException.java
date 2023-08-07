@@ -20,9 +20,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * {@code ServerException}
  * <p>
  * 基础错误异常类
+ * </p>
  *
  * @author Lypxc
  * @since 2022/4/19

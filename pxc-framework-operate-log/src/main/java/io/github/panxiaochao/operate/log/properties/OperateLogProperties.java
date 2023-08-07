@@ -23,9 +23,9 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * {@code OperateLogProperties}
  * <p>
  * 操作日志属性
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

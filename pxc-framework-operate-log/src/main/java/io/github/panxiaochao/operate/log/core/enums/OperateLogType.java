@@ -16,9 +16,9 @@
 package io.github.panxiaochao.operate.log.core.enums;
 
 /**
- * {@code OperateLogType}
  * <p>
  * 操作日志类型
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

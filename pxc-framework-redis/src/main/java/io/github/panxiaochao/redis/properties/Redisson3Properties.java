@@ -21,9 +21,9 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * {@code Redisson3Properties}
  * <p>
  * Redisson 自定义属性
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-27

@@ -18,8 +18,9 @@ package io.github.panxiaochao.operate.log.core.handler;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
 
 /**
- * {@code IOperateLogHandler}
  * <p>
+ * 操作日志接口
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

@@ -20,9 +20,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * {@code Pagination}
  * <p>
- * description: 分页对象属性.
+ * 分页对象属性.
  * </p>
  *
  * @author Lypxc

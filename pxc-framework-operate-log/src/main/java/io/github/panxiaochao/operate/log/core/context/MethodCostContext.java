@@ -18,9 +18,9 @@ package io.github.panxiaochao.operate.log.core.context;
 import com.alibaba.ttl.TransmittableThreadLocal;
 
 /**
- * {@code MethodCostContext}
  * <p>
  * 方法时间耗时上下文，使用 alibaba ttl 工具
+ * </p>
  *
  * @author Lypxc
  * @since 2023-07-03

@@ -18,7 +18,7 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2023-07-17
  */
-public class MetaObjectCustomizeHandler implements MetaObjectHandler {
+public class CustomizerMetaObjectHandler implements MetaObjectHandler {
 
 	private static final String FIELD_ID = "createId";
 
@@ -63,6 +63,10 @@ public class MetaObjectCustomizeHandler implements MetaObjectHandler {
 	 */
 	private static void strictFillValByName(MetaObject metaObject, String fieldName, Object fieldVal,
 			Class<?> fieldType, boolean updateFill) {
+		// 0. 如果填充值为空
+		if (fieldVal == null) {
+			return;
+		}
 		// 1. 没有 get 方法
 		if (!metaObject.hasSetter(fieldName)) {
 			return;

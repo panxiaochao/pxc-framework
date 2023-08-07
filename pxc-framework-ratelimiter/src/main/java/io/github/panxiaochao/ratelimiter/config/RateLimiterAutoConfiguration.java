@@ -21,9 +21,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConfiguration;
 
 /**
- * {@code RateLimiterAutoConfiguration}
  * <p>
  * RateLimiter 自动配置类
+ * </p>
  *
  * @author Lypxc
  * @since 2023-06-28
