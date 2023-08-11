@@ -48,7 +48,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
 			request.setAttribute("javax.servlet.error.exception", e, 0);
 		}
-		ServletResponseEnum servletExceptionEnum = null;
+		ServletResponseEnum servletExceptionEnum;
 		try {
 			servletExceptionEnum = ServletResponseEnum.valueOf(e.getClass().getSimpleName());
 		}

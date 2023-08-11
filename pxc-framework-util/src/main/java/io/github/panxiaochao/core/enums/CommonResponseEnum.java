@@ -84,7 +84,7 @@ public enum CommonResponseEnum implements IResponseEnum<Integer> {
 				return value.getMessage();
 			}
 		}
-		return null;
+		return "";
 	}
 
 }

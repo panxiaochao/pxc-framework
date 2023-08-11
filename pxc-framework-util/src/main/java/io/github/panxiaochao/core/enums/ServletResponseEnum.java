@@ -54,7 +54,7 @@ public enum ServletResponseEnum implements IResponseEnum<Integer> {
 				return value.getMessage();
 			}
 		}
-		return null;
+		return "";
 	}
 
 }

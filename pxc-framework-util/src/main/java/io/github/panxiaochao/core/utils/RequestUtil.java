@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
@@ -268,6 +269,83 @@ public class RequestUtil {
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 将 ip 转成 InetAddress
+	 * @param ip ip
+	 * @return InetAddress
+	 */
+	public static InetAddress getInetAddress(String ip) {
+		try {
+			return InetAddress.getByName(ip);
+		}
+		catch (UnknownHostException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 判断是否内网 ip
+	 * @param ip ip
+	 * @return boolean
+	 */
+	public static boolean isInternalIp(String ip) {
+		return isInternalIp(getInetAddress(ip));
+	}
+
+	/**
+	 * 判断是否内网 ip
+	 * @param address InetAddress
+	 * @return boolean
+	 */
+	public static boolean isInternalIp(InetAddress address) {
+		if (isLocalIp(address)) {
+			return true;
+		}
+		return isInternalIp(address.getAddress());
+	}
+
+	/**
+	 * 判断是否本地 ip
+	 * @param address InetAddress
+	 * @return boolean
+	 */
+	private static boolean isLocalIp(InetAddress address) {
+		return address.isAnyLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress();
+	}
+
+	/**
+	 * 判断是否内网 ip
+	 * @param addr ip
+	 * @return boolean
+	 */
+	private static boolean isInternalIp(byte[] addr) {
+		final byte b0 = addr[0];
+		final byte b1 = addr[1];
+		// 10.x.x.x/8
+		final byte section1 = 0x0A;
+		// 172.16.x.x/12
+		final byte section2 = (byte) 0xAC;
+		final byte section3 = (byte) 0x10;
+		final byte section4 = (byte) 0x1F;
+		// 192.168.x.x/16
+		final byte section5 = (byte) 0xC0;
+		final byte section6 = (byte) 0xA8;
+		switch (b0) {
+			case section1:
+				return true;
+			case section2:
+				if (b1 >= section3 && b1 <= section4) {
+					return true;
+				}
+			case section5:
+				if (b1 == section6) {
+					return true;
+				}
+			default:
+				return false;
 		}
 	}
 

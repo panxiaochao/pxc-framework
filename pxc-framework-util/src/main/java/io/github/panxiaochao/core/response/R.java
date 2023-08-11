@@ -19,7 +19,6 @@ import io.github.panxiaochao.core.enums.CommonResponseEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.function.Supplier;
@@ -27,6 +26,7 @@ import java.util.function.Supplier;
 /**
  * <p>
  * Api返回响应体
+ * </p>
  *
  * @param <T> 泛型参数
  * @author Lypxc
@@ -34,7 +34,6 @@ import java.util.function.Supplier;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Schema(name = "数据返回响应类", description = "数据返回响应类")
 public class R<T> {
 
@@ -55,6 +54,12 @@ public class R<T> {
 	 */
 	@Schema(description = "响应数据")
 	private T data;
+
+	/**
+	 * private constructor
+	 */
+	private R() {
+	}
 
 	/**
 	 * 成功
@@ -171,6 +176,15 @@ public class R<T> {
 	// ---- 增加链式编程 ----
 
 	/**
+	 * build R
+	 * @return R
+	 * @param <T> 参数
+	 */
+	public static <T> R<T> build() {
+		return new R<>();
+	}
+
+	/**
 	 * update code
 	 * @param code 码值
 	 * @return R
@@ -195,7 +209,7 @@ public class R<T> {
 	 * @param data 数据
 	 * @return R
 	 */
-	public R<T> date(T data) {
+	public R<T> data(T data) {
 		this.data = data;
 		return this;
 	}
