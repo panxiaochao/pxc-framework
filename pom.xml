@@ -62,6 +62,7 @@
         <module>pxc-framework-operate-log</module>
         <module>pxc-framework-mybatis-plus</module>
         <module>pxc-framework-util</module>
+        <module>pxc-framework-trace-log</module>
     </modules>
 
     <!-- properties -->

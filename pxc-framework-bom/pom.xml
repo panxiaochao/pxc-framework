@@ -112,6 +112,12 @@
                 <artifactId>pxc-framework-operate-log</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 日志追踪链路 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-trace-log</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- ORM 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

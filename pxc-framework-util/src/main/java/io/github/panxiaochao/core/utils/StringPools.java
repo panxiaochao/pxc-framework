@@ -23,7 +23,7 @@ package io.github.panxiaochao.core.utils;
  * @author Lypxc
  * @since 2023-02-17
  */
-public interface StringPoolUtil {
+public interface StringPools {
 
 	String AMPERSAND = "&";
 

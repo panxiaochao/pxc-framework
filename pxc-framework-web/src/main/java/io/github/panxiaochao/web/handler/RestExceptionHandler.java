@@ -102,7 +102,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(value = ServerException.class)
 	public R<String> handleBaseException(ServerException e) {
 		LOG.error(e.getMessage(), e);
-		return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
+		return R.fail(e.getCode(), e.getMessage(), null);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(value = ServerRuntimeException.class)
 	public R<String> handleBaseException(ServerRuntimeException e) {
 		LOG.error(e.getMessage(), e);
-		return R.fail(e.getResponseEnum().getCode(), e.getMessage(), null);
+		return R.fail(e.getCode(), e.getMessage(), null);
 	}
 
 	/**

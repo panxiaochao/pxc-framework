@@ -42,8 +42,8 @@ public @interface RepeatSubmitLimiter {
 	TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 
 	/**
-	 * 自定义请求头, 比如 Header 中的 AccessToken 值作为唯一值
+	 * 自定义提示消息
 	 */
-	// String headerName() default "";
+	String message() default "";
 
 }

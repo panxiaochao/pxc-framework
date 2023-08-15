@@ -15,7 +15,7 @@
  */
 package io.github.panxiaochao.redis.mapper;
 
-import io.github.panxiaochao.core.utils.StringPoolUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import org.redisson.api.NameMapper;
 import org.springframework.util.StringUtils;
 
@@ -35,7 +35,7 @@ public class KeyPrefixNameMapper implements NameMapper {
 	 * 前缀 默认为空字符串
 	 */
 	public KeyPrefixNameMapper() {
-		this.keyPrefix = StringPoolUtil.EMPTY;
+		this.keyPrefix = StringPools.EMPTY;
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class KeyPrefixNameMapper implements NameMapper {
 	 * @param keyPrefix 前缀字符串
 	 */
 	public KeyPrefixNameMapper(String keyPrefix) {
-		this.keyPrefix = StringUtils.hasText(keyPrefix) ? keyPrefix + StringPoolUtil.COLON : StringPoolUtil.EMPTY;
+		this.keyPrefix = StringUtils.hasText(keyPrefix) ? keyPrefix + StringPools.COLON : StringPools.EMPTY;
 	}
 
 	/**

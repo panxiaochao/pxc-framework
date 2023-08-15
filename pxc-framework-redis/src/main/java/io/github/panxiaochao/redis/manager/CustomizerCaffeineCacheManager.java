@@ -1,8 +1,23 @@
+/*
+ * Copyright © 2022-2023 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.panxiaochao.redis.manager;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.CaffeineSpec;
-import io.github.panxiaochao.core.utils.StringPoolUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import org.springframework.boot.convert.DurationStyle;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -145,7 +160,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	@Nullable
 	public Cache getCache(String name) {
 		// 重写 name 分割 name
-		String[] array = StringUtils.delimitedListToStringArray(name, StringPoolUtil.HASH);
+		String[] array = StringUtils.delimitedListToStringArray(name, StringPools.HASH);
 		name = array[0];
 		Cache cache = this.cacheMap.get(name);
 		if (cache == null && this.dynamic) {

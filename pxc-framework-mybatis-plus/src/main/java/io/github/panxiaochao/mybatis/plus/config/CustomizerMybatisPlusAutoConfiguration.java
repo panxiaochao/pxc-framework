@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2022-2023 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.panxiaochao.mybatis.plus.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
@@ -8,7 +23,7 @@ import com.baomidou.mybatisplus.core.toolkit.ParameterUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import io.github.panxiaochao.core.utils.LocalhostUtil;
+import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.handler.CustomizerMetaObjectHandler;
 import io.github.panxiaochao.mybatis.plus.properties.MpProperties;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +121,7 @@ public class CustomizerMybatisPlusAutoConfiguration {
 	 */
 	@Bean
 	public IdentifierGenerator idGenerator() {
-		long workerId = LocalhostUtil.ipv4ToLong(LocalhostUtil.getLocalhostStr()) & 31;
+		long workerId = IpUtil.ipv4ToLong(IpUtil.getLocalhostStr()) & 31;
 		long dataCenterId = workerId > 30 ? 0 : workerId + 1;
 		return new DefaultIdentifierGenerator(workerId, dataCenterId);
 	}

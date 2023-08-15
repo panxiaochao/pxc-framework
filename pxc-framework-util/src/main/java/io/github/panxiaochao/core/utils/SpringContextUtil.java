@@ -174,7 +174,7 @@ public class SpringContextUtil implements ApplicationContextAware {
 	 * get application name
 	 * @return application name
 	 */
-	public String getApplicationName() {
+	public static String getApplicationName() {
 		return getProperty("spring.application.name");
 	}
 

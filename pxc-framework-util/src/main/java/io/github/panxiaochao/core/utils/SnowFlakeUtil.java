@@ -130,7 +130,7 @@ public class SnowFlakeUtil implements Serializable {
 	 * 不能私有构造
 	 */
 	private SnowFlakeUtil() {
-		this.workerId = LocalhostUtil.ipv4ToLong(LocalhostUtil.getLocalhostStr()) & 31;
+		this.workerId = IpUtil.ipv4ToLong(IpUtil.getLocalhostStr()) & 31;
 		this.dataCenterId = workerId > 30 ? 0 : workerId + 1;
 	}
 

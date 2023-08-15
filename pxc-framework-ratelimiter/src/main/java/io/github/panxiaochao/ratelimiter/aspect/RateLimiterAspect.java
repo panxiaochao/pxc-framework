@@ -17,9 +17,9 @@ package io.github.panxiaochao.ratelimiter.aspect;
 
 import io.github.panxiaochao.core.exception.ServerRuntimeException;
 import io.github.panxiaochao.core.ienums.IEnum;
-import io.github.panxiaochao.core.utils.RequestUtil;
+import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
-import io.github.panxiaochao.core.utils.StringPoolUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.ratelimiter.annotation.RateLimiter;
 import io.github.panxiaochao.redis.utils.RedissonUtil;
 import lombok.AllArgsConstructor;
@@ -118,7 +118,7 @@ public class RateLimiterAspect {
 		Method method = methodSignature.getMethod();
 		String key = rateLimiter.key();
 		String classMethodName = method.getDeclaringClass().getName() + "." + method.getName();
-		if (StrUtil.containsAny(key, StringPoolUtil.HASH)) {
+		if (StrUtil.containsAny(key, StringPools.HASH)) {
 			// 参数
 			Object[] args = joinPoint.getArgs();
 			// 获取方法上参数的名称
@@ -141,7 +141,7 @@ public class RateLimiterAspect {
 					key = value + ":";
 				}
 				else {
-					key = StringPoolUtil.EMPTY;
+					key = StringPools.EMPTY;
 				}
 			}
 			catch (Exception e) {
@@ -152,7 +152,7 @@ public class RateLimiterAspect {
 		stringBuilder.append(key);
 		if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP) {
 			// 根据IP限流
-			stringBuilder.append(RequestUtil.ofRequestIp());
+			stringBuilder.append(IpUtil.ofRequestIp());
 		}
 		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.METHOD) {
 			// 根据METHOD限流
@@ -160,7 +160,7 @@ public class RateLimiterAspect {
 		}
 		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP_METHOD) {
 			// 根据IP+METHOD限流
-			stringBuilder.append(RequestUtil.ofRequestIp())
+			stringBuilder.append(IpUtil.ofRequestIp())
 				.append(":")
 				.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
 		}

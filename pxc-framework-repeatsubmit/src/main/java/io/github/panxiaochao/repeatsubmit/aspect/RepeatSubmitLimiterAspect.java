@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,7 +86,9 @@ public class RepeatSubmitLimiterAspect {
 			CACHE_KEY_SET.set(repeatSubmitLimiterKey);
 		}
 		else {
-			throw new ServerRuntimeException(RepeatSubmitLimiterErrorEnum.REPEAT_SUBMIT_LIMITER_ERROR);
+			String message = StringUtils.hasText(repeatSubmitLimiter.message()) ? repeatSubmitLimiter.message()
+					: RepeatSubmitLimiterErrorEnum.REPEAT_SUBMIT_LIMITER_ERROR.getMessage();
+			throw new ServerRuntimeException(RepeatSubmitLimiterErrorEnum.REPEAT_SUBMIT_LIMITER_ERROR, message);
 		}
 	}
 
@@ -148,7 +151,7 @@ public class RepeatSubmitLimiterAspect {
 		// argsString += "."+ headerName;
 		// }
 		// }
-		StringJoiner paramsString = new StringJoiner(StringPoolUtil.COLON);
+		StringJoiner paramsString = new StringJoiner(StringPools.COLON);
 		paramsString.add(requestUrl).add(classMethodName).add(argsString);
 		String combineKey = DigestUtils.md5DigestAsHex(paramsString.toString().getBytes(StandardCharsets.UTF_8));
 		return RATE_LIMITER_KEY + combineKey;
@@ -212,7 +215,7 @@ public class RepeatSubmitLimiterAspect {
 		/**
 		 * 限流KEY解析异常
 		 */
-		REPEAT_SUBMIT_LIMITER_ERROR(6052, "不允许重复提交，请稍后再试!");
+		REPEAT_SUBMIT_LIMITER_ERROR(6052, "请勿重复提交!");
 
 		private final Integer code;
 

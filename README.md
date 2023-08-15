@@ -17,13 +17,16 @@ New Reconstruction 2.0, base on spring framework.
 
 ### current module
 
-- 依赖模块：[pxc-framework-bom](pxc-framework-bom)
-- 核心模块：[pxc-framework-core](pxc-framework-core)
-- 工具类模块：[pxc-framework-util](pxc-framework-util)
-- Jackson模块：[pxc-framework-jackson](pxc-framework-jackson)
-- 操作日志模块：[pxc-framework-operate-log](pxc-framework-operate-log)
-- ORM模块：[pxc-framework-mybatis-plus](pxc-framework-mybatis-plus)
-- 限流模块：[pxc-framework-ratelimiter](pxc-framework-ratelimiter)
-- Redis模块：[pxc-framework-redis](pxc-framework-redis)
-- 防重复提交模块：[pxc-framework-repeatsubmit](pxc-framework-repeatsubmit)
-- Web模块：[pxc-framework-web](pxc-framework-web)
+|     模块名     |                            位置                            |
+|:-----------:|:--------------------------------------------------------:|
+|   `依赖模块`    |          [pxc-framework-bom](pxc-framework-bom)          |
+|   `核心模块`    |         [pxc-framework-core](pxc-framework-core)         |
+|   `工具类模块`   |         [pxc-framework-util](pxc-framework-util)         |
+| `Jackson模块` |      [pxc-framework-jackson](pxc-framework-jackson)      |
+|  `操作日志模块`   |  [pxc-framework-operate-log](pxc-framework-operate-log)  |
+| `日志链路追踪模块`  |    [pxc-framework-trace-log](pxc-framework-trace-log)    |
+|   `ORM模块`   | [pxc-framework-mybatis-plus](pxc-framework-mybatis-plus) |
+|   `限流模块`    |  [pxc-framework-ratelimiter](pxc-framework-ratelimiter)  |
+|  `Redis模块`  |        [pxc-framework-redis](pxc-framework-redis)        |
+|  `防重复提交模块`  | [pxc-framework-repeatsubmit](pxc-framework-repeatsubmit) |
+|   `Web模块`   |          [pxc-framework-web](pxc-framework-web)          |

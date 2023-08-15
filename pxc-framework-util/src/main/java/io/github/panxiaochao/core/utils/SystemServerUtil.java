@@ -157,7 +157,7 @@ public class SystemServerUtil {
 		SysInfo sys = new SysInfo();
 		Properties props = System.getProperties();
 		sys.setComputerName(networkParams.getHostName());
-		sys.setComputerIp(LocalhostUtil.getHostIp());
+		sys.setComputerIp(IpUtil.getHostIp());
 		sys.setDns(Arrays.toString(networkParams.getDnsServers()));
 		sys.setGateway(networkParams.getIpv4DefaultGateway());
 		sys.setOsName(props.getProperty("os.name"));

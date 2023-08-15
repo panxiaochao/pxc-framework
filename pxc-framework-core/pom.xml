@@ -15,10 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.github.panxiaochao</groupId>
             <artifactId>pxc-framework-util</artifactId>
         </dependency>

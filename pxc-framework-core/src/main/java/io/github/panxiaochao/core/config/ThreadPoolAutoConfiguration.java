@@ -96,7 +96,7 @@ public class ThreadPoolAutoConfiguration {
 		// 拒绝策略 CallerRunsPolicy
 		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		// 添加装饰器，上文传递
-		executor.setTaskDecorator(new TraceCopyContextTaskDecorator());
+		executor.setTaskDecorator(new TraceLogCopyContextTaskDecorator());
 		// 初始化
 		executor.initialize();
 		LOGGER.info("配置[ThreadPoolTaskExecutor]成功！");
@@ -106,7 +106,7 @@ public class ThreadPoolAutoConfiguration {
 	/**
 	 * 多线程自定义装饰器
 	 */
-	static class TraceCopyContextTaskDecorator implements TaskDecorator {
+	static class TraceLogCopyContextTaskDecorator implements TaskDecorator {
 
 		/**
 		 * Decorate the given {@code Runnable}, returning a potentially wrapped
