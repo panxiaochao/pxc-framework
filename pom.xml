@@ -77,9 +77,8 @@
         <spring-boot.version>2.7.15</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
-        <lombok.version>1.18.26</lombok.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <lombok.version>1.18.28</lombok.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <oshi.version>6.4.4</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
@@ -138,13 +137,6 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
-            </dependency>
-
-            <!-- mybatis-plus-generator 依赖管理 -->
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus-generator.version}</version>
             </dependency>
 
             <!-- alibaba ttl 管理 -->

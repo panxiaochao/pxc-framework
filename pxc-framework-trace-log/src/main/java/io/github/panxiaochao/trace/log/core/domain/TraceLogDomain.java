@@ -64,7 +64,7 @@ public class TraceLogDomain implements Serializable {
 		// 本机名
 		TraceLogContext.setHostName(builder.getHostName());
 		// 额外属性
-		TraceLogContext.setExtData(this.attributes);
+		// TraceLogContext.setExtData(this.attributes);
 	}
 
 	/**
@@ -143,11 +143,12 @@ public class TraceLogDomain implements Serializable {
 			this.hostIp = IpUtil.getHostIp();
 			this.hostName = IpUtil.getHostName();
 			// 额外属性
-			attributes.put(TraceLogConstant.PRE_APP, getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_APP)));
+			attributes.put(TraceLogConstant.PRE_APP,
+					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_APP)));
 			attributes.put(TraceLogConstant.PRE_HOST_IP,
-					getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_IP)));
+					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_IP)));
 			attributes.put(TraceLogConstant.PRE_HOST_NAME,
-					getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_NAME)));
+					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_NAME)));
 		}
 
 		/**
@@ -162,11 +163,11 @@ public class TraceLogDomain implements Serializable {
 			this.hostName = IpUtil.getHostName();
 			// 额外属性
 			attributes.put(TraceLogConstant.PRE_APP,
-					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_APP)));
+					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_APP)));
 			attributes.put(TraceLogConstant.PRE_HOST_IP,
-					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_IP)));
+					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_IP)));
 			attributes.put(TraceLogConstant.PRE_HOST_NAME,
-					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_NAME)));
+					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_NAME)));
 		}
 
 		private String getWebFluxHeaderName(HttpHeaders headers, String headerName) {
@@ -177,7 +178,7 @@ public class TraceLogDomain implements Serializable {
 			return null;
 		}
 
-		private String getBlankHeaderName(String headerName) {
+		private String getNotBlankHeaderName(String headerName) {
 			if (StringUtils.isBlank(headerName)) {
 				return TraceLogConstant.UNKNOWN;
 			}

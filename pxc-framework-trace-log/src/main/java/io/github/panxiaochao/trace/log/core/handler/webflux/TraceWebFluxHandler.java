@@ -62,8 +62,7 @@ public class TraceWebFluxHandler {
 		// 日志标签语句
 		// @formatter:off
 		String labelLogLabel = TraceLogDomain
-				.withServerHttpRequest(request)
-				.build()
+				.withServerHttpRequest(request).build()
 				.formatTraceLogLabel();
 		// @formatter:on
 		// 置入MDC

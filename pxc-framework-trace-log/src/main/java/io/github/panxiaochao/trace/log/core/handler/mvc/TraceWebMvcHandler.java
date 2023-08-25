@@ -60,8 +60,7 @@ public class TraceWebMvcHandler {
 		// 日志标签语句
 		// @formatter:off
 		String labelLogLabel = TraceLogDomain
-				.withServletRequest(request)
-				.build()
+				.withServletRequest(request).build()
 				.formatTraceLogLabel();
 		// @formatter:on
 		// 置入MDC
