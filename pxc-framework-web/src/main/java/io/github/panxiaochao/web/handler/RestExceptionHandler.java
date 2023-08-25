@@ -64,9 +64,9 @@ public class RestExceptionHandler {
 	public R<String> exception(Exception e) {
 		LOG.error(e.getMessage(), e);
 		if (ENV_PROD.equals(profile)) {
-			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), null);
+			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage());
 		}
-		return R.fail(e.getMessage(), null);
+		return R.fail(e.getMessage());
 	}
 
 	/**
@@ -78,9 +78,9 @@ public class RestExceptionHandler {
 	public R<String> illegalArgumentException(IllegalArgumentException e) {
 		LOG.error(e.getMessage(), e);
 		if (ENV_PROD.equals(profile)) {
-			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), null);
+			return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage());
 		}
-		return R.fail(e.getMessage(), null);
+		return R.fail(e.getMessage());
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(value = ApiServerException.class)
 	public R<String> handleBusinessException(ServerException e) {
 		LOG.error(e.getMessage(), e);
-		return R.fail(e.getMessage(), null);
+		return R.fail(e.getMessage());
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(value = ServerException.class)
 	public R<String> handleBaseException(ServerException e) {
 		LOG.error(e.getMessage(), e);
-		return R.fail(e.getCode(), e.getMessage(), null);
+		return R.fail(e.getCode(), e.getMessage());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(value = ServerRuntimeException.class)
 	public R<String> handleBaseException(ServerRuntimeException e) {
 		LOG.error(e.getMessage(), e);
-		return R.fail(e.getCode(), e.getMessage(), null);
+		return R.fail(e.getCode(), e.getMessage());
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class RestExceptionHandler {
 			}
 			msg.append(error.getDefaultMessage() == null ? "" : error.getDefaultMessage());
 		}
-		return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(), msg.substring(2), null);
+		return R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(), msg.substring(2));
 	}
 
 }

@@ -17,7 +17,7 @@ package io.github.panxiaochao.core.utils;
 
 /**
  * <p>
- * JDK环境判断工具类
+ * JDK环境判断工具类.
  * </p>
  *
  * @author Lypxc
@@ -56,7 +56,7 @@ public class JdkUtil {
 
 		try {
 			String jmvName = System.getProperty("java.vm.name");
-			isAndroid = jmvName.equals("Dalvik");
+			isAndroid = "Dalvik".equals(jmvName);
 			String javaSpecVer = System.getProperty("java.specification.version");
 			if (javaSpecVer.startsWith("1.")) {
 				javaSpecVer = javaSpecVer.substring(2);

@@ -16,6 +16,7 @@
 package io.github.panxiaochao.trace.log.core.domain;
 
 import io.github.panxiaochao.core.utils.IpUtil;
+import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.core.utils.UuidUtil;
 import io.github.panxiaochao.trace.log.constants.TraceLogConstant;
@@ -23,14 +24,14 @@ import io.github.panxiaochao.trace.log.core.context.TraceLogContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * <p>
@@ -45,7 +46,7 @@ public class TraceLogDomain implements Serializable {
 
 	private static final long serialVersionUID = 5728436343648917967L;
 
-	private Map<String, String> attributes;
+	private Map<String, String> attributes = new HashMap<>();
 
 	private TraceLogDomain() {
 	}
@@ -62,6 +63,8 @@ public class TraceLogDomain implements Serializable {
 		TraceLogContext.setHostIp(builder.getHostIp());
 		// 本机名
 		TraceLogContext.setHostName(builder.getHostName());
+		// 额外属性
+		TraceLogContext.setExtData(this.attributes);
 	}
 
 	/**
@@ -71,15 +74,10 @@ public class TraceLogDomain implements Serializable {
 	public String formatTraceLogLabel() {
 		StringJoiner traceLogLabel = new StringJoiner(StringPools.COMMA, "[", "]");
 		// 额外属性添加
-		// this.attributes.forEach((key, value) -> {
-		// if (StringUtils.isBlank(value)) {
-		// traceLogLabel.add(TraceLogConstant.UNKNOWN);
-		// }
-		// else {
-		// traceLogLabel.add(value);
-		// }
-		// });
-		// traceLogLabel.add(SpringContextUtil.getApplicationName());
+		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_APP));
+		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_IP));
+		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_NAME));
+		traceLogLabel.add(SpringContextUtil.getApplicationName());
 		traceLogLabel.add(TraceLogContext.getSpanId());
 		traceLogLabel.add(TraceLogContext.getTraceId());
 		traceLogLabel.add(TraceLogContext.getHostIp());
@@ -88,11 +86,21 @@ public class TraceLogDomain implements Serializable {
 	}
 
 	/**
-	 * Builder构造
+	 * WebMvc Builder构造
 	 * @param request HttpServletRequest
 	 * @return TraceLogDomainBuilder
 	 */
 	public static TraceLogDomainBuilder withServletRequest(HttpServletRequest request) {
+		Assert.notNull(request, "request cannot be null");
+		return new TraceLogDomainBuilder(request);
+	}
+
+	/**
+	 * WebFlux Builder构造
+	 * @param request ServerHttpRequest
+	 * @return TraceLogDomainBuilder
+	 */
+	public static TraceLogDomainBuilder withServerHttpRequest(ServerHttpRequest request) {
 		Assert.notNull(request, "request cannot be null");
 		return new TraceLogDomainBuilder(request);
 	}
@@ -125,6 +133,9 @@ public class TraceLogDomain implements Serializable {
 
 		private final Map<String, String> attributes = new HashMap<>();
 
+		/**
+		 * Servlet Http Request
+		 */
 		private TraceLogDomainBuilder(HttpServletRequest request) {
 			// 获取 RequestHead 信息
 			this.traceId = request.getHeader(TraceLogConstant.TRACE_ID);
@@ -132,9 +143,45 @@ public class TraceLogDomain implements Serializable {
 			this.hostIp = IpUtil.getHostIp();
 			this.hostName = IpUtil.getHostName();
 			// 额外属性
-			attributes.put(TraceLogConstant.PRE_APP, request.getHeader(TraceLogConstant.PRE_APP));
-			attributes.put(TraceLogConstant.PRE_HOST_IP, request.getHeader(TraceLogConstant.PRE_HOST_IP));
-			attributes.put(TraceLogConstant.PRE_HOST_NAME, request.getHeader(TraceLogConstant.PRE_HOST_NAME));
+			attributes.put(TraceLogConstant.PRE_APP, getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_APP)));
+			attributes.put(TraceLogConstant.PRE_HOST_IP,
+					getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_IP)));
+			attributes.put(TraceLogConstant.PRE_HOST_NAME,
+					getBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_NAME)));
+		}
+
+		/**
+		 * WebFlux ServerHttpRequest
+		 */
+		private TraceLogDomainBuilder(ServerHttpRequest request) {
+			// 获取 RequestHead 信息
+			HttpHeaders headers = request.getHeaders();
+			this.traceId = getWebFluxHeaderName(headers, TraceLogConstant.TRACE_ID);
+			this.spanId = getWebFluxHeaderName(headers, TraceLogConstant.SPAN_ID);
+			this.hostIp = IpUtil.getHostIp();
+			this.hostName = IpUtil.getHostName();
+			// 额外属性
+			attributes.put(TraceLogConstant.PRE_APP,
+					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_APP)));
+			attributes.put(TraceLogConstant.PRE_HOST_IP,
+					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_IP)));
+			attributes.put(TraceLogConstant.PRE_HOST_NAME,
+					getBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_NAME)));
+		}
+
+		private String getWebFluxHeaderName(HttpHeaders headers, String headerName) {
+			List<String> traceIds = headers.get(headerName);
+			if (!CollectionUtils.isEmpty(traceIds)) {
+				return traceIds.get(0);
+			}
+			return null;
+		}
+
+		private String getBlankHeaderName(String headerName) {
+			if (StringUtils.isBlank(headerName)) {
+				return TraceLogConstant.UNKNOWN;
+			}
+			return headerName;
 		}
 
 		public TraceLogDomain build() {

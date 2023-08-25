@@ -56,7 +56,10 @@ public class Jackson2AutoConfiguration {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Jackson2AutoConfiguration.class);
 
 	/**
-	 * to override the default ObjectMapper (and XmlMapper) <pre>
+	 * <p>
+	 * To override the default ObjectMapper (and XmlMapper).
+	 * </p>
+	 * <pre>
 	 *     1.Jackson2ObjectMapperBuilderCustomizer 注册Bean
 	 *     2.生成Bean Jackson2ObjectMapperBuilder
 	 *     3.通过 Jackson2ObjectMapperBuilder 生成 ObjectMapper

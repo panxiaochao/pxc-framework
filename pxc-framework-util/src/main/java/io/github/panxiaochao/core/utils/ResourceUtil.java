@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * <p>
- * description: 资源工具类
+ * 资源工具类
  * </p>
  *
  * @author Lypxc

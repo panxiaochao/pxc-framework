@@ -135,12 +135,23 @@ public class R<T> {
 	 * 失败
 	 * @param code 响应码
 	 * @param message 响应消息
+	 * @param <T> 数据类型
+	 * @return 失败的响应
+	 */
+	public static <T> R<T> fail(int code, String message) {
+		return fail(code, message, null);
+	}
+
+	/**
+	 * 失败
+	 * @param code 响应码
+	 * @param message 响应消息
 	 * @param data 数据
 	 * @param <T> 数据类型
 	 * @return 失败的响应
 	 */
 	public static <T> R<T> fail(int code, String message, T data) {
-		return new R<T>(code, message, data);
+		return new R<>(code, message, data);
 	}
 
 	/**

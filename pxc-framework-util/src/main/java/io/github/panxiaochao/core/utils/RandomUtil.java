@@ -37,6 +37,8 @@ public class RandomUtil {
 
 	private static final RandomUtil INST = new RandomUtil();
 
+	private final ThreadLocalRandom random = ThreadLocalRandom.current();
+
 	public static RandomUtil INSTANCE() {
 		return INST;
 	}
@@ -69,8 +71,7 @@ public class RandomUtil {
 	 */
 	public String getStringRandom(int len) {
 		int length = SOURCES.length;
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int j = 0; j < len; j++) {
 			sb.append(SOURCES[random.nextInt(length)]);
 		}
@@ -87,7 +88,6 @@ public class RandomUtil {
 		Assert.isTrue(size > 1, "size must not be less than one");
 		String[] randoms = new String[size];
 		int length = SOURCES.length;
-		ThreadLocalRandom random = ThreadLocalRandom.current();
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < len; j++) {
@@ -107,13 +107,13 @@ public class RandomUtil {
 	 * @return the random long
 	 * @throws IllegalArgumentException if startInclusive or endExclusive illegal
 	 */
-	public static long nextLong(final long startInclusive, final long endExclusive) {
+	public long nextLong(final long startInclusive, final long endExclusive) {
 		checkParameters(startInclusive, endExclusive);
 		long diff = endExclusive - startInclusive;
 		if (diff == 0) {
 			return startInclusive;
 		}
-		return ThreadLocalRandom.current().longs(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsLong();
+		return random.longs(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsLong();
 	}
 
 	/**
@@ -123,13 +123,13 @@ public class RandomUtil {
 	 * @return the random integer
 	 * @throws IllegalArgumentException if startInclusive or endExclusive illegal
 	 */
-	public static int nextInt(final int startInclusive, final int endExclusive) {
+	public int nextInt(final int startInclusive, final int endExclusive) {
 		checkParameters(startInclusive, endExclusive);
 		int diff = endExclusive - startInclusive;
 		if (diff == 0) {
 			return startInclusive;
 		}
-		return ThreadLocalRandom.current().ints(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsInt();
+		return random.ints(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsInt();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class RandomUtil {
 	 * @param startInclusive lower limit, must be non-negative
 	 * @param endExclusive the upper bound (not included)
 	 */
-	private static void checkParameters(final long startInclusive, final long endExclusive) {
+	private void checkParameters(final long startInclusive, final long endExclusive) {
 		if (endExclusive < startInclusive) {
 			throw new IllegalArgumentException("startInclusive must be less than or equal to the endExclusive.");
 		}

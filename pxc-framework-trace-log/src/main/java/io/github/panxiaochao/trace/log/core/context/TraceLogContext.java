@@ -19,6 +19,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 import io.github.panxiaochao.trace.log.constants.TraceLogConstant;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -40,6 +41,8 @@ public class TraceLogContext {
 	private static final TransmittableThreadLocal<String> HOST_IP = new TransmittableThreadLocal<>();
 
 	private static final TransmittableThreadLocal<String> HOST_NAME = new TransmittableThreadLocal<>();
+
+	private static final TransmittableThreadLocal<Map<String, String>> EXT_DATA = new TransmittableThreadLocal<>();
 
 	public static void setTraceId(String traceId) {
 		TRACE_ID_LOCAL.set(traceId);
@@ -68,7 +71,7 @@ public class TraceLogContext {
 	public static String generateNextSpanId() {
 		String curSpanId = getSpanId();
 		int curSpanIndex = SPAN_INDEX.get().incrementAndGet();
-		return String.format("{%s}.{%s}", curSpanId, curSpanIndex);
+		return String.format("%s.%s", curSpanId, curSpanIndex);
 	}
 
 	public static void removeSpanId() {
@@ -103,6 +106,18 @@ public class TraceLogContext {
 		HOST_NAME.remove();
 	}
 
+	public static void setExtData(Map<String, String> extData) {
+		EXT_DATA.set(extData);
+	}
+
+	public static Map<String, String> getExtData() {
+		return EXT_DATA.get();
+	}
+
+	public static void removeExtData() {
+		EXT_DATA.remove();
+	}
+
 	/**
 	 * 清除所有ThreadLocal数据
 	 */
@@ -112,6 +127,7 @@ public class TraceLogContext {
 		removeSpanIndex();
 		removeHostIp();
 		removeHostName();
+		removeExtData();
 	}
 
 }

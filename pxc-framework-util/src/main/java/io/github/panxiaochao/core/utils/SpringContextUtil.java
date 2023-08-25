@@ -44,9 +44,6 @@ public class SpringContextUtil implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
 
-	private SpringContextUtil() {
-	}
-
 	/**
 	 * get ApplicationContext instance
 	 * @return ApplicationContext

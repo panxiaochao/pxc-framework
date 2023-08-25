@@ -26,7 +26,7 @@ import org.springframework.core.Ordered;
 
 /**
  * <p>
- * description: Filter过滤器自动装配
+ * Filter过滤器自动装配
  * </p>
  * <p>
  * order的数值越小, 则优先级越高

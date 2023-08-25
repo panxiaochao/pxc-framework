@@ -39,7 +39,7 @@ import java.util.List;
 
 /**
  * <p>
- * description: RestTemplateUtil 静态工具类
+ * RestTemplateUtil 静态工具类
  * </p>
  *
  * @author Lypxc

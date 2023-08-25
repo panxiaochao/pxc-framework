@@ -16,13 +16,16 @@
 package io.github.panxiaochao.trace.log.config;
 
 import io.github.panxiaochao.trace.log.core.interceptor.mvc.TraceWebMvcInterceptor;
+import io.github.panxiaochao.trace.log.core.interceptor.scg.TraceGatewayGlobalFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -40,7 +43,7 @@ public class TraceLogAutoConfiguration {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TraceLogAutoConfiguration.class);
 
 	/**
-	 * Web Mvc Trace Log
+	 * WebMvc Trace Log
 	 */
 	@Configuration
 	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
@@ -57,6 +60,23 @@ public class TraceLogAutoConfiguration {
 			registry.addInterceptor(new TraceWebMvcInterceptor())
 				.addPathPatterns("/**")
 				.order(Ordered.HIGHEST_PRECEDENCE);
+		}
+
+	}
+
+	/**
+	 * GateWay Trace Log
+	 */
+	@Configuration
+	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+	@ConditionalOnClass(name = { "org.springframework.cloud.gateway.filter.GlobalFilter" })
+	static class TraceLogGatewayConfiguration {
+
+		@Bean
+		@Order(Ordered.HIGHEST_PRECEDENCE)
+		public TraceGatewayGlobalFilter tracerScgGlobalFilter() {
+			LOGGER.info("配置[TraceLog-Gateway]成功！");
+			return new TraceGatewayGlobalFilter();
 		}
 
 	}
