@@ -32,10 +32,10 @@
     <!-- scm -->
     <scm>
         <tag>master</tag>
-        <url>https://github.com/panxiaochao/pxc-spring-boot-starter-parent.git</url>
-        <connection>scm:git:https://github.com/panxiaochao/pxc-spring-boot-starter-parent.git
+        <url>https://github.com/panxiaochao/pxc-framework.git</url>
+        <connection>scm:git:https://github.com/panxiaochao/pxc-framework.git
         </connection>
-        <developerConnection>scm:git:https://github.com/panxiaochao/pxc-spring-boot-starter-parent.git
+        <developerConnection>scm:git:https://github.com/panxiaochao/pxc-framework.git
         </developerConnection>
     </scm>
 
