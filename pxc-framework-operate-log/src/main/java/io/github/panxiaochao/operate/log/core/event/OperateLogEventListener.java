@@ -50,7 +50,10 @@ public class OperateLogEventListener {
 	private final OperateLogDao operateLogDao;
 
 	/**
-	 * <pre> 1、可以支持使用异步存储操作 2、自定义存储(数据库、大数据等都可以)或者打印日志 </pre
+	 * 异步自定义操作日志： <pre>
+	 *     1、可以支持使用异步存储操作
+	 *     2、自定义存储(数据库、大数据等都可以)或者打印日志
+	 * </pre>
 	 * @param operateLogDomain 操作日志领域
 	 */
 	@Async
@@ -65,7 +68,7 @@ public class OperateLogEventListener {
 		LOGGER.info("[ip]: {}, [address]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
 				operateLogDomain.getIp(), operateLogDomain.getAddress(), operateLogDomain.getClassMethod(),
 				operateLogDomain.getRequestDateTime(), operateLogDomain.getCostTime());
-		// 如果是数据库操作
+		// 如果是其他自定义操作
 		if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
 			operateLogDao.handle(operateLogDomain);
 		}

@@ -15,10 +15,12 @@
  */
 package io.github.panxiaochao.redis.utils;
 
+import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.redis.utils.function.RLockTryFail;
 import io.github.panxiaochao.redis.utils.function.RLockTrySuccess;
 import org.redisson.api.*;
+import org.redisson.codec.JsonJacksonCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -401,6 +404,61 @@ public class RedissonUtil {
 	 */
 	public RLock rLock(String lockName) {
 		return ofRedissonClient().getLock(lockName);
+	}
+
+	// ------------------------------- 发布/订阅 类型操作 --------------------------------
+
+	/**
+	 * 发布通道消息
+	 * @param channelKey 通道key
+	 * @param msg 发送数据
+	 */
+	public <T> void publish(String channelKey, T msg) {
+		RTopic topic = getRTopic(channelKey);
+		topic.publish(msg);
+	}
+
+	/**
+	 * 发布通道消息
+	 * @param channelKey 通道key
+	 * @param msg 发送数据
+	 * @param consumer 自定义处理
+	 */
+	public <T> void publish(String channelKey, T msg, Consumer<T> consumer) {
+		RTopic topic = getRTopic(channelKey);
+		topic.publish(msg);
+		consumer.accept(msg);
+	}
+
+	/**
+	 * 订阅通道接收消息 - key 监听器需开启 `notify-keyspace-events` 等 redis 相关配置
+	 * @param channelKey 通道key
+	 * @param clazz 消息类型
+	 * @param consumer 自定义处理
+	 * @return locally unique listener id
+	 */
+	public <T> int subscribe(String channelKey, Class<T> clazz, Consumer<T> consumer) {
+		RTopic topic = getRTopic(channelKey);
+		return topic.addListener(clazz, (channel, msg) -> consumer.accept(msg));
+	}
+
+	/**
+	 * Removes the listener by <code>id</code> for listening this topic
+	 * @param channelKey 通道key
+	 * @param listenerIds - listener ids
+	 */
+	public void removeListener(String channelKey, Integer... listenerIds) {
+		RTopic topic = getRTopic(channelKey);
+		topic.removeListener(listenerIds);
+	}
+
+	/**
+	 * Obtain the RTopic
+	 * @param name name of object
+	 * @return RTopic
+	 */
+	private RTopic getRTopic(String name) {
+		return ofRedissonClient().getTopic(name, new JsonJacksonCodec(JacksonUtil.objectMapper()));
 	}
 
 }
