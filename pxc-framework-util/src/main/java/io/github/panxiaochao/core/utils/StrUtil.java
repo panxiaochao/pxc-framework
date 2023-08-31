@@ -20,6 +20,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -1397,6 +1398,87 @@ public class StrUtil {
 	public static String trimToNull(final String str) {
 		final String ts = trim(str);
 		return isEmpty(ts) ? null : ts;
+	}
+
+	/**
+	 * 替换指定字符串的指定区间内字符, 默认使用'*'替换
+	 *
+	 * <pre>
+	 * StrUtil.hide(null,*,*)=null
+	 * StrUtil.hide("",0,*)=""
+	 * StrUtil.hide("jackduan@163.com",-1,4)   ****duan@163.com
+	 * StrUtil.hide("jackduan@163.com",2,3)    ja*kduan@163.com
+	 * StrUtil.hide("jackduan@163.com",3,2)    jackduan@163.com
+	 * StrUtil.hide("jackduan@163.com",16,16)  jackduan@163.com
+	 * StrUtil.hide("jackduan@163.com",16,17)  jackduan@163.com
+	 * </pre>
+	 * @param str 字符串
+	 * @param startInclude 开始位置（包含）
+	 * @param endExclude 结束位置（不包含）
+	 * @return 替换后的字符串
+	 */
+	public static String hide(CharSequence str, int startInclude, int endExclude) {
+		return replace(str, startInclude, endExclude, '*');
+	}
+
+	/**
+	 * 替换指定字符串的指定区间内字符为固定字符<br>
+	 * 此方法使用{@link String#codePoints()}完成拆分替换
+	 * @param str 字符串
+	 * @param startInclude 开始位置（包含）
+	 * @param endExclude 结束位置（不包含）
+	 * @param replacedChar 被替换的字符
+	 * @return 替换后的字符串
+	 */
+	public static String replace(CharSequence str, int startInclude, int endExclude, char replacedChar) {
+		if (isBlank(str)) {
+			return EMPTY;
+		}
+		final String originalStr = str.toString();
+		int[] strCodePoints = originalStr.codePoints().toArray();
+		final int strLength = strCodePoints.length;
+		if (startInclude > strLength) {
+			return originalStr;
+		}
+		if (endExclude > strLength) {
+			endExclude = strLength;
+		}
+		if (startInclude > endExclude) {
+			// 如果起始位置大于结束位置，不替换
+			return originalStr;
+		}
+
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < strLength; i++) {
+			if (i >= startInclude && i < endExclude) {
+				stringBuilder.append(replacedChar);
+			}
+			else {
+				stringBuilder.append(new String(strCodePoints, i, 1));
+			}
+		}
+		return stringBuilder.toString();
+	}
+
+	/**
+	 * 重复某个字符
+	 *
+	 * <pre>
+	 * StrUtil.repeat('e', 0)  = ""
+	 * StrUtil.repeat('e', 3)  = "eee"
+	 * StrUtil.repeat('e', -2) = ""
+	 * </pre>
+	 * @param c 被重复的字符
+	 * @param count 重复的数目，如果小于等于0则返回""
+	 * @return 重复字符字符串
+	 */
+	public static String repeat(char c, int count) {
+		if (count <= 0) {
+			return EMPTY;
+		}
+		char[] result = new char[count];
+		Arrays.fill(result, c);
+		return new String(result);
 	}
 
 }

@@ -106,6 +106,12 @@
                 <artifactId>pxc-framework-repeatsubmit</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 脱敏加密 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-sensitive</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- 操作日志 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

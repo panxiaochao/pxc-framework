@@ -58,4 +58,12 @@ public enum Singleton {
 		return (T) SINGLES.get(key);
 	}
 
+	/**
+	 * 存储数量
+	 * @return size
+	 */
+	public int count() {
+		return SINGLES.size();
+	}
+
 }

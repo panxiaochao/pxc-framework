@@ -30,3 +30,4 @@ New Reconstruction 2.0, base on spring framework.
 |  `Redis模块`  |        [pxc-framework-redis](pxc-framework-redis)        |
 |  `防重复提交模块`  | [pxc-framework-repeatsubmit](pxc-framework-repeatsubmit) |
 |   `Web模块`   |          [pxc-framework-web](pxc-framework-web)          |
+|  `脱敏加密模块`   |    [pxc-framework-sensitive](pxc-framework-sensitive)    |
