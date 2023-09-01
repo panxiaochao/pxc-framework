@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.sensitive.serializer;
+package io.github.panxiaochao.sensitive.serializer.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -21,16 +21,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import io.github.panxiaochao.core.enums.CommonResponseEnum;
-import io.github.panxiaochao.core.exception.ServerRuntimeException;
-import io.github.panxiaochao.core.utils.Singleton;
 import io.github.panxiaochao.sensitive.annotation.FSensitive;
 import io.github.panxiaochao.sensitive.enums.FSensitiveStrategy;
 import io.github.panxiaochao.sensitive.strategy.AbstractFSensitiveStrategy;
-import org.springframework.util.ReflectionUtils;
+import io.github.panxiaochao.sensitive.utils.InvokeMethodSensitiveUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -41,7 +37,7 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2023-08-31
  */
-public class FSensitiveJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
+public class FSensitiveJackJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
 
 	private FSensitiveStrategy strategy;
 
@@ -50,10 +46,10 @@ public class FSensitiveJsonSerializer extends JsonSerializer<String> implements 
 	 */
 	private String customStrategyClassName;
 
-	private FSensitiveJsonSerializer() {
+	private FSensitiveJackJsonSerializer() {
 	}
 
-	private FSensitiveJsonSerializer(FSensitiveStrategy strategy, String customStrategyClassName) {
+	private FSensitiveJackJsonSerializer(FSensitiveStrategy strategy, String customStrategyClassName) {
 		this.strategy = strategy;
 		this.customStrategyClassName = customStrategyClassName;
 	}
@@ -66,32 +62,8 @@ public class FSensitiveJsonSerializer extends JsonSerializer<String> implements 
 				gen.writeString(strategy.desensitize().apply(value));
 			}
 			else {
-				// 不同class，使用自定义策略
-				try {
-					// 防止反射内存泄漏，每次都new一个对象
-					Object obj;
-					if (null != Singleton.INST.get(customStrategyClassName)) {
-						obj = Singleton.INST.get(customStrategyClassName);
-					}
-					else {
-						Class<?> cls = Class.forName(customStrategyClassName);
-						obj = cls.newInstance();
-						Singleton.INST.single(customStrategyClassName, obj);
-					}
-					Method handlerMethod = ReflectionUtils.findMethod(obj.getClass(), "handler", String.class);
-					if (Objects.isNull(handlerMethod)) {
-						throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR, "The class ["
-								+ customStrategyClassName + "] is not extend AbstractFSensitiveStrategy! ");
-					}
-					else {
-						ReflectionUtils.makeAccessible(handlerMethod);
-						Object handlerObject = ReflectionUtils.invokeMethod(handlerMethod, obj, value);
-						gen.writeString(handlerObject.toString());
-					}
-				}
-				catch (Exception e) {
-					gen.writeString(value);
-				}
+				String sensitiveValue = InvokeMethodSensitiveUtil.invokeSensitiveMethod(customStrategyClassName, value);
+				gen.writeString(sensitiveValue);
 			}
 		}
 		catch (IOException e) {
@@ -110,7 +82,7 @@ public class FSensitiveJsonSerializer extends JsonSerializer<String> implements 
 			if (null == annotation.strategy()) {
 				throw new RuntimeException("The annotation `@FSensitive` attribute strategy is empty!");
 			}
-			return new FSensitiveJsonSerializer(annotation.strategy(), annotation.customStrategy().getName());
+			return new FSensitiveJackJsonSerializer(annotation.strategy(), annotation.customStrategy().getName());
 		}
 		return prov.findValueSerializer(property.getType(), property);
 	}

@@ -18,7 +18,7 @@ package io.github.panxiaochao.sensitive.annotation;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.github.panxiaochao.sensitive.enums.FSensitiveStrategy;
-import io.github.panxiaochao.sensitive.serializer.FSensitiveJsonSerializer;
+import io.github.panxiaochao.sensitive.serializer.jackson.FSensitiveJackJsonSerializer;
 import io.github.panxiaochao.sensitive.strategy.AbstractFSensitiveStrategy;
 
 import java.lang.annotation.ElementType;
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @JacksonAnnotationsInside
-@JsonSerialize(using = FSensitiveJsonSerializer.class)
+@JsonSerialize(using = FSensitiveJackJsonSerializer.class)
 public @interface FSensitive {
 
 	/**

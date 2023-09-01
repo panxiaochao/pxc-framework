@@ -50,6 +50,16 @@ public class SystemServerUtil {
 	 */
 	private final SystemInfo systemInfo = new SystemInfo();
 
+	/**
+	 * 硬件信息
+	 */
+	private final HardwareAbstractionLayer hal = systemInfo.getHardware();
+
+	/**
+	 * 系统信息
+	 */
+	private final OperatingSystem os = systemInfo.getOperatingSystem();
+
 	private SystemServerUtil() {
 	}
 
@@ -79,7 +89,6 @@ public class SystemServerUtil {
 	 * @return Cpu
 	 */
 	public Cpu ofCpuInfo() {
-		HardwareAbstractionLayer hal = systemInfo.getHardware();
 		CentralProcessor processor = hal.getProcessor();
 		// CPU信息
 		long[] prevTicks = processor.getSystemCpuLoadTicks();
@@ -122,7 +131,7 @@ public class SystemServerUtil {
 	 * @return Mem
 	 */
 	public Mem ofMemInfo() {
-		GlobalMemory memory = systemInfo.getHardware().getMemory();
+		GlobalMemory memory = hal.getMemory();
 		memory.getVirtualMemory();
 		// 内存信息
 		Mem mem = new Mem();
@@ -152,8 +161,7 @@ public class SystemServerUtil {
 	 * @return SysInfo
 	 */
 	public SysInfo ofSysInfo() {
-		OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
-		NetworkParams networkParams = operatingSystem.getNetworkParams();
+		NetworkParams networkParams = os.getNetworkParams();
 		SysInfo sys = new SysInfo();
 		Properties props = System.getProperties();
 		sys.setComputerName(networkParams.getHostName());
@@ -171,8 +179,7 @@ public class SystemServerUtil {
 	 * @return DiskInfo
 	 */
 	public List<DiskInfo> ofDiskInfosInfo() {
-		OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
-		FileSystem fileSystem = operatingSystem.getFileSystem();
+		FileSystem fileSystem = os.getFileSystem();
 		List<OSFileStore> fsArray = fileSystem.getFileStores();
 		List<DiskInfo> diskInfos = new ArrayList<>();
 		for (OSFileStore fs : fsArray) {

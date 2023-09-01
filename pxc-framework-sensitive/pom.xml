@@ -18,6 +18,20 @@
             <groupId>io.github.panxiaochao</groupId>
             <artifactId>pxc-framework-util</artifactId>
         </dependency>
+        <!-- fastjson 1.X -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83_noneautotype</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- fastjson2 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.39</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>

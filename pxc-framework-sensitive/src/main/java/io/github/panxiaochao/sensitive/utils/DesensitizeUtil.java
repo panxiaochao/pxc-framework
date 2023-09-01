@@ -16,7 +16,10 @@
 package io.github.panxiaochao.sensitive.utils;
 
 import io.github.panxiaochao.core.utils.CharPools;
+import io.github.panxiaochao.core.utils.CharSequenceUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
+
+import java.util.function.Predicate;
 
 /**
  * <p>
@@ -46,7 +49,6 @@ public class DesensitizeUtil {
 
 	/**
 	 * 支持的脱敏类型枚举
-	 *
 	 */
 	public enum desensitizeType {
 
@@ -106,18 +108,24 @@ public class DesensitizeUtil {
 	}
 
 	/**
-	 * 脱敏，使用默认的脱敏策略 <pre>
-	 * DesensitizeUtil.desensitize("100", DesensitizeUtil.desensitizeType.USER_ID)) =  "0"
-	 * DesensitizeUtil.desensitize("段正淳", DesensitizeUtil.desensitizeType.CHINESE_NAME)) = "段**"
-	 * DesensitizeUtil.desensitize("51343620000320711X", DesensitizeUtil.desensitizeType.ID_CARD)) = "5***************1X"
-	 * DesensitizeUtil.desensitize("09157518479", DesensitizeUtil.desensitizeType.FIXED_PHONE)) = "0915*****79"
-	 * DesensitizeUtil.desensitize("18049531999", DesensitizeUtil.desensitizeType.MOBILE_PHONE)) = "180****1999"
-	 * DesensitizeUtil.desensitize("北京市海淀区马连洼街道289号", DesensitizeUtil.desensitizeType.ADDRESS)) = "北京市海淀区马********"
-	 * DesensitizeUtil.desensitize("duandazhi-jack@gmail.com.cn", DesensitizeUtil.desensitizeType.EMAIL)) = "d*************@gmail.com.cn"
-	 * DesensitizeUtil.desensitize("1234567890", DesensitizeUtil.desensitizeType.PASSWORD)) = "**********"
-	 * DesensitizeUtil.desensitize("苏D40000", DesensitizeUtil.desensitizeType.CAR_LICENSE)) = "苏D4***0"
-	 * DesensitizeUtil.desensitize("11011111222233333256", DesensitizeUtil.desensitizeType.BANK_CARD)) = "1101 **** **** **** 3256"
-	 * DesensitizeUtil.desensitize("192.168.1.1", DesensitizeUtil.desensitizeType.IPV4)) = "192.*.*.*"
+	 * <p>
+	 * 脱敏，使用默认的脱敏策略
+	 * </p>
+	 *
+	 * <pre>
+	 * {@code
+	 *    DesensitizeUtil.desensitize("100", DesensitizeUtil.desensitizeType.USER_ID)) =  "0"
+	 * 	  DesensitizeUtil.desensitize("段正淳", DesensitizeUtil.desensitizeType.CHINESE_NAME)) = "段**"
+	 * 	  DesensitizeUtil.desensitize("51343620000320711X", DesensitizeUtil.desensitizeType.ID_CARD)) = "5***************1X"
+	 * 	  DesensitizeUtil.desensitize("09157518479", DesensitizeUtil.desensitizeType.FIXED_PHONE)) = "0915*****79"
+	 * 	  DesensitizeUtil.desensitize("18049531999", DesensitizeUtil.desensitizeType.MOBILE_PHONE)) = "180****1999"
+	 * 	  DesensitizeUtil.desensitize("浙江省杭州市西湖区武林银泰111号", DesensitizeUtil.desensitizeType.ADDRESS)) = "浙江省杭州市西湖********"
+	 * 	  DesensitizeUtil.desensitize("duandazhi-jack@gmail.com.cn", DesensitizeUtil.desensitizeType.EMAIL)) = "d*************@gmail.com.cn"
+	 * 	  DesensitizeUtil.desensitize("1234567890", DesensitizeUtil.desensitizeType.PASSWORD)) = "**********"
+	 * 	  DesensitizeUtil.desensitize("苏D40000", DesensitizeUtil.desensitizeType.CAR_LICENSE)) = "苏D4***0"
+	 * 	  DesensitizeUtil.desensitize("11011111222233333256", DesensitizeUtil.desensitizeType.BANK_CARD)) = "1101 **** **** **** 3256"
+	 * 	  DesensitizeUtil.desensitize("192.168.1.1", DesensitizeUtil.desensitizeType.IPV4)) = "192.*.*.*"
+	 * }
 	 * </pre>
 	 * @param str 字符串
 	 * @param desensitizeType 脱敏类型;可以脱敏：用户id、中文名、身份证号、座机号、手机号、地址、电子邮件、密码
@@ -239,7 +247,7 @@ public class DesensitizeUtil {
 	}
 
 	/**
-	 * 【手机号码】前三位，后4位，其他隐藏，比如135****2210
+	 * 【手机号码】前三位，后4位，其他隐藏，比如189****5550
 	 * @param num 移动电话；
 	 * @return 脱敏后的移动电话；
 	 */
@@ -251,7 +259,7 @@ public class DesensitizeUtil {
 	}
 
 	/**
-	 * 【地址】只显示到地区，不显示详细地址，比如：北京市海淀区****
+	 * 【地址】只显示到地区，不显示详细地址，比如：浙江省杭州市****
 	 * @param address 家庭住址
 	 * @param sensitiveSize 敏感信息长度
 	 * @return 脱敏后的家庭地址
@@ -293,8 +301,17 @@ public class DesensitizeUtil {
 	}
 
 	/**
-	 * 【中国车牌】车牌中间用*代替 eg1：null -》 "" eg1："" -》 "" eg3：苏D40000 -》 苏D4***0 eg4：陕A12345D -》
-	 * 陕A1****D eg5：京A123 -》 京A123 如果是错误的车牌，不处理
+	 * <p>
+	 * 【中国车牌】车牌中间用*代替
+	 * </p>
+	 * <pre>
+	 *     eg1：null -》 ""
+	 *     eg1："" -》 ""
+	 *     eg3：苏D40000 -》 苏D4***0
+	 *     eg4：陕A12345D -》陕A1****D
+	 *     eg5：京A123 -》 京A123
+	 *     如果是错误的车牌，不处理
+	 * </pre>
 	 * @param carLicense 完整的车牌号
 	 * @return 脱敏后的车牌
 	 */
@@ -314,7 +331,18 @@ public class DesensitizeUtil {
 	}
 
 	/**
-	 * 银行卡号脱敏 eg: 1101 **** **** **** 3256
+	 * <p>
+	 * 【银行卡号脱敏】由于银行卡号长度不定，所以只展示前4位，后面的位数根据卡号决定展示1-4位 例如：
+	 * </p>
+	 *
+	 * <pre>
+	 *     {@code
+	 *      1. "1234 2222 3333 4444 6789 9"    ->   "1234 **** **** **** **** 9"
+	 *      2. "1234 2222 3333 4444 6789 91"   ->   "1234 **** **** **** **** 91"
+	 *      3. "1234 2222 3333 4444 678"       ->    "1234 **** **** **** 678"
+	 *      4. "1234 2222 3333 4444 6789"      ->    "1234 **** **** **** 6789"
+	 *     }
+	 *  </pre>
 	 * @param bankCardNo 银行卡号
 	 * @return 脱敏之后的银行卡号
 	 */
@@ -322,15 +350,16 @@ public class DesensitizeUtil {
 		if (StrUtil.isBlank(bankCardNo)) {
 			return bankCardNo;
 		}
-		bankCardNo = StrUtil.trim(bankCardNo);
+		bankCardNo = filter(bankCardNo, c -> false == CharSequenceUtil.isBlankChar(c));
 		if (bankCardNo.length() < 9) {
 			return bankCardNo;
 		}
 
 		final int length = bankCardNo.length();
-		final int midLength = length - 8;
-		final StringBuilder buf = new StringBuilder();
+		final int endLength = length % 4 == 0 ? 4 : length % 4;
+		final int midLength = length - 4 - endLength;
 
+		final StringBuilder buf = new StringBuilder();
 		buf.append(bankCardNo, 0, 4);
 		for (int i = 0; i < midLength; ++i) {
 			if (i % 4 == 0) {
@@ -338,7 +367,7 @@ public class DesensitizeUtil {
 			}
 			buf.append('*');
 		}
-		buf.append(CharPools.SPACE).append(bankCardNo, length - 4, length);
+		buf.append(CharPools.SPACE).append(bankCardNo, length - endLength, length);
 		return buf.toString();
 	}
 
@@ -380,6 +409,29 @@ public class DesensitizeUtil {
 			return StrUtil.EMPTY;
 		}
 		return str.substring(0, pos);
+	}
+
+	/**
+	 * 过滤字符串
+	 * @param str 字符串
+	 * @param filter 过滤器
+	 * @return 过滤后的字符串
+	 */
+	public static String filter(CharSequence str, final Predicate<Character> filter) {
+		if (str == null || filter == null) {
+			return StrUtil.EMPTY;
+		}
+
+		int len = str.length();
+		final StringBuilder sb = new StringBuilder(len);
+		char c;
+		for (int i = 0; i < len; i++) {
+			c = str.charAt(i);
+			if (filter.test(c)) {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 
 }
