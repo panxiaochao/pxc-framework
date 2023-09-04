@@ -9,6 +9,10 @@ pxc-framework Converged Project, base on spring boot 2.7.X up-to-date
 - Redisson 3.22.0
 - Springdoc-Openapi 1.7.0
 
+### Framework 2.0
+
+pxc-framework 2.0 url：[pxc-framework 2.0](https://github.com/panxiaochao/pxc-framework/tree/framework-2.0)
+
 ### current module
 
 - 公共模块：[pxc-framework-common](pxc-framework-common)
