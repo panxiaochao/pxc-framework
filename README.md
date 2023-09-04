@@ -15,6 +15,10 @@ New Reconstruction 2.0, base on spring framework.
 - Spring Boot 2.7.15
 - JDK 1.8
 
+### old version
+
+老版本：[pxc-framework](https://github.com/panxiaochao/pxc-framework)
+
 ### current module
 
 |     模块名     |                            位置                            |
