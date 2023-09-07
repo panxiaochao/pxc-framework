@@ -204,10 +204,27 @@ public class JacksonUtil {
 	 */
 	public static <T> T toObj(String json, TypeReference<T> typeReference) {
 		try {
-			return OBJECT_MAPPER.readValue(json, typeReference);
+			return toObj(OBJECT_MAPPER.readTree(json), typeReference);
 		}
 		catch (IOException e) {
 			LOGGER.error("json解析出错：{}", json, e);
+			return null;
+		}
+	}
+
+	/**
+	 * Json node deserialize to Object.
+	 * @param jsonNode json node
+	 * @param typeReference {@link TypeReference} of object
+	 * @param <T> General type
+	 * @return object
+	 */
+	public static <T> T toObj(JsonNode jsonNode, TypeReference<T> typeReference) {
+		try {
+			return OBJECT_MAPPER.readValue(jsonNode.traverse(OBJECT_MAPPER), typeReference);
+		}
+		catch (IOException e) {
+			LOGGER.error("json解析出错：{}", jsonNode, e);
 			return null;
 		}
 	}
@@ -274,22 +291,6 @@ public class JacksonUtil {
 		try {
 			return OBJECT_MAPPER.readValue(json,
 					OBJECT_MAPPER.getTypeFactory().constructMapType(Map.class, kClass, vClass));
-		}
-		catch (IOException e) {
-			LOGGER.error("json解析出错：{}", json, e);
-			return null;
-		}
-	}
-
-	/**
-	 * @param json json
-	 * @param type type
-	 * @param <T> T类型
-	 * @return T类型
-	 */
-	public static <T> T nativeRead(String json, TypeReference<T> type) {
-		try {
-			return OBJECT_MAPPER.readValue(json, type);
 		}
 		catch (IOException e) {
 			LOGGER.error("json解析出错：{}", json, e);

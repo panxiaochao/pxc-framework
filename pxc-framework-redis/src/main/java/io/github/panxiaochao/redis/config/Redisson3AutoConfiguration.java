@@ -24,11 +24,13 @@ import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.redis.mapper.KeyPrefixNameMapper;
 import io.github.panxiaochao.redis.properties.Redisson3Properties;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.Config;
 import org.redisson.config.SentinelServersConfig;
 import org.redisson.config.SingleServerConfig;
+import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +108,16 @@ public class Redisson3AutoConfiguration {
 			}
 			LOGGER.info("配置[Redis -> Redisson]成功！");
 		};
+	}
+
+	/**
+	 * RedissonConnectionFactory工厂
+	 * @param redissonClient 实例
+	 * @return RedissonConnectionFactory工厂
+	 */
+	@Bean
+	public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redissonClient) {
+		return new RedissonConnectionFactory(redissonClient);
 	}
 
 	/**

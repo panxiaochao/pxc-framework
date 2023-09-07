@@ -616,6 +616,16 @@ public class StrUtil {
 	}
 
 	/**
+	 * Checks if CharSequence contains a search CharSequence.
+	 * @param str the CharSequence to check, may be null
+	 * @param searchChar the Char to find, may be null
+	 * @return true if the CharSequence contains the search CharSequence
+	 */
+	public static boolean contains(CharSequence str, char searchChar) {
+		return containsAny(str, searchChar);
+	}
+
+	/**
 	 * <p>
 	 * Checks if the CharSequence contains any character in the given set of characters.
 	 * </p>
@@ -1346,11 +1356,11 @@ public class StrUtil {
 	 * </p>
 	 *
 	 * <pre>
-	 * StringUtils.trim(null)          = null
-	 * StringUtils.trim("")            = ""
-	 * StringUtils.trim("     ")       = ""
-	 * StringUtils.trim("abc")         = "abc"
-	 * StringUtils.trim("    abc    ") = "abc"
+	 * StrUtil.trim(null)          = null
+	 * StrUtil.trim("")            = ""
+	 * StrUtil.trim("     ")       = ""
+	 * StrUtil.trim("abc")         = "abc"
+	 * StrUtil.trim("    abc    ") = "abc"
 	 * </pre>
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed string, {@code null} if null String input
@@ -1366,11 +1376,11 @@ public class StrUtil {
 	 * {@code null}.
 	 *
 	 * <pre>
-	 * StringUtils.trimToEmpty(null)          = ""
-	 * StringUtils.trimToEmpty("")            = ""
-	 * StringUtils.trimToEmpty("     ")       = ""
-	 * StringUtils.trimToEmpty("abc")         = "abc"
-	 * StringUtils.trimToEmpty("    abc    ") = "abc"
+	 * StrUtil.trimToEmpty(null)          = ""
+	 * StrUtil.trimToEmpty("")            = ""
+	 * StrUtil.trimToEmpty("     ")       = ""
+	 * StrUtil.trimToEmpty("abc")         = "abc"
+	 * StrUtil.trimToEmpty("    abc    ") = "abc"
 	 * </pre>
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed String, or an empty String if {@code null} input
@@ -1385,11 +1395,11 @@ public class StrUtil {
 	 * {@code null} if the String is empty ("") after the trim or if it is {@code null}.
 	 *
 	 * <pre>
-	 * StringUtils.trimToNull(null)          = null
-	 * StringUtils.trimToNull("")            = null
-	 * StringUtils.trimToNull("     ")       = null
-	 * StringUtils.trimToNull("abc")         = "abc"
-	 * StringUtils.trimToNull("    abc    ") = "abc"
+	 * StrUtil.trimToNull(null)          = null
+	 * StrUtil.trimToNull("")            = null
+	 * StrUtil.trimToNull("     ")       = null
+	 * StrUtil.trimToNull("abc")         = "abc"
+	 * StrUtil.trimToNull("    abc    ") = "abc"
 	 * </pre>
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed String, {@code null} if only chars &lt;= 32, empty or null
@@ -1479,6 +1489,287 @@ public class StrUtil {
 		char[] result = new char[count];
 		Arrays.fill(result, c);
 		return new String(result);
+	}
+
+	/**
+	 * <p>
+	 * Splits the provided text into an array, using whitespace as the separator.
+	 * Whitespace is defined by {@link Character#isWhitespace(char)}.
+	 * </p>
+	 *
+	 * <p>
+	 * The separator is not included in the returned String array. Adjacent separators are
+	 * treated as one separator. For more control over the split use the StrTokenizer
+	 * class.
+	 * </p>
+	 *
+	 * <p>
+	 * A {@code null} input String returns {@code null}.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.split(null)       = null
+	 * StrUtil.split("")         = []
+	 * StrUtil.split("abc def")  = ["abc", "def"]
+	 * StrUtil.split("abc  def") = ["abc", "def"]
+	 * StrUtil.split(" abc ")    = ["abc"]
+	 * </pre>
+	 * @param str the String to parse, may be null
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	public static String[] split(final String str) {
+		return split(str, null, -1);
+	}
+
+	/**
+	 * <p>
+	 * Splits the provided text into an array, separator specified. This is an alternative
+	 * to using StringTokenizer.
+	 * </p>
+	 *
+	 * <p>
+	 * The separator is not included in the returned String array. Adjacent separators are
+	 * treated as one separator. For more control over the split use the StrTokenizer
+	 * class.
+	 * </p>
+	 *
+	 * <p>
+	 * A {@code null} input String returns {@code null}.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.split(null, *)         = null
+	 * StrUtil.split("", *)           = []
+	 * StrUtil.split("a.b.c", '.')    = ["a", "b", "c"]
+	 * StrUtil.split("a..b.c", '.')   = ["a", "b", "c"]
+	 * StrUtil.split("a:b:c", '.')    = ["a:b:c"]
+	 * StrUtil.split("a b c", ' ')    = ["a", "b", "c"]
+	 * </pre>
+	 * @param str the String to parse, may be null
+	 * @param separatorChar the character used as the delimiter
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	public static String[] split(final String str, final char separatorChar) {
+		return splitWorker(str, separatorChar, false);
+	}
+
+	/**
+	 * <p>
+	 * Splits the provided text into an array, separators specified. This is an
+	 * alternative to using StringTokenizer.
+	 * </p>
+	 *
+	 * <p>
+	 * The separator is not included in the returned String array. Adjacent separators are
+	 * treated as one separator. For more control over the split use the StrTokenizer
+	 * class.
+	 * </p>
+	 *
+	 * <p>
+	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars
+	 * splits on whitespace.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.split(null, *)         = null
+	 * StrUtil.split("", *)           = []
+	 * StrUtil.split("abc def", null) = ["abc", "def"]
+	 * StrUtil.split("abc def", " ")  = ["abc", "def"]
+	 * StrUtil.split("abc  def", " ") = ["abc", "def"]
+	 * StrUtil.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
+	 * </pre>
+	 * @param str the String to parse, may be null
+	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * whitespace
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	public static String[] split(final String str, final String separatorChars) {
+		return splitWorker(str, separatorChars, -1, false);
+	}
+
+	/**
+	 * <p>
+	 * Splits the provided text into an array with a maximum length, separators specified.
+	 * </p>
+	 *
+	 * <p>
+	 * The separator is not included in the returned String array. Adjacent separators are
+	 * treated as one separator.
+	 * </p>
+	 *
+	 * <p>
+	 * A {@code null} input String returns {@code null}. A {@code null} separatorChars
+	 * splits on whitespace.
+	 * </p>
+	 *
+	 * <p>
+	 * If more than {@code max} delimited substrings are found, the last returned string
+	 * includes all characters after the first {@code max - 1} returned strings (including
+	 * separator characters).
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.split(null, *, *)            = null
+	 * StrUtil.split("", *, *)              = []
+	 * StrUtil.split("ab cd ef", null, 0)   = ["ab", "cd", "ef"]
+	 * StrUtil.split("ab   cd ef", null, 0) = ["ab", "cd", "ef"]
+	 * StrUtil.split("ab:cd:ef", ":", 0)    = ["ab", "cd", "ef"]
+	 * StrUtil.split("ab:cd:ef", ":", 2)    = ["ab", "cd:ef"]
+	 * </pre>
+	 * @param str the String to parse, may be null
+	 * @param separatorChars the characters used as the delimiters, {@code null} splits on
+	 * whitespace
+	 * @param max the maximum number of elements to include in the array. A zero or
+	 * negative value implies no limit
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	public static String[] split(final String str, final String separatorChars, final int max) {
+		return splitWorker(str, separatorChars, max, false);
+	}
+
+	/**
+	 * Performs the logic for the {@code split} and {@code splitPreserveAllTokens} methods
+	 * that do not return a maximum array length.
+	 * @param str the String to parse, may be {@code null}
+	 * @param separatorChar the separate character
+	 * @param preserveAllTokens if {@code true}, adjacent separators are treated as empty
+	 * token separators; if {@code false}, adjacent separators are treated as one
+	 * separator.
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	private static String[] splitWorker(final String str, final char separatorChar, final boolean preserveAllTokens) {
+		// Performance tuned for 2.0 (JDK1.4)
+		if (str == null) {
+			return null;
+		}
+		final int len = str.length();
+		if (len == 0) {
+			return ArrayUtil.EMPTY_STRING_ARRAY;
+		}
+		final List<String> list = new ArrayList<>();
+		int i = 0;
+		int start = 0;
+		boolean match = false;
+		boolean lastMatch = false;
+		while (i < len) {
+			if (str.charAt(i) == separatorChar) {
+				if (match || preserveAllTokens) {
+					list.add(str.substring(start, i));
+					match = false;
+					lastMatch = true;
+				}
+				start = ++i;
+				continue;
+			}
+			lastMatch = false;
+			match = true;
+			i++;
+		}
+		if (match || preserveAllTokens && lastMatch) {
+			list.add(str.substring(start, i));
+		}
+		return list.toArray(ArrayUtil.EMPTY_STRING_ARRAY);
+	}
+
+	/**
+	 * Performs the logic for the {@code split} and {@code splitPreserveAllTokens} methods
+	 * that return a maximum array length.
+	 * @param str the String to parse, may be {@code null}
+	 * @param separatorChars the separate character
+	 * @param max the maximum number of elements to include in the array. A zero or
+	 * negative value implies no limit.
+	 * @param preserveAllTokens if {@code true}, adjacent separators are treated as empty
+	 * token separators; if {@code false}, adjacent separators are treated as one
+	 * separator.
+	 * @return an array of parsed Strings, {@code null} if null String input
+	 */
+	private static String[] splitWorker(final String str, final String separatorChars, final int max,
+			final boolean preserveAllTokens) {
+		// Performance tuned for 2.0 (JDK1.4)
+		// Direct code is quicker than StringTokenizer.
+		// Also, StringTokenizer uses isSpace() not isWhitespace()
+
+		if (str == null) {
+			return null;
+		}
+		final int len = str.length();
+		if (len == 0) {
+			return ArrayUtil.EMPTY_STRING_ARRAY;
+		}
+		final List<String> list = new ArrayList<>();
+		int sizePlus1 = 1;
+		int i = 0;
+		int start = 0;
+		boolean match = false;
+		boolean lastMatch = false;
+		if (separatorChars == null) {
+			// Null separator means use whitespace
+			while (i < len) {
+				if (Character.isWhitespace(str.charAt(i))) {
+					if (match || preserveAllTokens) {
+						lastMatch = true;
+						if (sizePlus1++ == max) {
+							i = len;
+							lastMatch = false;
+						}
+						list.add(str.substring(start, i));
+						match = false;
+					}
+					start = ++i;
+					continue;
+				}
+				lastMatch = false;
+				match = true;
+				i++;
+			}
+		}
+		else if (separatorChars.length() == 1) {
+			// Optimise 1 character case
+			final char sep = separatorChars.charAt(0);
+			while (i < len) {
+				if (str.charAt(i) == sep) {
+					if (match || preserveAllTokens) {
+						lastMatch = true;
+						if (sizePlus1++ == max) {
+							i = len;
+							lastMatch = false;
+						}
+						list.add(str.substring(start, i));
+						match = false;
+					}
+					start = ++i;
+					continue;
+				}
+				lastMatch = false;
+				match = true;
+				i++;
+			}
+		}
+		else {
+			// standard case
+			while (i < len) {
+				if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+					if (match || preserveAllTokens) {
+						lastMatch = true;
+						if (sizePlus1++ == max) {
+							i = len;
+							lastMatch = false;
+						}
+						list.add(str.substring(start, i));
+						match = false;
+					}
+					start = ++i;
+					continue;
+				}
+				lastMatch = false;
+				match = true;
+				i++;
+			}
+		}
+		if (match || preserveAllTokens && lastMatch) {
+			list.add(str.substring(start, i));
+		}
+		return list.toArray(ArrayUtil.EMPTY_STRING_ARRAY);
 	}
 
 }

@@ -64,6 +64,7 @@
         <module>pxc-framework-util</module>
         <module>pxc-framework-trace-log</module>
         <module>pxc-framework-sensitive</module>
+        <module>pxc-framework-email</module>
     </modules>
 
     <!-- properties -->
@@ -84,6 +85,7 @@
         <oshi.version>6.4.4</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
         <commons-io.version>2.13.0</commons-io.version>
+        <hutool.version>5.8.21</hutool.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -159,6 +161,15 @@
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>
                 <version>${ip2region.version}</version>
+            </dependency>
+
+            <!-- hutool 依赖管理 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

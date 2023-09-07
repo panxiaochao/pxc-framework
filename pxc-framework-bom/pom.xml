@@ -76,6 +76,12 @@
                 <artifactId>pxc-framework-core</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- Email 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-email</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- 工具类 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
