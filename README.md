@@ -17,7 +17,7 @@ New Reconstruction 2.0, base on spring framework.
 
 ### old version
 
-老版本：[pxc-framework](https://github.com/panxiaochao/pxc-framework)
+老版本 1.X：[pxc-framework](https://github.com/panxiaochao/pxc-framework)
 
 ### current module
 
@@ -29,6 +29,7 @@ New Reconstruction 2.0, base on spring framework.
 |   `工具类模块`   |         [pxc-framework-util](pxc-framework-util)         |
 | `Jackson模块` |      [pxc-framework-jackson](pxc-framework-jackson)      |
 |  `操作日志模块`   |  [pxc-framework-operate-log](pxc-framework-operate-log)  |
+|   `二维码模块`   |       [pxc-framework-qrcode](pxc-framework-qrcode)       |
 | `日志链路追踪模块`  |    [pxc-framework-trace-log](pxc-framework-trace-log)    |
 |   `ORM模块`   | [pxc-framework-mybatis-plus](pxc-framework-mybatis-plus) |
 |   `限流模块`    |  [pxc-framework-ratelimiter](pxc-framework-ratelimiter)  |

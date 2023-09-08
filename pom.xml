@@ -65,6 +65,7 @@
         <module>pxc-framework-trace-log</module>
         <module>pxc-framework-sensitive</module>
         <module>pxc-framework-email</module>
+        <module>pxc-framework-qrcode</module>
     </modules>
 
     <!-- properties -->
@@ -86,6 +87,7 @@
         <ip2region.version>2.7.0</ip2region.version>
         <commons-io.version>2.13.0</commons-io.version>
         <hutool.version>5.8.21</hutool.version>
+        <zxing.version>3.5.2</zxing.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>

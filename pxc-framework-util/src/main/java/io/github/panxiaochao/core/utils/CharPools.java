@@ -120,4 +120,38 @@ public interface CharPools {
 	 */
 	char AT = '@';
 
+	char HASH = '#';
+
+	char PERCENT = '%';
+
+	char PIPE = '|';
+
+	char PLUS = '+';
+
+	char QUESTION_MARK = '?';
+
+	char EXCLAMATION_MARK = '!';
+
+	char EQUALS = '=';
+
+	char AMPERSAND = '&';
+
+	char ASTERISK = '*';
+
+	char STAR = ASTERISK;
+
+	char DOLLAR = '$';
+
+	char HAT = '^';
+
+	char LEFT_CHEV = '<';
+
+	char RIGHT_CHEV = '>';
+
+	char SEMICOLON = ';';
+
+	char BACKTICK = '`';
+
+	char TILDA = '~';
+
 }

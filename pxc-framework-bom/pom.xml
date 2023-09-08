@@ -124,6 +124,12 @@
                 <artifactId>pxc-framework-operate-log</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 二维码  模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-qrcode</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- 日志追踪链路 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
