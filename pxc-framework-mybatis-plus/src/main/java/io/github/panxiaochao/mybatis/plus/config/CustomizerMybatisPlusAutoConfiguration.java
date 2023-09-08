@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.handler.CustomizerMetaObjectHandler;
+import io.github.panxiaochao.mybatis.plus.injector.MySqlInjector;
 import io.github.panxiaochao.mybatis.plus.properties.MpProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.executor.Executor;
@@ -124,6 +125,15 @@ public class CustomizerMybatisPlusAutoConfiguration {
 		long workerId = IpUtil.ipv4ToLong(IpUtil.getLocalhostStr()) & 31;
 		long dataCenterId = workerId > 30 ? 0 : workerId + 1;
 		return new DefaultIdentifierGenerator(workerId, dataCenterId);
+	}
+
+	/**
+	 * MySQL 注入器
+	 * @return 注入器
+	 */
+	@Bean
+	public MySqlInjector mySqlInjector() {
+		return new MySqlInjector();
 	}
 
 }
