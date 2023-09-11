@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.trace.log.config;
 
+import io.github.panxiaochao.trace.log.core.interceptor.feign.TraceFeignInterceptor;
 import io.github.panxiaochao.trace.log.core.interceptor.mvc.TraceWebMvcInterceptor;
 import io.github.panxiaochao.trace.log.core.interceptor.scg.TraceGatewayGlobalFilter;
 import org.slf4j.Logger;
@@ -77,6 +78,22 @@ public class TraceLogAutoConfiguration {
 		public TraceGatewayGlobalFilter tracerScgGlobalFilter() {
 			LOGGER.info("配置[TraceLog-Gateway]成功！");
 			return new TraceGatewayGlobalFilter();
+		}
+
+	}
+
+	/**
+	 * Feign Trace Log
+	 */
+	@Configuration
+	@ConditionalOnClass(name = { "feign.RequestInterceptor" })
+	static class TraceLogFeignConfiguration {
+
+		@Bean
+		@Order(Ordered.HIGHEST_PRECEDENCE)
+		public TraceFeignInterceptor traceFeignInterceptor() {
+			LOGGER.info("配置[TraceLog-Feign]成功！");
+			return new TraceFeignInterceptor();
 		}
 
 	}
