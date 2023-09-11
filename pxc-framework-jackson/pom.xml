@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-jackson</artifactId>
-    <description>[2.0.2]pxc framework jackson 模块</description>
+    <description>[2.0.3-SNAPSHOT]pxc framework jackson 模块</description>
 
     <dependencies>
         <!-- 核心模块 -->

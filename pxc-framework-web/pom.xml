@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-web</artifactId>
-    <description>[2.0.2]pxc framework web 模块</description>
+    <description>[2.0.3-SNAPSHOT]pxc framework web 模块</description>
 
     <dependencies>
         <dependency>
