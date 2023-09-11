@@ -19,8 +19,8 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
-import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.datamatrix.encoder.SymbolShapeHint;
+import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import io.github.panxiaochao.core.utils.Base64Util;
 import io.github.panxiaochao.core.utils.CharPools;
@@ -53,7 +53,7 @@ public class QRCodeUtil {
 	private final String content;
 
 	/**
-	 * 图片 大小
+	 * 图片 大小, 默认正方形
 	 */
 	private int size;
 
@@ -93,7 +93,7 @@ public class QRCodeUtil {
 	private boolean deleteMargin;
 
 	/**
-	 * 图片的外边距大小 (Quiet Zone)
+	 * 图片的外边距大小 (Quiet Zone) 1-4
 	 */
 	private int margin;
 
@@ -111,25 +111,25 @@ public class QRCodeUtil {
 	 * 创建一个带有默认值的 QRCode 生成器的格式。默认值如下
 	 *
 	 * <ul>
-	 * <li>图片大小: 512px</li>
+	 * <li>图片大小: 300px</li>
 	 * <li>内容编码格式: UTF-8</li>
 	 * <li>错误修正等级: Level M (有15% 的内容可被修正)</li>
 	 * <li>前景色: 黑色</li>
 	 * <li>背景色: 白色</li>
 	 * <li>输出图片的文件格式: png</li>
-	 * <li>图片空白区域大小: 0个单位</li>
+	 * <li>图片空白区域大小: 2个单位</li>
 	 * </ul>
 	 */
 	private QRCodeUtil(String content) {
 		this.content = content;
-		this.size = 512;
+		this.size = 300;
 		this.encode = StandardCharsets.UTF_8;
 		this.errorCorrectionLevel = ErrorCorrectionLevel.M;
 		this.errorCorrectionLevelValue = 0.15;
 		this.foreGroundColor = Color.BLACK;
 		this.backGroundColor = Color.WHITE;
 		this.imageFormat = "png";
-		this.deleteMargin = true;
+		this.margin = 2;
 		this.hints = new Hashtable<>();
 	}
 
@@ -288,10 +288,16 @@ public class QRCodeUtil {
 	 * @return 提供给编码器额外的参数
 	 */
 	public Map<EncodeHintType, ?> getHints() {
+		// 先清空
 		hints.clear();
+		// 配置纠错级别
 		hints.put(EncodeHintType.ERROR_CORRECTION, this.errorCorrectionLevel);
+		// 配置编码
 		hints.put(EncodeHintType.CHARACTER_SET, this.encode);
+		// 配置边距
 		hints.put(EncodeHintType.MARGIN, this.margin);
+		// 设置样式：不设置,正方形,矩形
+		hints.put(EncodeHintType.DATA_MATRIX_SHAPE, SymbolShapeHint.FORCE_SQUARE);
 		return hints;
 	}
 
@@ -455,7 +461,9 @@ public class QRCodeUtil {
 	public BufferedImage toImage() {
 		BitMatrix matrix;
 		try {
-			matrix = new QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, this.size, this.size, this.getHints());
+			// 图像数据转换，使用了矩阵转换
+			matrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, this.size, this.size,
+					this.getHints());
 		}
 		catch (WriterException e) {
 			throw new RuntimeException(e);
@@ -603,7 +611,7 @@ public class QRCodeUtil {
 		LuminanceSource source = new BufferedImageLuminanceSource(qrCodeImage);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		try {
-			Result result = new QRCodeReader().decode(bitmap, hints);
+			Result result = new QRCodeMultiReader().decode(bitmap, hints);
 			return result.getText();
 		}
 		catch (NotFoundException | ChecksumException | FormatException e) {
@@ -650,7 +658,7 @@ public class QRCodeUtil {
 		LuminanceSource source = new BufferedImageLuminanceSource(qrCodeImage);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		try {
-			Result result = new QRCodeReader().decode(bitmap);
+			Result result = new QRCodeMultiReader().decode(bitmap);
 			return result.getRawBytes();
 		}
 		catch (NotFoundException | ChecksumException | FormatException e) {
