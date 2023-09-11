@@ -19,6 +19,10 @@ New Reconstruction 2.0, base on spring framework.
 
 老版本 1.X：[pxc-framework](https://github.com/panxiaochao/pxc-framework)
 
+### current version
+
+`2.0.2`
+
 ### current module
 
 |     模块名     |                            位置                            |
