@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-core</artifactId>
-    <description>pxc framework core 核心模块</description>
+    <description>[2.0.2]pxc framework core 核心模块</description>
 
     <dependencies>
         <dependency>

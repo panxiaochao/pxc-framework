@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-email</artifactId>
-    <description>pxc framework email 模块</description>
+    <description>[2.0.2]pxc framework email 模块</description>
 
     <dependencies>
         <!-- 核心模块 -->
