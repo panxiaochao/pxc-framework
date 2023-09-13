@@ -19,6 +19,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -59,6 +60,9 @@ public class ObjectUtil {
 		if (object == null) {
 			return true;
 		}
+		if (object instanceof Optional) {
+			return !((Optional<?>) object).isPresent();
+		}
 		if (object instanceof CharSequence) {
 			return ((CharSequence) object).length() == 0;
 		}
@@ -78,6 +82,15 @@ public class ObjectUtil {
 			return !((Iterator<?>) object).hasNext();
 		}
 		return false;
+	}
+
+	/**
+	 * Determine whether the given array is empty: i.e. {@code null} or of zero length.
+	 * @param array the array to check
+	 * @see #isEmpty(Object)
+	 */
+	public static boolean isEmpty(Object[] array) {
+		return (array == null || array.length == 0);
 	}
 
 	/**
@@ -128,6 +141,31 @@ public class ObjectUtil {
 	 */
 	public static <T> T getIfNull(final T object, final T defaultValue) {
 		return object != null ? object : defaultValue;
+	}
+
+	/**
+	 * Append the given object to the given array, returning a new array consisting of the
+	 * input array contents plus the given object.
+	 * @param array the array to append to (can be {@code null})
+	 * @param obj the object to append
+	 * @return the new array (of the same component type; never {@code null})
+	 */
+	public static <A, O extends A> A[] addObjectToArray(A[] array, O obj) {
+		Class<?> compType = Object.class;
+		if (array != null) {
+			compType = array.getClass().getComponentType();
+		}
+		else if (obj != null) {
+			compType = obj.getClass();
+		}
+		int newArrLength = (array != null ? array.length + 1 : 1);
+		@SuppressWarnings("unchecked")
+		A[] newArr = (A[]) Array.newInstance(compType, newArrLength);
+		if (array != null) {
+			System.arraycopy(array, 0, newArr, 0, array.length);
+		}
+		newArr[newArr.length - 1] = obj;
+		return newArr;
 	}
 
 }

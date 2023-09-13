@@ -17,17 +17,18 @@ package io.github.panxiaochao.redis.utils;
 
 import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
+import io.github.panxiaochao.core.utils.StrUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.redis.utils.function.RLockTryFail;
 import io.github.panxiaochao.redis.utils.function.RLockTrySuccess;
 import org.redisson.api.*;
+import org.redisson.api.geo.GeoSearchArgs;
 import org.redisson.codec.JsonJacksonCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -312,6 +313,300 @@ public class RedissonUtil {
 	 */
 	private RBitSet getRBitSet(String name) {
 		return ofRedissonClient().getBitSet(name);
+	}
+
+	// ------------------------------- 地理位置GEO 类型操作 --------------------------------
+
+	/**
+	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 纬度
+	 * @param member 成员名称
+	 * @return 添加元素个数
+	 */
+	public Long geoAdd(String key, double lng, double lat, Object member) {
+		RGeo<Object> geo = getRGeo(key);
+		return geo.add(lng, lat, member);
+	}
+
+	/**
+	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中
+	 * @param key 名称KEY
+	 * @param entries 包含精度、维度、成员集合
+	 * @return 添加元素个数
+	 */
+	public Long geoAdd(String key, GeoEntry... entries) {
+		RGeo<String> geo = getRGeo(key);
+		return geo.add(entries);
+	}
+
+	/**
+	 * 返回成员映射的GeoHash值.
+	 * @param key 名称KEY
+	 * @param members - objects
+	 * @return hash mapped by object
+	 */
+	public Map<String, String> hash(String key, String... members) {
+		RGeo<String> geo = getRGeo(key);
+		return geo.hash(members);
+	}
+
+	/**
+	 * 返回成员的地址位置信息.
+	 * @param key 名称KEY
+	 * @param members - objects
+	 * @return geo position mapped by object
+	 */
+	public Map<String, GeoPosition> position(String key, String... members) {
+		RGeo<String> geo = getRGeo(key);
+		return geo.pos(members);
+	}
+
+	/**
+	 * 返回指定两个对象的距离，通过指定距离单位，比如：米m，千米km，英里mi，英尺ft.
+	 * @param key 名称KEY
+	 * @param firstMember - first object
+	 * @param secondMember - second object
+	 * @param geoUnit - geo unit
+	 * @return distance
+	 */
+	public Double distance(String key, String firstMember, String secondMember, GeoUnit geoUnit) {
+		RGeo<String> geo = getRGeo(key);
+		return geo.dist(firstMember, secondMember, geoUnit);
+	}
+
+	/**
+	 * 返回成员内指定搜索条件内的排序集合, 默认升序
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回成员内指定搜索条件内的排序集合
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
+			int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的排序集合, 默认升序
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
+				count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的排序集合
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
+			int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员内指定搜索条件内的元素, 并返回距离, 默认正序
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
+			int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员内指定搜索条件内的元素，并返回距离
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的元素, 并返回距离, 默认正序
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
+			int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
+				count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的元素，并返回距离
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员内指定搜索条件内的元素，并返回经纬度，默认正序
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
+			int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员内指定搜索条件内的元素，并返回经纬度
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的元素，并返回经纬度，默认正序
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
+			GeoUnit geoUnit, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
+				count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度内指定搜索条件内的元素，并返回经纬度
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 构造查询条件
+	 * @param member 成员
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回查询对象
+	 */
+	private GeoSearchArgs buildGeoSearchArgs(String member, double lng, double lat, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		if (StrUtil.isNotBlank(member)) {
+			return GeoSearchArgs.from(member).radius(radius, geoUnit).order(geoOrder).count(count);
+		}
+		return GeoSearchArgs.from(lng, lat).radius(radius, geoUnit).order(geoOrder).count(count);
+	}
+
+	/**
+	 * Obtain the RGeo
+	 * @param name name of object
+	 * @return RGeo
+	 */
+	private <T> RGeo<T> getRGeo(String name) {
+		return ofRedissonClient().getGeo(name, new JsonJacksonCodec(JacksonUtil.objectMapper()));
 	}
 
 	// ------------------------------- 可重入锁 类型操作 --------------------------------
