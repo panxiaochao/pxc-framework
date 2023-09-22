@@ -50,7 +50,10 @@ public class OperateLogEventListener {
 	private final OperateLogDao operateLogDao;
 
 	/**
-	 * 异步自定义操作日志： <pre>
+	 * <p>
+	 * 异步自定义操作日志：
+	 * </p>
+	 * <pre>
 	 *     1、可以支持使用异步存储操作
 	 *     2、自定义存储(数据库、大数据等都可以)或者打印日志
 	 * </pre>

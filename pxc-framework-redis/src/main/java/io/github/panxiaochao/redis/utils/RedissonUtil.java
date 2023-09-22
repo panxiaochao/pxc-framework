@@ -150,7 +150,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Set the value
+	 * Set the value.
 	 * @param key key
 	 * @param value T value
 	 * @param duration duration
@@ -164,7 +164,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * delete the object from the key
+	 * delete the object from the key.
 	 * @param key key
 	 * @return true or false
 	 */
@@ -185,7 +185,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain the RBucket
+	 * Obtain the RBucket.
 	 * @param name name of object
 	 * @return RBucket
 	 */
@@ -206,7 +206,7 @@ public class RedissonUtil {
 	// ------------------------------- 限流 类型操作 --------------------------------
 
 	/**
-	 * 限流
+	 * 限流.
 	 * @param key 限流key
 	 * @param rateType 限流类型
 	 * @param rate 速率
@@ -230,7 +230,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain the RRateLimiter
+	 * Obtain the RRateLimiter.
 	 * @param name name of object
 	 * @return RRateLimiter
 	 */
@@ -241,7 +241,7 @@ public class RedissonUtil {
 	// ------------------------------- 二进制流 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RBinaryStream
+	 * Obtain the RBinaryStream.
 	 * @param name name of object
 	 * @return RBinaryStream
 	 */
@@ -252,7 +252,7 @@ public class RedissonUtil {
 	// ------------------------------- List 类型操作 --------------------------------
 
 	/**
-	 * Obtain the getRList
+	 * Obtain the getRList.
 	 * @param name name of object
 	 * @return getRList
 	 */
@@ -263,7 +263,7 @@ public class RedissonUtil {
 	// ------------------------------- Set 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RSet
+	 * Obtain the RSet.
 	 * @param name name of object
 	 * @return RSet
 	 */
@@ -274,7 +274,7 @@ public class RedissonUtil {
 	// ------------------------------- Map 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RMap
+	 * Obtain the RMap.
 	 * @param name name of object
 	 * @return RMap
 	 */
@@ -285,7 +285,7 @@ public class RedissonUtil {
 	// ------------------------------- MapCache 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RMapCache
+	 * Obtain the RMapCache.
 	 * @param name name of object
 	 * @return RMapCache
 	 */
@@ -296,7 +296,7 @@ public class RedissonUtil {
 	// ------------------------------- 原子Long 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RAtomicLong
+	 * Obtain the RAtomicLong.
 	 * @param name name of object
 	 * @return RAtomicLong
 	 */
@@ -307,7 +307,7 @@ public class RedissonUtil {
 	// ------------------------------- 字节 类型操作 --------------------------------
 
 	/**
-	 * Obtain the RBitSet
+	 * Obtain the RBitSet.
 	 * @param name name of object
 	 * @return RBitSet
 	 */
@@ -318,7 +318,7 @@ public class RedissonUtil {
 	// ------------------------------- 地理位置GEO 类型操作 --------------------------------
 
 	/**
-	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中
+	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 纬度
@@ -331,7 +331,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中
+	 * 将指定的地理空间位置（纬度、经度、名称）添加到指定的key中.
 	 * @param key 名称KEY
 	 * @param entries 包含精度、维度、成员集合
 	 * @return 添加元素个数
@@ -377,7 +377,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * 返回成员内指定搜索条件内的排序集合, 默认升序
+	 * 返回成员周围半径内指定搜索条件内的排序集合, 默认升序.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -387,12 +387,12 @@ public class RedissonUtil {
 	 */
 	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
 		return geo.search(geoSearchArgs);
 	}
 
 	/**
-	 * 返回成员内指定搜索条件内的排序集合
+	 * 返回成员周围半径内指定搜索条件内的排序集合.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -404,12 +404,12 @@ public class RedissonUtil {
 	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
 		return geo.search(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的排序集合, 默认升序
+	 * 返回经纬度周围半径内指定搜索条件的排序集合, 默认升序.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 维度
@@ -420,13 +420,13 @@ public class RedissonUtil {
 	 */
 	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
-				count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
+				GeoOrder.ASC, count);
 		return geo.search(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的排序集合
+	 * 返回经纬度周围半径内指定搜索条件的排序集合.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 维度
@@ -439,12 +439,51 @@ public class RedissonUtil {
 	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
+				count);
 		return geo.search(geoSearchArgs);
 	}
 
 	/**
-	 * 返回指定成员内指定搜索条件内的元素, 并返回距离, 默认正序
+	 * 返回经纬度周围矩形大小范围内指定搜索条件的排序集合.
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, String member, double width, double height, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度周围矩形大小范围内指定搜索条件的排序集合.
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public List<String> search(String key, double lng, double lat, double width, double height, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
+				geoOrder, count);
+		return geo.search(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员周围半径内指定搜索条件的元素, 并返回距离, 默认正序.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -455,12 +494,12 @@ public class RedissonUtil {
 	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
 		return geo.searchWithDistance(geoSearchArgs);
 	}
 
 	/**
-	 * 返回指定成员内指定搜索条件内的元素，并返回距离
+	 * 返回指定成员周围半径内指定搜索条件的元素，并返回距离.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -472,12 +511,12 @@ public class RedissonUtil {
 	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
 		return geo.searchWithDistance(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的元素, 并返回距离, 默认正序
+	 * 返回经纬度周围半径内指定搜索条件的元素, 并返回距离, 默认正序.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 维度
@@ -489,31 +528,70 @@ public class RedissonUtil {
 	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
+				GeoOrder.ASC, count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度周围半径内指定搜索条件的元素，并返回距离.
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param radius 单位内半径
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
 				count);
 		return geo.searchWithDistance(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的元素，并返回距离
+	 * 返回指定成员周围矩形大小内指定搜索条件的元素，并返回距离.
 	 * @param key 名称KEY
-	 * @param lng 经度
-	 * @param lat 维度
-	 * @param radius 单位内半径
+	 * @param member 成员
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
 	 * @param geoUnit 单位
 	 * @param geoOrder 排序
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
-			GeoOrder geoOrder, int count) {
+	public Map<String, Double> searchWithDistance(String key, String member, double width, double height,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
 		return geo.searchWithDistance(geoSearchArgs);
 	}
 
 	/**
-	 * 返回指定成员内指定搜索条件内的元素，并返回经纬度，默认正序
+	 * 返回经纬度周围矩形大小内指定搜索条件的元素，并返回距离.
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double width, double height,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
+				geoOrder, count);
+		return geo.searchWithDistance(geoSearchArgs);
+	}
+
+	/**
+	 * 返回指定成员周围半径内指定搜索条件的元素，并返回经纬度，默认正序.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -524,12 +602,12 @@ public class RedissonUtil {
 	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
 		return geo.searchWithPosition(geoSearchArgs);
 	}
 
 	/**
-	 * 返回指定成员内指定搜索条件内的元素，并返回经纬度
+	 * 返回指定成员周围半径内指定搜索条件的元素，并返回经纬度.
 	 * @param key 名称KEY
 	 * @param member 成员
 	 * @param radius 单位内半径
@@ -541,12 +619,12 @@ public class RedissonUtil {
 	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
 		return geo.searchWithPosition(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的元素，并返回经纬度，默认正序
+	 * 返回经纬度周围半径内指定搜索条件的元素，并返回经纬度，默认正序.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 维度
@@ -558,13 +636,13 @@ public class RedissonUtil {
 	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
 			GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, GeoOrder.ASC,
-				count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
+				GeoOrder.ASC, count);
 		return geo.searchWithPosition(geoSearchArgs);
 	}
 
 	/**
-	 * 返回经纬度内指定搜索条件内的元素，并返回经纬度
+	 * 返回经纬度周围半径内指定搜索条件的元素，并返回经纬度.
 	 * @param key 名称KEY
 	 * @param lng 经度
 	 * @param lat 维度
@@ -577,12 +655,51 @@ public class RedissonUtil {
 	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
 			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
-		GeoSearchArgs geoSearchArgs = buildGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder, count);
+		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
+				count);
 		return geo.searchWithPosition(geoSearchArgs);
 	}
 
 	/**
-	 * 构造查询条件
+	 * 返回指定成员周围矩形大小内指定搜索条件的元素，并返回经纬度.
+	 * @param key 名称KEY
+	 * @param member 成员
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, String member, double width, double height,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 返回经纬度周围矩形大小内指定搜索条件的元素，并返回经纬度.
+	 * @param key 名称KEY
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回集合
+	 */
+	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double width, double height,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+		RGeo<String> geo = getRGeo(key);
+		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
+				geoOrder, count);
+		return geo.searchWithPosition(geoSearchArgs);
+	}
+
+	/**
+	 * 构造以成员或者经纬度周围半径大小查为询条件.
 	 * @param member 成员
 	 * @param lng 经度
 	 * @param lat 维度
@@ -592,8 +709,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回查询对象
 	 */
-	private GeoSearchArgs buildGeoSearchArgs(String member, double lng, double lat, double radius, GeoUnit geoUnit,
-			GeoOrder geoOrder, int count) {
+	private GeoSearchArgs buildRadiusGeoSearchArgs(String member, double lng, double lat, double radius,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		if (StrUtil.isNotBlank(member)) {
 			return GeoSearchArgs.from(member).radius(radius, geoUnit).order(geoOrder).count(count);
 		}
@@ -601,7 +718,27 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain the RGeo
+	 * 构造以成员或者经纬度周围矩形大小查为询条件.
+	 * @param member 成员
+	 * @param lng 经度
+	 * @param lat 维度
+	 * @param width 矩形宽度
+	 * @param height 矩形高度
+	 * @param geoUnit 单位
+	 * @param geoOrder 排序
+	 * @param count 返回数量
+	 * @return 返回查询对象
+	 */
+	private GeoSearchArgs buildBoxGeoSearchArgs(String member, double lng, double lat, double width, double height,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+		if (StrUtil.isNotBlank(member)) {
+			return GeoSearchArgs.from(member).box(width, height, geoUnit).order(geoOrder).count(count);
+		}
+		return GeoSearchArgs.from(lng, lat).box(width, height, geoUnit).order(geoOrder).count(count);
+	}
+
+	/**
+	 * Obtain the RGeo.
 	 * @param name name of object
 	 * @return RGeo
 	 */
@@ -612,7 +749,7 @@ public class RedissonUtil {
 	// ------------------------------- 可重入锁 类型操作 --------------------------------
 
 	/**
-	 * tryLock by lockName
+	 * tryLock by lockName.
 	 * @param lockName the lock name
 	 * @param waitTime the maximum time to acquire the lock
 	 * @param leaseTime lease time
@@ -632,7 +769,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * tryLock by RLock
+	 * tryLock by RLock.
 	 * @param lock the RLock object
 	 * @param waitTime the maximum time to acquire the lock
 	 * @param leaseTime lease time
@@ -652,7 +789,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Releases the lock
+	 * Releases the lock.
 	 * @param lock the RLock Object
 	 */
 	public void unLock(RLock lock) {
@@ -663,7 +800,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * tryLock by lockName
+	 * tryLock by lockName.
 	 * @param lockName the lock name
 	 * @param waitTime the maximum time to acquire the lock
 	 * @param leaseTime lease time
@@ -693,7 +830,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain RLock
+	 * Obtain RLock.
 	 * @param lockName the lock name
 	 * @return RLock object
 	 */
@@ -704,7 +841,7 @@ public class RedissonUtil {
 	// ------------------------------- 发布/订阅 类型操作 --------------------------------
 
 	/**
-	 * 发布通道消息
+	 * 发布通道消息.
 	 * @param channelKey 通道key
 	 * @param msg 发送数据
 	 */
@@ -714,7 +851,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * 发布通道消息
+	 * 发布通道消息.
 	 * @param channelKey 通道key
 	 * @param msg 发送数据
 	 * @param consumer 自定义处理
@@ -726,7 +863,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * 订阅通道接收消息 - key 监听器需开启 `notify-keyspace-events` 等 redis 相关配置
+	 * 订阅通道接收消息 - key 监听器需开启 `notify-keyspace-events` 等 redis 相关配置.
 	 * @param channelKey 通道key
 	 * @param clazz 消息类型
 	 * @param consumer 自定义处理
@@ -738,7 +875,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Removes the listener by <code>id</code> for listening this topic
+	 * Removes the listener by <code>id</code> for listening this topic.
 	 * @param channelKey 通道key
 	 * @param listenerIds - listener ids
 	 */
@@ -748,7 +885,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain the RTopic
+	 * Obtain the RTopic.
 	 * @param name name of object
 	 * @return RTopic
 	 */

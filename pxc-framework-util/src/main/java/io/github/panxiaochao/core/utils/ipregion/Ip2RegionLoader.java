@@ -35,6 +35,7 @@ import java.io.InputStream;
  * @author Lypxc
  * @since 2023-07-10
  */
+@Getter
 public class Ip2RegionLoader {
 
 	/**
@@ -49,7 +50,6 @@ public class Ip2RegionLoader {
 
 	private static final Ip2RegionLoader IP2REGION_LOADER = new Ip2RegionLoader();
 
-	@Getter
 	private final Searcher searcher;
 
 	private Ip2RegionLoader() {

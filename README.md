@@ -12,7 +12,7 @@ New Reconstruction 2.0, base on spring framework.
 
 ### current version
 
-- Spring Boot 2.7.15
+- Spring Boot 2.7.16
 - JDK 1.8
 
 ### old version
