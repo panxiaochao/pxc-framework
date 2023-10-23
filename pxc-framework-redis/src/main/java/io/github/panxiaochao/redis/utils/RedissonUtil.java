@@ -109,7 +109,7 @@ public class RedissonUtil {
 	 * @param value T value
 	 */
 	public <T> void set(String key, T value) {
-		set(key, value, 0, null);
+		set(key, value, Duration.ofMillis(0));
 	}
 
 	/**
@@ -120,22 +120,6 @@ public class RedissonUtil {
 	public <T> T get(String key) {
 		RBucket<T> rBucket = getRBucket(key);
 		return rBucket.get();
-	}
-
-	/**
-	 * Set the value
-	 * @param key key
-	 * @param value T value
-	 * @param timeToLive expire time
-	 * @param timeUnit time unit
-	 */
-	public <T> void set(String key, T value, long timeToLive, TimeUnit timeUnit) {
-		if (timeToLive <= 0) {
-			getRBucket(key).set(value);
-		}
-		else {
-			getRBucket(key).set(value, timeToLive, timeUnit);
-		}
 	}
 
 	/**
@@ -153,14 +137,19 @@ public class RedissonUtil {
 	 * Set the value.
 	 * @param key key
 	 * @param value T value
-	 * @param duration duration
+	 * @param duration expiration duration
 	 */
 	public <T> void set(String key, T value, Duration duration) {
-		RBatch batch = ofRBatch();
-		RBucketAsync<T> bucket = batch.getBucket(key);
-		bucket.setAsync(value);
-		bucket.expireAsync(duration);
-		batch.execute();
+		if (duration.toMillis() <= 0) {
+			getRBucket(key).set(value);
+		}
+		else {
+			RBatch batch = ofRBatch();
+			RBucketAsync<T> bucket = batch.getBucket(key);
+			bucket.setAsync(value);
+			bucket.expireAsync(duration);
+			batch.execute();
+		}
 	}
 
 	/**

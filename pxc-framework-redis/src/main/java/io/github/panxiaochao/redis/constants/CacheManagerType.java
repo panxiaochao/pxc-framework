@@ -25,6 +25,13 @@ package io.github.panxiaochao.redis.constants;
  */
 public enum CacheManagerType {
 
-	redis, caffeine
+	/**
+	 * redis存储
+	 */
+	redis,
+	/**
+	 * caffeine存储
+	 */
+	caffeine
 
 }
