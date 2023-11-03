@@ -18,6 +18,7 @@ package io.github.panxiaochao.mybatis.plus.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ParameterUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -25,7 +26,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.handler.CustomizerMetaObjectHandler;
-import io.github.panxiaochao.mybatis.plus.injector.MySqlInjector;
+import io.github.panxiaochao.mybatis.plus.injector.mysql.MySqlInjector;
+import io.github.panxiaochao.mybatis.plus.injector.oracle.OracleInjector;
 import io.github.panxiaochao.mybatis.plus.properties.MpProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.executor.Executor;
@@ -34,6 +36,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -128,12 +131,23 @@ public class CustomizerMybatisPlusAutoConfiguration {
 	}
 
 	/**
-	 * MySQL 注入器
+	 * 仅 MySQL 注入器
 	 * @return 注入器
 	 */
 	@Bean
-	public MySqlInjector mySqlInjector() {
+	@ConditionalOnProperty(name = "mybatis-plus.db-type", havingValue = "mysql")
+	public DefaultSqlInjector mySqlInjector() {
 		return new MySqlInjector();
+	}
+
+	/**
+	 * 仅 Oracle 注入器
+	 * @return 注入器
+	 */
+	@Bean
+	@ConditionalOnProperty(name = "mybatis-plus.db-type", havingValue = "oracle")
+	public DefaultSqlInjector oracleInjector() {
+		return new OracleInjector();
 	}
 
 }

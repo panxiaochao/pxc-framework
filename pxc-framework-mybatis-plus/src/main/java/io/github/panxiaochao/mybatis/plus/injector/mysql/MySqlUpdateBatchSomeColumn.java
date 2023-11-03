@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.injector;
+package io.github.panxiaochao.mybatis.plus.injector.mysql;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -32,15 +32,17 @@ import org.apache.ibatis.mapping.SqlSource;
  * @author Lypxc
  * @since 2023-09-08
  */
-public class UpdateBatchSomeColumn extends AbstractMethod {
+public class MySqlUpdateBatchSomeColumn extends AbstractMethod {
 
 	private static final long serialVersionUID = 794731765508860279L;
+
+	private static final String METHOD_NAME = "updateBatchSomeColumn";
 
 	/**
 	 * 默认方法名
 	 */
-	public UpdateBatchSomeColumn() {
-		super("updateBatchSomeColumn");
+	public MySqlUpdateBatchSomeColumn() {
+		super(METHOD_NAME);
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class UpdateBatchSomeColumn extends AbstractMethod {
 		String sqlResult = String.format(sql, tableInfo.getTableName(), setSql, tableInfo.getKeyColumn(),
 				"item." + tableInfo.getKeyProperty(), additional);
 		SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
-		return this.addUpdateMappedStatement(mapperClass, modelClass, "updateBatchSomeColumn", sqlSource);
+		return this.addUpdateMappedStatement(mapperClass, modelClass, METHOD_NAME, sqlSource);
 	}
 
 }

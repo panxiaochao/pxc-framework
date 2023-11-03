@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.injector;
+package io.github.panxiaochao.mybatis.plus.injector.mysql;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
@@ -37,9 +37,9 @@ public class MySqlInjector extends DefaultSqlInjector {
 	public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
 		// 获取 MyBatis-Plus 自带方法
 		List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
-		// 增加自定义方法，字段注解上不等于 FieldFill.DEFAULT 的字段才会插入
-		methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.DEFAULT));
-		methodList.add(new UpdateBatchSomeColumn());
+		// 增加自定义方法，字段注解上不等于 FieldFill.UPDATE 的字段才会插入
+		methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
+		methodList.add(new MySqlUpdateBatchSomeColumn());
 		return methodList;
 	}
 
