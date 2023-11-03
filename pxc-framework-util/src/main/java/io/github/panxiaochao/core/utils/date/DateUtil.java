@@ -20,10 +20,11 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>
- * JDK Date 工具类
+ * JDK Date 工具类.
  * </p>
  *
  * @author Lypxc
@@ -44,7 +45,7 @@ public class DateUtil {
 	 */
 	private static SimpleDateFormat getDateFormat(String format) {
 		SimpleDateFormat simpleDateFormat = DateContext.get();
-		if (null == simpleDateFormat) {
+		if (Objects.isNull(simpleDateFormat)) {
 			simpleDateFormat = new SimpleDateFormat(format);
 			DateContext.set(simpleDateFormat);
 		}
@@ -94,9 +95,12 @@ public class DateUtil {
 	 * @return Date
 	 */
 	public static Date localTimeToDate(LocalTime localTime) {
-		LocalDate localDate = LocalDate.now();
-		ZoneId zone = ZoneId.systemDefault();
-		Instant instant = LocalDateTime.of(localDate, localTime).atZone(zone).toInstant();
+		// @formatter:off
+		Instant instant = LocalDateTime
+				.of(LocalDate.now(), localTime)
+				.atZone(ZoneId.systemDefault())
+				.toInstant();
+		// @formatter:on
 		return Date.from(instant);
 	}
 

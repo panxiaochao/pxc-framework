@@ -161,7 +161,7 @@ public class IpInfo {
 	 * @return info
 	 */
 	public static String readInfo(IpInfo ipInfo, Function<IpInfo, String> function) {
-		if (ipInfo == null) {
+		if (null == ipInfo) {
 			return null;
 		}
 		return function.apply(ipInfo);

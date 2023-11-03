@@ -30,7 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 /**
  * <p>
- * 默认情况下，标准的 Spring MVC 异常会通过 DefaultHandlerExceptionResolver 来处理 继承自定义处理一些特殊错误
+ * 默认情况下，标准的 Spring MVC 异常会通过 DefaultHandlerExceptionResolver 来处理 继承自定义处理一些特殊错误.
  * </p>
  *
  * @author Lypxc

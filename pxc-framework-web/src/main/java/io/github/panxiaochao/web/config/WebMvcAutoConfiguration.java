@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * <p>
- * WebMvcAutoConfiguration is a AutoConfiguration
+ * WebMvcAutoConfiguration is a AutoConfiguration.
  * </p>
  *
  * @author Lypxc

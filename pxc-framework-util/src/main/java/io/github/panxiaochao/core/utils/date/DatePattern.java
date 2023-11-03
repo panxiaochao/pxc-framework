@@ -29,13 +29,25 @@ import java.util.Locale;
  */
 public class DatePattern {
 
-	public static final long DAY_MILLI = 24 * 60 * 60 * 1000;
+	/**
+	 * 24小时 毫秒数
+	 */
+	public static final long DAY_MILLIS = 24 * 60 * 60 * 1000;
 
-	public static final long HOUR_MILLI = 60 * 60 * 1000;
+	/**
+	 * 1小时 毫秒数
+	 */
+	public static final long HOUR_MILLIS = 60 * 60 * 1000;
 
-	public static final long MINUTE_MILLI = 60 * 1000;
+	/**
+	 * 1分钟 毫秒数
+	 */
+	public static final long MINUTE_MILLIS = 60 * 1000;
 
-	public static final long SECOND_MILLI = 1000;
+	/**
+	 * 1秒 毫秒数
+	 */
+	public static final long SECOND_MILLIS = 1000;
 
 	public static final String NORMAL_YEAR_PATTERN = "yyyy";
 

@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
- * 重新包装HttpServletRequest，解决是让其输入流可重复读
+ * 重新包装HttpServletRequest，解决是让其输入流可重复读.
  * </p>
  *
  * @author Lypxc

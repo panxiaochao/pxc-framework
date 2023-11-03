@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * <p>
- * jackson TimeModule
+ * jackson TimeModule.
  * </p>
  *
  * @author Lypxc

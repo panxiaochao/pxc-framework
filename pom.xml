@@ -80,8 +80,8 @@
         <spring-boot.version>2.7.17</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <lombok.version>1.18.28</lombok.version>
+        <mybatis-plus.version>3.5.4</mybatis-plus.version>
+        <lombok.version>1.18.30</lombok.version>
         <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
         <oshi.version>6.4.4</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>

@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * <p>
- * new Date() 上下文，解决SimpleDateFormat多线程安全问题
+ * new Date() 上下文，解决SimpleDateFormat多线程安全问题.
  * </p>
  *
  * @author Lypxc

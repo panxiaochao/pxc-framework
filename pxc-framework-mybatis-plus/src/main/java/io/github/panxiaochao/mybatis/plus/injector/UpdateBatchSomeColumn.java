@@ -17,6 +17,7 @@ package io.github.panxiaochao.mybatis.plus.injector;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import io.github.panxiaochao.core.utils.StringPools;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 
@@ -46,7 +47,7 @@ public class UpdateBatchSomeColumn extends AbstractMethod {
 	public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
 		String sql = "<script>\n<foreach collection=\"list\" item=\"item\" separator=\";\">\nupdate %s %s where %s=#{%s} %s\n</foreach>\n</script>";
 		String additional = tableInfo.isWithVersion() ? tableInfo.getVersionFieldInfo().getVersionOli("item", "item.")
-				: "" + tableInfo.getLogicDeleteSql(true, true);
+				: StringPools.EMPTY + tableInfo.getLogicDeleteSql(true, true);
 		String setSql = sqlSet(tableInfo.isWithLogicDelete(), false, tableInfo, false, "item", "item.");
 		String sqlResult = String.format(sql, tableInfo.getTableName(), setSql, tableInfo.getKeyColumn(),
 				"item." + tableInfo.getKeyProperty(), additional);
