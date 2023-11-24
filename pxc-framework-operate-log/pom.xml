@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-operate-log</artifactId>
-    <description>[2.0.3-SNAPSHOT]pxc framework operatelog 操作日志模块</description>
+    <description>[2.0.3]pxc framework operatelog 操作日志模块</description>
 
     <dependencies>
         <!-- 核心模块 -->
