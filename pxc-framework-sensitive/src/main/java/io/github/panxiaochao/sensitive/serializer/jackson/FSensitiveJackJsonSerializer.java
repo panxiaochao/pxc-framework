@@ -39,25 +39,20 @@ import java.util.Objects;
  */
 public class FSensitiveJackJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
 
-	private FSensitiveStrategy strategy;
-
 	/**
 	 * 自定义策略ClassName
 	 */
 	private String customStrategyClassName;
 
-	private FSensitiveJackJsonSerializer() {
-	}
-
-	private FSensitiveJackJsonSerializer(FSensitiveStrategy strategy, String customStrategyClassName) {
-		this.strategy = strategy;
-		this.customStrategyClassName = customStrategyClassName;
-	}
+	/**
+	 * 脱敏策略
+	 */
+	private FSensitiveStrategy strategy;
 
 	@Override
 	public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		try {
-			// 相同的class，使用自带策略
+			// 如果是 AbstractFSensitiveStrategy 默认策略，则使用默认 FSensitiveStrategy.DEFAULT
 			if (customStrategyClassName.equals(AbstractFSensitiveStrategy.class.getName())) {
 				gen.writeString(strategy.desensitize().apply(value));
 			}
@@ -82,7 +77,9 @@ public class FSensitiveJackJsonSerializer extends JsonSerializer<String> impleme
 			if (null == annotation.strategy()) {
 				throw new RuntimeException("The annotation `@FSensitive` attribute strategy is empty!");
 			}
-			return new FSensitiveJackJsonSerializer(annotation.strategy(), annotation.customStrategy().getName());
+			this.customStrategyClassName = annotation.customStrategy().getName();
+			this.strategy = annotation.strategy();
+			return this;
 		}
 		return prov.findValueSerializer(property.getType(), property);
 	}

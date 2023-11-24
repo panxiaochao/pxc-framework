@@ -21,7 +21,7 @@ import lombok.Getter;
 
 /**
  * <p>
- * 服务异常枚举, code以5000开始
+ * 服务异常枚举, code以5000开始.
  * </p>
  *
  * @author Lypxc
