@@ -66,11 +66,12 @@
         <module>pxc-framework-sensitive</module>
         <module>pxc-framework-email</module>
         <module>pxc-framework-qrcode</module>
+        <module>pxc-framework-mybatis-plus-generator</module>
     </modules>
 
     <!-- properties -->
     <properties>
-        <revision>2.0.3</revision>
+        <revision>2.0.4-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>

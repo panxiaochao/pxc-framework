@@ -21,7 +21,7 @@ New Reconstruction 2.0, base on spring framework.
 
 ### current version
 
-`2.0.3`
+`2.0.4-SNAPSHOT`
 
 ### current module
 
