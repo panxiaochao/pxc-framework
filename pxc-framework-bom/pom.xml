@@ -142,6 +142,12 @@
                 <artifactId>pxc-framework-mybatis-plus</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 代码构建 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-mybatis-plus-generator</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Mvc Web 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

@@ -145,6 +145,13 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
+            <!-- mybatis-plus-generator 依赖管理 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
             <!-- alibaba ttl 管理 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
