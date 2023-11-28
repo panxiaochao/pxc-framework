@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * {@code EnhanceFreemarkerTemplateEngine}
  * <p>
- * description: 引擎增强，自定义
+ * Freemarker 模版引擎增强.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-02-17
