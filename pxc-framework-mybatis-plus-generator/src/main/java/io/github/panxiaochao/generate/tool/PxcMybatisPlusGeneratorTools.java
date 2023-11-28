@@ -23,7 +23,6 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
-import com.baomidou.mybatisplus.generator.fill.Property;
 import io.github.panxiaochao.generate.enhance.EnhanceFreemarkerTemplateEngine;
 import io.github.panxiaochao.generate.enums.GenerateDbType;
 import org.springframework.util.CollectionUtils;
@@ -126,7 +125,7 @@ public class PxcMybatisPlusGeneratorTools {
 			.enableTableFieldAnnotation()
 			.naming(NamingStrategy.underline_to_camel)
 			.columnNaming(NamingStrategy.underline_to_camel)
-			.idType(IdType.ASSIGN_ID)
+			.idType(IdType.AUTO)
 			.formatFileName("%sPO");
 		if (!CollectionUtils.isEmpty(builder.insertFields)) {
 			strategyBuilder.entityBuilder().addTableFills(builder.insertFields);
@@ -335,7 +334,7 @@ public class PxcMybatisPlusGeneratorTools {
 
 		public Builder updateFields(List<String> updateFields) {
 			List<IFill> tableFills = new ArrayList<>();
-			updateFields.forEach(updateField -> tableFills.add(new Property(updateField, FieldFill.INSERT_UPDATE)));
+			updateFields.forEach(updateField -> tableFills.add(new Column(updateField, FieldFill.INSERT_UPDATE)));
 			this.updateFields.addAll(tableFills);
 			return this;
 		}
