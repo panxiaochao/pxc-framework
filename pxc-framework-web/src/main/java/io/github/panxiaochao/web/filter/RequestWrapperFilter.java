@@ -42,7 +42,8 @@ public class RequestWrapperFilter implements Filter {
 		if (!StringUtils.hasText(contentType)) {
 			filterChain.doFilter(request, response);
 		}
-		else if (StringUtils.hasText(contentType) || contentType.contains("multipart/form-data")) {
+		//fix: 请求类型是表单提交的放过
+		else if (StringUtils.hasText(contentType) && contentType.contains("multipart/form-data")) {
 			filterChain.doFilter(request, response);
 		}
 		else {
