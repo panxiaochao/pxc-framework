@@ -1,7 +1,7 @@
 package ${application}.service;
 
-import ${package.Entity}.${entity}PO;
-import ${superServiceClassPackage};
+import ${domain}.service.${entity}DomainService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
  * @since ${date}
  */
 @Service
+@RequiredArgsConstructor
 public class ${serviceAppName} {
+
+    /**
+     * ${table.comment!} 服务类
+     */
+    private final ${entity}DomainService ${entity?uncap_first}DomainService;
 
 }

@@ -187,6 +187,8 @@ public class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 		String parentPackage = config.getPackageConfig().getParent();
 
 		objectMap.put("application", parentPackage + ".application");
+		objectMap.put("domain", parentPackage + ".domain");
+		objectMap.put("infrastructure", parentPackage + ".infrastructure");
 
 		String filePath = "";
 		String templatePath = "";
@@ -266,7 +268,7 @@ public class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 		String parentPath = getPathInfo(OutputFile.parent);
 		String parentPackage = config.getPackageConfig().getParent();
 
-		objectMap.put("domain", parentPackage + ".domain.entity");
+		objectMap.put("domain", parentPackage + ".domain");
 
 		String filePath = parentPath + "/domain/entity/" + objectMap.get("entity") + ".java";
 		String templatePath = "/templates/domain/entity.java.ftl";
@@ -276,6 +278,18 @@ public class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 		}
 		catch (Exception exception) {
 			throw new RuntimeException("创建 Entity.java 文件失败！", exception);
+		}
+
+		String serviceAppName = entityName + "DomainService";
+		objectMap.put("serviceAppName", serviceAppName);
+		filePath = parentPath + "/domain/service/" + serviceAppName + ".java";
+		templatePath = "/templates/domain/service.java.ftl";
+		try {
+			super.outputFile(new File(filePath), objectMap, templatePath,
+					config.getStrategyConfig().entity().isFileOverride());
+		}
+		catch (Exception exception) {
+			throw new RuntimeException("创建" + filePath + "文件失败！", exception);
 		}
 	}
 

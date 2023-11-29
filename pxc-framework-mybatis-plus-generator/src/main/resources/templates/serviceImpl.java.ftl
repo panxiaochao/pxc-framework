@@ -2,7 +2,7 @@ package ${package.ServiceImpl};
 
 import ${package.Entity}.${entity}PO;
 import ${package.Mapper}.${table.mapperName};
-import ${package.Service}.${table.serviceName};
+import ${package.Service}.I${table.serviceName};
 import ${superServiceImplClassPackage};
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}PO> implements ${table.serviceName} {
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}PO> implements I${table.serviceName} {
 
     private final ${table.mapperName} ${table.mapperName?uncap_first};
 }
