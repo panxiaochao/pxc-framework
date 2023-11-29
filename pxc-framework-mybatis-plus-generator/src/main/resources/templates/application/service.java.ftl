@@ -1,7 +1,8 @@
-package ${package.Service};
+package ${application}.service;
 
 import ${package.Entity}.${entity}PO;
 import ${superServiceClassPackage};
+import org.springframework.stereotype.Service;
 
 /**
  * <p> ${table.comment!} 服务类. </p>
@@ -9,6 +10,7 @@ import ${superServiceClassPackage};
  * @author ${author}
  * @since ${date}
  */
-public interface I${table.serviceName} {
+@Service
+public class ${serviceAppName} {
 
 }

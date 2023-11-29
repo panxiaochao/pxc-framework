@@ -88,7 +88,7 @@ public class PxcMybatisPlusGeneratorTools {
 			globalConfigBuilder.enableSpringdoc();
 		}
 		globalConfigBuilder.author(builder.author)
-			.dateType(DateType.ONLY_DATE)
+			.dateType(DateType.TIME_PACK)
 			.commentDate(pattern)
 			.outputDir(builder.outputDir + "/src/main/java")
 			.disableOpenDir();
@@ -125,8 +125,8 @@ public class PxcMybatisPlusGeneratorTools {
 			.enableTableFieldAnnotation()
 			.naming(NamingStrategy.underline_to_camel)
 			.columnNaming(NamingStrategy.underline_to_camel)
-			.idType(IdType.AUTO)
-			.formatFileName("%sPO");
+			.idType(IdType.AUTO);
+//			.formatFileName("%sPO");
 		if (!CollectionUtils.isEmpty(builder.insertFields)) {
 			strategyBuilder.entityBuilder().addTableFills(builder.insertFields);
 		}
@@ -139,7 +139,7 @@ public class PxcMybatisPlusGeneratorTools {
 			.enableFileOverride()
 			.enableHyphenStyle()
 			.enableRestStyle()
-			.formatFileName("%sController");
+			.formatFileName("%sApi");
 
 		// Service 策略配置
 		strategyBuilder.serviceBuilder()
@@ -174,7 +174,7 @@ public class PxcMybatisPlusGeneratorTools {
 	 */
 	private void createTemplateConfig(TemplateConfig.Builder templateConfigBuilder, Builder builder) {
 		templateConfigBuilder.controller("/templates/controller.java")
-			.entity("/templates/entity.java")
+			.entity("/templates/entityPO.java")
 			.service("/templates/service.java")
 			.serviceImpl("/templates/serviceImpl.java")
 			.mapper("/templates/mapper.java")

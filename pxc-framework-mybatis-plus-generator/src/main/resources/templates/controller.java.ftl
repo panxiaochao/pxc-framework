@@ -2,7 +2,7 @@ package ${package.Controller};
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import io.github.panxiaochao.${package.ModuleName}.service.${entity}Service;
+import io.github.panxiaochao.${package.ModuleName}.application.service.${entity}AppService;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ import ${superControllerClassPackage};
 </#if>
 
 /**
- * <p> ${table.comment!} 前端控制器
+ * <p> ${table.comment!} 前端控制器.</p>
  *
  * @author ${author}
  * @since ${date}
@@ -39,7 +39,7 @@ public class ${table.controllerName} {
     /**
      * ${table.comment!} 服务
      */
-    private final ${entity}Service ${entity?uncap_first}Service;
+    private final ${entity}AppService ${entity?uncap_first}AppService;
 
 }
 </#if>

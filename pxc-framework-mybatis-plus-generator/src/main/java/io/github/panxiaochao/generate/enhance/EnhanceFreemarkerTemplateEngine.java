@@ -15,17 +15,21 @@
  */
 package io.github.panxiaochao.generate.enhance;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import io.github.panxiaochao.core.utils.StringPools;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -62,7 +66,23 @@ public class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 		// 继承原先渲对象的逻辑
 		Map<String, Object> objectMap = super.getObjectMap(configBuilder, tableInfo);
 		// 以下加入自定义
-		// do something
+		// 修改idType的类型
+		for (TableField field : tableInfo.getFields()) {
+			// 主键字段
+			if (field.isKeyFlag()) {
+				// 如果主键是自增类型，设置 idType 为 AUTO
+				if (field.isKeyIdentityFlag()) {
+					objectMap.put("idType", "AUTO");
+				}
+				else if ("String".equals(field.getPropertyType())) {
+					objectMap.put("idType", "ASSIGN_UUID");
+				}
+				else {
+					objectMap.put("idType", "ASSIGN_ID");
+				}
+				objectMap.put("idPropertyType", field.getPropertyType());
+			}
+		}
 		return objectMap;
 	}
 
@@ -71,50 +91,191 @@ public class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 	 */
 	@Override
 	public AbstractTemplateEngine batchOutput() {
-		// 首先使用父功能
-		super.batchOutput();
-		// 以下加入自定义
 		try {
 			ConfigBuilder config = this.getConfigBuilder();
-			// Application.java
-			// outputApplication(config);
-			// application.yml
-			// outputApplicationYml(config);
-			// pom.xml
-			outputPom(config);
+			List<TableInfo> tableInfoList = config.getTableInfoList();
+			tableInfoList.forEach(tableInfo -> {
+				Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
+				Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
+					// 添加自定义属性
+					t.beforeOutputFile(tableInfo, objectMap);
+					// 输出自定义文件
+					outputCustomFile(t.getCustomFiles(), tableInfo, objectMap);
+				});
+				// entity
+				outputEntityPO(tableInfo, objectMap);
+				// mapper and xml
+				outputMapper(tableInfo, objectMap);
+				// service
+				outputIService(tableInfo, objectMap);
+				// controller
+				outputController(tableInfo, objectMap);
+				// 生成 Application 模块
+				outputApplication(config, objectMap, tableInfo);
+				// 生成 domain 模块
+				outputDomain(config, objectMap, tableInfo);
+				// 生成 Convert 模块
+				outputConvert(config, objectMap, tableInfo);
+			});
 		}
 		catch (Exception e) {
 			throw new RuntimeException("无法创建文件，请检查配置信息！", e);
 		}
-
 		return this;
 	}
 
 	/**
-	 * 输出 Application.java
+	 * 输出实体文件
+	 * @param tableInfo 表信息
+	 * @param objectMap 渲染数据
+	 */
+	private void outputEntityPO(TableInfo tableInfo, Map<String, Object> objectMap) {
+		String entityName = tableInfo.getEntityName() + "PO";
+		String entityPath = getPathInfo(OutputFile.entity);
+		if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
+			getTemplateFilePath(template -> template.getEntity(getConfigBuilder().getGlobalConfig().isKotlin()))
+				.ifPresent((entity) -> {
+					String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()),
+							entityName);
+					outputFile(getOutputFile(entityFile, OutputFile.entity), objectMap, entity,
+							getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+				});
+		}
+	}
+
+	/**
+	 * 输出IService文件
+	 * @param tableInfo 表信息
+	 * @param objectMap 渲染数据
+	 */
+	private void outputIService(TableInfo tableInfo, Map<String, Object> objectMap) {
+		// IMpService.java
+		String entityName = tableInfo.getEntityName();
+		// 判断是否要生成service接口
+		if (tableInfo.isServiceInterface()) {
+			String servicePath = getPathInfo(OutputFile.service);
+			if (StringUtils.isNotBlank(tableInfo.getServiceName()) && StringUtils.isNotBlank(servicePath)) {
+				getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
+					String serviceFile = String.format(
+							(servicePath + File.separator + "I" + tableInfo.getServiceName() + suffixJavaOrKt()),
+							entityName);
+					outputFile(getOutputFile(serviceFile, OutputFile.service), objectMap, service,
+							getConfigBuilder().getStrategyConfig().service().isFileOverride());
+				});
+			}
+		}
+		// MpServiceImpl.java
+		String serviceImplPath = getPathInfo(OutputFile.serviceImpl);
+		if (StringUtils.isNotBlank(tableInfo.getServiceImplName()) && StringUtils.isNotBlank(serviceImplPath)) {
+			getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
+				String implFile = String.format(
+						(serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()),
+						entityName);
+				outputFile(getOutputFile(implFile, OutputFile.serviceImpl), objectMap, serviceImpl,
+						getConfigBuilder().getStrategyConfig().service().isFileOverride());
+			});
+		}
+	}
+
+	/**
+	 * 输出 Application
 	 * @param config 配置汇总
 	 */
-	private void outputApplication(ConfigBuilder config) {
+	private void outputApplication(ConfigBuilder config, Map<String, Object> objectMap, TableInfo tableInfo) {
+		String entityName = tableInfo.getEntityName();
+		String parentPath = getPathInfo(OutputFile.parent);
 		String parentPackage = config.getPackageConfig().getParent();
-		String parentPath = config.getPathInfo().get(OutputFile.parent);
-		if (StringUtils.hasText(config.getPackageConfig().getModuleName())) {
-			parentPackage = parentPackage.replaceAll(StringPools.DOT + config.getPackageConfig().getModuleName(),
-					StringPools.EMPTY);
-			parentPath = parentPath.replace(config.getPackageConfig().getModuleName(), StringPools.EMPTY);
-		}
-		Map<String, Object> objectMap = new HashMap<>(3);
-		objectMap.put("parentPackage", parentPackage);
-		objectMap.put("author", config.getGlobalConfig().getAuthor());
-		objectMap.put("date", config.getGlobalConfig().getCommentDate());
 
-		String applicationFilePath = parentPath + APPLICATION_JAVA_FILE;
-		String templateApplicationName = templateFilePath(APPLICATION_JAVA_FILE).toLowerCase();
-		String templateApplicationPath = TEMPLATE_APPLICATION_JAVA_FILE_PATH + templateApplicationName;
+		objectMap.put("application", parentPackage + ".application");
+
+		String filePath = "";
+		String templatePath = "";
+		String[] requests = new String[] { "Create", "Update", "Query" };
+		for (String request : requests) {
+			filePath = parentPath + "/application/api/request/" + objectMap.get("entity") + request + "Request.java";
+			templatePath = String.format("/templates/request/Entity%sRequest.java.ftl", request);
+			try {
+				super.outputFile(new File(filePath), objectMap, templatePath,
+						config.getStrategyConfig().entity().isFileOverride());
+			}
+			catch (Exception exception) {
+				throw new RuntimeException("创建" + filePath + "文件失败！", exception);
+			}
+		}
+		String[] responses = new String[] { "Query", "" };
+		for (String response : responses) {
+			filePath = parentPath + "/application/api/response/" + objectMap.get("entity") + response + "Response.java";
+			templatePath = String.format("/templates/response/Entity%sResponse.java.ftl", response);
+			try {
+				super.outputFile(new File(filePath), objectMap, templatePath,
+						config.getStrategyConfig().entity().isFileOverride());
+			}
+			catch (Exception exception) {
+				throw new RuntimeException("创建" + filePath + "文件失败！", exception);
+			}
+		}
+
+		String serviceAppName = entityName + "AppService";
+		objectMap.put("serviceAppName", serviceAppName);
+		filePath = parentPath + "/application/service/" + serviceAppName + ".java";
+		templatePath = "/templates/application/service.java.ftl";
 		try {
-			super.writer(objectMap, templateApplicationPath, new File(applicationFilePath));
+			super.outputFile(new File(filePath), objectMap, templatePath,
+					config.getStrategyConfig().entity().isFileOverride());
 		}
 		catch (Exception exception) {
-			throw new RuntimeException("创建 Application.java 文件失败！", exception);
+			throw new RuntimeException("创建" + filePath + "文件失败！", exception);
+		}
+	}
+
+	/**
+	 * 输出 Convert
+	 * @param config 配置汇总
+	 */
+	private void outputConvert(ConfigBuilder config, Map<String, Object> objectMap, TableInfo tableInfo) {
+		String entityName = tableInfo.getEntityName();
+		String parentPath = getPathInfo(OutputFile.parent);
+		String parentPackage = config.getPackageConfig().getParent();
+
+		objectMap.put("application", parentPackage + ".application");
+		objectMap.put("domain", parentPackage + ".domain");
+		objectMap.put("infrastructure", parentPackage + ".infrastructure");
+
+		String filePath = "";
+		String templatePath = "";
+		String[] converts = new String[] { "PO", "DTO" };
+		for (String convert : converts) {
+			filePath = parentPath + "/convert/" + convert + "/I" + objectMap.get("entity") + convert + "Convert.java";
+			templatePath = String.format("/templates/convert/IEntity%sConvert.java.ftl", convert);
+			try {
+				super.outputFile(new File(filePath), objectMap, templatePath,
+						config.getStrategyConfig().entity().isFileOverride());
+			}
+			catch (Exception exception) {
+				throw new RuntimeException("创建" + filePath + "文件失败！", exception);
+			}
+		}
+	}
+
+	/**
+	 * 输出 Domain Entity.java
+	 * @param config 配置汇总
+	 */
+	private void outputDomain(ConfigBuilder config, Map<String, Object> objectMap, TableInfo tableInfo) {
+		String entityName = tableInfo.getEntityName();
+		String parentPath = getPathInfo(OutputFile.parent);
+		String parentPackage = config.getPackageConfig().getParent();
+
+		objectMap.put("domain", parentPackage + ".domain.entity");
+
+		String filePath = parentPath + "/domain/entity/" + objectMap.get("entity") + ".java";
+		String templatePath = "/templates/domain/entity.java.ftl";
+		try {
+			super.outputFile(new File(filePath), objectMap, templatePath,
+					config.getStrategyConfig().entity().isFileOverride());
+		}
+		catch (Exception exception) {
+			throw new RuntimeException("创建 Entity.java 文件失败！", exception);
 		}
 	}
 

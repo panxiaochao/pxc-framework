@@ -10,11 +10,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
 <#if entityLombokModel>
-import lombok.Getter;import lombok.Setter;
+import lombok.Getter;
+import lombok.Setter;
 <#if chainModel>
 import lombok.experimental.Accessors;
 </#if>
 </#if>
+import java.time.LocalDateTime;
 
 /**
  * <p> ${table.comment!} 持久化对象. <p>
@@ -38,13 +40,13 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "${entity}PO对象", description = "${table.comment!}")
 </#if>
 <#if superEntityClass??>
-public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
+public class ${entity}PO extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
 <#elseif activeRecord>
-public class ${entity} extends Model<${entity}> {
+public class ${entity}PO extends Model<${entity}> {
 <#elseif entitySerialVersionUID>
-public class ${entity} implements Serializable {
+public class ${entity}PO implements Serializable {
 <#else>
-public class ${entity} {
+public class ${entity}PO {
 </#if>
 <#if entitySerialVersionUID>
 

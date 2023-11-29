@@ -1,6 +1,6 @@
 package ${package.Mapper};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}PO;
 import ${superMapperClassPackage};
 <#if mapperAnnotationClass??>
 import ${mapperAnnotationClass.name};
@@ -15,10 +15,6 @@ import ${mapperAnnotationClass.name};
 <#if mapperAnnotationClass??>
 @${mapperAnnotationClass.simpleName}
 </#if>
-<#if kotlin>
-interface ${table.mapperName} : ${superMapperClass}<${entity}>
-<#else>
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}PO> {
 
 }
-</#if>
