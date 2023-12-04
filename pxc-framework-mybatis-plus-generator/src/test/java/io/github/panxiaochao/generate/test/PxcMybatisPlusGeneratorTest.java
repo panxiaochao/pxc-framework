@@ -4,9 +4,9 @@ import io.github.panxiaochao.generate.enums.GenerateDbType;
 import io.github.panxiaochao.generate.tool.PxcMybatisPlusGeneratorTools;
 
 /**
- * {@code PxcMybatisPlusGeneratorTest}
  * <p>
- * description:
+ * 测试工具类.
+ * </p>
  *
  * @author Lypxc
  * @since 2023-02-15

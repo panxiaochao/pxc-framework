@@ -1,6 +1,6 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity}PO;
+import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
 
 /**
@@ -9,6 +9,6 @@ import ${superServiceClassPackage};
  * @author ${author}
  * @since ${date}
  */
-public interface I${table.serviceName} {
+public interface ${table.serviceName} {
 
 }

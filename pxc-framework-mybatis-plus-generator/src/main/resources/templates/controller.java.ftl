@@ -2,15 +2,15 @@ package ${package.Controller};
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import io.github.panxiaochao.${package.ModuleName}.application.service.${entity}AppService;
+import io.github.panxiaochao.${package.ModuleName}.service.${entity}Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
-import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.bind.annotation.RestController;
 <#else>
-import org.springframework.stereotype.Controller;
+    import org.springframework.stereotype.Controller;
 </#if>
 <#if superControllerClassPackage??>
-import ${superControllerClassPackage};
+    import ${superControllerClassPackage};
 </#if>
 
 /**
@@ -35,11 +35,5 @@ public class ${table.controllerName} extends ${superControllerClass} {
 <#else>
 public class ${table.controllerName} {
 </#if>
-
-    /**
-     * ${table.comment!} 服务
-     */
-    private final ${entity}AppService ${entity?uncap_first}AppService;
-
 }
 </#if>

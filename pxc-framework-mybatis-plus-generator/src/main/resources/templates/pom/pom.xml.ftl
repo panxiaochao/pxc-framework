@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.panxiaochao</groupId>
         <artifactId>pxc-spring-boot-starter-parent</artifactId>
-        <version>2.0.3</version>
+        <version>2022-2.7-1.1</version>
         <relativePath/>
     </parent>
 
@@ -24,7 +24,12 @@
         </dependency>
         <dependency>
             <groupId>io.github.panxiaochao</groupId>
-            <artifactId>pxc-framework-mybatis-plus</artifactId>
+            <artifactId>pxc-framework-springdoc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.3.1</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>

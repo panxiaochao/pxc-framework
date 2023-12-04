@@ -19,15 +19,25 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.IFill;
-import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.GlobalConfig;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.PackageConfig;
+import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.config.TemplateConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import com.baomidou.mybatisplus.generator.fill.Property;
 import io.github.panxiaochao.generate.enhance.EnhanceFreemarkerTemplateEngine;
 import io.github.panxiaochao.generate.enums.GenerateDbType;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -88,7 +98,7 @@ public class PxcMybatisPlusGeneratorTools {
 			globalConfigBuilder.enableSpringdoc();
 		}
 		globalConfigBuilder.author(builder.author)
-			.dateType(DateType.TIME_PACK)
+			.dateType(DateType.ONLY_DATE)
 			.commentDate(pattern)
 			.outputDir(builder.outputDir + "/src/main/java")
 			.disableOpenDir();
@@ -102,11 +112,6 @@ public class PxcMybatisPlusGeneratorTools {
 		packageConfigBuilder.parent(builder.parent)
 			.moduleName(builder.moduleName)
 			.entity(builder.entity)
-			.service("service")
-			.serviceImpl("service.impl")
-			.mapper("mapper")
-			.xml("mapper.xml")
-			.controller("controller")
 			.pathInfo(Collections.singletonMap(OutputFile.xml, builder.outputDir + "/src/main/resources/mapper"));
 	}
 
@@ -174,7 +179,7 @@ public class PxcMybatisPlusGeneratorTools {
 	 */
 	private void createTemplateConfig(TemplateConfig.Builder templateConfigBuilder, Builder builder) {
 		templateConfigBuilder.controller("/templates/controller.java")
-			.entity("/templates/entityPO.java")
+			.entity("/templates/entity.java")
 			.service("/templates/service.java")
 			.serviceImpl("/templates/serviceImpl.java")
 			.mapper("/templates/mapper.java")
@@ -334,7 +339,7 @@ public class PxcMybatisPlusGeneratorTools {
 
 		public Builder updateFields(List<String> updateFields) {
 			List<IFill> tableFills = new ArrayList<>();
-			updateFields.forEach(updateField -> tableFills.add(new Column(updateField, FieldFill.INSERT_UPDATE)));
+			updateFields.forEach(updateField -> tableFills.add(new Property(updateField, FieldFill.INSERT_UPDATE)));
 			this.updateFields.addAll(tableFills);
 			return this;
 		}
