@@ -101,6 +101,18 @@ public class R<T> {
 	}
 
 	/**
+	 * 成功
+	 * @param code 响应码
+	 * @param message 自定义消息
+	 * @param data 数据
+	 * @param <T> 数据类型
+	 * @return 成功的响应
+	 */
+	public static <T> R<T> ok(int code, String message, T data) {
+		return new R<>(code, message, data);
+	}
+
+	/**
 	 * 失败
 	 * @param <T> 数据类型
 	 * @return 失败的响应

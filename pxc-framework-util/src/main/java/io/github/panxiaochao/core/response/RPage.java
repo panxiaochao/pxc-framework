@@ -91,6 +91,19 @@ public class RPage<T> {
 	}
 
 	/**
+	 * 成功
+	 * @param code 响应码
+	 * @param message 自定义消息
+	 * @param pagination 分页
+	 * @param data 数据
+	 * @param <T> 数据类型
+	 * @return 成功的响应
+	 */
+	public static <T> RPage<T> ok(int code, String message, Pagination pagination, List<T> data) {
+		return new RPage<>(code, message, new PageResponse<>(pagination, data));
+	}
+
+	/**
 	 * 失败
 	 * @param <T> 数据类型
 	 * @return 失败的响应

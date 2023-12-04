@@ -19,21 +19,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * <p>
  * 请求分页参数
  * </p>
  *
- * @param <T> 泛型参数
  * @author Lypxc
  * @since 2021/12/3 17:51
  */
 @Getter
 @Setter
 @Schema(description = "请求分页参数")
-public class RequestPage<T> {
+public class RequestPage {
 
 	/**
 	 * 页号
@@ -46,18 +43,6 @@ public class RequestPage<T> {
 	 */
 	@Schema(description = "页数")
 	private long pageSize = 10;
-
-	/**
-	 * 获取排序信息
-	 */
-	@Schema(description = "排序字段")
-	private List<OrderItems> orderItems;
-
-	/**
-	 * 对象
-	 */
-	@Schema(description = "请求参数对象")
-	private T paramsObject;
 
 	/**
 	 * 是否查询总数
