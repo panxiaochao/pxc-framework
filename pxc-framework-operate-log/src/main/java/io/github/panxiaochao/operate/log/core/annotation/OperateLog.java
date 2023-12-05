@@ -15,7 +15,11 @@
  */
 package io.github.panxiaochao.operate.log.core.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * <p>
@@ -29,6 +33,11 @@ import java.lang.annotation.*;
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperateLog {
+
+	/**
+	 * 获取请求参数key, 支持 Spring EL 表达式, 例如 #id, #user.id
+	 */
+	String key() default "";
 
 	/**
 	 * 模块名
@@ -94,6 +103,10 @@ public @interface OperateLog {
 		 * 导入
 		 */
 		IMPORT,
+		/**
+		 * 登录
+		 */
+		LOGIN,
 		/**
 		 * 强退
 		 */

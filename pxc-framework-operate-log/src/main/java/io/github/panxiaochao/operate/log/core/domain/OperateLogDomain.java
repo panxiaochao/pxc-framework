@@ -73,6 +73,16 @@ public class OperateLogDomain implements Serializable {
 	private String requestContentType;
 
 	/**
+	 * 请求浏览器
+	 */
+	private String browser;
+
+	/**
+	 * 请求操作系统
+	 */
+	private String os;
+
+	/**
 	 * 请求Ip
 	 */
 	private String ip;
@@ -108,7 +118,12 @@ public class OperateLogDomain implements Serializable {
 	private Object responseData;
 
 	/**
-	 * 执行耗时
+	 * 自定义参数值
+	 */
+	private Object value;
+
+	/**
+	 * 执行耗时, 单位毫秒
 	 */
 	private long costTime;
 

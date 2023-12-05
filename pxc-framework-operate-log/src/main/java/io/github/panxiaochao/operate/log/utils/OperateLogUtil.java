@@ -15,12 +15,26 @@
  */
 package io.github.panxiaochao.operate.log.utils;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.github.panxiaochao.core.utils.*;
 import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
 import io.github.panxiaochao.operate.log.core.context.MethodCostContext;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParserContext;
+import org.springframework.expression.common.TemplateParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -32,6 +46,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -43,6 +58,31 @@ import java.util.StringJoiner;
  * @since 2023-07-03
  */
 public class OperateLogUtil {
+
+	/**
+	 * LOGGER OperateLogUtil.class
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperateLogUtil.class);
+
+	/**
+	 * 定义EL表达式解析器
+	 */
+	private static final ExpressionParser EXPRESSIONPARSER = new SpelExpressionParser();
+
+	/**
+	 * 定义EL解析模版
+	 */
+	private static final ParserContext PARSERCONTEXT = new TemplateParserContext();
+
+	/**
+	 * 定义EL上下文对象进行解析
+	 */
+	private static final EvaluationContext EVALUATIONCONTEXT = new StandardEvaluationContext();
+
+	/**
+	 * 方法参数解析器
+	 */
+	private static final ParameterNameDiscoverer PARAMETERNAMEDISCOVERER = new DefaultParameterNameDiscoverer();
 
 	/**
 	 * 处理日志方式
@@ -82,13 +122,32 @@ public class OperateLogUtil {
 		else {
 			operateLogDomain.setCode(1);
 		}
+		// 设置请求浏览器和操作系统
+		String uaString = RequestUtil.getRequest().getHeader("User-Agent").toLowerCase();
+		UserAgent userAgent = UserAgentUtil.parse(uaString);
+		operateLogDomain.setBrowser(userAgent.getBrowser().toString() + " " + userAgent.getVersion());
+		operateLogDomain.setOs(userAgent.getPlatform().toString() + " " + userAgent.getOs().toString());
 		// 设置请求参数
 		if (operateLog.saveReqParams()) {
 			setRequestParam(args, operateLogDomain, operateLog.excludeParamNames());
 		}
 		// 设置返回值
 		if (operateLog.saveResData() && ObjectUtil.isNotEmpty(returnValue)) {
+			JsonNode jsonNode = JacksonUtil.transferToJsonNode(returnValue);
+			if (ObjectUtil.isNotEmpty(jsonNode)) {
+				// 兼容返回是 0 或者 200 的情况
+				if (jsonNode.get("code") != null && jsonNode.get("code").asInt() != 0
+						&& jsonNode.get("code").asInt() != 200) {
+					operateLogDomain.setCode(0);
+					operateLogDomain.setErrorMessage(jsonNode.get("message").asText());
+				}
+			}
 			operateLogDomain.setResponseData(StrUtil.substring(JacksonUtil.toString(returnValue), 0, 2000));
+		}
+		// 设置参数值
+		String key = operateLog.key();
+		if (StringUtils.hasText(key)) {
+			operateLogDomain.setValue(parseExpression(method, joinPoint, key));
 		}
 		// 设置消耗时间
 		operateLogDomain.setCostTime(System.currentTimeMillis() - MethodCostContext.getMethodCostTime());
@@ -96,6 +155,41 @@ public class OperateLogUtil {
 		MethodCostContext.removeMethodCostTime();
 		// 发布事件保存数据库
 		SpringContextUtil.publishEvent(operateLogDomain);
+	}
+
+	/**
+	 * 解析参数
+	 * @param method Method
+	 * @param joinPoint JoinPoint
+	 * @param key 参数key
+	 * @return 解析值
+	 */
+	private static String parseExpression(Method method, JoinPoint joinPoint, String key) {
+		if (StrUtil.containsAny(key, StringPools.HASH)) {
+			// 参数
+			Object[] args = joinPoint.getArgs();
+			// 获取方法上参数的名称
+			String[] parameterNames = PARAMETERNAMEDISCOVERER.getParameterNames(method);
+			Objects.requireNonNull(parameterNames, "限流Key解析异常, 请确认方法体是否存在定义参数！");
+			for (int i = 0; i < parameterNames.length; i++) {
+				EVALUATIONCONTEXT.setVariable(parameterNames[i], args[i]);
+			}
+			try {
+				Expression expression;
+				if (StringUtils.startsWithIgnoreCase(key, PARSERCONTEXT.getExpressionPrefix())
+						&& StringUtils.endsWithIgnoreCase(key, PARSERCONTEXT.getExpressionSuffix())) {
+					expression = EXPRESSIONPARSER.parseExpression(key, PARSERCONTEXT);
+				}
+				else {
+					expression = EXPRESSIONPARSER.parseExpression(key);
+				}
+				return expression.getValue(EVALUATIONCONTEXT, String.class);
+			}
+			catch (Exception e) {
+				LOGGER.error("解析参数出错", e);
+			}
+		}
+		return StrUtil.EMPTY;
 	}
 
 	/**

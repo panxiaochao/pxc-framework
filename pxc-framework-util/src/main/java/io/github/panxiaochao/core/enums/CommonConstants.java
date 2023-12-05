@@ -28,12 +28,12 @@ public interface CommonConstants {
 	/**
 	 * 通用成功标识
 	 */
-	Integer OK = 0;
+	Integer OK = 1;
 
 	/**
 	 * 通用失败标识
 	 */
-	Integer FAIL = 1;
+	Integer FAIL = 0;
 
 	/**
 	 * 是否为系统默认（是）
