@@ -4,6 +4,7 @@ import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.MapUtil;
 import io.github.panxiaochao.core.utils.ObjectUtil;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -173,28 +174,46 @@ public class TreeBuilder<E> implements Serializable {
 
 	/**
 	 * <p>
-	 * 快速构建树, 不支持层级裁剪, deep属性无效，否则使用{@link #build()}方法
+	 * 快速构建树
 	 * </p>
 	 * @return this
 	 */
 	public TreeBuilder<E> fastBuild() {
 		buildTreeMap();
+		// -1 默认不剪切
+		if (this.deep > -1) {
+			cutTree();
+		}
 		this.isBuild = true;
 		this.treeMap.clear();
 		return this;
 	}
 
+	private void cutTree() {
+		cutTree(this.root, 0, this.deep);
+	}
+
 	/**
-	 * <p>
-	 * 构建树
-	 * </p>
-	 * @return this
+	 * 剪切层级
+	 * @param tree 树节点
+	 * @param curDepp 当前层级
+	 * @param maxDeep 最大层级
 	 */
-	public TreeBuilder<E> build() {
-		buildTreeMap();
-		this.isBuild = true;
-		this.treeMap.clear();
-		return this;
+	private void cutTree(Tree<E> tree, int curDepp, int maxDeep) {
+		if (null == tree) {
+			return;
+		}
+		if (curDepp == maxDeep) {
+			tree.setChildren(new ArrayList<>());
+			return;
+		}
+
+		final List<Tree<E>> children = tree.getChildren();
+		if (!CollectionUtils.isEmpty(children)) {
+			for (Tree<E> child : children) {
+				cutTree(child, curDepp + 1, maxDeep);
+			}
+		}
 	}
 
 	/**
@@ -250,7 +269,7 @@ public class TreeBuilder<E> implements Serializable {
 			extraMap.put("c", new ArrayList<>());
 		}));
 
-		List<Tree<String>> treeSingle = TreeBuilder.of("0").append(nodeList).fastBuild().toTreeList();
+		List<Tree<String>> treeSingle = TreeBuilder.of("0").append(nodeList).deep(1).fastBuild().toTreeList();
 
 		System.out.println(JacksonUtil.toString(treeSingle));
 
