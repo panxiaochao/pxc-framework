@@ -53,7 +53,19 @@ public class TreeBuilder<E> implements Serializable {
 	 * @return TreeBuilder
 	 */
 	public static <E> TreeBuilder<E> of(E rootId, boolean isNullChildrenAsEmpty) {
-		return new TreeBuilder<>(rootId, isNullChildrenAsEmpty, null);
+		return of(rootId, isNullChildrenAsEmpty, null);
+	}
+
+	/**
+	 * 创建Tree构建器
+	 * @param rootId 根节点ID
+	 * @param isNullChildrenAsEmpty 是否子节点没有数据的情况下，给一个默认空集，默认 false
+	 * @param properties 树节点属性配置
+	 * @param <E> ID类型
+	 * @return TreeBuilder
+	 */
+	public static <E> TreeBuilder<E> of(E rootId, boolean isNullChildrenAsEmpty, TreeNodeProperties properties) {
+		return new TreeBuilder<>(rootId, isNullChildrenAsEmpty, properties);
 	}
 
 	/**
@@ -71,7 +83,7 @@ public class TreeBuilder<E> implements Serializable {
 	}
 
 	/**
-	 * 循环深度层次，默认3层, 'deep = -1' 不受限制
+	 * 循环深度层次, 默认-1, 不受限制
 	 * @param deep 深度
 	 * @return this
 	 */
