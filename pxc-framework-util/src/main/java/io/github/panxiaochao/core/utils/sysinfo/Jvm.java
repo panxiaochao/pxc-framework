@@ -17,6 +17,7 @@ package io.github.panxiaochao.core.utils.sysinfo;
 
 import io.github.panxiaochao.core.utils.ArithmeticUtil;
 import io.github.panxiaochao.core.utils.date.DateUtil;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.lang.management.ManagementFactory;
@@ -31,6 +32,7 @@ import java.util.Date;
  * @since 2023-07-07
  */
 @Setter
+@Getter
 public class Jvm {
 
 	/**
@@ -51,7 +53,12 @@ public class Jvm {
 	/**
 	 * JDK版本
 	 */
-	private String version;
+	private String javaVersion;
+
+	/**
+	 * JVM版本
+	 */
+	private String jvmVersion;
 
 	/**
 	 * JDK路径
@@ -83,14 +90,6 @@ public class Jvm {
 	 */
 	public String getName() {
 		return ManagementFactory.getRuntimeMXBean().getVmName();
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getHome() {
-		return home;
 	}
 
 	/**

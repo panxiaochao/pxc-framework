@@ -17,6 +17,7 @@ package io.github.panxiaochao.core.utils.sysinfo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -28,6 +29,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 public class SysInfo {
 
 	/**

@@ -15,7 +15,12 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import io.github.panxiaochao.core.utils.sysinfo.*;
+import io.github.panxiaochao.core.utils.sysinfo.Cpu;
+import io.github.panxiaochao.core.utils.sysinfo.DiskInfo;
+import io.github.panxiaochao.core.utils.sysinfo.Jvm;
+import io.github.panxiaochao.core.utils.sysinfo.Mem;
+import io.github.panxiaochao.core.utils.sysinfo.ServerInfo;
+import io.github.panxiaochao.core.utils.sysinfo.SysInfo;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
@@ -117,6 +122,7 @@ public class SystemServerUtil {
 				- prevTicks[CentralProcessor.TickType.STEAL.getIndex()];
 		long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
 		Cpu cpu = new Cpu();
+		cpu.setCpuName(processor.getProcessorIdentifier().getName());
 		cpu.setCpuNum(processor.getLogicalProcessorCount());
 		cpu.setTotal(totalCpu);
 		cpu.setSys(cSys);
@@ -151,8 +157,9 @@ public class SystemServerUtil {
 		jvm.setTotal(Runtime.getRuntime().totalMemory());
 		jvm.setMax(Runtime.getRuntime().maxMemory());
 		jvm.setFree(Runtime.getRuntime().freeMemory());
-		jvm.setVersion(props.getProperty("java.version"));
+		jvm.setJavaVersion(props.getProperty("java.version"));
 		jvm.setHome(props.getProperty("java.home"));
+		jvm.setJvmVersion(props.getProperty("java.vm.version"));
 		return jvm;
 	}
 
@@ -168,7 +175,7 @@ public class SystemServerUtil {
 		sys.setComputerIp(IpUtil.getHostIp());
 		sys.setDns(Arrays.toString(networkParams.getDnsServers()));
 		sys.setGateway(networkParams.getIpv4DefaultGateway());
-		sys.setOsName(props.getProperty("os.name"));
+		sys.setOsName(props.getProperty("os.name") + " " + props.getProperty("os.version"));
 		sys.setOsArch(props.getProperty("os.arch"));
 		sys.setUserDir(props.getProperty("user.dir"));
 		return sys;
@@ -224,13 +231,15 @@ public class SystemServerUtil {
 		}
 	}
 
-	// public static void main(String[] args) {
-	// Properties props = System.getProperties();
-	// //遍历所有的属性
-	// for (String key : props.stringPropertyNames()) {
-	// //输出对应的键和值
-	// System.out.println(key + " = " + props.getProperty(key));
-	// }
-	// }
+//	public static void main(String[] args) {
+//		System.out.println(SystemServerUtil.INSTANCE().ofSysInfo());
+//
+//		Properties props = System.getProperties();
+//		// 遍历所有的属性
+//		for (String key : props.stringPropertyNames()) {
+//			// 输出对应的键和值
+//			System.out.println(key + " = " + props.getProperty(key));
+//		}
+//	}
 
 }

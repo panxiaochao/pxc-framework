@@ -16,6 +16,7 @@
 package io.github.panxiaochao.core.utils.sysinfo;
 
 import io.github.panxiaochao.core.utils.ArithmeticUtil;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -28,8 +29,14 @@ import lombok.ToString;
  * @since 2023-07-07
  */
 @Setter
+@Getter
 @ToString
 public class Cpu {
+
+	/**
+	 * CPU名称
+	 */
+	private String cpuName;
 
 	/**
 	 * 核心数
@@ -60,10 +67,6 @@ public class Cpu {
 	 * CPU当前空闲率
 	 */
 	private double free;
-
-	public int getCpuNum() {
-		return cpuNum;
-	}
 
 	public double getTotal() {
 		return ArithmeticUtil.round(ArithmeticUtil.mul(total, 100), 2);
