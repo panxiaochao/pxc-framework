@@ -394,7 +394,6 @@ public class EmailUtil {
 	 * @param isHtml 是否为HTML格式
 	 * @param files 附件列表
 	 * @return message-id
-	 * @since 4.6.3
 	 */
 	private static String send(MailAccount mailAccount, boolean useGlobalSession, Collection<String> tos,
 			Collection<String> ccs, Collection<String> bccs, String subject, String content,

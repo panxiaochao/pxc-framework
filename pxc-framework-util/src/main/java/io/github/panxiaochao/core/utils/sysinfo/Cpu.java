@@ -39,9 +39,29 @@ public class Cpu {
 	private String cpuName;
 
 	/**
-	 * 核心数
+	 * 物理CPU数
 	 */
-	private int cpuNum;
+	private int physicalPackageCount;
+
+	/**
+	 * 物理CPU核心数
+	 */
+	private int physicalProcessorCount;
+
+	/**
+	 * 能效核心数
+	 */
+	private int efficiencyCount;
+
+	/**
+	 * 逻辑处理核心数
+	 */
+	private int logicalProcessorCount;
+
+	/**
+	 * 供应商
+	 */
+	private String vendor;
 
 	/**
 	 * CPU总的使用率
@@ -56,7 +76,7 @@ public class Cpu {
 	/**
 	 * CPU用户使用率
 	 */
-	private double used;
+	private double user;
 
 	/**
 	 * CPU当前等待率
@@ -68,16 +88,21 @@ public class Cpu {
 	 */
 	private double free;
 
-	public double getTotal() {
-		return ArithmeticUtil.round(ArithmeticUtil.mul(total, 100), 2);
-	}
+	/**
+	 * CPU使用率：100 - 当前空闲
+	 */
+	private double usage;
+
+	// public double getTotal() {
+	// return ArithmeticUtil.round(ArithmeticUtil.mul(total, 100), 2);
+	// }
 
 	public double getSys() {
 		return ArithmeticUtil.round(ArithmeticUtil.mul(sys / total, 100), 2);
 	}
 
-	public double getUsed() {
-		return ArithmeticUtil.round(ArithmeticUtil.mul(used / total, 100), 2);
+	public double getUser() {
+		return ArithmeticUtil.round(ArithmeticUtil.mul(user / total, 100), 2);
 	}
 
 	public double getWait() {
@@ -86,6 +111,10 @@ public class Cpu {
 
 	public double getFree() {
 		return ArithmeticUtil.round(ArithmeticUtil.mul(free / total, 100), 2);
+	}
+
+	public double getUsage() {
+		return ArithmeticUtil.sub(100D, this.getFree());
 	}
 
 }

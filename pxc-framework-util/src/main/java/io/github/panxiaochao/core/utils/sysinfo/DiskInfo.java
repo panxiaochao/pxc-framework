@@ -17,6 +17,7 @@ package io.github.panxiaochao.core.utils.sysinfo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -28,6 +29,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class DiskInfo {
 
 	/**
@@ -48,17 +50,17 @@ public class DiskInfo {
 	/**
 	 * 总大小
 	 */
-	private String total;
+	private double total;
 
 	/**
 	 * 剩余大小
 	 */
-	private String free;
+	private double free;
 
 	/**
 	 * 已经使用量
 	 */
-	private String used;
+	private double used;
 
 	/**
 	 * 资源的使用率

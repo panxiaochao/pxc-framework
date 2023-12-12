@@ -54,7 +54,12 @@ public class ServerInfo {
 	private SysInfo sys = new SysInfo();
 
 	/**
-	 * 磁盘 相关信息
+	 * 磁盘存储 相关信息
+	 */
+	private DiskInfo diskInfo = new DiskInfo();
+
+	/**
+	 * 磁盘文件 相关信息
 	 */
 	private List<DiskInfo> diskInfos = new LinkedList<>();
 

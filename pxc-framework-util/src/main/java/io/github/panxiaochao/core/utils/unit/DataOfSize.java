@@ -272,8 +272,6 @@ public final class DataOfSize implements Comparable<DataOfSize>, Serializable {
 
 	/**
 	 * Static nested class to support lazy loading of the {@link #PATTERN}.
-	 *
-	 * @since 5.3.21
 	 */
 	private static class DataSizeUtils {
 

@@ -48,9 +48,14 @@ public class SysInfo {
 	private String dns;
 
 	/**
-	 * 默认网关
+	 * IPV4网关
 	 */
-	private String gateway;
+	private String ipv4Gateway;
+
+	/**
+	 * IPV6网关
+	 */
+	private String ipv6Gateway;
 
 	/**
 	 * 项目路径
