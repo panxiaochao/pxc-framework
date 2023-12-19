@@ -53,6 +53,6 @@ public interface CommonConstants {
 	/**
 	 * 菜单根节点
 	 */
-	Long MENU_TREE_ROOT_ID = 0L;
+	Long TREE_ROOT_ID = 0L;
 
 }

@@ -319,8 +319,7 @@ public class SystemServerUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(SystemServerUtil.INSTANCE().ofSysInfo());
-
+		// System.out.println(SystemServerUtil.INSTANCE().ofSysInfo());
 		// Properties props = System.getProperties();
 		// // 遍历所有的属性
 		// for (String key : props.stringPropertyNames()) {

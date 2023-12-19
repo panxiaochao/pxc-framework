@@ -33,7 +33,7 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 	 * 无参构造
 	 */
 	public Tree(TreeNodeProperties properties) {
-		this.treeNodeProperties = ObjectUtil.getIfNull(properties, TreeNodeProperties.DEFAULT_PROPERTIES);
+		this.treeNodeProperties = ObjectUtil.getIfNull(properties, TreeNodeProperties.builder());
 	}
 
 	/**

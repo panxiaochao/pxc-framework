@@ -108,9 +108,9 @@ public @interface OperateLog {
 		 */
 		LOGIN,
 		/**
-		 * 强退
+		 * 登出
 		 */
-		FORCE,
+		LOGOUT,
 		/**
 		 * 生成代码
 		 */

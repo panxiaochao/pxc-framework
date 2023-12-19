@@ -17,8 +17,6 @@ public class TreeNodeProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static TreeNodeProperties DEFAULT_PROPERTIES = new TreeNodeProperties();
-
 	private String idKey = "id";
 
 	private String parentIdKey = "parentId";
@@ -28,6 +26,13 @@ public class TreeNodeProperties implements Serializable {
 	private String weightKey = "weight";
 
 	private String labelKey = "name";
+
+	/**
+	 * 静态构造
+	 */
+	public static TreeNodeProperties builder() {
+		return new TreeNodeProperties();
+	}
 
 	/**
 	 * 设置输出idKey别名
@@ -64,7 +69,7 @@ public class TreeNodeProperties implements Serializable {
 	 * @param weightKey 别名weight的key
 	 * @return this
 	 */
-	public TreeNodeProperties setWeightKey(String weightKey) {
+	public TreeNodeProperties weightKey(String weightKey) {
 		this.weightKey = weightKey;
 		return this;
 	}
@@ -74,7 +79,7 @@ public class TreeNodeProperties implements Serializable {
 	 * @param labelKey 别名label的key
 	 * @return this
 	 */
-	public TreeNodeProperties setLabelKey(String labelKey) {
+	public TreeNodeProperties labelKey(String labelKey) {
 		this.labelKey = labelKey;
 		return this;
 	}
