@@ -1,4 +1,4 @@
-package io.github.panxiaochao.core.utils.tree;
+package io.github.panxiaochao.core.component.tree;
 
 import io.github.panxiaochao.core.utils.ArrayUtil;
 import io.github.panxiaochao.core.utils.ObjectUtil;

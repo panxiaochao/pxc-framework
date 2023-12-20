@@ -1,5 +1,8 @@
-package io.github.panxiaochao.core.utils.tree;
+package io.github.panxiaochao.core.component.tree;
 
+import io.github.panxiaochao.core.component.select.Select;
+import io.github.panxiaochao.core.component.select.SelectBuilder;
+import io.github.panxiaochao.core.component.select.SelectOption;
 import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.MapUtil;
 import io.github.panxiaochao.core.utils.ObjectUtil;
@@ -34,6 +37,8 @@ public class TreeBuilder<E> implements Serializable {
 	private int deep;
 
 	private final boolean isNullChildrenAsEmpty;
+
+	private boolean isAsc;
 
 	/**
 	 * 创建Tree构建器
@@ -80,6 +85,7 @@ public class TreeBuilder<E> implements Serializable {
 		this.treeMap = new LinkedHashMap<>();
 		this.deep = -1;
 		this.isNullChildrenAsEmpty = isNullChildrenAsEmpty;
+		this.isAsc = true;
 	}
 
 	/**
@@ -89,6 +95,16 @@ public class TreeBuilder<E> implements Serializable {
 	 */
 	public TreeBuilder<E> deep(int deep) {
 		this.deep = deep;
+		return this;
+	}
+
+	/**
+	 * 是否升序，默认升序
+	 * @param isAsc 是否升序
+	 * @return this
+	 */
+	public TreeBuilder<E> asc(boolean isAsc) {
+		this.isAsc = isAsc;
 		return this;
 	}
 
@@ -143,8 +159,8 @@ public class TreeBuilder<E> implements Serializable {
 
 	/**
 	 * 来源数据-》目标数据
-	 * @param source 来源源数据实体
-	 * @param target 目标树节点实体
+	 * @param source 来源数据实体
+	 * @param target 目标节点实体
 	 */
 	private <T> void parseTo(TreeNode<T> source, Tree<E> target) {
 		target.setId((E) source.getId());
@@ -165,7 +181,7 @@ public class TreeBuilder<E> implements Serializable {
 		if (MapUtil.isEmpty(this.treeMap)) {
 			return;
 		}
-		final Map<E, Tree<E>> eTreeMap = MapUtil.comparingByValue(this.treeMap, false);
+		final Map<E, Tree<E>> eTreeMap = MapUtil.comparingByValue(this.treeMap, !isAsc);
 		E parentId;
 		for (Tree<E> node : eTreeMap.values()) {
 			if (null == node) {
@@ -283,7 +299,21 @@ public class TreeBuilder<E> implements Serializable {
 
 		List<Tree<String>> treeSingle = TreeBuilder.of("0").append(nodeList).deep(1).fastBuild().toTreeList();
 
-		System.out.println(JacksonUtil.toString(treeSingle));
+		// System.out.println(JacksonUtil.toString(treeSingle));
+
+		// 构建 SelectOption 列表
+		List<SelectOption<String>> selectOptionsList = new ArrayList<>();
+		selectOptionsList.add(SelectOption.of("0", "张三0", 5));
+		selectOptionsList.add(SelectOption.of("1", "张三1", 4));
+		selectOptionsList.add(SelectOption.of("2", "张三2", 3));
+		selectOptionsList.add(SelectOption.of("3", "张三3", 2));
+		selectOptionsList.add(SelectOption.of("4", "张三4", 7));
+		selectOptionsList.add(SelectOption.of("5", "张三5", 8));
+		selectOptionsList.add(SelectOption.of("6", "张三6", 1));
+
+		List<Select<String>> select = SelectBuilder.of(selectOptionsList).desc().fastBuild().toSelectList();
+
+		System.out.println(JacksonUtil.toString(select));
 
 	}
 
