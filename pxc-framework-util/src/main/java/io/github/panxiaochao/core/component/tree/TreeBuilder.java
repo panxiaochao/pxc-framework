@@ -38,7 +38,7 @@ public class TreeBuilder<E> implements Serializable {
 
 	private final boolean isNullChildrenAsEmpty;
 
-	private boolean isAsc;
+	private boolean isDesc;
 
 	/**
 	 * 创建Tree构建器
@@ -85,7 +85,7 @@ public class TreeBuilder<E> implements Serializable {
 		this.treeMap = new LinkedHashMap<>();
 		this.deep = -1;
 		this.isNullChildrenAsEmpty = isNullChildrenAsEmpty;
-		this.isAsc = true;
+		this.isDesc = false;
 	}
 
 	/**
@@ -99,12 +99,11 @@ public class TreeBuilder<E> implements Serializable {
 	}
 
 	/**
-	 * 是否升序，默认升序
-	 * @param isAsc 是否升序
+	 * 是否倒序，默认升序
 	 * @return this
 	 */
-	public TreeBuilder<E> asc(boolean isAsc) {
-		this.isAsc = isAsc;
+	public TreeBuilder<E> desc() {
+		this.isDesc = true;
 		return this;
 	}
 
@@ -181,7 +180,7 @@ public class TreeBuilder<E> implements Serializable {
 		if (MapUtil.isEmpty(this.treeMap)) {
 			return;
 		}
-		final Map<E, Tree<E>> eTreeMap = MapUtil.comparingByValue(this.treeMap, !isAsc);
+		final Map<E, Tree<E>> eTreeMap = MapUtil.comparingByValue(this.treeMap, isDesc);
 		E parentId;
 		for (Tree<E> node : eTreeMap.values()) {
 			if (null == node) {

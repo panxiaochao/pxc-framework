@@ -185,9 +185,7 @@ public class SelectBuilder<E> implements Serializable {
 	}
 
 	/**
-	 * <p>
 	 * 快速构建下拉菜单
-	 * </p>
 	 * @return this
 	 */
 	public SelectBuilder<E> fastBuild() {
@@ -195,15 +193,6 @@ public class SelectBuilder<E> implements Serializable {
 		this.isBuild = true;
 		this.selectMap.clear();
 		return this;
-	}
-
-	/**
-	 * 构建单实体下拉菜单
-	 * @return 构建下拉菜单实体
-	 */
-	public Select<E> toSelect() {
-		Assert.isTrue(isBuild, "Current select has not been built.");
-		return this.root;
 	}
 
 	/**
