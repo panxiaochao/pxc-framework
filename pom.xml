@@ -81,13 +81,13 @@
         <spring-boot.version>2.7.18</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <lombok.version>1.18.30</lombok.version>
-        <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
+        <transmittable-thread-local.version>2.14.5</transmittable-thread-local.version>
         <oshi.version>6.4.8</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
         <commons-io.version>2.13.0</commons-io.version>
-        <hutool.version>5.8.23</hutool.version>
+        <hutool.version>5.8.24</hutool.version>
         <zxing.version>3.5.2</zxing.version>
 
         <!-- 插件版本 -->
