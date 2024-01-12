@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-trace-log</artifactId>
-    <description>[2.0.4]pxc framework trace log 日志链路追踪模块</description>
+    <description>[2.0.5-SNAPSHOT]pxc framework trace log 日志链路追踪模块</description>
 
     <dependencies>
         <!-- 核心模块 -->

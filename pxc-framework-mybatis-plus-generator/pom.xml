@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-mybatis-plus-generator</artifactId>
-    <description>[2.0.4]pxc framework mybatis plus generator 代码构建模块</description>
+    <description>[2.0.5-SNAPSHOT]pxc framework mybatis plus generator 代码构建模块</description>
 
     <dependencies>
         <dependency>
