@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.enums;
+package io.github.panxiaochao.core.constants;
 
 /**
  * <p>
@@ -23,7 +23,7 @@ package io.github.panxiaochao.core.enums;
  * @author Lypxc
  * @since 2023-11-30
  */
-public interface CommonConstants {
+public interface CommonConstant {
 
 	/**
 	 * 通用成功标识

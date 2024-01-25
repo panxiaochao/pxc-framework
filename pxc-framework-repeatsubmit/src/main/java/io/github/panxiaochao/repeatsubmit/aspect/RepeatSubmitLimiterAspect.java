@@ -19,7 +19,11 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 import io.github.panxiaochao.core.exception.ServerRuntimeException;
 import io.github.panxiaochao.core.ienums.IEnum;
 import io.github.panxiaochao.core.response.R;
-import io.github.panxiaochao.core.utils.*;
+import io.github.panxiaochao.core.utils.ArrayUtil;
+import io.github.panxiaochao.core.utils.JacksonUtil;
+import io.github.panxiaochao.core.utils.ObjectUtil;
+import io.github.panxiaochao.core.utils.RequestUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.redis.utils.RedissonUtil;
 import io.github.panxiaochao.repeatsubmit.annotation.RepeatSubmitLimiter;
 import lombok.AllArgsConstructor;
@@ -183,7 +187,7 @@ public class RepeatSubmitLimiterAspect {
 	private static boolean isFilterObject(final Object o) {
 		Class<?> clazz = o.getClass();
 		if (clazz.isArray()) {
-			return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
+			return MultipartFile.class.isAssignableFrom(clazz.getComponentType());
 		}
 		else if (Collection.class.isAssignableFrom(clazz)) {
 			Collection<?> collection = (Collection<?>) o;

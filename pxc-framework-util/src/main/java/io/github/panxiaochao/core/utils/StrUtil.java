@@ -549,15 +549,15 @@ public class StrUtil {
 	 * </p>
 	 *
 	 * <pre>
-	 * StrUtil.defaultString(null)  = ""
-	 * StrUtil.defaultString("")    = ""
-	 * StrUtil.defaultString("bat") = "bat"
+	 * StrUtil.defaultIfNull(null)  = ""
+	 * StrUtil.defaultIfNull("")    = ""
+	 * StrUtil.defaultIfNull("bat") = "bat"
 	 * </pre>
 	 * @param str the String to check, may be null
 	 * @return the passed in String, or the empty String if it was {@code null}
 	 */
-	public static String defaultString(final String str) {
-		return defaultString(str, EMPTY);
+	public static String defaultIfNull(final String str) {
+		return defaultIfNull(str, EMPTY);
 	}
 
 	/**
@@ -567,17 +567,17 @@ public class StrUtil {
 	 * </p>
 	 *
 	 * <pre>
-	 * StrUtil.defaultString(null, "NULL")  = "NULL"
-	 * StrUtil.defaultString("", "NULL")    = ""
-	 * StrUtil.defaultString("bat", "NULL") = "bat"
+	 * StrUtil.defaultIfNull(null, "NULL")  = "NULL"
+	 * StrUtil.defaultIfNull("", "NULL")    = ""
+	 * StrUtil.defaultIfNull("bat", "NULL") = "bat"
 	 * </pre>
 	 * @param str the String to check, may be null
 	 * @param defaultStr the default String to return if the input is {@code null}, may be
 	 * null
 	 * @return the passed in String, or the default if it was {@code null}
 	 */
-	public static String defaultString(final String str, final String defaultStr) {
-		return str == null ? defaultStr : str;
+	public static String defaultIfNull(final String str, final String defaultStr) {
+		return null == str ? defaultStr : str;
 	}
 
 	/**

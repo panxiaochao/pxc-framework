@@ -92,6 +92,10 @@ public @interface OperateLog {
 		 */
 		DELETE,
 		/**
+		 * 查询
+		 */
+		QUERY,
+		/**
 		 * 授权
 		 */
 		GRANT,

@@ -143,8 +143,6 @@ public class ThreadPoolAutoConfiguration {
 	 * 定时任务线程池配置
 	 */
 	@Bean
-	// @ConditionalOnProperty(prefix = "spring.pxc-framework.task-scheduler", name =
-	// "enabled", havingValue = "true")
 	public TaskScheduler taskScheduler(PxcFrameWorkProperties pxcFrameWorkProperties) {
 		PxcFrameWorkProperties.TaskSchedulerConfig taskSchedulerConfig = pxcFrameWorkProperties.getTaskScheduler();
 		ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
