@@ -46,18 +46,18 @@ public abstract class BasePo implements Serializable {
 	private LocalDateTime createTime;
 
 	/**
-	 * 创建人
-	 */
-	// @Schema(description = "创建人")
-	// @TableField(value = "CREATE_ID", fill = FieldFill.INSERT)
-	// private Long createId;
-
-	/**
 	 * 更新时间
 	 */
 	@Schema(description = "更新时间")
 	@TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
 	private LocalDateTime updateTime;
+
+	/**
+	 * 创建人
+	 */
+	// @Schema(description = "创建人")
+	// @TableField(value = "CREATE_ID", fill = FieldFill.INSERT)
+	// private Long createId;
 
 	/**
 	 * 更新人

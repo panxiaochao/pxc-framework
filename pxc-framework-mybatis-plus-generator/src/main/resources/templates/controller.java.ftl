@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import io.github.panxiaochao.${package.ModuleName}.service.${entity}Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
-    import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController;
 <#else>
-    import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 </#if>
 <#if superControllerClassPackage??>
-    import ${superControllerClassPackage};
+import ${superControllerClassPackage};
 </#if>
 
 /**

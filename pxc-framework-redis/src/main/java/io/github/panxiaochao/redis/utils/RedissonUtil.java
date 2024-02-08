@@ -19,8 +19,6 @@ import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.StringPools;
-import io.github.panxiaochao.redis.utils.function.RLockTryFail;
-import io.github.panxiaochao.redis.utils.function.RLockTrySuccess;
 import org.redisson.api.*;
 import org.redisson.api.geo.GeoSearchArgs;
 import org.redisson.codec.JsonJacksonCodec;
@@ -28,7 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -202,9 +204,9 @@ public class RedissonUtil {
 	 * @param rateInterval 速率间隔
 	 * @return -1 表示失败
 	 */
-	public long setRateLimiter(String key, RateType rateType, long rate, long rateInterval) {
+	public long tryRateLimiter(String key, RateType rateType, long rate, long rateInterval) {
 		RRateLimiter rateLimiter = getRRateLimiter(key);
-		boolean trySetRateSuccess = rateLimiter.trySetRate(rateType, rate, rateInterval, RateIntervalUnit.SECONDS);
+		boolean trySetRateSuccess = rateLimiter.trySetRate(rateType, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
 		// 第一次成功 拿锁后进行设置过期时间
 		if (trySetRateSuccess) {
 			// 设置过期时间，和速率一样，防止缓存残留
@@ -738,26 +740,6 @@ public class RedissonUtil {
 	// ------------------------------- 可重入锁 类型操作 --------------------------------
 
 	/**
-	 * tryLock by lockName.
-	 * @param lockName the lock name
-	 * @param waitTime the maximum time to acquire the lock
-	 * @param leaseTime lease time
-	 * @param unit time unit
-	 * @return <code>true</code> if lock is successfully acquired, otherwise
-	 * <code>false</code> if lock is already set.
-	 */
-	public boolean tryLock(String lockName, long waitTime, long leaseTime, TimeUnit unit) {
-		boolean tryLockSuccess = false;
-		try {
-			tryLockSuccess = rLock(lockName).tryLock(waitTime, leaseTime, unit);
-		}
-		catch (InterruptedException e) {
-			LOGGER.error("Exception tryLock", e);
-		}
-		return tryLockSuccess;
-	}
-
-	/**
 	 * tryLock by RLock.
 	 * @param lock the RLock object
 	 * @param waitTime the maximum time to acquire the lock
@@ -785,36 +767,6 @@ public class RedissonUtil {
 		// 是否上锁 && 是否同一个线程
 		if (lock.isLocked() && lock.isHeldByCurrentThread()) {
 			lock.unlock();
-		}
-	}
-
-	/**
-	 * tryLock by lockName.
-	 * @param lockName the lock name
-	 * @param waitTime the maximum time to acquire the lock
-	 * @param leaseTime lease time
-	 * @param unit time unit
-	 * @param rLockTrySuccess the customize lock success handle
-	 * @param rLockTryFail the customize lock error handle
-	 */
-	public void tryLock(String lockName, long waitTime, long leaseTime, TimeUnit unit, RLockTrySuccess rLockTrySuccess,
-			RLockTryFail rLockTryFail) {
-		boolean tryLockSuccess;
-		RLock rLock = rLock(lockName);
-		try {
-			tryLockSuccess = rLock.tryLock(waitTime, leaseTime, unit);
-			if (tryLockSuccess) {
-				rLockTrySuccess.successHandle();
-			}
-			else {
-				rLockTryFail.errorHandle();
-			}
-		}
-		catch (InterruptedException e) {
-			LOGGER.error("Exception tryLock", e);
-		}
-		finally {
-			unLock(rLock);
 		}
 	}
 

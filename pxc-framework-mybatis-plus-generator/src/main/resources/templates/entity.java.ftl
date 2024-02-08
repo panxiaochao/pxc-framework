@@ -18,16 +18,16 @@ import lombok.experimental.Accessors;
 </#if>
 
 /**
-* <p> ${table.comment!} 持久化对象
-*
-* @author ${author}
-* @since ${date}
-*/
+ * <p> ${table.comment!} 持久化对象 </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
 <#if entityLombokModel>
 @Getter
 @Setter
 <#if chainModel>
-    @Accessors(chain = true)
+@Accessors(chain = true)
 </#if>
 </#if>
 <#if table.convert>

@@ -16,10 +16,11 @@
 package io.github.panxiaochao.ratelimiter.annotation;
 
 import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * 防刷、限流注解, 应用于字段、类、方法
+ * 防刷、限流注解, 应用于方法
  * </p>
  * <pre>
  *  ElementType.TYPE：能修饰类、接口或枚举类型
@@ -49,19 +50,29 @@ public @interface RateLimiter {
 	String key() default "";
 
 	/**
-	 * 指定second时间内, API最大请求次数
+	 * 指定时间内, API最大请求次数
 	 */
 	int maxCount() default 10;
 
 	/**
-	 * 限定时间范围, 单位秒
+	 * 限定时间范围, 默认毫秒
 	 */
-	int limitSecond() default 60;
+	long limitTime() default 60 * 1000;
+
+	/**
+	 * 时间单位格式, 默认毫秒
+	 */
+	TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 
 	/**
 	 * 限流类型
 	 */
 	RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+
+	/**
+	 * 自定义提示消息
+	 */
+	String message() default "";
 
 	/**
 	 * 限流类型

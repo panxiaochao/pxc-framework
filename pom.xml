@@ -7,7 +7,7 @@
     <artifactId>pxc-framework-parent</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>${project.artifactId}</name>
+    <name>pxc-framework-parent</name>
     <description>pxc-framework Converged Project, base on spring boot 2.7.X up-to-date</description>
     <url>https://github.com/panxiaochao/pxc-framework</url>
 

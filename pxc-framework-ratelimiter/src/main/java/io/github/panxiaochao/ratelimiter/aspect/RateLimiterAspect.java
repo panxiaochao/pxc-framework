@@ -47,6 +47,7 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -94,15 +95,18 @@ public class RateLimiterAspect {
 	@Before("@annotation(rateLimiter)")
 	public void before(JoinPoint joinPoint, RateLimiter rateLimiter) {
 		int maxCount = rateLimiter.maxCount();
-		int limitSecond = rateLimiter.limitSecond();
+		long limitTime = rateLimiter.limitTime();
+		TimeUnit timeUnit = rateLimiter.timeUnit();
 		// 获取限流 KEY
 		String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
 		// RateType.OVERALL 全局限流
 		// RateType.PER_CLIENT 客户端单独计算限流
 		long availableCount = RedissonUtil.INSTANCE()
-			.setRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount, limitSecond);
+			.tryRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount, timeUnit.toMillis(limitTime));
 		if (availableCount == -1) {
-			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR);
+			String message = StringUtils.hasText(rateLimiter.message()) ? rateLimiter.message()
+					: RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR.getMessage();
+			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR, message);
 		}
 		LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
 	}

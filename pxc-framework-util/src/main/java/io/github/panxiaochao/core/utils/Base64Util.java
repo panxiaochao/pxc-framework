@@ -163,7 +163,6 @@ public class Base64Util {
 	 * Alphabet".
 	 * @param src the encoded byte array
 	 * @return the original byte array
-	 * @since 4.2.4
 	 */
 	public static byte[] decodeUrlSafe(byte[] src) {
 		if (src.length == 0) {

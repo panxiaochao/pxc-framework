@@ -29,6 +29,6 @@ public interface RLockTryFail {
 	/**
 	 * 自定失败义处理方法
 	 */
-	void errorHandle();
+	void apply();
 
 }
