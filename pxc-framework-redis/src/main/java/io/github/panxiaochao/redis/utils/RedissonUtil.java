@@ -115,6 +115,36 @@ public class RedissonUtil {
 	}
 
 	/**
+	 * 设置过期时间
+	 * @param key key
+	 * @param duration expiration duration
+	 */
+	public <T> boolean expire(String key, Duration duration) {
+		RBucket<T> rBucket = getRBucket(key);
+		return rBucket.expire(duration);
+	}
+
+	/**
+	 * 设置过期时间，当只有key设置过过期时间才会设置
+	 * @param key key
+	 * @param duration expiration duration
+	 */
+	public <T> boolean expireIfSet(String key, Duration duration) {
+		RBucket<T> rBucket = getRBucket(key);
+		return rBucket.expireIfSet(duration);
+	}
+
+	/**
+	 * 设置过期时间，当只有key没有设置过期时间才会设置
+	 * @param key key
+	 * @param duration expiration duration
+	 */
+	public <T> boolean expireIfNotSet(String key, Duration duration) {
+		RBucket<T> rBucket = getRBucket(key);
+		return rBucket.expireIfNotSet(duration);
+	}
+
+	/**
 	 * Obtain the v
 	 * @param key key
 	 * @return value
