@@ -15,6 +15,8 @@
  */
 package io.github.panxiaochao.web.filter;
 
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +32,7 @@ import java.util.List;
  * @author Lypxc
  * @since 2023-06-26
  */
-public class CorsFilter implements Filter {
+public class CorsFilter extends OncePerRequestFilter {
 
 	/**
 	 * 当前跨域请求最大有效时长，同一个域名不会再进行检查，默认3600
@@ -44,10 +46,8 @@ public class CorsFilter implements Filter {
 			"PATCH");
 
 	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		HttpServletResponse response = (HttpServletResponse) servletResponse;
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 		// 解决跨域的问题
 		cors(request, response);
 		// 放行
@@ -60,16 +60,6 @@ public class CorsFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Methods", String.join(",", ALLOWED_METHODS));
 		response.setHeader("Access-Control-Allow-Headers", "*");
 		response.setHeader("Access-Control-Max-Age", MAX_AGE);
-	}
-
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		Filter.super.init(filterConfig);
-	}
-
-	@Override
-	public void destroy() {
-		Filter.super.destroy();
 	}
 
 }

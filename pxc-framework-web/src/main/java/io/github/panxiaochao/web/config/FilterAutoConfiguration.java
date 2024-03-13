@@ -77,7 +77,7 @@ public class FilterAutoConfiguration {
 		registrationBean.setFilter(new RequestWrapperFilter());
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.addServletNames("requestWrapperFilter");
-		registrationBean.setOrder(2);
+		registrationBean.setOrder(1);
 		return registrationBean;
 	}
 

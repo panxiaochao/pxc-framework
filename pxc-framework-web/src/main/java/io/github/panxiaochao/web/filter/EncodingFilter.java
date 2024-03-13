@@ -15,7 +15,11 @@
  */
 package io.github.panxiaochao.web.filter;
 
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -27,26 +31,16 @@ import java.nio.charset.StandardCharsets;
  * @author Lypxc
  * @since 2023-06-26
  */
-public class EncodingFilter implements Filter {
+public class EncodingFilter extends OncePerRequestFilter {
 
 	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 		// 编码
-		servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-		servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+		request.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+		request.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 		// 放行
-		filterChain.doFilter(servletRequest, servletResponse);
-	}
-
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		Filter.super.init(filterConfig);
-	}
-
-	@Override
-	public void destroy() {
-		Filter.super.destroy();
+		filterChain.doFilter(request, response);
 	}
 
 }

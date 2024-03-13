@@ -14,7 +14,8 @@
     <description>[2.0.5-SNAPSHOT]pxc framework redis 缓存模块，统一采用Redisson组件</description>
 
     <properties>
-        <redisson.version>3.27.0</redisson.version>
+        <!-- 3.27.0 以上起码需要Springboot 3.X版本，起因是是netty-bom需要4.1.105.Final以上版本 -->
+        <redisson.version>3.26.0</redisson.version>
     </properties>
 
     <dependencies>

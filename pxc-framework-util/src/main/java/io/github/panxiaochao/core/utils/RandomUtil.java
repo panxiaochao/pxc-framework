@@ -32,7 +32,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomUtil {
 
 	private RandomUtil() {
-		throw new RuntimeException("can't be construct");
 	}
 
 	private static final RandomUtil INST = new RandomUtil();
@@ -98,6 +97,27 @@ public class RandomUtil {
 			sb.setLength(0);
 		}
 		return Arrays.asList(randoms);
+	}
+
+	/**
+	 * 获取数组随机数数组
+	 * @param len 随机长度
+	 * @return byte[]
+	 */
+	public byte[] getBytesRandom(int len) {
+		byte[] bytes = new byte[len];
+		random.nextBytes(bytes);
+		return bytes;
+	}
+
+	/**
+	 * <p>
+	 * Returns a random boolean value
+	 * </p>
+	 * @return the random boolean
+	 */
+	public boolean nextBoolean() {
+		return random.nextBoolean();
 	}
 
 	/**
