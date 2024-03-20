@@ -206,6 +206,14 @@ public class RedissonUtil {
 	}
 
 	/**
+	 * Check object existence
+	 * @return <code>true</code> if object exists and <code>false</code> otherwise
+	 */
+	public boolean isExists(String key) {
+		return getRBucket(key).isExists();
+	}
+
+	/**
 	 * Obtain the RBucket.
 	 * @param name name of object
 	 * @return RBucket

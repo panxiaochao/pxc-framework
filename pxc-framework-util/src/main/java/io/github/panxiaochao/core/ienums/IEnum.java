@@ -43,7 +43,7 @@ public interface IEnum<T> {
 	 * @return 返回信息
 	 */
 	default String ofCode(T code) {
-		return null;
+		return "";
 	}
 
 }
