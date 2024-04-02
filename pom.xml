@@ -88,7 +88,9 @@
         <ip2region.version>2.7.0</ip2region.version>
         <commons-io.version>2.13.0</commons-io.version>
         <hutool.version>5.8.26</hutool.version>
-        <zxing.version>3.5.2</zxing.version>
+        <zxing.version>3.5.3</zxing.version>
+        <fastjson.version>1.2.83_noneautotype</fastjson.version>
+        <fastjson2.version>2.0.47</fastjson2.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -246,6 +248,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.verison}</version>
                 <configuration>
+                    <source>${java.version}</source>
                     <charset>UTF-8</charset>
                     <encoding>UTF-8</encoding>
                     <docencoding>UTF-8</docencoding>
