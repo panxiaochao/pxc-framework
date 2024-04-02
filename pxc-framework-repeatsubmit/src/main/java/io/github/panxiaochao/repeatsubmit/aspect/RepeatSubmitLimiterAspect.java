@@ -215,11 +215,11 @@ public class RepeatSubmitLimiterAspect {
 		/**
 		 * 重复提交间隔时间设置不能小于1秒
 		 */
-		REPEAT_SUBMIT_LIMITER_TIME_ERROR(6051, "重复提交间隔时间设置不能小于1秒！"),
+		REPEAT_SUBMIT_LIMITER_TIME_ERROR(6010, "重复提交间隔时间设置不能小于1秒！"),
 		/**
 		 * 限流KEY解析异常
 		 */
-		REPEAT_SUBMIT_LIMITER_ERROR(6052, "请勿重复提交!");
+		REPEAT_SUBMIT_LIMITER_ERROR(6011, "请勿重复提交!");
 
 		private final Integer code;
 
