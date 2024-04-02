@@ -67,6 +67,7 @@
         <module>pxc-framework-email</module>
         <module>pxc-framework-qrcode</module>
         <module>pxc-framework-mybatis-plus-generator</module>
+        <module>pxc-framework-cache</module>
     </modules>
 
     <!-- properties -->

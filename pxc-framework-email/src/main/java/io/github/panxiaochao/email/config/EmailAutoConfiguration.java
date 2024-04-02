@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration
 @EnableConfigurationProperties(EmailProperties.class)
-@ConditionalOnProperty(name = "spring.email.enable", havingValue = "true")
+@ConditionalOnProperty(name = "spring.pxc-framework.email.enable", havingValue = "true")
 public class EmailAutoConfiguration {
 
 	@Bean

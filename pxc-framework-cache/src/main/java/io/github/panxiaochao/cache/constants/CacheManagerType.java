@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.redis.constants;
+package io.github.panxiaochao.cache.constants;
 
 /**
  * <p>
@@ -26,12 +26,18 @@ package io.github.panxiaochao.redis.constants;
 public enum CacheManagerType {
 
 	/**
-	 * redis存储
+	 * Caffeine backed caching.
 	 */
-	redis,
+	CAFFEINE,
+
 	/**
-	 * caffeine存储
+	 * Redis backed caching.
 	 */
-	caffeine
+	REDIS,
+
+	/**
+	 * Simple in-memory caching.
+	 */
+	SIMPLE
 
 }

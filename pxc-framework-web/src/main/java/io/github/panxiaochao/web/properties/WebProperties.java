@@ -29,7 +29,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-web", ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = "spring.pxc-framework.pxc-web", ignoreInvalidFields = true)
 public class WebProperties {
 
 	/**

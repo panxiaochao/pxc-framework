@@ -185,11 +185,11 @@ public class RateLimiterAspect {
 		/**
 		 * 请求频繁，请过会儿再试
 		 */
-		RATE_LIMITER_FREQUENT_ERROR(6001, "访问过于频繁，请稍后再试!"),
+		RATE_LIMITER_FREQUENT_ERROR(6020, "访问过于频繁，请稍后再试!"),
 		/**
 		 * 限流KEY解析异常
 		 */
-		RATE_LIMITER_PARSE_EXPRESSION_ERROR(6002, "限流KEY解析异常!");
+		RATE_LIMITER_PARSE_EXPRESSION_ERROR(6021, "限流KEY解析异常!");
 
 		private final Integer code;
 

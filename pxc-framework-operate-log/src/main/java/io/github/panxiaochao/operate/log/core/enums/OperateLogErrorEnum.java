@@ -34,7 +34,7 @@ public enum OperateLogErrorEnum implements IEnum<Integer> {
 	/**
 	 * 请配置操作日志处理类
 	 */
-	OPERATE_LOG_HANDLER_ERROR(6061, "请配置操作日志处理类！");
+	OPERATE_LOG_HANDLER_ERROR(6000, "请配置操作日志处理类！");
 
 	private final Integer code;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.redis.manager;
+package io.github.panxiaochao.cache.core;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.CaffeineSpec;
@@ -42,7 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 重写源码：{@link org.springframework.cache.caffeine.CaffeineCacheManager}
  * </p>
  * <pre>
- * key格式为: cacheNames#ttl
+ * cacheName格式为: cacheNames#ttl
  * ttl 过期时间 如果设置为0则不过期 默认为0
  * 例子: test、test#60s
  *</pre>
@@ -50,7 +50,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Lypxc
  * @since 2023-08-01
  */
-public class CustomizerCaffeineCacheManager implements CacheManager {
+public class PlusCaffeineCacheManager implements CacheManager {
 
 	private Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
 
@@ -66,7 +66,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	 * Construct a dynamic CaffeineCacheManager, lazily creating cache instances as they
 	 * are being requested.
 	 */
-	public CustomizerCaffeineCacheManager() {
+	public PlusCaffeineCacheManager() {
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	 * Set the Caffeine to use for building each individual {@link CaffeineCache}
 	 * instance.
 	 * @see #createNativeCaffeineCache
-	 * @see com.github.benmanes.caffeine.cache.Caffeine#build()
+	 * @see Caffeine#build()
 	 */
 	public void setCaffeine(Caffeine<Object, Object> caffeine) {
 		Assert.notNull(caffeine, "Caffeine must not be null");
@@ -105,7 +105,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	 * Set the {@link CaffeineSpec} to use for building each individual
 	 * {@link CaffeineCache} instance.
 	 * @see #createNativeCaffeineCache
-	 * @see com.github.benmanes.caffeine.cache.Caffeine#from(CaffeineSpec)
+	 * @see Caffeine#from(CaffeineSpec)
 	 */
 	public void setCaffeineSpec(CaffeineSpec caffeineSpec) {
 		doSetCaffeine(Caffeine.from(caffeineSpec));
@@ -116,7 +116,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	 * {@link CaffeineCache} instance. The given value needs to comply with Caffeine's
 	 * {@link CaffeineSpec} (see its javadoc).
 	 * @see #createNativeCaffeineCache
-	 * @see com.github.benmanes.caffeine.cache.Caffeine#from(String)
+	 * @see Caffeine#from(String)
 	 */
 	public void setCacheSpecification(String cacheSpecification) {
 		doSetCaffeine(Caffeine.from(cacheSpecification));
@@ -239,7 +239,7 @@ public class CustomizerCaffeineCacheManager implements CacheManager {
 	protected com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache() {
 		return this.cacheBuilder
 			// 设置过期时间
-			.expireAfterWrite(Duration.ofSeconds(60))
+			.expireAfterWrite(Duration.ofSeconds(30))
 			// 初始化缓存空间大小
 			.initialCapacity(100)
 			// 最大的缓存条数

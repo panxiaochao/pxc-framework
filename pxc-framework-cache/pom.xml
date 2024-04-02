@@ -10,13 +10,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pxc-framework-redis</artifactId>
-    <description>[2.0.5-SNAPSHOT]pxc framework redis 模块，统一采用Redisson组件</description>
-
-    <properties>
-        <!-- 3.27.0 以上起码需要Springboot 3.X版本，起因是是netty-bom需要4.1.105.Final以上版本 -->
-        <redisson.version>3.26.0</redisson.version>
-    </properties>
+    <artifactId>pxc-framework-cache</artifactId>
+    <description>[2.0.5-SNAPSHOT]pxc framework cache 缓存模块</description>
 
     <dependencies>
         <!-- 核心模块 -->
@@ -24,16 +19,15 @@
             <groupId>io.github.panxiaochao</groupId>
             <artifactId>pxc-framework-core</artifactId>
         </dependency>
-        <!-- cache 模块 -->
+        <!-- caffeine 缓存 -->
         <dependency>
-            <groupId>io.github.panxiaochao</groupId>
-            <artifactId>pxc-framework-cache</artifactId>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
         </dependency>
-        <!-- redisson -->
+        <!-- 线程池 -->
         <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>${redisson.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
     </dependencies>
 </project>
