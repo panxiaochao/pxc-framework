@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.redis.manager;
+package io.github.panxiaochao.redis.cache;
 
 import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.redis.utils.RedissonUtil;
@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentMap;
  * 重写源码：org.redisson.spring.cache.RedissonSpringCacheManager
  * </p>
  * <pre>
- * key格式为: cacheNames#ttl#maxIdleTime#maxSize
+ * cacheName格式为: cacheNames#ttl#maxIdleTime#maxSize
  * ttl 过期时间 如果设置为0则不过期 默认为0
  * maxIdleTime 最大空闲时间 根据LRU算法清理空闲数据 如果设置为0则不检测 默认为0
  * maxSize 组最大长度 根据LRU算法清理溢出数据 如果设置为0则无限长 默认为0
@@ -59,7 +59,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Lypxc
  * @since 2023-08-01
  */
-public class CustomizerRedissonSpringCacheManager implements CacheManager, ResourceLoaderAware, InitializingBean {
+public class PlusRedissonCacheManager implements CacheManager, ResourceLoaderAware, InitializingBean {
 
 	ResourceLoader resourceLoader;
 
@@ -80,7 +80,7 @@ public class CustomizerRedissonSpringCacheManager implements CacheManager, Resou
 	/**
 	 * Creates CacheManager
 	 */
-	public CustomizerRedissonSpringCacheManager() {
+	public PlusRedissonCacheManager() {
 	}
 
 	/**
@@ -137,14 +137,6 @@ public class CustomizerRedissonSpringCacheManager implements CacheManager, Resou
 	 */
 	public void setConfig(Map<String, ? extends CacheConfig> config) {
 		this.configMap = (Map<String, CacheConfig>) config;
-	}
-
-	/**
-	 * Set Redisson instance
-	 * @param redisson instance
-	 */
-	public void setRedisson(RedissonClient redisson) {
-		this.redisson = redisson;
 	}
 
 	/**

@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.redis.properties;
+package io.github.panxiaochao.cache.properties;
 
+import io.github.panxiaochao.cache.constants.CacheManagerType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>
- * Redisson 自定义属性
+ * Cache 自定义属性
  * </p>
  *
  * @author Lypxc
@@ -29,12 +30,29 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-framework.redis", ignoreInvalidFields = true)
-public class Redisson3Properties {
+@ConfigurationProperties(prefix = "spring.pxc-framework.cache", ignoreInvalidFields = true)
+public class CacheManagerProperties {
 
 	/**
-	 * redis 缓存 key 前缀
+	 * 缓存类型: caffeine（默认）、REDIS、SIMPLE
 	 */
-	private String keyPrefix;
+	private CacheManagerType cacheType = CacheManagerType.CAFFEINE;
+
+	/**
+	 *
+	 */
+	private final Caffeine caffeine = new Caffeine();
+
+	@Getter
+	@Setter
+	public static class Caffeine {
+
+		/**
+		 * The spec to use to create caches. See CaffeineSpec for more details on the spec
+		 * format.
+		 */
+		private String spec;
+
+	}
 
 }

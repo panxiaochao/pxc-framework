@@ -29,6 +29,7 @@ New Reconstruction 2.0, base on spring framework.
 |:-----------:|:----------------------------------------------------------------------------:|
 |   `依赖模块`    |                    [pxc-framework-bom](pxc-framework-bom)                    |
 |   `核心模块`    |                   [pxc-framework-core](pxc-framework-core)                   |
+|  `Cache模块`  |                  [pxc-framework-cache](pxc-framework-cache)                  |
 |  `Email模块`  |                  [pxc-framework-email](pxc-framework-email)                  |
 |   `工具类模块`   |                   [pxc-framework-util](pxc-framework-util)                   |
 | `Jackson模块` |                [pxc-framework-jackson](pxc-framework-jackson)                |
