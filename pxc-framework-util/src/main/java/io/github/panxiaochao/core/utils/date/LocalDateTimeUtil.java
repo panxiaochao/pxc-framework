@@ -96,7 +96,7 @@ public class LocalDateTimeUtil {
 
 	/**
 	 * String dateStr 转 LocalDate
-	 * @param dateStr dateStr 例如: '2022-04-12 00:00:00'
+	 * @param dateStr dateStr 例如: '2022-04-12'
 	 * @return LocalDate
 	 */
 	public static LocalDate stringToLocalDate(String dateStr) {
@@ -105,8 +105,8 @@ public class LocalDateTimeUtil {
 
 	/**
 	 * String dateStr 转 LocalDate
-	 * @param dateStr 例如: '2022-04-12 00:00:00'
-	 * @param format 例如: 'yyyy-MM-dd HH:mm:ss'
+	 * @param dateStr 例如: '2022-04-12'
+	 * @param format 例如: 'yyyy-MM-dd'
 	 * @return LocalDate
 	 */
 	public static LocalDate stringToLocalDate(String dateStr, String format) {
