@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.properties;
+package io.github.panxiaochao.redis.config.properties;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>
- * 自定义属性配置文件
+ * Redisson 自定义属性
  * </p>
  *
  * @author Lypxc
- * @since 2023-07-17
+ * @since 2023-06-27
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "mybatis-plus", ignoreInvalidFields = true)
-public class MpProperties {
+@ConfigurationProperties(prefix = "spring.pxc-framework.redis", ignoreInvalidFields = true)
+public class Redisson3Properties {
 
 	/**
-	 * 数据库类型, 默认Mysql类型
+	 * redis 缓存 key 前缀
 	 */
-	private DbType dbType = DbType.MYSQL;
+	private String keyPrefix;
 
 }

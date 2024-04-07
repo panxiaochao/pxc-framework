@@ -17,12 +17,12 @@ package io.github.panxiaochao.operate.log.config;
 
 import io.github.panxiaochao.core.exception.ServerRuntimeException;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
+import io.github.panxiaochao.operate.log.config.properties.OperateLogProperties;
 import io.github.panxiaochao.operate.log.core.OperateLogDao;
 import io.github.panxiaochao.operate.log.core.aspect.OperateLogAspect;
 import io.github.panxiaochao.operate.log.core.enums.OperateLogErrorEnum;
 import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
 import io.github.panxiaochao.operate.log.core.handler.AbstractOperateLogHandler;
-import io.github.panxiaochao.operate.log.properties.OperateLogProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

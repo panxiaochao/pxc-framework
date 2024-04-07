@@ -21,8 +21,21 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
-import java.net.*;
-import java.util.*;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,8 +157,8 @@ public class IpUtil {
 	 */
 	private static String getMultistageReverseProxyIp(String ip) {
 		// 多级反向代理检测
-		if (ip != null && org.apache.commons.lang3.StringUtils.indexOf(ip, ',') > 0) {
-			final String[] ips = org.apache.commons.lang3.StringUtils.split(ip, ',');
+		if (ip != null && ip.indexOf(',') > 0) {
+			final String[] ips = ip.split(",");
 			for (final String subIp : ips) {
 				if (Boolean.FALSE.equals(isUnknown(subIp))) {
 					ip = subIp;

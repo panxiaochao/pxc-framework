@@ -15,7 +15,6 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
@@ -27,6 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -146,7 +146,7 @@ public class SpringContextUtil implements ApplicationContextAware {
 	public static String registerBeanDefinition(final GenericBeanDefinition beanDefinition,
 			final ClassLoader classLoader) {
 		String beanClassName = beanDefinition.getBeanClassName();
-		if (StringUtils.isBlank(beanClassName)) {
+		if (!StringUtils.hasText(beanClassName)) {
 			throw new NullPointerException("beanDefinition.beanClassName is null");
 		}
 		String beanName = getBeanName(beanClassName);

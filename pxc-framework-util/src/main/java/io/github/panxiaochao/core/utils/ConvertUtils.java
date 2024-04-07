@@ -15,7 +15,8 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import org.apache.commons.lang3.StringUtils;
+
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,10 +59,10 @@ public class ConvertUtils {
 	 * @return int value if input value is legal, otherwise default value
 	 */
 	public static int toInt(String val, int defaultValue) {
-		if (StringUtils.equalsIgnoreCase(val, NULL_STR)) {
+		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
-		if (StringUtils.isBlank(val)) {
+		if (val.equalsIgnoreCase(NULL_STR)) {
 			return defaultValue;
 		}
 		try {
@@ -103,7 +104,7 @@ public class ConvertUtils {
 	 * @return long value if input value is legal, otherwise default value
 	 */
 	public static long toLong(String val, long defaultValue) {
-		if (StringUtils.isBlank(val)) {
+		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
 		try {
@@ -134,7 +135,7 @@ public class ConvertUtils {
 	 * @return int value if input value is legal, otherwise default value
 	 */
 	public static long toInteger(String val, int defaultValue) {
-		if (StringUtils.isBlank(val)) {
+		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
 		try {
@@ -153,7 +154,7 @@ public class ConvertUtils {
 	 * @return boolean value if input value is legal, otherwise default value
 	 */
 	public static boolean toBoolean(String val, boolean defaultValue) {
-		if (StringUtils.isBlank(val)) {
+		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
 		return Boolean.parseBoolean(val);

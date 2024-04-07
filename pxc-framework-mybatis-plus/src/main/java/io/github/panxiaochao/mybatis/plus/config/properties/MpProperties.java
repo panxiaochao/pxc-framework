@@ -13,46 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.cache.properties;
+package io.github.panxiaochao.mybatis.plus.config.properties;
 
-import io.github.panxiaochao.cache.constants.CacheManagerType;
+import com.baomidou.mybatisplus.annotation.DbType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>
- * Cache 自定义属性
+ * 自定义属性配置文件
  * </p>
  *
  * @author Lypxc
- * @since 2023-06-27
+ * @since 2023-07-17
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-framework.cache", ignoreInvalidFields = true)
-public class CacheManagerProperties {
+@ConfigurationProperties(prefix = "mybatis-plus", ignoreInvalidFields = true)
+public class MpProperties {
 
 	/**
-	 * 缓存类型: caffeine（默认）、REDIS、SIMPLE
+	 * 数据库类型, 默认Mysql类型
 	 */
-	private CacheManagerType cacheType = CacheManagerType.CAFFEINE;
-
-	/**
-	 *
-	 */
-	private final Caffeine caffeine = new Caffeine();
-
-	@Getter
-	@Setter
-	public static class Caffeine {
-
-		/**
-		 * The spec to use to create caches. See CaffeineSpec for more details on the spec
-		 * format.
-		 */
-		private String spec;
-
-	}
+	private DbType dbType = DbType.MYSQL;
 
 }

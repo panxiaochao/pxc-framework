@@ -88,6 +88,12 @@
                 <artifactId>pxc-framework-email</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- Holiday 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-holiday</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- 工具类 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

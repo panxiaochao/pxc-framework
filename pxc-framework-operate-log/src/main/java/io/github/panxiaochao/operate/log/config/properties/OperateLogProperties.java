@@ -13,28 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.web.properties;
+package io.github.panxiaochao.operate.log.config.properties;
 
+import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
+import io.github.panxiaochao.operate.log.core.handler.AbstractOperateLogHandler;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>
- * 自定属性配置
+ * 操作日志属性
  * </p>
  *
  * @author Lypxc
- * @since 2023-07-17
+ * @since 2023-07-03
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-framework.pxc-web", ignoreInvalidFields = true)
-public class WebProperties {
+@ToString
+@ConfigurationProperties(prefix = "spring.pxc-framework.operatelog", ignoreInvalidFields = true)
+public class OperateLogProperties {
 
 	/**
-	 * 是否开启 Cors
+	 * 存储日志类型
 	 */
-	private boolean cors;
+	public OperateLogType logType = OperateLogType.LOGGER;
+
+	/**
+	 * 自定义日志处理器,
+	 */
+	private Class<? extends AbstractOperateLogHandler> handler;
 
 }

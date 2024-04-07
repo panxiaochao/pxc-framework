@@ -68,6 +68,7 @@
         <module>pxc-framework-qrcode</module>
         <module>pxc-framework-mybatis-plus-generator</module>
         <module>pxc-framework-cache</module>
+        <module>pxc-framework-holiday</module>
     </modules>
 
     <!-- properties -->
@@ -87,8 +88,10 @@
         <transmittable-thread-local.version>2.14.5</transmittable-thread-local.version>
         <oshi.version>6.4.8</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
-        <commons-io.version>2.13.0</commons-io.version>
+        <commons-io.version>2.15.0</commons-io.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
         <hutool.version>5.8.26</hutool.version>
+        <swagger-annotations.version>2.2.9</swagger-annotations.version>
         <zxing.version>3.5.3</zxing.version>
         <fastjson.version>1.2.83_noneautotype</fastjson.version>
         <fastjson2.version>2.0.47</fastjson2.version>

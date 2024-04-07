@@ -15,9 +15,6 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1280,7 +1277,7 @@ public class StrUtil {
 	 * 
 	 */
 	public static String substringBetween(final String str, final String open, final String close) {
-		if (!ObjectUtils.allNotNull(str, open, close)) {
+		if (!ObjectUtil.allNotNull(str, open, close)) {
 			return null;
 		}
 		final int start = str.indexOf(open);
@@ -1324,7 +1321,7 @@ public class StrUtil {
 		}
 		final int strLen = str.length();
 		if (strLen == 0) {
-			return ArrayUtils.EMPTY_STRING_ARRAY;
+			return ArrayUtil.EMPTY_STRING_ARRAY;
 		}
 		final int closeLen = close.length();
 		final int openLen = open.length();
@@ -1346,7 +1343,7 @@ public class StrUtil {
 		if (list.isEmpty()) {
 			return null;
 		}
-		return list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+		return list.toArray(ArrayUtil.EMPTY_STRING_ARRAY);
 	}
 
 	/**

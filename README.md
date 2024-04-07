@@ -30,6 +30,7 @@ New Reconstruction 2.0, base on spring framework.
 |   `依赖模块`    |                    [pxc-framework-bom](pxc-framework-bom)                    |           |
 |   `核心模块`    |                   [pxc-framework-core](pxc-framework-core)                   |           |
 |  `Cache模块`  |                  [pxc-framework-cache](pxc-framework-cache)                  |           |
+| `Holiday模块` |                [pxc-framework-holiday](pxc-framework-holiday)                |           |
 |  `Email模块`  |                  [pxc-framework-email](pxc-framework-email)                  |           |
 |   `工具类模块`   |                   [pxc-framework-util](pxc-framework-util)                   |           |
 | `Jackson模块` |                [pxc-framework-jackson](pxc-framework-jackson)                |           |
@@ -43,3 +44,7 @@ New Reconstruction 2.0, base on spring framework.
 |  `防重复提交模块`  |           [pxc-framework-repeatsubmit](pxc-framework-repeatsubmit)           | 6010-6019 |
 |   `Web模块`   |                    [pxc-framework-web](pxc-framework-web)                    |           |
 |  `脱敏加密模块`   |              [pxc-framework-sensitive](pxc-framework-sensitive)              |           |
+
+## 鸣谢 JetBrains 对开源项目的支持
+
+[![JetBrains](docs/img/jetbrains.png)](https://www.jetbrains.com?from=pxc-framework)

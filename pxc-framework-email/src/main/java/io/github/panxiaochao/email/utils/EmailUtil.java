@@ -29,7 +29,11 @@ import javax.mail.Session;
 import java.io.Closeable;
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
