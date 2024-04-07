@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @since 2024-04-03
  * @version 1.0
  */
-@SpringBootTest(classes = { HolidayAutoConfiguration.class })
+@SpringBootTest(classes = { HolidayAutoConfiguration.class }, properties = {"spring.pxc-framework.holiday.json-locations=/data/**"})
 public class HolidayTest {
 
 	@Resource

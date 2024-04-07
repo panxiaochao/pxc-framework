@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * <p>
@@ -37,6 +38,152 @@ import java.util.Optional;
  * @since 2023-01-28
  */
 public class ObjectUtil {
+
+	/**
+	 * Checks if all values in the array are not {@code nulls}.
+	 *
+	 * <p>
+	 * If any value is {@code null} or the array is {@code null} then {@code false} is
+	 * returned. If all elements in array are not {@code null} or the array is empty
+	 * (contains no elements) {@code true} is returned.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.allNotNull(*)             = true
+	 * ObjectUtil.allNotNull(*, *)          = true
+	 * ObjectUtil.allNotNull(null)          = false
+	 * ObjectUtil.allNotNull(null, null)    = false
+	 * ObjectUtil.allNotNull(null, *)       = false
+	 * ObjectUtil.allNotNull(*, null)       = false
+	 * ObjectUtil.allNotNull(*, *, null, *) = false
+	 * </pre>
+	 * @param values the values to test, may be {@code null} or empty
+	 * @return {@code false} if there is at least one {@code null} value in the array or
+	 * the array is {@code null}, {@code true} if all values in the array are not
+	 * {@code null}s or array contains no elements.
+	 */
+	public static boolean allNotNull(final Object... values) {
+		if (values == null) {
+			return false;
+		}
+
+		for (final Object val : values) {
+			if (val == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks if all values in the given array are {@code null}.
+	 *
+	 * <p>
+	 * If all the values are {@code null} or the array is {@code null} or empty, then
+	 * {@code true} is returned, otherwise {@code false} is returned.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.allNull(*)                = false
+	 * ObjectUtil.allNull(*, null)          = false
+	 * ObjectUtil.allNull(null, *)          = false
+	 * ObjectUtil.allNull(null, null, *, *) = false
+	 * ObjectUtil.allNull(null)             = true
+	 * ObjectUtil.allNull(null, null)       = true
+	 * </pre>
+	 * @param values the values to test, may be {@code null} or empty
+	 * @return {@code true} if all values in the array are {@code null}s, {@code false} if
+	 * there is at least one non-null value in the array.
+	 */
+	public static boolean allNull(final Object... values) {
+		return !anyNotNull(values);
+	}
+
+	/**
+	 * Checks if any value in the given array is not {@code null}.
+	 *
+	 * <p>
+	 * If all the values are {@code null} or the array is {@code null} or empty then
+	 * {@code false} is returned. Otherwise {@code true} is returned.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.anyNotNull(*)                = true
+	 * ObjectUtil.anyNotNull(*, null)          = true
+	 * ObjectUtil.anyNotNull(null, *)          = true
+	 * ObjectUtil.anyNotNull(null, null, *, *) = true
+	 * ObjectUtil.anyNotNull(null)             = false
+	 * ObjectUtil.anyNotNull(null, null)       = false
+	 * </pre>
+	 * @param values the values to test, may be {@code null} or empty
+	 * @return {@code true} if there is at least one non-null value in the array,
+	 * {@code false} if all values in the array are {@code null}s. If the array is
+	 * {@code null} or empty {@code false} is also returned.
+	 */
+	public static boolean anyNotNull(final Object... values) {
+		return firstNonNull(values) != null;
+	}
+
+	/**
+	 * Checks if any value in the given array is {@code null}.
+	 *
+	 * <p>
+	 * If any of the values are {@code null} or the array is {@code null}, then
+	 * {@code true} is returned, otherwise {@code false} is returned.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.anyNull(*)             = false
+	 * ObjectUtil.anyNull(*, *)          = false
+	 * ObjectUtil.anyNull(null)          = true
+	 * ObjectUtil.anyNull(null, null)    = true
+	 * ObjectUtil.anyNull(null, *)       = true
+	 * ObjectUtil.anyNull(*, null)       = true
+	 * ObjectUtil.anyNull(*, *, null, *) = true
+	 * </pre>
+	 * @param values the values to test, may be {@code null} or empty
+	 * @return {@code true} if there is at least one {@code null} value in the array,
+	 * {@code false} if all the values are non-null. If the array is {@code null} or
+	 * empty, {@code true} is also returned.
+	 */
+	public static boolean anyNull(final Object... values) {
+		return !allNotNull(values);
+	}
+
+	/**
+	 * <p>
+	 * Returns the first value in the array which is not {@code null}. If all the values
+	 * are {@code null} or the array is {@code null} or empty then {@code null} is
+	 * returned.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.firstNonNull(null, null)      = null
+	 * ObjectUtil.firstNonNull(null, "")        = ""
+	 * ObjectUtil.firstNonNull(null, null, "")  = ""
+	 * ObjectUtil.firstNonNull(null, "zz")      = "zz"
+	 * ObjectUtil.firstNonNull("abc", *)        = "abc"
+	 * ObjectUtil.firstNonNull(null, "xyz", *)  = "xyz"
+	 * ObjectUtil.firstNonNull(Boolean.TRUE, *) = Boolean.TRUE
+	 * ObjectUtil.firstNonNull()                = null
+	 * </pre>
+	 * @param <T> the component type of the array
+	 * @param values the values to test, may be {@code null} or empty
+	 * @return the first value from {@code values} which is not {@code null}, or
+	 * {@code null} if there are no non-null values
+	 */
+	@SafeVarargs
+	public static <T> T firstNonNull(final T... values) {
+		if (values != null) {
+			for (final T val : values) {
+				if (val != null) {
+					return val;
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * <p>
@@ -148,6 +295,35 @@ public class ObjectUtil {
 	 */
 	public static <T> T getIfNull(final T object, final T defaultValue) {
 		return isNotEmpty(object) ? object : defaultValue;
+	}
+
+	/**
+	 * <p>
+	 * Returns the given {@code object} is it is non-null, otherwise returns the
+	 * Supplier's {@link Supplier#get()} value.
+	 * </p>
+	 *
+	 * <p>
+	 * The caller responsible for thread-safety and exception handling of default value
+	 * supplier.
+	 * </p>
+	 *
+	 * <pre>
+	 * ObjectUtil.getIfNull(null, () -&gt; null)     = null
+	 * ObjectUtil.getIfNull(null, null)              = null
+	 * ObjectUtil.getIfNull(null, () -&gt; "")       = ""
+	 * ObjectUtil.getIfNull(null, () -&gt; "zz")     = "zz"
+	 * ObjectUtil.getIfNull("abc", *)                = "abc"
+	 * ObjectUtil.getIfNull(Boolean.TRUE, *)         = Boolean.TRUE
+	 * </pre>
+	 * @param <T> the type of the object
+	 * @param object the {@code Object} to test, may be {@code null}
+	 * @param defaultSupplier the default value to return, may be {@code null}
+	 * @return {@code object} if it is not {@code null},
+	 * {@code defaultValueSupplier.get()} otherwise
+	 */
+	public static <T> T getIfNull(final T object, final Supplier<T> defaultSupplier) {
+		return object != null ? object : defaultSupplier == null ? null : defaultSupplier.get();
 	}
 
 	/**
@@ -274,13 +450,12 @@ public class ObjectUtil {
 	 * 比较大小，值相等 返回true<br>
 	 * 此方法通过调用{@link BigDecimal#compareTo(BigDecimal)}方法来判断是否相等<br>
 	 * 此方法判断值相等时忽略精度的，即0.00 == 0
-	 *
 	 * @param bigNum1 数字1
 	 * @param bigNum2 数字2
 	 * @return 是否相等
 	 */
 	public static boolean equals(BigDecimal bigNum1, BigDecimal bigNum2) {
-		//noinspection NumberEquality
+		// noinspection NumberEquality
 		if (bigNum1 == bigNum2) {
 			// 如果用户传入同一对象，省略compareTo以提高性能。
 			return true;

@@ -28,10 +28,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -99,6 +101,7 @@ public class HolidayProperties implements InitializingBean {
 		for (Resource resource : resources) {
 			try (InputStream inputStream = resource.getInputStream()) {
 				Holiday holiday = JacksonUtil.toBean(inputStream, Holiday.class);
+				Objects.requireNonNull(holiday, "holiday cannot be null");
 				Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
 			}
 			catch (IOException e) {
@@ -112,12 +115,18 @@ public class HolidayProperties implements InitializingBean {
 				for (Resource resource : locationResources) {
 					try (InputStream inputStream = resource.getInputStream()) {
 						Holiday holiday = JacksonUtil.toBean(inputStream, Holiday.class);
-						// 判断是否覆盖
-						if (overwrite) {
-							Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
+						if (holiday != null && holiday.getYear() != null) {
+							// 覆盖 或 年份数据为空
+							if (overwrite
+									|| null == Singleton.INST.get(HolidayConstant.KEY_PREFIX + holiday.getYear())) {
+								Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
+							}
+							else {
+								LOGGER.warn("年份{}已存在，不覆盖！", holiday.getYear());
+							}
 						}
 						else {
-							LOGGER.warn("年份{}已存在，不覆盖！", holiday.getYear());
+							LOGGER.error("Holiday 数据格式有误，请检查！");
 						}
 					}
 					catch (IOException e) {
@@ -129,6 +138,7 @@ public class HolidayProperties implements InitializingBean {
 		else {
 			LOGGER.warn("自定义Holiday location路径为空，不加载！");
 		}
+
 	}
 
 }
