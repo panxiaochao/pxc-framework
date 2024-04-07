@@ -23,15 +23,19 @@ import io.github.panxiaochao.trace.log.constants.TraceLogConstant;
 import io.github.panxiaochao.trace.log.core.context.TraceLogContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * <p>
@@ -53,7 +57,7 @@ public class TraceLogDomain implements Serializable {
 
 	public TraceLogDomain(TraceLogDomainBuilder builder) {
 		// traceId 如果没有取到TraceId，就重新生成一个
-		if (StringUtils.isBlank(builder.getTraceId())) {
+		if (StringUtils.hasText(builder.getTraceId())) {
 			builder.setTraceId(UuidUtil.getSimpleUUID());
 		}
 		TraceLogContext.setTraceId(builder.getTraceId());
@@ -179,7 +183,7 @@ public class TraceLogDomain implements Serializable {
 		}
 
 		private String getNotBlankHeaderName(String headerName) {
-			if (StringUtils.isBlank(headerName)) {
+			if (StringUtils.hasText(headerName)) {
 				return TraceLogConstant.UNKNOWN;
 			}
 			return headerName;

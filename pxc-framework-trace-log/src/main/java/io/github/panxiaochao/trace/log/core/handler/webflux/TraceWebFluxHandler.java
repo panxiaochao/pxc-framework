@@ -20,9 +20,9 @@ import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.trace.log.constants.TraceLogConstant;
 import io.github.panxiaochao.trace.log.core.context.TraceLogContext;
 import io.github.panxiaochao.trace.log.core.domain.TraceLogDomain;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -68,7 +68,7 @@ public class TraceWebFluxHandler {
 		// 置入MDC
 		MDC.put(TraceLogConstant.MDC_KEY, labelLogLabel);
 		// 添加Header
-		if (StringUtils.isNotBlank(TraceLogContext.getTraceId())) {
+		if (StringUtils.hasText(TraceLogContext.getTraceId())) {
 			return request.mutate()
 				.headers(httpHeader -> httpHeader.set(TraceLogConstant.TRACE_ID, TraceLogContext.getTraceId()))
 				.headers(httpHeader -> httpHeader.set(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId()))

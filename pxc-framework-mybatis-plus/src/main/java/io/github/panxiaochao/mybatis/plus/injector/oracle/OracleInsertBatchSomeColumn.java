@@ -23,12 +23,12 @@ import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -112,25 +112,25 @@ public class OracleInsertBatchSomeColumn extends AbstractMethod {
 			final String columns, final String item, final String separator) {
 		StringBuilder sb = new StringBuilder("<foreach");
 
-		if (StringUtils.isNotBlank(collection)) {
+		if (StringUtils.hasText(collection)) {
 			sb.append(" collection=\"").append(collection).append("\"");
 		}
 
-		if (StringUtils.isNotBlank(item)) {
+		if (StringUtils.hasText(item)) {
 			sb.append(" item=\"").append(item).append("\"");
 		}
 
-		if (StringUtils.isNotBlank(separator)) {
+		if (StringUtils.hasText(separator)) {
 			sb.append(" separator=\"").append(separator).append("\"");
 		}
 
 		sb.append(">").append("\n");
 
-		if (StringUtils.isNotBlank(tableName)) {
+		if (StringUtils.hasText(tableName)) {
 			sb.append(" INTO ").append(tableName).append(" ");
 		}
 
-		if (StringUtils.isNotBlank(columns)) {
+		if (StringUtils.hasText(columns)) {
 			sb.append(LEFT_BRACKET).append(columns).append(RIGHT_BRACKET).append(" VALUES ");
 		}
 

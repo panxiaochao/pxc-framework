@@ -144,8 +144,8 @@ public class IpUtil {
 	 */
 	private static String getMultistageReverseProxyIp(String ip) {
 		// 多级反向代理检测
-		if (ip != null && org.apache.commons.lang3.StringUtils.indexOf(ip, ',') > 0) {
-			final String[] ips = org.apache.commons.lang3.StringUtils.split(ip, ',');
+		if (ip != null && ip.indexOf(',') > 0) {
+			final String[] ips = ip.split(",");
 			for (final String subIp : ips) {
 				if (Boolean.FALSE.equals(isUnknown(subIp))) {
 					ip = subIp;

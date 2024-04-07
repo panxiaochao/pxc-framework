@@ -15,21 +15,18 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import org.apache.commons.lang3.exception.CloneFailedException;
-import org.apache.commons.lang3.stream.Streams;
-
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -65,7 +62,7 @@ public class ObjectUtil {
 	 * {@code null}s or array contains no elements.
 	 */
 	public static boolean allNotNull(final Object... values) {
-		return values != null && Stream.of(values).noneMatch(Objects::isNull);
+		return values != null && Arrays.stream(values).noneMatch(Objects::isNull);
 	}
 
 	/**
@@ -167,7 +164,7 @@ public class ObjectUtil {
 	 */
 	@SafeVarargs
 	public static <T> T firstNonNull(final T... values) {
-		return Streams.of(values).filter(Objects::nonNull).findFirst().orElse(null);
+		return Arrays.stream(values).filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
 	/**
@@ -343,8 +340,6 @@ public class ObjectUtil {
 	 * @param <T> the type of the object
 	 * @param obj the object to clone, null returns null
 	 * @return the clone if the object implements {@link Cloneable} otherwise {@code null}
-	 * @throws CloneFailedException if the object is cloneable and the clone operation
-	 * fails
 	 */
 	public static <T> T clone(final T obj) {
 		if (obj instanceof Cloneable) {
@@ -368,14 +363,14 @@ public class ObjectUtil {
 					result = clone.invoke(obj);
 				}
 				catch (final NoSuchMethodException e) {
-					throw new CloneFailedException(
-							"Cloneable type " + obj.getClass().getName() + " has no clone method", e);
+					throw new RuntimeException("Cloneable type " + obj.getClass().getName() + " has no clone method",
+							e);
 				}
 				catch (final IllegalAccessException e) {
-					throw new CloneFailedException("Cannot clone Cloneable type " + obj.getClass().getName(), e);
+					throw new RuntimeException("Cannot clone Cloneable type " + obj.getClass().getName(), e);
 				}
 				catch (final InvocationTargetException e) {
-					throw new CloneFailedException("Exception cloning Cloneable type " + obj.getClass().getName(),
+					throw new RuntimeException("Exception cloning Cloneable type " + obj.getClass().getName(),
 							e.getCause());
 				}
 			}

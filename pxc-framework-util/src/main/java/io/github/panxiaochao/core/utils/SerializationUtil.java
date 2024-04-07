@@ -15,9 +15,6 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import org.apache.commons.lang3.SerializationException;
-import org.apache.commons.lang3.Validate;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,6 +26,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -142,7 +140,7 @@ public class SerializationUtil {
 	 * @param <T> the type of the object involved
 	 * @param object the {@code Serializable} object to clone
 	 * @return the cloned object
-	 * @throws SerializationException (runtime) if the serialization fails
+	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	public static <T> T clone(final T object) {
 		if (object == null) {
@@ -163,10 +161,10 @@ public class SerializationUtil {
 
 		}
 		catch (final ClassNotFoundException ex) {
-			throw new SerializationException("ClassNotFoundException while reading cloned object data", ex);
+			throw new RuntimeException("ClassNotFoundException while reading cloned object data", ex);
 		}
 		catch (final IOException ex) {
-			throw new SerializationException("IOException while reading or closing cloned object data", ex);
+			throw new RuntimeException("IOException while reading or closing cloned object data", ex);
 		}
 	}
 
@@ -185,10 +183,10 @@ public class SerializationUtil {
 	 * @param objectData the serialized object, must not be null
 	 * @return the deserialized object
 	 * @throws NullPointerException if {@code objectData} is {@code null}
-	 * @throws SerializationException (runtime) if the serialization fails
+	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	public static <T> T deserialize(final byte[] objectData) {
-		Validate.notNull(objectData, "objectData");
+		Objects.requireNonNull(objectData, () -> "objectData cannot be null");
 		return deserialize(new ByteArrayInputStream(objectData));
 	}
 
@@ -217,18 +215,18 @@ public class SerializationUtil {
 	 * @param inputStream the serialized object input stream, must not be null
 	 * @return the deserialized object
 	 * @throws NullPointerException if {@code inputStream} is {@code null}
-	 * @throws SerializationException (runtime) if the serialization fails
+	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	@SuppressWarnings("resource") // inputStream is managed by the caller
 	public static <T> T deserialize(final InputStream inputStream) {
-		Validate.notNull(inputStream, "inputStream");
+		Objects.requireNonNull(inputStream, () -> "inputStream cannot be null");
 		try (ObjectInputStream in = new ObjectInputStream(inputStream)) {
 			@SuppressWarnings("unchecked")
 			final T obj = (T) in.readObject();
 			return obj;
 		}
 		catch (final ClassNotFoundException | IOException ex) {
-			throw new SerializationException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -251,7 +249,7 @@ public class SerializationUtil {
 	 * </p>
 	 * @param obj the object to serialize to bytes
 	 * @return a byte[] with the converted Serializable
-	 * @throws SerializationException (runtime) if the serialization fails
+	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	public static <T> byte[] serialize(final T obj) {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
@@ -276,16 +274,16 @@ public class SerializationUtil {
 	 * @param obj the object to serialize to bytes, may be null
 	 * @param outputStream the stream to write to, must not be null
 	 * @throws NullPointerException if {@code outputStream} is {@code null}
-	 * @throws SerializationException (runtime) if the serialization fails
+	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	@SuppressWarnings("resource") // outputStream is managed by the caller
 	public static void serialize(final Object obj, final OutputStream outputStream) {
-		Validate.notNull(outputStream, "outputStream");
+		Objects.requireNonNull(outputStream, () -> "outputStream cannot be null");
 		try (ObjectOutputStream out = new ObjectOutputStream(outputStream)) {
 			out.writeObject(obj);
 		}
 		catch (final IOException ex) {
-			throw new SerializationException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 
