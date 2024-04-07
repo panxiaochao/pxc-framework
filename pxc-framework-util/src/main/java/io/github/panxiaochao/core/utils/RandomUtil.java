@@ -38,7 +38,7 @@ public class RandomUtil {
 
 	private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-	public static RandomUtil INSTANCE() {
+	public static RandomUtil INST() {
 		return INST;
 	}
 
@@ -46,6 +46,29 @@ public class RandomUtil {
 	 * 默认长度4
 	 */
 	private static final int DEFAULT_LEN = 4;
+
+	/**
+	 * 小写
+	 */
+	private static final char[] LOWERCASE_LETTER_SOURCES = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+			'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
+	/**
+	 * 大写
+	 */
+	private static final char[] UPPERCASE_LETTER_SOURCES = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+			'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+	/**
+	 * 数字
+	 */
+	private static final char[] NUMBER_SOURCES = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+	/**
+	 * 特殊符号
+	 */
+	private static final char[] SPECIAL_SYMBOL_SOURCES = new char[] { '!', '#', '$', '%', '&', '(', ')', '*', '+', '-',
+			'.', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '~' };
 
 	/**
 	 * 大小写、数字

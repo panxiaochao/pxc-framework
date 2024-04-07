@@ -16,6 +16,7 @@
 package io.github.panxiaochao.core.utils;
 
 import org.apache.commons.lang3.exception.CloneFailedException;
+import org.apache.commons.lang3.stream.Streams;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -63,17 +65,7 @@ public class ObjectUtil {
 	 * {@code null}s or array contains no elements.
 	 */
 	public static boolean allNotNull(final Object... values) {
-		if (values == null) {
-			return false;
-		}
-
-		for (final Object val : values) {
-			if (val == null) {
-				return false;
-			}
-		}
-
-		return true;
+		return values != null && Stream.of(values).noneMatch(Objects::isNull);
 	}
 
 	/**
@@ -175,14 +167,7 @@ public class ObjectUtil {
 	 */
 	@SafeVarargs
 	public static <T> T firstNonNull(final T... values) {
-		if (values != null) {
-			for (final T val : values) {
-				if (val != null) {
-					return val;
-				}
-			}
-		}
-		return null;
+		return Streams.of(values).filter(Objects::nonNull).findFirst().orElse(null);
 	}
 
 	/**
@@ -294,7 +279,7 @@ public class ObjectUtil {
 	 * @return {@code object} if it is not {@code null}, defaultValue otherwise
 	 */
 	public static <T> T getIfNull(final T object, final T defaultValue) {
-		return isNotEmpty(object) ? object : defaultValue;
+		return object != null ? object : defaultValue;
 	}
 
 	/**
