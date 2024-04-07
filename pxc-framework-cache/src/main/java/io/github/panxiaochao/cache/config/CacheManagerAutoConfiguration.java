@@ -15,9 +15,9 @@
  */
 package io.github.panxiaochao.cache.config;
 
+import io.github.panxiaochao.cache.config.properties.CacheManagerProperties;
 import io.github.panxiaochao.cache.constants.CacheManagerType;
 import io.github.panxiaochao.cache.core.PlusCaffeineCacheManager;
-import io.github.panxiaochao.cache.config.properties.CacheManagerProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

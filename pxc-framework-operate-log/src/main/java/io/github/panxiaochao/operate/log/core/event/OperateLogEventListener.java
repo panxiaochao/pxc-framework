@@ -17,10 +17,10 @@ package io.github.panxiaochao.operate.log.core.event;
 
 import io.github.panxiaochao.core.utils.Ip2regionUtil;
 import io.github.panxiaochao.core.utils.ipregion.IpInfo;
+import io.github.panxiaochao.operate.log.config.properties.OperateLogProperties;
 import io.github.panxiaochao.operate.log.core.OperateLogDao;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
 import io.github.panxiaochao.operate.log.core.enums.OperateLogType;
-import io.github.panxiaochao.operate.log.config.properties.OperateLogProperties;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
