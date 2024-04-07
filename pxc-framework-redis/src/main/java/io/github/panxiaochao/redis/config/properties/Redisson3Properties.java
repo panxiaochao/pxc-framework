@@ -13,11 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * @author Lypxc
- * @since 2023-07-12
- */
-@NonNullApi
-package io.github.panxiaochao.core.utils.jackson;
+package io.github.panxiaochao.redis.config.properties;
 
-import org.springframework.lang.NonNullApi;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+/**
+ * <p>
+ * Redisson 自定义属性
+ * </p>
+ *
+ * @author Lypxc
+ * @since 2023-06-27
+ */
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "spring.pxc-framework.redis", ignoreInvalidFields = true)
+public class Redisson3Properties {
+
+	/**
+	 * redis 缓存 key 前缀
+	 */
+	private String keyPrefix;
+
+}

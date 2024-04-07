@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.redis.mapper.KeyPrefixNameMapper;
-import io.github.panxiaochao.redis.properties.Redisson3Properties;
+import io.github.panxiaochao.redis.config.properties.Redisson3Properties;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;

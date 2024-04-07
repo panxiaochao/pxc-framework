@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.properties;
+package io.github.panxiaochao.core.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

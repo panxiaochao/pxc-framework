@@ -91,6 +91,7 @@
         <commons-io.version>2.15.0</commons-io.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <hutool.version>5.8.26</hutool.version>
+        <swagger-annotations.version>2.2.21</swagger-annotations.version>
         <zxing.version>3.5.3</zxing.version>
         <fastjson.version>1.2.83_noneautotype</fastjson.version>
         <fastjson2.version>2.0.47</fastjson2.version>
