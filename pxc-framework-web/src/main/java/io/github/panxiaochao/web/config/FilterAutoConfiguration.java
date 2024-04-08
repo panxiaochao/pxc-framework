@@ -57,7 +57,7 @@ public class FilterAutoConfiguration {
 	 * @return FilterRegistrationBean
 	 */
 	@Bean
-	@ConditionalOnProperty(name = "spring.pxc-web.cors", havingValue = "true")
+	@ConditionalOnProperty(name = "spring.pxc-framework.cors", havingValue = "true")
 	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new CorsFilter());

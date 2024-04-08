@@ -134,7 +134,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 				}
 			}
 		}
-
 		return sb.toString();
 	}
 
