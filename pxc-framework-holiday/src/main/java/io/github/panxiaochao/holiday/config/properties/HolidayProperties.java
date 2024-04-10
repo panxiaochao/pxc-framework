@@ -125,7 +125,7 @@ public class HolidayProperties implements InitializingBean {
 							}
 						}
 						else {
-							LOGGER.error("Holiday 数据格式有误，请检查！");
+							LOGGER.error("自定义Holiday文件[{}]数据格式有误，请检查！", resource.getFile().getName());
 						}
 					}
 					catch (IOException e) {

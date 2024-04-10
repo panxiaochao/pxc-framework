@@ -29,12 +29,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-framework.pxc-web", ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = "spring.pxc-framework", ignoreInvalidFields = true)
 public class WebProperties {
 
 	/**
-	 * 是否开启 Cors
+	 * 是否开启 Cors, 默认开启
 	 */
-	private boolean cors;
+	private boolean cors = true;
 
 }

@@ -13,11 +13,6 @@
     <artifactId>pxc-framework-redis</artifactId>
     <description>[2.0.5-SNAPSHOT]pxc framework redis 模块，统一采用Redisson组件</description>
 
-    <properties>
-        <!-- 3.27.0 以上起码需要Springboot 3.X版本，起因是是netty-bom需要4.1.105.Final以上版本 -->
-        <redisson.version>3.26.0</redisson.version>
-    </properties>
-
     <dependencies>
         <!-- 核心模块 -->
         <dependency>
@@ -33,7 +28,40 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>${redisson.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-boot-starter-actuator</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-data-redis</artifactId>
+                    <groupId>org.springframework.data</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>redis.clients</groupId>
+                    <artifactId>jedis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

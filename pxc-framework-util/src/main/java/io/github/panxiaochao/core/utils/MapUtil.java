@@ -91,6 +91,7 @@ public class MapUtil {
 	 *
 	 * <p>
 	 * Null returns true.
+	 * </p>
 	 * @param map the collection to check, may be null
 	 * @return true if empty or null
 	 */
@@ -103,6 +104,7 @@ public class MapUtil {
 	 *
 	 * <p>
 	 * Null returns false.
+	 * </p>
 	 * @param map the collection to check, may be null
 	 * @return true if non-null and non-empty
 	 */
