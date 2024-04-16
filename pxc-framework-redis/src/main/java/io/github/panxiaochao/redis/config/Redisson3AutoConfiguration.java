@@ -27,13 +27,13 @@ import io.github.panxiaochao.core.utils.date.DatePattern;
 import io.github.panxiaochao.redis.config.properties.Redisson3Properties;
 import io.github.panxiaochao.redis.mapper.KeyPrefixNameMapper;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
+import org.redisson.codec.CompositeCodec;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.Config;
 import org.redisson.config.SentinelServersConfig;
 import org.redisson.config.SingleServerConfig;
-import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.ReflectionUtils;
@@ -78,7 +77,17 @@ public class Redisson3AutoConfiguration {
 	public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers() {
 		return config -> {
 			// 序列化模式
-			config.setCodec(new JsonJacksonCodec(JacksonUtil.objectMapper()));
+			ObjectMapper objectMapper = JacksonUtil.objectMapper();
+			objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+			objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
+					ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+			JsonJacksonCodec jsonCodec = new JsonJacksonCodec(objectMapper);
+			// 组合序列化 key 使用 String 内容使用通用 json 格式
+			config.setCodec(new CompositeCodec(StringCodec.INSTANCE, jsonCodec, jsonCodec));
+			config.setThreads(16);
+			config.setNettyThreads(32);
+			// 缓存 Lua 脚本 减少网络传输(redisson 大部分的功能都是基于 Lua 脚本实现)
+			config.setUseScriptCache(true);
 			// 获取方法
 			Method singleServerMethod = ReflectionUtils.findMethod(Config.class, "getSingleServerConfig");
 			Method sentinelServersMethod = ReflectionUtils.findMethod(Config.class, "getSentinelServersConfig");
@@ -115,16 +124,6 @@ public class Redisson3AutoConfiguration {
 	}
 
 	/**
-	 * RedissonConnectionFactory工厂
-	 * @param redissonClient 实例
-	 * @return RedissonConnectionFactory工厂
-	 */
-	@Bean
-	public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redissonClient) {
-		return new RedissonConnectionFactory(redissonClient);
-	}
-
-	/**
 	 * Redis 序列化配置 采用 RedissonConnectionFactory 工厂
 	 * @return RedisTemplate
 	 */
@@ -155,11 +154,6 @@ public class Redisson3AutoConfiguration {
 		template.afterPropertiesSet();
 		LOGGER.info("配置[Redis -> RedisTemplate]成功！");
 		return template;
-	}
-
-	@Bean
-	public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-		return new StringRedisTemplate(redisConnectionFactory);
 	}
 
 }

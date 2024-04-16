@@ -101,8 +101,8 @@ public class RateLimiterAspect {
 		String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
 		// RateType.OVERALL 全局限流
 		// RateType.PER_CLIENT 客户端单独计算限流
-		long availableCount = RedissonUtil.INSTANCE()
-			.tryRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount, timeUnit.toMillis(limitTime));
+		long availableCount = RedissonUtil.tryRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount,
+				timeUnit.toMillis(limitTime));
 		if (availableCount == -1) {
 			String message = StringUtils.hasText(rateLimiter.message()) ? rateLimiter.message()
 					: RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR.getMessage();
@@ -170,7 +170,7 @@ public class RateLimiterAspect {
 		}
 		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.SINGLE) {
 			// 获取客户端实例id
-			stringBuilder.append(RedissonUtil.INSTANCE().getRedissonId());
+			stringBuilder.append(RedissonUtil.getRedissonId());
 		}
 		return stringBuilder.toString();
 	}

@@ -26,11 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -55,43 +55,13 @@ public class RedissonUtil {
 	private RedissonUtil() {
 	}
 
-	/**
-	 * 初始化
-	 */
-	private static final RedissonUtil REDISSON_UTIL = new RedissonUtil();
-
-	/**
-	 * RedissonClient properties
-	 */
-	private RedissonClient redissonClient;
-
-	/**
-	 * 自己手动初始化 RedissonClient Bean instance
-	 * @param redissonClient RedissonClient
-	 * @return RedissonUtil
-	 */
-	public RedissonUtil initRedissonClient(RedissonClient redissonClient) {
-		this.redissonClient = redissonClient;
-		return this;
-	}
-
-	/**
-	 * Obtain static RedissonUtil instance
-	 * @return RedissonUtil
-	 */
-	public static RedissonUtil INSTANCE() {
-		return REDISSON_UTIL;
-	}
+	private static final RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
 
 	/**
 	 * Obtain RedissonClient
 	 * @return RedissonClient
 	 */
-	public RedissonClient ofRedissonClient() {
-		final RedissonClient redissonClient = Optional.ofNullable(this.redissonClient)
-			.orElseGet(() -> SpringContextUtil.getBean(RedissonClient.class));
-		Objects.requireNonNull(redissonClient,
-				"RedissonClient is null, check env is a web application or iniRedissonClient ！");
+	public static RedissonClient ofRedissonClient() {
 		return redissonClient;
 	}
 
@@ -99,7 +69,7 @@ public class RedissonUtil {
 	 * Returns id of this Redisson instance ID
 	 * @return String
 	 */
-	public String getRedissonId() {
+	public static String getRedissonId() {
 		return ofRedissonClient().getId();
 	}
 
@@ -110,7 +80,7 @@ public class RedissonUtil {
 	 * @param key key
 	 * @param value T value
 	 */
-	public <T> void set(String key, T value) {
+	public static <T> void set(String key, T value) {
 		set(key, value, Duration.ofMillis(0));
 	}
 
@@ -119,9 +89,8 @@ public class RedissonUtil {
 	 * @param key key
 	 * @param duration expiration duration
 	 */
-	public <T> boolean expire(String key, Duration duration) {
-		RBucket<T> rBucket = getRBucket(key);
-		return rBucket.expire(duration);
+	public static boolean expire(String key, Duration duration) {
+		return getRBucket(key).expire(duration);
 	}
 
 	/**
@@ -129,7 +98,7 @@ public class RedissonUtil {
 	 * @param key key
 	 * @param duration expiration duration
 	 */
-	public <T> boolean expireIfSet(String key, Duration duration) {
+	public static <T> boolean expireIfSet(String key, Duration duration) {
 		RBucket<T> rBucket = getRBucket(key);
 		return rBucket.expireIfSet(duration);
 	}
@@ -139,7 +108,7 @@ public class RedissonUtil {
 	 * @param key key
 	 * @param duration expiration duration
 	 */
-	public <T> boolean expireIfNotSet(String key, Duration duration) {
+	public static <T> boolean expireIfNotSet(String key, Duration duration) {
 		RBucket<T> rBucket = getRBucket(key);
 		return rBucket.expireIfNotSet(duration);
 	}
@@ -149,7 +118,7 @@ public class RedissonUtil {
 	 * @param key key
 	 * @return value
 	 */
-	public <T> T get(String key) {
+	public static <T> T get(String key) {
 		RBucket<T> rBucket = getRBucket(key);
 		return rBucket.get();
 	}
@@ -161,7 +130,7 @@ public class RedissonUtil {
 	 * @param duration expiration duration
 	 * @return {@code true} if successful, or {@code false} if element was already set
 	 */
-	public <T> boolean setIfAbsent(String key, T value, Duration duration) {
+	public static <T> boolean setIfAbsent(String key, T value, Duration duration) {
 		return getRBucket(key).setIfAbsent(value, duration);
 	}
 
@@ -171,7 +140,7 @@ public class RedissonUtil {
 	 * @param value T value
 	 * @param duration expiration duration
 	 */
-	public <T> void set(String key, T value, Duration duration) {
+	public static <T> void set(String key, T value, Duration duration) {
 		if (duration.toMillis() <= 0) {
 			getRBucket(key).set(value);
 		}
@@ -189,7 +158,7 @@ public class RedissonUtil {
 	 * @param key key
 	 * @return true or false
 	 */
-	public boolean delete(String key) {
+	public static boolean delete(String key) {
 		return getRBucket(key).delete();
 	}
 
@@ -197,7 +166,7 @@ public class RedissonUtil {
 	 * delete the Collection object from the key
 	 * @param collection collection
 	 */
-	public void delete(Collection<?> collection) {
+	public static void delete(Collection<?> collection) {
 		RBatch batch = ofRBatch();
 		collection.forEach(key -> {
 			batch.getBucket(key.toString()).deleteAsync();
@@ -209,7 +178,7 @@ public class RedissonUtil {
 	 * Check object existence
 	 * @return <code>true</code> if object exists and <code>false</code> otherwise
 	 */
-	public boolean isExists(String key) {
+	public static boolean isExists(String key) {
 		return getRBucket(key).isExists();
 	}
 
@@ -218,7 +187,7 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RBucket
 	 */
-	private <T> RBucket<T> getRBucket(String name) {
+	private static <T> RBucket<T> getRBucket(String name) {
 		return ofRedissonClient().getBucket(name);
 	}
 
@@ -228,7 +197,7 @@ public class RedissonUtil {
 	 * Obtain the RBatch
 	 * @return RBatch
 	 */
-	private RBatch ofRBatch() {
+	private static RBatch ofRBatch() {
 		return ofRedissonClient().createBatch();
 	}
 
@@ -242,7 +211,7 @@ public class RedissonUtil {
 	 * @param rateInterval 速率间隔
 	 * @return -1 表示失败
 	 */
-	public long tryRateLimiter(String key, RateType rateType, long rate, long rateInterval) {
+	public static long tryRateLimiter(String key, RateType rateType, long rate, long rateInterval) {
 		RRateLimiter rateLimiter = getRRateLimiter(key);
 		boolean trySetRateSuccess = rateLimiter.trySetRate(rateType, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
 		// 第一次成功 拿锁后进行设置过期时间
@@ -263,7 +232,7 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RRateLimiter
 	 */
-	private RRateLimiter getRRateLimiter(String name) {
+	private static RRateLimiter getRRateLimiter(String name) {
 		return ofRedissonClient().getRateLimiter(name);
 	}
 
@@ -274,40 +243,219 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RBinaryStream
 	 */
-	private RBinaryStream getRBinaryStream(String name) {
+	private static RBinaryStream getRBinaryStream(String name) {
 		return ofRedissonClient().getBinaryStream(name);
 	}
 
 	// ------------------------------- List 类型操作 --------------------------------
 
 	/**
+	 * 按指定索引删除对象
+	 * @param key 缓存的键值
+	 * @param index 索引
+	 */
+	public static void removeList(String key, int index) {
+		getRList(key).fastRemove(index);
+	}
+
+	/**
+	 * 从该列表中删除指定元素
+	 * @param key 缓存的键值
+	 * @param value 需要移除的值
+	 * @return 缓存的对象
+	 */
+	public static <T> boolean removeList(String key, T value) {
+		RList<T> rList = getRList(key);
+		return rList.remove(value);
+	}
+
+	/**
+	 * 获取所有List缓存
+	 * @param key 缓存的键值
+	 * @return 缓存的对象
+	 */
+	public static <T> List<T> getList(String key) {
+		RList<T> rList = getRList(key);
+		return rList.readAll();
+	}
+
+	/**
+	 * 通过索引获取List缓存
+	 * @param key 缓存的键值
+	 * @param indexes 索引
+	 * @return 缓存的对象
+	 */
+	public static <T> List<T> getList(String key, final int... indexes) {
+		RList<T> rList = getRList(key);
+		return rList.get(indexes);
+	}
+
+	/**
+	 * 缓存List缓存
+	 * @param key 缓存的键值
+	 * @param data 缓存的数据
+	 * @return 缓存的对象
+	 */
+	public static <T> boolean addList(String key, final T data) {
+		RList<T> rList = getRList(key);
+		return rList.add(data);
+	}
+
+	/**
+	 * 设置List Key过期时间
+	 * @param key key
+	 * @param duration expiration duration
+	 * @return true or false
+	 */
+	public static boolean expireList(String key, Duration duration) {
+		return getRList(key).expire(duration);
+	}
+
+	/**
+	 * 缓存List数据
+	 * @param key 缓存的键值
+	 * @param dataList 待缓存的List数据
+	 * @return 缓存的对象
+	 */
+	public static <T> boolean addList(String key, final List<T> dataList) {
+		RList<T> rList = getRList(key);
+		return rList.addAll(dataList);
+	}
+
+	/**
 	 * Obtain the getRList.
 	 * @param name name of object
 	 * @return getRList
 	 */
-	private <T> RList<T> getRList(String name) {
+	private static <T> RList<T> getRList(String name) {
 		return ofRedissonClient().getList(name);
 	}
 
 	// ------------------------------- Set 类型操作 --------------------------------
 
 	/**
+	 * 去除Set缓存
+	 * @param key 缓存的key
+	 * @return set对象
+	 */
+	public static <T> boolean removeSet(String key, T value) {
+		RSet<T> rSet = getRSet(key);
+		return rSet.remove(value);
+	}
+
+	/**
+	 * 获得All Set缓存
+	 * @param key 缓存的key
+	 * @return set对象
+	 */
+	public static <T> Set<T> getAllSet(String key) {
+		RSet<T> rSet = getRSet(key);
+		return rSet.readAll();
+	}
+
+	/**
+	 * 缓存Set
+	 * @param key 缓存键值
+	 * @param dataSet 缓存的数据
+	 * @return 缓存数据的对象
+	 */
+	public static <T> boolean addSet(String key, final Set<T> dataSet) {
+		RSet<T> rSet = getRSet(key);
+		return rSet.addAll(dataSet);
+	}
+
+	/**
+	 * 缓存Set数据
+	 * @param key 缓存的键值
+	 * @param data 待缓存的数据
+	 * @return 缓存的对象
+	 */
+	public static <T> boolean addSet(String key, final T data) {
+		RSet<T> rSet = getRSet(key);
+		return rSet.add(data);
+	}
+
+	/**
+	 * 设置Set Key过期时间
+	 * @param key key
+	 * @param duration expiration duration
+	 * @return true or false
+	 */
+	public static boolean expireSet(String key, Duration duration) {
+		return getRSet(key).expire(duration);
+	}
+
+	/**
 	 * Obtain the RSet.
 	 * @param name name of object
 	 * @return RSet
 	 */
-	private <T> RSet<T> getRSet(String name) {
+	private static <T> RSet<T> getRSet(String name) {
 		return ofRedissonClient().getSet(name);
 	}
 
 	// ------------------------------- Map 类型操作 --------------------------------
 
 	/**
+	 * remove map by key and value
+	 * @param name name of object
+	 * @param key key
+	 * @param <T> T Object
+	 */
+	public static <T> boolean removeMap(String name, String key, T value) {
+		RMap<String, T> rMap = getRMap(name);
+		return rMap.remove(key, value);
+	}
+
+	/**
+	 * get all v from ramp
+	 * @param name name of object
+	 * @param <T> T Object
+	 */
+	public static <T> Map<String, T> getMapAll(String name) {
+		RMap<String, T> rMap = getRMap(name);
+		return rMap.readAllMap();
+	}
+
+	/**
+	 * get v by k from ramp
+	 * @param name name of object
+	 * @param key key
+	 * @param <T> T Object
+	 */
+	public static <T> T getMap(String name, String key) {
+		RMap<String, T> rMap = getRMap(name);
+		return rMap.get(key);
+	}
+
+	/**
+	 * Stores k and v into ramp
+	 * @param name name of object
+	 * @param key key
+	 * @param value value
+	 * @param <T> T Object
+	 */
+	public static <T> void addMap(String name, String key, T value) {
+		RMap<String, T> rMap = getRMap(name);
+		rMap.put(key, value);
+	}
+
+	/**
+	 * 设置Map Key过期时间
+	 * @param key key
+	 * @param duration expiration duration
+	 * @return true or false
+	 */
+	public static boolean expireMap(String key, Duration duration) {
+		return getRMap(key).expire(duration);
+	}
+
+	/**
 	 * Obtain the RMap.
 	 * @param name name of object
 	 * @return RMap
 	 */
-	private <K, V> RMap<K, V> getRMap(String name) {
+	private static <K, V> RMap<K, V> getRMap(String name) {
 		return ofRedissonClient().getMap(name);
 	}
 
@@ -318,7 +466,7 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RMapCache
 	 */
-	private <K, V> RMapCache<K, V> getRMapCache(String name) {
+	private static <K, V> RMapCache<K, V> getRMapCache(String name) {
 		return ofRedissonClient().getMapCache(name);
 	}
 
@@ -329,18 +477,142 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RAtomicLong
 	 */
-	private RAtomicLong getRAtomicLong(String name) {
+	private static RAtomicLong getRAtomicLong(String name) {
 		return ofRedissonClient().getAtomicLong(name);
 	}
 
 	// ------------------------------- 字节 类型操作 --------------------------------
 
 	/**
+	 * 获取key下BitSet对象
+	 * @return <code>BitSet</code>.
+	 */
+	public static BitSet getBit(String key) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.asBitSet();
+	}
+
+	/**
+	 * 获取key字节数组
+	 * @return <code>byte[]</code>.
+	 */
+	public static byte[] getBitArray(String key) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.toByteArray();
+	}
+
+	/**
+	 * 获取 bitIndex 位置的值, true or false
+	 * @param bitIndex - index of bit
+	 * @return <code>true</code> if bit set to one and <code>false</code> overwise.
+	 */
+	public static boolean getBit(String key, long bitIndex) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.get(bitIndex);
+	}
+
+	/**
+	 * 将 bitIndex 位置设置为0
+	 * @param bitIndex - index of bit
+	 * @return <code>true</code> - if previous value was true, <code>false</code> - if
+	 * previous value was false
+	 */
+	public static boolean clearBit(String key, long bitIndex) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.clear(bitIndex);
+	}
+
+	/**
+	 * Set all bits to zero
+	 */
+	public static void clearBit(String key) {
+		RBitSet rBitSet = getRBitSet(key);
+		rBitSet.clear();
+	}
+
+	/**
+	 * Set all bits to zero from <code>fromIndex</code> (inclusive) to
+	 * <code>toIndex</code> (exclusive)
+	 * @param fromIndex inclusive
+	 * @param toIndex exclusive
+	 *
+	 */
+	public static void clearBit(String key, long fromIndex, long toIndex) {
+		RBitSet rBitSet = getRBitSet(key);
+		rBitSet.clear(fromIndex, toIndex);
+	}
+
+	/**
+	 * 指定数组偏移量位置设置为指定值
+	 * @param indexArray The index array of bits that needs to be set to
+	 * <code>value</code>
+	 * @param value true = 1, false = 0
+	 */
+	public static void addBit(String key, long[] indexArray, boolean value) {
+		RBitSet rBitSet = getRBitSet(key);
+		rBitSet.set(indexArray, value);
+	}
+
+	/**
+	 * 指定范围偏移量位置设置为指定值
+	 * @param fromIndex inclusive
+	 * @param toIndex exclusive
+	 * @param value true = 1, false = 0
+	 */
+	public static void addBit(String key, long bitIndex, long fromIndex, long toIndex, boolean value) {
+		RBitSet rBitSet = getRBitSet(key);
+		rBitSet.set(fromIndex, toIndex, value);
+	}
+
+	/**
+	 * 指定范围偏移量位置设置为 1
+	 * @param fromIndex inclusive
+	 * @param toIndex exclusive
+	 */
+	public static void addBit(String key, long bitIndex, long fromIndex, long toIndex) {
+		RBitSet rBitSet = getRBitSet(key);
+		rBitSet.set(fromIndex, toIndex);
+	}
+
+	/**
+	 * 将 bitIndex 位置设置为指定值
+	 * @param bitIndex - index of bit
+	 * @param value true = 1, false = 0
+	 * @return <code>true</code> - if previous value was true, <code>false</code> - if
+	 * previous value was false
+	 */
+	public static boolean addBit(String key, long bitIndex, boolean value) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.set(bitIndex, value);
+	}
+
+	/**
+	 * 指定偏移量位置设置为 1
+	 * @param bitIndex - index of bit
+	 * @return <code>true</code> - if previous value was true, <code>false</code> - if
+	 * previous value was false
+	 */
+	public static boolean addBit(String key, long bitIndex) {
+		RBitSet rBitSet = getRBitSet(key);
+		return rBitSet.set(bitIndex);
+	}
+
+	/**
+	 * 设置Bit Key过期时间
+	 * @param key key
+	 * @param duration expiration duration
+	 * @return true or false
+	 */
+	public static boolean expireBit(String key, Duration duration) {
+		return getRBitSet(key).expire(duration);
+	}
+
+	/**
 	 * Obtain the RBitSet.
 	 * @param name name of object
 	 * @return RBitSet
 	 */
-	private RBitSet getRBitSet(String name) {
+	private static RBitSet getRBitSet(String name) {
 		return ofRedissonClient().getBitSet(name);
 	}
 
@@ -354,7 +626,7 @@ public class RedissonUtil {
 	 * @param member 成员名称
 	 * @return 添加元素个数
 	 */
-	public Long geoAdd(String key, double lng, double lat, Object member) {
+	public static Long geoAdd(String key, double lng, double lat, Object member) {
 		RGeo<Object> geo = getRGeo(key);
 		return geo.add(lng, lat, member);
 	}
@@ -365,7 +637,7 @@ public class RedissonUtil {
 	 * @param entries 包含精度、维度、成员集合
 	 * @return 添加元素个数
 	 */
-	public Long geoAdd(String key, GeoEntry... entries) {
+	public static Long geoAdd(String key, GeoEntry... entries) {
 		RGeo<String> geo = getRGeo(key);
 		return geo.add(entries);
 	}
@@ -376,7 +648,7 @@ public class RedissonUtil {
 	 * @param members - objects
 	 * @return hash mapped by object
 	 */
-	public Map<String, String> hash(String key, String... members) {
+	public static Map<String, String> hash(String key, String... members) {
 		RGeo<String> geo = getRGeo(key);
 		return geo.hash(members);
 	}
@@ -387,7 +659,7 @@ public class RedissonUtil {
 	 * @param members - objects
 	 * @return geo position mapped by object
 	 */
-	public Map<String, GeoPosition> position(String key, String... members) {
+	public static Map<String, GeoPosition> position(String key, String... members) {
 		RGeo<String> geo = getRGeo(key);
 		return geo.pos(members);
 	}
@@ -400,7 +672,7 @@ public class RedissonUtil {
 	 * @param geoUnit - geo unit
 	 * @return distance
 	 */
-	public Double distance(String key, String firstMember, String secondMember, GeoUnit geoUnit) {
+	public static Double distance(String key, String firstMember, String secondMember, GeoUnit geoUnit) {
 		RGeo<String> geo = getRGeo(key);
 		return geo.dist(firstMember, secondMember, geoUnit);
 	}
@@ -414,7 +686,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, int count) {
+	public static List<String> search(String key, String member, double radius, GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
 		return geo.search(geoSearchArgs);
@@ -430,7 +702,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, String member, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
+	public static List<String> search(String key, String member, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
@@ -447,7 +719,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, int count) {
+	public static List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
 				GeoOrder.ASC, count);
@@ -465,8 +737,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit, GeoOrder geoOrder,
-			int count) {
+	public static List<String> search(String key, double lng, double lat, double radius, GeoUnit geoUnit,
+			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
 				count);
@@ -484,7 +756,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, String member, double width, double height, GeoUnit geoUnit,
+	public static List<String> search(String key, String member, double width, double height, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
@@ -503,7 +775,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public List<String> search(String key, double lng, double lat, double width, double height, GeoUnit geoUnit,
+	public static List<String> search(String key, double lng, double lat, double width, double height, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
@@ -520,7 +792,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
+	public static Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
@@ -537,7 +809,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
+	public static Map<String, Double> searchWithDistance(String key, String member, double radius, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
@@ -554,8 +826,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
-			int count) {
+	public static Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius,
+			GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
 				GeoOrder.ASC, count);
@@ -573,8 +845,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius, GeoUnit geoUnit,
-			GeoOrder geoOrder, int count) {
+	public static Map<String, Double> searchWithDistance(String key, double lng, double lat, double radius,
+			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
 				count);
@@ -592,7 +864,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, String member, double width, double height,
+	public static Map<String, Double> searchWithDistance(String key, String member, double width, double height,
 			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
@@ -611,8 +883,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, Double> searchWithDistance(String key, double lng, double lat, double width, double height,
-			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+	public static Map<String, Double> searchWithDistance(String key, double lng, double lat, double width,
+			double height, GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
 				geoOrder, count);
@@ -628,7 +900,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
+	public static Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
 			int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, GeoOrder.ASC, count);
@@ -645,7 +917,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
+	public static Map<String, GeoPosition> searchWithPosition(String key, String member, double radius, GeoUnit geoUnit,
 			GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(member, 0, 0, radius, geoUnit, geoOrder, count);
@@ -662,7 +934,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
+	public static Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
 			GeoUnit geoUnit, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit,
@@ -681,7 +953,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
+	public static Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double radius,
 			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildRadiusGeoSearchArgs(StringPools.EMPTY, lng, lat, radius, geoUnit, geoOrder,
@@ -700,7 +972,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, String member, double width, double height,
+	public static Map<String, GeoPosition> searchWithPosition(String key, String member, double width, double height,
 			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(member, 0, 0, width, height, geoUnit, geoOrder, count);
@@ -719,8 +991,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回集合
 	 */
-	public Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double width, double height,
-			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+	public static Map<String, GeoPosition> searchWithPosition(String key, double lng, double lat, double width,
+			double height, GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		RGeo<String> geo = getRGeo(key);
 		GeoSearchArgs geoSearchArgs = buildBoxGeoSearchArgs(StringPools.EMPTY, lng, lat, width, height, geoUnit,
 				geoOrder, count);
@@ -738,7 +1010,7 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回查询对象
 	 */
-	private GeoSearchArgs buildRadiusGeoSearchArgs(String member, double lng, double lat, double radius,
+	private static GeoSearchArgs buildRadiusGeoSearchArgs(String member, double lng, double lat, double radius,
 			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		if (StrUtil.isNotBlank(member)) {
 			return GeoSearchArgs.from(member).radius(radius, geoUnit).order(geoOrder).count(count);
@@ -758,8 +1030,8 @@ public class RedissonUtil {
 	 * @param count 返回数量
 	 * @return 返回查询对象
 	 */
-	private GeoSearchArgs buildBoxGeoSearchArgs(String member, double lng, double lat, double width, double height,
-			GeoUnit geoUnit, GeoOrder geoOrder, int count) {
+	private static GeoSearchArgs buildBoxGeoSearchArgs(String member, double lng, double lat, double width,
+			double height, GeoUnit geoUnit, GeoOrder geoOrder, int count) {
 		if (StrUtil.isNotBlank(member)) {
 			return GeoSearchArgs.from(member).box(width, height, geoUnit).order(geoOrder).count(count);
 		}
@@ -771,7 +1043,7 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RGeo
 	 */
-	private <T> RGeo<T> getRGeo(String name) {
+	private static <T> RGeo<T> getRGeo(String name) {
 		return ofRedissonClient().getGeo(name, new JsonJacksonCodec(JacksonUtil.objectMapper()));
 	}
 
@@ -786,7 +1058,7 @@ public class RedissonUtil {
 	 * @return <code>true</code> if lock is successfully acquired, otherwise
 	 * <code>false</code> if lock is already set.
 	 */
-	public boolean tryLock(RLock lock, long waitTime, long leaseTime, TimeUnit unit) {
+	public static boolean tryLock(RLock lock, long waitTime, long leaseTime, TimeUnit unit) {
 		boolean tryLockSuccess = false;
 		try {
 			tryLockSuccess = lock.tryLock(waitTime, leaseTime, unit);
@@ -801,7 +1073,7 @@ public class RedissonUtil {
 	 * Releases the lock.
 	 * @param lock the RLock Object
 	 */
-	public void unLock(RLock lock) {
+	public static void unLock(RLock lock) {
 		// 是否上锁 && 是否同一个线程
 		if (lock.isLocked() && lock.isHeldByCurrentThread()) {
 			lock.unlock();
@@ -813,7 +1085,7 @@ public class RedissonUtil {
 	 * @param lockName the lock name
 	 * @return RLock object
 	 */
-	public RLock rLock(String lockName) {
+	public static RLock rLock(String lockName) {
 		return ofRedissonClient().getLock(lockName);
 	}
 
@@ -824,7 +1096,7 @@ public class RedissonUtil {
 	 * @param channelKey 通道key
 	 * @param msg 发送数据
 	 */
-	public <T> void publish(String channelKey, T msg) {
+	public static <T> void publish(String channelKey, T msg) {
 		RTopic topic = getRTopic(channelKey);
 		topic.publish(msg);
 	}
@@ -835,7 +1107,7 @@ public class RedissonUtil {
 	 * @param msg 发送数据
 	 * @param consumer 自定义处理
 	 */
-	public <T> void publish(String channelKey, T msg, Consumer<T> consumer) {
+	public static <T> void publish(String channelKey, T msg, Consumer<T> consumer) {
 		RTopic topic = getRTopic(channelKey);
 		topic.publish(msg);
 		consumer.accept(msg);
@@ -848,7 +1120,7 @@ public class RedissonUtil {
 	 * @param consumer 自定义处理
 	 * @return locally unique listener id
 	 */
-	public <T> int subscribe(String channelKey, Class<T> clazz, Consumer<T> consumer) {
+	public static <T> int subscribe(String channelKey, Class<T> clazz, Consumer<T> consumer) {
 		RTopic topic = getRTopic(channelKey);
 		return topic.addListener(clazz, (channel, msg) -> consumer.accept(msg));
 	}
@@ -858,7 +1130,7 @@ public class RedissonUtil {
 	 * @param channelKey 通道key
 	 * @param listenerIds - listener ids
 	 */
-	public void removeListener(String channelKey, Integer... listenerIds) {
+	public static void removeListener(String channelKey, Integer... listenerIds) {
 		RTopic topic = getRTopic(channelKey);
 		topic.removeListener(listenerIds);
 	}
@@ -868,8 +1140,8 @@ public class RedissonUtil {
 	 * @param name name of object
 	 * @return RTopic
 	 */
-	private RTopic getRTopic(String name) {
-		return ofRedissonClient().getTopic(name, new JsonJacksonCodec(JacksonUtil.objectMapper()));
+	private static RTopic getRTopic(String name) {
+		return ofRedissonClient().getTopic(name);
 	}
 
 }

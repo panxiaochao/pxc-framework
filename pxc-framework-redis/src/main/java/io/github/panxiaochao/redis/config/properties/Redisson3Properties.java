@@ -29,12 +29,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "spring.pxc-framework.redis", ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = "spring.pxc-framework.redisson", ignoreInvalidFields = true)
 public class Redisson3Properties {
 
 	/**
 	 * redis 缓存 key 前缀
 	 */
 	private String keyPrefix;
+
+	/**
+	 * 线程池数量, 默认16
+	 */
+	private int threads = 16;
+
+	/**
+	 * Netty线程池数量, 默认32
+	 */
+	private int nettyThreads = 32;
 
 }

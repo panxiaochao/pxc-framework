@@ -86,7 +86,7 @@ public class RepeatSubmitLimiterAspect {
 		}
 		// 获取限重复提交KEY
 		String repeatSubmitLimiterKey = getRepeatSubmitLimiterKey(joinPoint, repeatSubmitLimiter);
-		if (RedissonUtil.INSTANCE().setIfAbsent(repeatSubmitLimiterKey, "", Duration.ofMillis(interval))) {
+		if (RedissonUtil.setIfAbsent(repeatSubmitLimiterKey, "", Duration.ofMillis(interval))) {
 			CACHE_KEY_SET.set(repeatSubmitLimiterKey);
 		}
 		else {
@@ -109,7 +109,7 @@ public class RepeatSubmitLimiterAspect {
 				R<?> r = (R<?>) returnValue;
 				// 请求成功后不删除操作，保存还在有效时间内继续防止重复提交
 				if (R.isFail(r)) {
-					RedissonUtil.INSTANCE().delete(CACHE_KEY_SET.get());
+					RedissonUtil.delete(CACHE_KEY_SET.get());
 				}
 			}
 		}
@@ -127,7 +127,7 @@ public class RepeatSubmitLimiterAspect {
 	 */
 	@AfterThrowing(pointcut = "@annotation(repeatSubmitLimiter)", throwing = "ex")
 	public void afterThrowing(JoinPoint joinPoint, RepeatSubmitLimiter repeatSubmitLimiter, Exception ex) {
-		RedissonUtil.INSTANCE().delete(CACHE_KEY_SET.get());
+		RedissonUtil.delete(CACHE_KEY_SET.get());
 		CACHE_KEY_SET.remove();
 	}
 

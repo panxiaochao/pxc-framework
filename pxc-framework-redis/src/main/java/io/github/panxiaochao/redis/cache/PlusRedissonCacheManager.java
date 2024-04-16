@@ -145,7 +145,7 @@ public class PlusRedissonCacheManager implements CacheManager, ResourceLoaderAwa
 	 */
 	public RedissonClient getRedisson() {
 		if (this.redisson == null) {
-			this.redisson = RedissonUtil.INSTANCE().ofRedissonClient();
+			this.redisson = RedissonUtil.ofRedissonClient();
 		}
 		return this.redisson;
 	}
