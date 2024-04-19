@@ -16,6 +16,7 @@
 package io.github.panxiaochao.holiday.config.properties;
 
 import io.github.panxiaochao.core.utils.JacksonUtil;
+import io.github.panxiaochao.core.utils.ResourceUtil;
 import io.github.panxiaochao.core.utils.Singleton;
 import io.github.panxiaochao.holiday.constants.HolidayConstant;
 import io.github.panxiaochao.holiday.entity.Holiday;
@@ -28,6 +29,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,8 +100,11 @@ public class HolidayProperties implements InitializingBean {
 	public void afterPropertiesSet() {
 		Resource[] resources = resolveDefaultJsonLocation();
 		for (Resource resource : resources) {
+			Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+					+ " (please add config file or check your holiday json configuration)");
 			try (InputStream inputStream = resource.getInputStream()) {
-				Holiday holiday = JacksonUtil.toBean(inputStream, Holiday.class);
+				String json = ResourceUtil.read(inputStream);
+				Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
 				Objects.requireNonNull(holiday, "holiday cannot be null");
 				Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
 			}
@@ -112,8 +117,11 @@ public class HolidayProperties implements InitializingBean {
 			Arrays.stream(jsonLocations).forEach(location -> {
 				Resource[] locationResources = getResources(location);
 				for (Resource resource : locationResources) {
+					Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+							+ " (please add config file or check your holiday json configuration)");
 					try (InputStream inputStream = resource.getInputStream()) {
-						Holiday holiday = JacksonUtil.toBean(inputStream, Holiday.class);
+						String json = ResourceUtil.read(inputStream);
+						Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
 						if (holiday != null && holiday.getYear() != null) {
 							// 覆盖 或 年份数据为空
 							if (overwrite

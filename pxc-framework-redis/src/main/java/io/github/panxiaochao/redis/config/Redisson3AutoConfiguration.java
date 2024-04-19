@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.date.DatePattern;
 import io.github.panxiaochao.redis.config.properties.Redisson3Properties;
 import io.github.panxiaochao.redis.mapper.KeyPrefixNameMapper;
@@ -77,11 +76,7 @@ public class Redisson3AutoConfiguration {
 	public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers() {
 		return config -> {
 			// 序列化模式
-			ObjectMapper objectMapper = JacksonUtil.objectMapper();
-			objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-			objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
-					ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-			JsonJacksonCodec jsonCodec = new JsonJacksonCodec(objectMapper);
+			JsonJacksonCodec jsonCodec = new JsonJacksonCodec(objectMapper());
 			// 组合序列化 key 使用 String 内容使用通用 json 格式
 			config.setCodec(new CompositeCodec(StringCodec.INSTANCE, jsonCodec, jsonCodec));
 			config.setThreads(16);
@@ -131,19 +126,9 @@ public class Redisson3AutoConfiguration {
 	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, T> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		// 使用Jackson2JsonRedisSerialize 替换默认序列化(默认采用的是JDK序列化)
-		ObjectMapper om = new ObjectMapper();
-		// 指定要序列化的域, field, get, set, 以及修饰符范围，ANY是都有包括private和public
-		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
-		om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
-				JsonTypeInfo.As.PROPERTY);
-		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		om.setDateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN));
 		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
 				Object.class);
-		jackson2JsonRedisSerializer.setObjectMapper(om);
+		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
 		// 使用 StringRedisSerializer 来序列化和反序列化redis的key值
 		template.setKeySerializer(RedisSerializer.string());
 		template.setHashKeySerializer(RedisSerializer.string());
@@ -154,6 +139,20 @@ public class Redisson3AutoConfiguration {
 		template.afterPropertiesSet();
 		LOGGER.info("配置[Redis -> RedisTemplate]成功！");
 		return template;
+	}
+
+	private ObjectMapper objectMapper() {
+		// 使用Jackson2JsonRedisSerialize 替换默认序列化(默认采用的是JDK序列化)
+		ObjectMapper om = new ObjectMapper();
+		// 指定要序列化的域, field, get, set, 以及修饰符范围，ANY是都有包括private和public
+		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+		// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
+		om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
+				JsonTypeInfo.As.PROPERTY);
+		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		om.setDateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN));
+		return om;
 	}
 
 }
