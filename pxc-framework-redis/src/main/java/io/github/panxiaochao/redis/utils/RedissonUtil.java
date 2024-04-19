@@ -15,19 +15,18 @@
  */
 package io.github.panxiaochao.redis.utils;
 
-import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.StringPools;
 import org.redisson.api.*;
 import org.redisson.api.geo.GeoSearchArgs;
-import org.redisson.codec.JsonJacksonCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,6 +72,85 @@ public class RedissonUtil {
 		return ofRedissonClient().getId();
 	}
 
+	// ------------------------------- Key查询类型操作 --------------------------------
+
+	/**
+	 * 按匹配模式获取键值，默认10个 <pre>
+	 * Supported glob-style patterns:
+	 *  h?llo subscribes to hello, hallo and hxllo
+	 *  h*llo subscribes to hllo and heeeello
+	 *  h[ae]llo subscribes to hello and hallo, but not hillo
+	 * </pre>
+	 * @param pattern - match pattern
+	 * @return Set<String>
+	 */
+	public static Set<String> getKeysByPattern(String pattern) {
+		Set<String> keySet = new HashSet<>();
+		Iterable<String> iterable = getRKey().getKeysByPattern(pattern);
+		iterable.forEach(keySet::add);
+		return keySet;
+	}
+
+	/**
+	 * 按匹配模式获取count个数键值 <pre>
+	 * Supported glob-style patterns:
+	 *  h?llo subscribes to hello, hallo and hxllo
+	 *  h*llo subscribes to hllo and heeeello
+	 *  h[ae]llo subscribes to hello and hallo, but not hillo
+	 * </pre>
+	 * @param pattern - match pattern
+	 * @param count - keys loaded per request to Redis
+	 * @return Set<String>
+	 */
+	public static Set<String> getKeysByPattern(String pattern, int count) {
+		Set<String> keySet = new HashSet<>();
+		Iterable<String> iterable = getRKey().getKeysByPattern(pattern, count);
+		iterable.forEach(keySet::add);
+		return keySet;
+	}
+
+	/**
+	 * 按匹配模式删除多个对象。
+	 * <p>
+	 * Method executes in <b>NON atomic way</b> in cluster mode due to lua script
+	 * limitations.
+	 * <p>
+	 * <pre>
+	 * Supported glob-style patterns:
+	 *  h?llo subscribes to hello, hallo and hxllo
+	 *  h*llo subscribes to hllo and heeeello
+	 *  h[ae]llo subscribes to hello and hallo, but not hillo
+	 * </pre>
+	 * @param pattern 表达式
+	 * @return number of removed keys
+	 */
+	public static long deleteKeyByPattern(String pattern) {
+		return getRKey().deleteByPattern(pattern);
+	}
+
+	/**
+	 * 返回当前所选数据库中的键数量
+	 * @return count of keys
+	 */
+	public static long countKeys() {
+		return getRKey().count();
+	}
+
+	/**
+	 * 按 keys 删除多个对象
+	 * @param keys - object names
+	 */
+	public static void deleteKeys(String... keys) {
+		getRKey().delete(keys);
+	}
+
+	/**
+	 * Obtain the RKeys.
+	 * @return RKeys
+	 */
+	private static RKeys getRKey() {
+		return ofRedissonClient().getKeys();
+	}
 	// ------------------------------- Object 类型操作 --------------------------------
 
 	/**
@@ -156,10 +234,9 @@ public class RedissonUtil {
 	/**
 	 * delete the object from the key.
 	 * @param key key
-	 * @return true or false
 	 */
-	public static boolean delete(String key) {
-		return getRBucket(key).delete();
+	public static void delete(String key) {
+		getRBucket(key).delete();
 	}
 
 	/**
@@ -484,12 +561,35 @@ public class RedissonUtil {
 	// ------------------------------- 字节 类型操作 --------------------------------
 
 	/**
+	 * 返回设置为1的位数的数量.
+	 * @return 返回设置为1的位数的数量.
+	 */
+	public static long getBitCardinality(String key) {
+		return getRBitSet(key).cardinality();
+	}
+
+	/**
+	 * 返回设置的位数.
+	 * @return 返回设置的位数.
+	 */
+	public static long getBitSize(String key) {
+		return getRBitSet(key).size();
+	}
+
+	/**
+	 * 返回“逻辑大小”=最高集位的索引加一, 如果没有任何设置位，则返回零.
+	 * @return "logical size" = index of highest set bit plus one
+	 */
+	public static long getBitLength(String key) {
+		return getRBitSet(key).length();
+	}
+
+	/**
 	 * 获取key下BitSet对象
 	 * @return <code>BitSet</code>.
 	 */
 	public static BitSet getBit(String key) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.asBitSet();
+		return getRBitSet(key).asBitSet();
 	}
 
 	/**
@@ -497,8 +597,7 @@ public class RedissonUtil {
 	 * @return <code>byte[]</code>.
 	 */
 	public static byte[] getBitArray(String key) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.toByteArray();
+		return getRBitSet(key).toByteArray();
 	}
 
 	/**
@@ -507,8 +606,7 @@ public class RedissonUtil {
 	 * @return <code>true</code> if bit set to one and <code>false</code> overwise.
 	 */
 	public static boolean getBit(String key, long bitIndex) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.get(bitIndex);
+		return getRBitSet(key).get(bitIndex);
 	}
 
 	/**
@@ -518,16 +616,14 @@ public class RedissonUtil {
 	 * previous value was false
 	 */
 	public static boolean clearBit(String key, long bitIndex) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.clear(bitIndex);
+		return getRBitSet(key).clear(bitIndex);
 	}
 
 	/**
 	 * Set all bits to zero
 	 */
 	public static void clearBit(String key) {
-		RBitSet rBitSet = getRBitSet(key);
-		rBitSet.clear();
+		getRBitSet(key).clear();
 	}
 
 	/**
@@ -538,8 +634,7 @@ public class RedissonUtil {
 	 *
 	 */
 	public static void clearBit(String key, long fromIndex, long toIndex) {
-		RBitSet rBitSet = getRBitSet(key);
-		rBitSet.clear(fromIndex, toIndex);
+		getRBitSet(key).clear(fromIndex, toIndex);
 	}
 
 	/**
@@ -549,8 +644,7 @@ public class RedissonUtil {
 	 * @param value true = 1, false = 0
 	 */
 	public static void addBit(String key, long[] indexArray, boolean value) {
-		RBitSet rBitSet = getRBitSet(key);
-		rBitSet.set(indexArray, value);
+		getRBitSet(key).set(indexArray, value);
 	}
 
 	/**
@@ -560,8 +654,7 @@ public class RedissonUtil {
 	 * @param value true = 1, false = 0
 	 */
 	public static void addBit(String key, long bitIndex, long fromIndex, long toIndex, boolean value) {
-		RBitSet rBitSet = getRBitSet(key);
-		rBitSet.set(fromIndex, toIndex, value);
+		getRBitSet(key).set(fromIndex, toIndex, value);
 	}
 
 	/**
@@ -570,8 +663,7 @@ public class RedissonUtil {
 	 * @param toIndex exclusive
 	 */
 	public static void addBit(String key, long bitIndex, long fromIndex, long toIndex) {
-		RBitSet rBitSet = getRBitSet(key);
-		rBitSet.set(fromIndex, toIndex);
+		getRBitSet(key).set(fromIndex, toIndex);
 	}
 
 	/**
@@ -582,8 +674,7 @@ public class RedissonUtil {
 	 * previous value was false
 	 */
 	public static boolean addBit(String key, long bitIndex, boolean value) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.set(bitIndex, value);
+		return getRBitSet(key).set(bitIndex, value);
 	}
 
 	/**
@@ -593,8 +684,7 @@ public class RedissonUtil {
 	 * previous value was false
 	 */
 	public static boolean addBit(String key, long bitIndex) {
-		RBitSet rBitSet = getRBitSet(key);
-		return rBitSet.set(bitIndex);
+		return getRBitSet(key).set(bitIndex);
 	}
 
 	/**
@@ -1044,7 +1134,7 @@ public class RedissonUtil {
 	 * @return RGeo
 	 */
 	private static <T> RGeo<T> getRGeo(String name) {
-		return ofRedissonClient().getGeo(name, new JsonJacksonCodec(JacksonUtil.objectMapper()));
+		return ofRedissonClient().getGeo(name);
 	}
 
 	// ------------------------------- 可重入锁 类型操作 --------------------------------
