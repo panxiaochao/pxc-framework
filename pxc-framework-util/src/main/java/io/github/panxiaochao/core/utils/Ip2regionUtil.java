@@ -17,6 +17,7 @@ package io.github.panxiaochao.core.utils;
 
 import io.github.panxiaochao.core.utils.ipregion.Ip2RegionLoader;
 import io.github.panxiaochao.core.utils.ipregion.IpInfo;
+import org.lionsoul.ip2region.xdb.Searcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,17 +35,19 @@ public class Ip2regionUtil {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionUtil.class);
 
+	private static final Searcher SEARCHER = Ip2RegionLoader.searcher();
+
 	/**
-	 * ip 位置 搜索
-	 * @param ip ip
-	 * @return 位置
+	 * IP解析, 返回<code>IpInfo</code>对象
+	 * @param ip 解析的ip
+	 * @return IpInfo
 	 */
 	public static IpInfo memorySearch(String ip) {
 		try {
 			// 1.ipv4
 			String[] ipV4Part = IpInfo.getIpv4Part(ip);
 			if (ipV4Part.length == 4) {
-				IpInfo ipInfo = IpInfo.toIpInfo(Ip2RegionLoader.INSTANCE().getSearcher().search(ip));
+				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER.search(ip));
 				ipInfo.setIp(ip);
 				return ipInfo;
 			}
@@ -54,13 +57,13 @@ public class Ip2regionUtil {
 				return null;
 			}
 			else {
-				// 3.非 ipv6
+				// 3.不合法 IP
 				LOGGER.error("invalid ip address {}", ip);
 			}
 			return null;
 		}
 		catch (Exception e) {
-			LOGGER.error("memorySearch ip {} is error", ip, e);
+			LOGGER.error("memorySearch ip {} parse is error", ip, e);
 			return null;
 		}
 	}

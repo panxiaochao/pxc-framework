@@ -15,14 +15,15 @@
  */
 package io.github.panxiaochao.core.utils.ipregion;
 
+import io.github.panxiaochao.core.utils.ResourceUtil;
 import lombok.Getter;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.StreamUtils;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,33 +44,20 @@ public class Ip2RegionLoader {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2RegionLoader.class);
 
+	private static final ResourcePatternResolver RESOURCE_PATTERN_RESOLVER = new PathMatchingResourcePatternResolver();
+
 	/**
 	 * ip2region.db 文件路径
 	 */
-	private static final String IP2REGION_DB_FILE_LOCATION = "classpath:ip2region/ip2region.xdb";
+	private static final String DEFAULT_IP2REGION_DB_LOCATION = "classpath*:/ip2region/ip2region.xdb";
 
-	private static final Ip2RegionLoader IP2REGION_LOADER = new Ip2RegionLoader();
+	private static final Searcher SEARCHER;
 
-	private final Searcher searcher;
-
-	private Ip2RegionLoader() {
-		this.searcher = defaultSearcherByDb();
-	}
-
-	public static Ip2RegionLoader INSTANCE() {
-		return IP2REGION_LOADER;
-	}
-
-	/**
-	 * 从内存加载DB数据
-	 * @param filePath 路径
-	 * @return byte[]
-	 */
-	public byte[] loadByteFromFile(String filePath) {
-		ResourceLoader resourceLoader = new DefaultResourceLoader();
-		Resource resource = resourceLoader.getResource(filePath);
-		try (InputStream inputStream = resource.getInputStream()) {
-			return StreamUtils.copyToByteArray(inputStream);
+	static {
+		byte[] ip2regionBytes = loadByteFromFile(DEFAULT_IP2REGION_DB_LOCATION);
+		try {
+			SEARCHER = Searcher.newWithBuffer(ip2regionBytes);
+			LOGGER.info("配置[ip2region]成功！");
 		}
 		catch (IOException e) {
 			throw new RuntimeException("load ip2region file db is error", e);
@@ -77,18 +65,45 @@ public class Ip2RegionLoader {
 	}
 
 	/**
-	 * 静态默认获取本地数据库
+	 * Don't new
+	 */
+	private Ip2RegionLoader() {
+	}
+
+	/**
+	 * 返回 Searcher 对象
 	 * @return Searcher
 	 */
-	private Searcher defaultSearcherByDb() {
+	public static Searcher searcher() {
+		return SEARCHER;
+	}
+
+	/**
+	 * 从内存加载DB数据
+	 * @param filePath 路径
+	 * @return byte[]
+	 */
+	public static byte[] loadByteFromFile(String filePath) {
+		Resource[] resources = getResources(filePath);
+		for (Resource resource : resources) {
+			Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+					+ " (please add config file or check your holiday json configuration)");
+			try (InputStream inputStream = resource.getInputStream()) {
+				return ResourceUtil.readByteArray(inputStream);
+			}
+			catch (IOException e) {
+				throw new RuntimeException("load ip2region file db is error", e);
+			}
+		}
+		return null;
+	}
+
+	public static Resource[] getResources(String location) {
 		try {
-			byte[] ip2regionBytes = loadByteFromFile(IP2REGION_DB_FILE_LOCATION);
-			Searcher searcher = Searcher.newWithBuffer(ip2regionBytes);
-			LOGGER.info("配置[ip2region]成功！");
-			return searcher;
+			return RESOURCE_PATTERN_RESOLVER.getResources(location);
 		}
 		catch (IOException e) {
-			throw new RuntimeException(e);
+			return new Resource[0];
 		}
 	}
 

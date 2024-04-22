@@ -18,6 +18,7 @@ package io.github.panxiaochao.core.utils.ipregion;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -123,10 +124,10 @@ public class IpInfo {
 	 * @return IpInfo
 	 */
 	public static IpInfo toIpInfo(String region) {
-		if (region == null) {
-			return null;
-		}
 		IpInfo ipInfo = new IpInfo();
+		if (!StringUtils.hasText(region)) {
+			return ipInfo;
+		}
 		String[] splitInfoArr = SPLIT_PATTERN.split(region);
 		// 补齐5位
 		if (splitInfoArr.length < 5) {
@@ -149,7 +150,7 @@ public class IpInfo {
 	private static String filterZero(String info) {
 		// null 或 0 返回 null
 		if (null == info || "0".equals(info)) {
-			return null;
+			return "";
 		}
 		return info;
 	}
