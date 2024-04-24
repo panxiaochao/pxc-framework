@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.redis.utils;
 
+import io.github.panxiaochao.core.utils.CollectionUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.StringPools;
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,10 +85,8 @@ public class RedissonUtil {
 	 * @return Set<String>
 	 */
 	public static Set<String> getKeysByPattern(String pattern) {
-		Set<String> keySet = new HashSet<>();
 		Iterable<String> iterable = getRKey().getKeysByPattern(pattern);
-		iterable.forEach(keySet::add);
-		return keySet;
+		return CollectionUtil.toHashSet(iterable);
 	}
 
 	/**
@@ -103,10 +101,8 @@ public class RedissonUtil {
 	 * @return Set<String>
 	 */
 	public static Set<String> getKeysByPattern(String pattern, int count) {
-		Set<String> keySet = new HashSet<>();
 		Iterable<String> iterable = getRKey().getKeysByPattern(pattern, count);
-		iterable.forEach(keySet::add);
-		return keySet;
+		return CollectionUtil.toHashSet(iterable);
 	}
 
 	/**

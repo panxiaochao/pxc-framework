@@ -187,6 +187,20 @@ public class CollectionUtil {
 	/**
 	 * 转换HashSet
 	 * @param <T> 集合元素类型
+	 * @param iterable 集合
+	 * @return HashSet对象
+	 */
+	public static <T> HashSet<T> toHashSet(Iterable<T> iterable) {
+		HashSet<T> set = new HashSet<>();
+		if (null != iterable) {
+			set = toHashSet(iterable.iterator());
+		}
+		return set;
+	}
+
+	/**
+	 * 转换HashSet
+	 * @param <T> 集合元素类型
 	 * @param enumeration 集合
 	 * @return HashSet对象
 	 */
