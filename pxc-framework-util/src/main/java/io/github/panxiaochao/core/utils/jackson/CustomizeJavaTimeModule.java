@@ -27,6 +27,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import io.github.panxiaochao.core.utils.jackson.jsonserializer.BigNumberSerializer;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -64,22 +65,25 @@ public class CustomizeJavaTimeModule extends SimpleModule {
 
 	public CustomizeJavaTimeModule() {
 		super(PackageVersion.VERSION);
+		// Serializer
 		this.addSerializer(LocalDateTime.class,
 				new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
 		this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
 		this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
 		this.addSerializer(Instant.class, InstantSerializer.INSTANCE);
+		// 数值型
+		this.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
+		this.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
+		this.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
+		this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
+
+		// Deserialize
 		this.addDeserializer(LocalDateTime.class,
 				new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT)));
 		this.addDeserializer(LocalDate.class,
 				new LocalDateDeserializer(DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT)));
 		this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
 		this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
-		// 数值型
-		this.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
-		this.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
-		this.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
-		this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
 	}
 
 }

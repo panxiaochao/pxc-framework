@@ -110,6 +110,7 @@
         <!-- 3.27.0 以上起码需要Springboot 3.X版本，起因是是netty-bom需要4.1.105.Final以上版本 -->
         <redisson.version>3.26.0</redisson.version>
         <javax-mail-api.version>1.6.2</javax-mail-api.version>
+        <hikari.version>4.0.3</hikari.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -325,6 +326,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
                 <version>${commons-pool2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikari.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

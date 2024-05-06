@@ -17,6 +17,7 @@ package io.github.panxiaochao.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -27,6 +28,7 @@ import lombok.Getter;
  * @since 2023-11-14
  */
 @Getter
+@ToString
 @AllArgsConstructor
 public enum DatabaseType {
 
@@ -190,12 +192,12 @@ public enum DatabaseType {
 	/**
 	 * 数据库名称
 	 */
-	private final String db;
+	private final String dbType;
 
 	/**
 	 * 描述
 	 */
-	private final String desc;
+	private final String remark;
 
 	/**
 	 * 获取数据库类型
@@ -203,7 +205,7 @@ public enum DatabaseType {
 	 */
 	public static DatabaseType getDatabaseType(String dbType) {
 		for (DatabaseType type : DatabaseType.values()) {
-			if (type.db.equalsIgnoreCase(dbType)) {
+			if (type.dbType.equalsIgnoreCase(dbType)) {
 				return type;
 			}
 		}

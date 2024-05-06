@@ -34,12 +34,8 @@ public class RandomUtil {
 	private RandomUtil() {
 	}
 
-	private static final RandomUtil INST = new RandomUtil();
-
-	private final ThreadLocalRandom random = ThreadLocalRandom.current();
-
-	public static RandomUtil INST() {
-		return INST;
+	private static ThreadLocalRandom threadLocalRandom() {
+		return ThreadLocalRandom.current();
 	}
 
 	/**
@@ -82,7 +78,7 @@ public class RandomUtil {
 	 * 获取字符串随机数，默认长度4
 	 * @return 返回字符串
 	 */
-	public String getStringRandom() {
+	public static String getStringRandom() {
 		return getStringRandom(DEFAULT_LEN);
 	}
 
@@ -91,11 +87,11 @@ public class RandomUtil {
 	 * @param len 随机长度
 	 * @return 返回字符串
 	 */
-	public String getStringRandom(int len) {
+	public static String getStringRandom(int len) {
 		int length = SOURCES.length;
 		StringBuilder sb = new StringBuilder();
 		for (int j = 0; j < len; j++) {
-			sb.append(SOURCES[random.nextInt(length)]);
+			sb.append(SOURCES[threadLocalRandom().nextInt(length)]);
 		}
 		return sb.toString();
 	}
@@ -106,14 +102,14 @@ public class RandomUtil {
 	 * @param size 数组长度
 	 * @return List<String>
 	 */
-	public List<String> getStringRandoms(int len, int size) {
+	public static List<String> getStringRandoms(int len, int size) {
 		Assert.isTrue(size > 1, "size must not be less than one");
 		String[] randoms = new String[size];
 		int length = SOURCES.length;
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < len; j++) {
-				sb.append(SOURCES[random.nextInt(length)]);
+				sb.append(SOURCES[threadLocalRandom().nextInt(length)]);
 			}
 			randoms[i] = sb.toString();
 			// 清空数据
@@ -127,52 +123,52 @@ public class RandomUtil {
 	 * @param len 随机长度
 	 * @return byte[]
 	 */
-	public byte[] getBytesRandom(int len) {
+	public static byte[] getBytesRandom(int len) {
 		byte[] bytes = new byte[len];
-		random.nextBytes(bytes);
+		threadLocalRandom().nextBytes(bytes);
 		return bytes;
 	}
 
 	/**
 	 * <p>
-	 * Returns a random boolean value
+	 * Returns a threadLocalRandom() boolean value
 	 * </p>
-	 * @return the random boolean
+	 * @return the threadLocalRandom() boolean
 	 */
-	public boolean nextBoolean() {
-		return random.nextBoolean();
+	public static boolean nextBoolean() {
+		return threadLocalRandom().nextBoolean();
 	}
 
 	/**
-	 * Returns a random long within the specified range.
+	 * Returns a threadLocalRandom() long within the specified range.
 	 * @param startInclusive the smallest value that can be returned, must be non-negative
 	 * @param endExclusive the upper bound (not included)
-	 * @return the random long
+	 * @return the threadLocalRandom() long
 	 * @throws IllegalArgumentException if startInclusive or endExclusive illegal
 	 */
-	public long nextLong(final long startInclusive, final long endExclusive) {
+	public static long nextLong(final long startInclusive, final long endExclusive) {
 		checkParameters(startInclusive, endExclusive);
 		long diff = endExclusive - startInclusive;
 		if (diff == 0) {
 			return startInclusive;
 		}
-		return random.longs(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsLong();
+		return threadLocalRandom().longs(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsLong();
 	}
 
 	/**
-	 * Returns a random integer within the specified range.
+	 * Returns a threadLocalRandom() integer within the specified range.
 	 * @param startInclusive lower limit, must be non-negative
 	 * @param endExclusive the upper bound (not included)
-	 * @return the random integer
+	 * @return the threadLocalRandom() integer
 	 * @throws IllegalArgumentException if startInclusive or endExclusive illegal
 	 */
-	public int nextInt(final int startInclusive, final int endExclusive) {
+	public static int nextInt(final int startInclusive, final int endExclusive) {
 		checkParameters(startInclusive, endExclusive);
 		int diff = endExclusive - startInclusive;
 		if (diff == 0) {
 			return startInclusive;
 		}
-		return random.ints(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsInt();
+		return threadLocalRandom().ints(startInclusive, (endExclusive + 1)).limit(1).findFirst().getAsInt();
 	}
 
 	/**
@@ -180,7 +176,7 @@ public class RandomUtil {
 	 * @param startInclusive lower limit, must be non-negative
 	 * @param endExclusive the upper bound (not included)
 	 */
-	private void checkParameters(final long startInclusive, final long endExclusive) {
+	private static void checkParameters(final long startInclusive, final long endExclusive) {
 		if (endExclusive < startInclusive) {
 			throw new IllegalArgumentException("startInclusive must be less than or equal to the endExclusive.");
 		}
