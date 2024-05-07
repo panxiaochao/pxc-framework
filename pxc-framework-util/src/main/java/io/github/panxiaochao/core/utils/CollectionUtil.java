@@ -29,6 +29,9 @@ public class CollectionUtil {
 	@SuppressWarnings("rawtypes")
 	private static final Collection EMPTY_COLLECTION = Collections.emptyList();
 
+	@SuppressWarnings("rawtypes")
+	public static final List EMPTY_LIST = Collections.emptyList();
+
 	/**
 	 * 空集合
 	 * @return 空集合
@@ -37,6 +40,16 @@ public class CollectionUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> emptyCollection() {
 		return EMPTY_COLLECTION;
+	}
+
+	/**
+	 * 空集合
+	 * @return 空集合
+	 * @param <T> 类型
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> emptyList() {
+		return (List<T>) EMPTY_LIST;
 	}
 
 	/**
