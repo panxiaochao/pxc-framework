@@ -150,7 +150,7 @@ public class RedissonUtil {
 	// ------------------------------- Object 类型操作 --------------------------------
 
 	/**
-	 * set the value
+	 * 设置值
 	 * @param key key
 	 * @param value T value
 	 */
@@ -188,7 +188,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Obtain the v
+	 * 获取值
 	 * @param key key
 	 * @return value
 	 */
@@ -198,7 +198,17 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Sets value with defined duration only if object holder doesn't exist.
+	 * 获取值通过批量keys
+	 * @param keys keys
+	 * @return value
+	 */
+	public static <T> Map<String, T> get(String... keys) {
+		RBuckets rBuckets = getRBuckets();
+		return rBuckets.get(keys);
+	}
+
+	/**
+	 * 仅当对象不存在时设置具有过期持续时间的值.
 	 * @param key key
 	 * @param value value to set
 	 * @param duration expiration duration
@@ -209,7 +219,17 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Set the value.
+	 * 仅当对象已存在时设置具有过期持续时间的值.
+	 * @param value value to set
+	 * @param duration expiration duration
+	 * @return {@code true} if successful, or {@code false} if element wasn't set
+	 */
+	public static <T> boolean setIfExists(String key, T value, Duration duration) {
+		return getRBucket(key).setIfExists(value, duration);
+	}
+
+	/**
+	 * 设置值.
 	 * @param key key
 	 * @param value T value
 	 * @param duration expiration duration
@@ -228,7 +248,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * delete the object from the key.
+	 * 删除值通过key.
 	 * @param key key
 	 */
 	public static void delete(String key) {
@@ -236,7 +256,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * delete the Collection object from the key
+	 * 删除值通过批量key
 	 * @param collection collection
 	 */
 	public static void delete(Collection<?> collection) {
@@ -248,7 +268,7 @@ public class RedissonUtil {
 	}
 
 	/**
-	 * Check object existence
+	 * 检查对象是否存在
 	 * @return <code>true</code> if object exists and <code>false</code> otherwise
 	 */
 	public static boolean isExists(String key) {
@@ -262,6 +282,14 @@ public class RedissonUtil {
 	 */
 	private static <T> RBucket<T> getRBucket(String name) {
 		return ofRedissonClient().getBucket(name);
+	}
+
+	/**
+	 * Obtain the RBuckets.
+	 * @return RBuckets
+	 */
+	private static RBuckets getRBuckets() {
+		return ofRedissonClient().getBuckets();
 	}
 
 	// ------------------------------- 管道 类型操作 --------------------------------
@@ -470,14 +498,30 @@ public class RedissonUtil {
 	// ------------------------------- Map 类型操作 --------------------------------
 
 	/**
+	 * clear map all
+	 * @param name name of object
+	 */
+	public static void clearMap(String name) {
+		getRMap(name).clear();
+	}
+
+	/**
+	 * remove map by key
+	 * @param name name of object
+	 * @param key key
+	 */
+	public static void removeMap(String name, String key) {
+		getRMap(name).remove(key);
+	}
+
+	/**
 	 * remove map by key and value
 	 * @param name name of object
 	 * @param key key
 	 * @param <T> T Object
 	 */
 	public static <T> boolean removeMap(String name, String key, T value) {
-		RMap<String, T> rMap = getRMap(name);
-		return rMap.remove(key, value);
+		return getRMap(name).remove(key, value);
 	}
 
 	/**

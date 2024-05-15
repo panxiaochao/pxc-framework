@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import io.github.panxiaochao.core.utils.date.DatePattern;
+import io.github.panxiaochao.core.utils.jackson.CustomizeJavaTimeModule;
 import io.github.panxiaochao.redis.config.properties.Redisson3Properties;
 import io.github.panxiaochao.redis.mapper.KeyPrefixNameMapper;
 import lombok.RequiredArgsConstructor;
@@ -152,6 +153,7 @@ public class Redisson3AutoConfiguration {
 		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		om.setDateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN));
+		om.registerModule(new CustomizeJavaTimeModule());
 		return om;
 	}
 
