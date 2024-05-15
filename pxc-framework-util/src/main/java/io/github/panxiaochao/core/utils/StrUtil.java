@@ -361,6 +361,73 @@ public class StrUtil {
 
 	/**
 	 * <p>
+	 * Checks if all of the CharSequences are empty (""), null or whitespace only.
+	 * </p>
+	 *
+	 * <p>
+	 * Whitespace is defined by {@link Character#isWhitespace(char)}.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.isAllBlank(null)             = true
+	 * StrUtil.isAllBlank(null, "foo")      = false
+	 * StrUtil.isAllBlank(null, null)       = true
+	 * StrUtil.isAllBlank("", "bar")        = false
+	 * StrUtil.isAllBlank("bob", "")        = false
+	 * StrUtil.isAllBlank("  bob  ", null)  = false
+	 * StrUtil.isAllBlank(" ", "bar")       = false
+	 * StrUtil.isAllBlank("foo", "bar")     = false
+	 * StrUtil.isAllBlank(new String[] {})  = true
+	 * </pre>
+	 * @param css the CharSequences to check, may be null or empty
+	 * @return {@code true} if all of the CharSequences are empty or null or whitespace
+	 * only
+	 */
+	public static boolean isAllBlank(final CharSequence... css) {
+		if (ArrayUtil.isEmpty(css)) {
+			return true;
+		}
+		for (final CharSequence cs : css) {
+			if (isNotBlank(cs)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * <p>
+	 * Checks if all of the CharSequences are empty ("") or null.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.isAllEmpty(null)             = true
+	 * StrUtil.isAllEmpty(null, "")         = true
+	 * StrUtil.isAllEmpty(new String[] {})  = true
+	 * StrUtil.isAllEmpty(null, "foo")      = false
+	 * StrUtil.isAllEmpty("", "bar")        = false
+	 * StrUtil.isAllEmpty("bob", "")        = false
+	 * StrUtil.isAllEmpty("  bob  ", null)  = false
+	 * StrUtil.isAllEmpty(" ", "bar")       = false
+	 * StrUtil.isAllEmpty("foo", "bar")     = false
+	 * </pre>
+	 * @param css the CharSequences to check, may be null or empty
+	 * @return {@code true} if all of the CharSequences are empty or null
+	 */
+	public static boolean isAllEmpty(final CharSequence... css) {
+		if (ArrayUtil.isEmpty(css)) {
+			return true;
+		}
+		for (final CharSequence cs : css) {
+			if (isNotEmpty(cs)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * <p>
 	 * Checks if none of the CharSequences are empty (""), null or whitespace only.
 	 * </p>
 	 *
@@ -1486,6 +1553,42 @@ public class StrUtil {
 		char[] result = new char[count];
 		Arrays.fill(result, c);
 		return new String(result);
+	}
+
+	/**
+	 * <p>
+	 * Removes a substring only if it is at the beginning of a source string, otherwise
+	 * returns the source string.
+	 * </p>
+	 *
+	 * <p>
+	 * A {@code null} source string will return {@code null}. An empty ("") source string
+	 * will return the empty string. A {@code null} search string will return the source
+	 * string.
+	 * </p>
+	 *
+	 * <pre>
+	 * StrUtil.removeStart(null, *)      = null
+	 * StrUtil.removeStart("", *)        = ""
+	 * StrUtil.removeStart(*, null)      = *
+	 * StrUtil.removeStart("www.domain.com", "www.")   = "domain.com"
+	 * StrUtil.removeStart("domain.com", "www.")       = "domain.com"
+	 * StrUtil.removeStart("www.domain.com", "domain") = "www.domain.com"
+	 * StrUtil.removeStart("abc", "")    = "abc"
+	 * </pre>
+	 * @param str the source String to search, may be null
+	 * @param remove the String to search for and remove, may be null
+	 * @return the substring with the string removed if found, {@code null} if null String
+	 * input
+	 */
+	public static String removeStart(final String str, final String remove) {
+		if (isEmpty(str) || isEmpty(remove)) {
+			return str;
+		}
+		if (str.startsWith(remove)) {
+			return str.substring(remove.length());
+		}
+		return str;
 	}
 
 	/**

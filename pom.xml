@@ -111,6 +111,7 @@
         <redisson.version>3.26.0</redisson.version>
         <javax-mail-api.version>1.6.2</javax-mail-api.version>
         <hikari.version>4.0.3</hikari.version>
+        <slf4j-api.version>2.0.13</slf4j-api.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
@@ -331,6 +332,11 @@
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>${hikari.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

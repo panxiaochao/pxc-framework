@@ -506,9 +506,6 @@ public class JdbcUtil {
 				}
 				x.close();
 			}
-			catch (SQLRecoverableException e) {
-				// skip
-			}
 			catch (Exception e) {
 				LOGGER.error("Close Connection error", e);
 			}

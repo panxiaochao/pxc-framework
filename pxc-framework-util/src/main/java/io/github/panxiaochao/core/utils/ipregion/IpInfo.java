@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.core.utils.ipregion;
 
+import io.github.panxiaochao.core.utils.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,7 +23,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -91,7 +91,7 @@ public class IpInfo {
 		regionSet.add(area);
 		regionSet.add(province);
 		regionSet.add(city);
-		regionSet.removeIf(Objects::isNull);
+		regionSet.removeIf(StrUtil::isBlank);
 		return String.join("|", regionSet);
 	}
 
@@ -106,7 +106,7 @@ public class IpInfo {
 		regionSet.add(province);
 		regionSet.add(city);
 		regionSet.add(isp);
-		regionSet.removeIf(Objects::isNull);
+		regionSet.removeIf(StrUtil::isBlank);
 		return String.join("|", regionSet);
 	}
 

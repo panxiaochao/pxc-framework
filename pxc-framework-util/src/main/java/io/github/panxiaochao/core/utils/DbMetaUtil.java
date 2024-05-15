@@ -5,6 +5,8 @@ import io.github.panxiaochao.core.utils.meta.db.IndexMeta;
 import io.github.panxiaochao.core.utils.meta.db.TableMeta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,12 +15,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -37,6 +39,11 @@ import java.util.Set;
  * @version 1.0
  */
 public class DbMetaUtil {
+
+	/**
+	 * LOGGER DbMetaUtil.class
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(DbMetaUtil.class);
 
 	/**
 	 * 获取所有表名
@@ -125,12 +132,7 @@ public class DbMetaUtil {
 					new String[] { TableType.TABLE.getName() })) {
 				if (null != rs) {
 					while (rs.next()) {
-						TableMeta table = new TableMeta();
-						table.setCatalog(rs.getString("TABLE_CAT"));
-						table.setSchema(rs.getString("TABLE_SCHEM"));
-						table.setTableName(rs.getString("TABLE_NAME"));
-						table.setTableComment(rs.getString("REMARKS"));
-						table.setTableType(rs.getString("TABLE_TYPE"));
+						TableMeta table = TableMeta.build(rs);
 						tableMetas.add(table);
 					}
 				}
@@ -143,16 +145,9 @@ public class DbMetaUtil {
 
 			for (TableMeta tableMeta : tableMetas) {
 				// 获取主键
-				try (final ResultSet rs = metaData.getPrimaryKeys(tableMeta.getCatalog(), tableMeta.getSchema(),
-						tableMeta.getTableName())) {
-					if (null != rs) {
-						final Set<String> pks = new HashSet<>();
-						while (rs.next()) {
-							pks.add(rs.getString("COLUMN_NAME"));
-						}
-						tableMeta.setPkNames(pks);
-					}
-				}
+				final Set<String> pks = getPrimaryKeysSet(metaData, tableMeta.getCatalog(), tableMeta.getSchema(),
+						tableMeta.getTableName());
+				tableMeta.setPkNames(pks);
 
 				// 获取字段信息
 				try (final ResultSet rs = metaData.getColumns(tableMeta.getCatalog(), tableMeta.getSchema(),
@@ -160,46 +155,15 @@ public class DbMetaUtil {
 					if (null != rs) {
 						Map<String, ColumnMeta> columnMetaMap = new LinkedHashMap<>();
 						while (rs.next()) {
-							ColumnMeta columnMeta = new ColumnMeta();
-							columnMeta.setSchema(tableMeta.getSchema());
-							columnMeta.setTableName(tableMeta.getTableName());
-							columnMeta.setColumnName(rs.getString("COLUMN_NAME"));
+							ColumnMeta columnMeta = ColumnMeta.build(rs);
+							// 是否是主键
 							columnMeta.setPrimaryKey(tableMeta.isPrimaryKey(columnMeta.getColumnName()));
-							columnMeta.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
-							columnMeta.setColumnDefault(rs.getString("COLUMN_DEF"));
-							columnMeta.setNullable(rs.getBoolean("NULLABLE"));
-							columnMeta.setJdbcType(rs.getInt("DATA_TYPE"));
-							columnMeta.setJdbcTypeName(rs.getString("TYPE_NAME"));
-							columnMeta.setColumnLength(rs.getInt("COLUMN_SIZE"));
-							columnMeta.setColumnComment(rs.getString("REMARKS"));
-
-							// 保留小数位数
-							try {
-								int digit = rs.getInt("DECIMAL_DIGITS");
-								columnMeta.setScale(digit);
-							}
-							catch (SQLException ignore) {
-								// 某些驱动可能不支持，跳过
-							}
-
-							// 是否自增
-							try {
-								String auto = rs.getString("IS_AUTOINCREMENT");
-								if ("YES".equalsIgnoreCase(auto)) {
-									columnMeta.setAutoIncrement(Boolean.TRUE);
-								}
-								else {
-									columnMeta.setAutoIncrement(Boolean.FALSE);
-								}
-							}
-							catch (SQLException ignore) {
-								// 某些驱动可能不支持，跳过
-							}
 							columnMetaMap.put(columnMeta.getColumnName(), columnMeta);
 						}
 						tableMeta.setColumns(columnMetaMap);
 					}
 				}
+
 				// 获得索引信息
 				try (final ResultSet rs = metaData.getIndexInfo(tableMeta.getCatalog(), tableMeta.getSchema(),
 						tableMeta.getTableName(), false, false)) {
@@ -231,7 +195,7 @@ public class DbMetaUtil {
 			}
 		}
 		catch (SQLException e) {
-			throw new RuntimeException("获取数据库表元数据信息错误", e);
+			throw new RuntimeException("获取数据库表元数据信息失败", e);
 		}
 		finally {
 			JdbcUtil.close(conn);
@@ -246,28 +210,8 @@ public class DbMetaUtil {
 	 * @return 字段数组
 	 */
 	public static List<String> getColumnNames(DataSource dataSource, String tableName) {
-		final List<String> columnNames = new ArrayList<>();
-		Connection conn = null;
-		try {
-			conn = dataSource.getConnection();
-			final String catalog = getCatalog(conn);
-			final String schema = getSchema(conn);
-			final DatabaseMetaData metaData = conn.getMetaData();
-			try (final ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
-				if (null != rs) {
-					while (rs.next()) {
-						columnNames.add(rs.getString("COLUMN_NAME"));
-					}
-				}
-			}
-			return columnNames;
-		}
-		catch (Exception e) {
-			throw new RuntimeException("获取数据库表-字段元数据失败!", e);
-		}
-		finally {
-			JdbcUtil.close(conn);
-		}
+		final List<ColumnMeta> columnNames = getColumnMeta(dataSource, null, null, tableName);
+		return columnNames.stream().map(ColumnMeta::getColumnName).collect(Collectors.toList());
 	}
 
 	/**
@@ -280,13 +224,71 @@ public class DbMetaUtil {
 	 */
 	public static List<ColumnMeta> getColumnMeta(DataSource dataSource, String catalog, String schema,
 			String tableName) {
+		final Map<String, ColumnMeta> columnMetaMap = new LinkedHashMap<>();
 		if (StrUtil.isNotBlank(tableName)) {
-			List<TableMeta> tableMetas = getTableMeta(dataSource, catalog, schema, tableName);
-			if (CollectionUtil.isNotEmpty(tableMetas)) {
-				return new ArrayList<>(tableMetas.get(0).getColumns().values());
+			Connection conn = null;
+			try {
+				conn = dataSource.getConnection();
+				if (null == catalog) {
+					catalog = getCatalog(conn);
+				}
+				if (null == schema) {
+					schema = getSchema(conn);
+				}
+				final DatabaseMetaData metaData = conn.getMetaData();
+				// 获取主键
+				final Set<String> pks = getPrimaryKeysSet(metaData, catalog, schema, tableName);
+				// 获取字段信息
+				try (final ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
+					if (null != rs) {
+						while (rs.next()) {
+							ColumnMeta columnMeta = ColumnMeta.build(rs);
+							// 是否是主键
+							columnMeta.setPrimaryKey(pks.contains(columnMeta.getColumnName()));
+							columnMetaMap.put(columnMeta.getColumnName(), columnMeta);
+						}
+					}
+				}
+			}
+			catch (SQLException e) {
+				throw new RuntimeException("获取数据库表-字段元数据信息失败", e);
+			}
+			finally {
+				JdbcUtil.close(conn);
 			}
 		}
-		return Collections.emptyList();
+		return new ArrayList<>(columnMetaMap.values());
+	}
+
+	/**
+	 * 获取表主键
+	 * @param metaData 数据库元数据对象
+	 * @param tableName 表名, 必填
+	 * @param catalog catalog name
+	 * @param schema schema name
+	 * @return 返回主键数组
+	 */
+	private static Set<String> getPrimaryKeysSet(DatabaseMetaData metaData, String catalog, String schema,
+			String tableName) {
+		final Set<String> pks = new HashSet<>();
+		if (StrUtil.isNotBlank(tableName)) {
+			try {
+				try (final ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
+					if (null != rs) {
+						while (rs.next()) {
+							pks.add(rs.getString("COLUMN_NAME"));
+						}
+						if (pks.size() > 1) {
+							LOGGER.warn("当前表: {}，存在多主键", tableName);
+						}
+					}
+				}
+			}
+			catch (SQLException e) {
+				throw new RuntimeException("获取数据库表主键失败!", e);
+			}
+		}
+		return pks;
 	}
 
 	/**
@@ -294,7 +296,7 @@ public class DbMetaUtil {
 	 * @param conn {@link Connection} 数据库连接，{@code null}时获取null
 	 * @return catalog 获取失败获取{@code null}
 	 */
-	public static String getCatalog(Connection conn) {
+	private static String getCatalog(Connection conn) {
 		if (null == conn) {
 			return null;
 		}
@@ -312,7 +314,7 @@ public class DbMetaUtil {
 	 * @param conn {@link Connection} 数据库连接，{@code null}时获取null
 	 * @return schema 获取失败获取{@code null}
 	 */
-	public static String getSchema(Connection conn) {
+	private static String getSchema(Connection conn) {
 		if (null == conn) {
 			return null;
 		}

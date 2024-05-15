@@ -1,10 +1,14 @@
 package io.github.panxiaochao.core.utils.meta.db;
 
+import io.github.panxiaochao.core.utils.StringPools;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * <p>
@@ -94,5 +98,60 @@ public class ColumnMeta implements Serializable {
 	 * 字段 注释
 	 */
 	private String columnComment;
+
+	/**
+	 * 构建数据库字段元数据
+	 */
+	public static ColumnMeta build(ResultSet rs) {
+		ColumnMeta columnMeta = new ColumnMeta();
+		try {
+			columnMeta.setSchema(rs.getString("TABLE_SCHEM"));
+			columnMeta.setTableName(rs.getString("TABLE_NAME"));
+			columnMeta.setColumnName(rs.getString("COLUMN_NAME"));
+			columnMeta.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+			columnMeta.setColumnDefault(rs.getString("COLUMN_DEF"));
+			columnMeta.setNullable(rs.getBoolean("NULLABLE"));
+			columnMeta.setJdbcType(rs.getInt("DATA_TYPE"));
+			columnMeta.setJdbcTypeName(rs.getString("TYPE_NAME"));
+			columnMeta.setColumnLength(rs.getInt("COLUMN_SIZE"));
+			columnMeta.setColumnComment(formatComment(rs.getString("REMARKS")));
+
+			// 保留小数位数
+			try {
+				int digit = rs.getInt("DECIMAL_DIGITS");
+				columnMeta.setScale(digit);
+			}
+			catch (SQLException ignore) {
+				// 某些驱动可能不支持，跳过
+			}
+
+			// 是否自增
+			try {
+				String auto = rs.getString("IS_AUTOINCREMENT");
+				if ("YES".equalsIgnoreCase(auto)) {
+					columnMeta.setAutoIncrement(Boolean.TRUE);
+				}
+				else {
+					columnMeta.setAutoIncrement(Boolean.FALSE);
+				}
+			}
+			catch (SQLException ignore) {
+				// 某些驱动可能不支持，跳过
+			}
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return columnMeta;
+	}
+
+	/**
+	 * 格式化内容
+	 * @param comment 注释
+	 * @return 格式化内容
+	 */
+	private static String formatComment(String comment) {
+		return StringUtils.hasText(comment) ? comment.replaceAll("\r\n", "\t") : StringPools.EMPTY;
+	}
 
 }

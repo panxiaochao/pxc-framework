@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -67,6 +69,24 @@ public class TableMeta implements Serializable {
 	 * 数据库 字段对象
 	 */
 	private Map<String, ColumnMeta> columns = new LinkedHashMap<>();
+
+	/**
+	 * 构建数据表元数据
+	 */
+	public static TableMeta build(ResultSet rs) {
+		TableMeta table = new TableMeta();
+		try {
+			table.setCatalog(rs.getString("TABLE_CAT"));
+			table.setSchema(rs.getString("TABLE_SCHEM"));
+			table.setTableName(rs.getString("TABLE_NAME"));
+			table.setTableComment(rs.getString("REMARKS"));
+			table.setTableType(rs.getString("TABLE_TYPE"));
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return table;
+	}
 
 	/**
 	 * 是否是主键
