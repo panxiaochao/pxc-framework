@@ -86,6 +86,26 @@ public final class DataOfSize implements Comparable<DataOfSize>, Serializable {
 	 */
 	private static final long BYTES_PER_TB = BYTES_PER_GB * 1024;
 
+	/**
+	 * Bytes per Petabyte.
+	 */
+	private static final long BYTES_PER_PB = BYTES_PER_TB * 1024;
+
+	/**
+	 * Bytes per Exabyte.
+	 */
+	private static final long BYTES_PER_EB = BYTES_PER_PB * 1024;
+
+	/**
+	 * Bytes per Zettabyte.
+	 */
+	private static final long BYTES_PER_ZB = BYTES_PER_EB * 1024;
+
+	/**
+	 * Bytes per Yottabyte.
+	 */
+	private static final long BYTES_PER_YB = BYTES_PER_ZB * 1024;
+
 	private final long bytes;
 
 	private DataOfSize(long bytes) {
@@ -136,6 +156,42 @@ public final class DataOfSize implements Comparable<DataOfSize>, Serializable {
 	public static DataOfSize ofTerabytes(long terabytes) {
 		return new DataOfSize(Math.multiplyExact(terabytes, BYTES_PER_TB));
 	}
+
+	/**
+	 * Obtain a {@link DataOfSize} representing the specified number of petabytes.
+	 * @param petabytes the number of petabytes, positive or negative
+	 * @return a {@link DataOfSize}
+	 */
+	public static DataOfSize ofPetabyte(long petabytes) {
+		return new DataOfSize(Math.multiplyExact(petabytes, BYTES_PER_PB));
+	}
+
+	/**
+	 * Obtain a {@link DataOfSize} representing the specified number of exabytes.
+	 * @param exabytes the number of exabytes, positive or negative
+	 * @return a {@link DataOfSize}
+	 */
+	public static DataOfSize ofExabyte(long exabytes) {
+		return new DataOfSize(Math.multiplyExact(exabytes, BYTES_PER_EB));
+	}
+
+	/**
+	 * Obtain a {@link DataOfSize} representing the specified number of zettabytes.
+	 * @param zettabytes the number of zettabytes, positive or negative
+	 * @return a {@link DataOfSize}
+	 */
+	// public static DataOfSize ofZettabyte(long zettabytes) {
+	// return new DataOfSize(Math.multiplyExact(zettabytes, BYTES_PER_ZB));
+	// }
+
+	/**
+	 * Obtain a {@link DataOfSize} representing the specified number of yottabytes.
+	 * @param yottabytes the number of yottabytes, positive or negative
+	 * @return a {@link DataOfSize}
+	 */
+	// public static DataOfSize ofYottabyte(long yottabytes) {
+	// return new DataOfSize(Math.multiplyExact(yottabytes, BYTES_PER_YB));
+	// }
 
 	/**
 	 * Obtain a {@link DataOfSize} representing an amount in the specified
@@ -242,6 +298,30 @@ public final class DataOfSize implements Comparable<DataOfSize>, Serializable {
 	public long toTerabytes() {
 		return this.bytes / BYTES_PER_TB;
 	}
+
+	/**
+	 * Return the number of petabytes in this instance.
+	 * @return the number of petabytes
+	 */
+	public long toPetabytes() {
+		return this.bytes / BYTES_PER_PB;
+	}
+
+	/**
+	 * Return the number of exabytes in this instance.
+	 * @return the number of exabytes
+	 */
+	public long toExabytes() {
+		return this.bytes / BYTES_PER_EB;
+	}
+
+	// public long toZettabytes() {
+	// return this.bytes / BYTES_PER_ZB;
+	// }
+	//
+	// public long toYottabytes() {
+	// return this.bytes / BYTES_PER_YB;
+	// }
 
 	@Override
 	public int compareTo(DataOfSize other) {

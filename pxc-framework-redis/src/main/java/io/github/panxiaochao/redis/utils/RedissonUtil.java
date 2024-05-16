@@ -256,6 +256,15 @@ public class RedissonUtil {
 	}
 
 	/**
+	 * 获取当前值后并且删除.
+	 * @param key key
+	 */
+	public static <T> T getAndDelete(String key) {
+		RBucket<T> rBucket = getRBucket(key);
+		return rBucket.getAndDelete();
+	}
+
+	/**
 	 * 删除值通过批量key
 	 * @param collection collection
 	 */

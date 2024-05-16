@@ -321,11 +321,24 @@ public class SystemServerUtil {
 	public static void main(String[] args) {
 		// System.out.println(SystemServerUtil.INSTANCE().ofSysInfo());
 		// Properties props = System.getProperties();
-		// // 遍历所有的属性
+		// 遍历所有的属性
 		// for (String key : props.stringPropertyNames()) {
 		// // 输出对应的键和值
 		// System.out.println(key + " = " + props.getProperty(key));
 		// }
+
+		// long memoryUsed = 0;
+		// for (MemoryPoolMXBean memoryPoolBean : ManagementFactory.getPlatformMXBeans(MemoryPoolMXBean.class)) {
+		// 	memoryUsed += memoryPoolBean.getUsage().getUsed();
+		// }
+		// System.out.println(DataOfSize.ofBytes(memoryUsed).toMegabytes());
+		//
+		// System.out.println("打印Java内存系统信息-----------");
+		// MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+		// System.out.println("测试是否启用了内存系统的详细输出:" + memoryMXBean.isVerbose());
+		// System.out.println("返回正在等待完成的对象的大致数量:" + memoryMXBean.getObjectPendingFinalizationCount());
+		// System.out.println("返回用于对象分配的堆的当前内存使用情况:" + memoryMXBean.getHeapMemoryUsage());
+		// System.out.println("返回Java虚拟机使用的非堆内存的当前内存使用情况:" + memoryMXBean.getNonHeapMemoryUsage());
 	}
 
 }

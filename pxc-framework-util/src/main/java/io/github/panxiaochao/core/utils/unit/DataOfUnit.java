@@ -87,7 +87,27 @@ public enum DataOfUnit {
 	/**
 	 * Terabytes, represented by suffix {@code TB}.
 	 */
-	TERABYTES("TB", DataOfSize.ofTerabytes(1));
+	TERABYTES("TB", DataOfSize.ofTerabytes(1)),
+
+	/**
+	 * Petabyte, represented by suffix {@code PB}.
+	 */
+	PETABYTE("PB", DataOfSize.ofPetabyte(1)),
+
+	/**
+	 * Exabyte, represented by suffix {@code EB}.
+	 */
+	EXABYTE("EB", DataOfSize.ofExabyte(1));
+
+	/**
+	 * Zettabyte, represented by suffix {@code ZB}.
+	 */
+	// ZETTABYTE("ZB", DataOfSize.ofZettabyte(1)),
+
+	/**
+	 * Yottabyte, represented by suffix {@code YB}.
+	 */
+	// YOTTABYTE("YB", DataOfSize.ofYottabyte(1));
 
 	private final String suffix;
 
