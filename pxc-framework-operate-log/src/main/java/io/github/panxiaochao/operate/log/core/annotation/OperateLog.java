@@ -116,6 +116,10 @@ public @interface OperateLog {
 		 */
 		LOGOUT,
 		/**
+		 * 强退
+		 */
+		FORCE_LOGOUT,
+		/**
 		 * 生成代码
 		 */
 		GENERATE_CODE,
