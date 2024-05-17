@@ -47,4 +47,6 @@ New Reconstruction 2.0, base on spring framework.
 
 ## 鸣谢 JetBrains 对开源项目的支持
 
-[![JetBrains](docs/img/jetbrains.png)](https://www.jetbrains.com?from=pxc-framework)
+<a href="https://www.jetbrains.com?from=pxc-framework">
+<img width="200" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo.">
+</a>
