@@ -170,7 +170,7 @@ public class OperateLogUtil {
 			Object[] args = joinPoint.getArgs();
 			// 获取方法上参数的名称
 			String[] parameterNames = PARAMETERNAMEDISCOVERER.getParameterNames(method);
-			Objects.requireNonNull(parameterNames, "限流Key解析异常, 请确认方法体是否存在定义参数！");
+			Objects.requireNonNull(parameterNames, "OperateLog Key解析异常, 请确认方法体是否存在定义参数！");
 			for (int i = 0; i < parameterNames.length; i++) {
 				EVALUATIONCONTEXT.setVariable(parameterNames[i], args[i]);
 			}
@@ -206,9 +206,7 @@ public class OperateLogUtil {
 		}
 		// 会出现混合模式，POST 中用跟参数的情况
 		if (MapUtil.isNotEmpty(paramsMap)) {
-			if (MapUtil.isNotEmpty(paramsMap)) {
-				MapUtil.removeAny(paramsMap, excludeProperties);
-			}
+			MapUtil.removeAny(paramsMap, excludeProperties);
 			operateLogDomain.setRequestParam(StrUtil.substring(JacksonUtil.toString(paramsMap), 0, 2000));
 		}
 	}
