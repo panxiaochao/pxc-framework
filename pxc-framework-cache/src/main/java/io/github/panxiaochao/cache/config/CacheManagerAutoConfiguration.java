@@ -73,7 +73,7 @@ public class CacheManagerAutoConfiguration {
 				}
 			}
 			else {
-				LOGGER.error("[pxc-framework-redis] is not dependency");
+				LOGGER.error("[pxc-framework-redis] is not dependency, will use simple cache!");
 			}
 		}
 		LOGGER.info("配置[Cache -> Simple]成功！");
