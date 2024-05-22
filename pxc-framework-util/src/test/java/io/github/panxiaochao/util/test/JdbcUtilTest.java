@@ -88,4 +88,13 @@ public class JdbcUtilTest {
 		}
 	}
 
+	@Test
+	void testConnection() {
+		String driver = "com.mysql.cj.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/oauth2?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
+		String username = "root";
+		String password = "root1234561";
+		System.out.println(JdbcUtil.testConnection(url, username, password));
+	}
+
 }

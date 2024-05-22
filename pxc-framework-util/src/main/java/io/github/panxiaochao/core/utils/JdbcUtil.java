@@ -33,6 +33,11 @@ public class JdbcUtil {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcUtil.class);
 
+	/**
+	 * 连接超时设置
+	 */
+	private static final int CONNECTION_TIMEOUTS_SECONDS = 5;
+
 	private static final List<String> JAVA8_TIME = Arrays.asList("LocalDate", "LocalTime", "LocalDateTime");
 
 	/**
@@ -584,6 +589,25 @@ public class JdbcUtil {
 			catch (Exception e) {
 				LOGGER.error("close error", e);
 			}
+		}
+	}
+
+	/**
+	 * 测试连接数据库是否成功
+	 * @param url 连接url
+	 * @param username 用户名
+	 * @param password 密码
+	 * @return true or false
+	 */
+	public static boolean testConnection(String url, String username, String password) {
+		DriverManager.setLoginTimeout(CONNECTION_TIMEOUTS_SECONDS);
+		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+			LOGGER.info("Connection {} is success!", connection.getMetaData().getDatabaseProductName());
+			return true;
+		}
+		catch (SQLException e) {
+			LOGGER.error("Connection jdbc is error", e);
+			return false;
 		}
 	}
 
