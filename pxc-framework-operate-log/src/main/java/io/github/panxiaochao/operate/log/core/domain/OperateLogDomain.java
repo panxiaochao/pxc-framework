@@ -15,6 +15,12 @@
  */
 package io.github.panxiaochao.operate.log.core.domain;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
+import io.github.panxiaochao.core.utils.IpUtil;
+import io.github.panxiaochao.core.utils.ObjectUtil;
+import io.github.panxiaochao.core.utils.RequestUtil;
+import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,7 +44,7 @@ public class OperateLogDomain implements Serializable {
 	private static final long serialVersionUID = -8831737354114961499L;
 
 	/**
-	 * 名称
+	 * 标题
 	 */
 	private String title;
 
@@ -141,5 +147,38 @@ public class OperateLogDomain implements Serializable {
 	 * 错误原因
 	 */
 	private String errorMessage;
+
+	/**
+	 * 基础构建日志对象
+	 */
+	public static OperateLogDomain build(OperateLog operateLog, Class<?> targetClass, String methodName) {
+		OperateLogDomain operateLogDomain = new OperateLogDomain();
+		if (ObjectUtil.isEmpty(targetClass)) {
+			return operateLogDomain;
+		}
+		operateLogDomain.setClassName(targetClass.getSimpleName());
+		operateLogDomain.setClassMethod(targetClass.getName() + "." + methodName + "()");
+		if (ObjectUtil.isNotEmpty(operateLog)) {
+			operateLogDomain.setTitle(operateLog.title());
+			operateLogDomain.setDescription(operateLog.description());
+			operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
+			operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
+		}
+		if (RequestUtil.getRequest() != null) {
+			operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
+			operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
+			operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
+			operateLogDomain.setIp(IpUtil.ofRequestIp());
+			// 设置请求浏览器和操作系统
+			String uaString = RequestUtil.getRequest().getHeader("User-Agent").toLowerCase();
+			UserAgent userAgent = UserAgentUtil.parse(uaString);
+			operateLogDomain.setBrowser(userAgent.getBrowser().toString() + " " + userAgent.getVersion());
+			operateLogDomain.setOs(userAgent.getPlatform().toString() + " " + userAgent.getOs().toString());
+		}
+		operateLogDomain.setRequestDateTime(LocalDateTime.now());
+		operateLogDomain.setCode(1);
+		operateLogDomain.setCostTime(0);
+		return operateLogDomain;
+	}
 
 }

@@ -15,10 +15,16 @@
  */
 package io.github.panxiaochao.operate.log.utils;
 
-import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.panxiaochao.core.utils.*;
+import io.github.panxiaochao.core.utils.ArrayUtil;
+import io.github.panxiaochao.core.utils.ExceptionUtil;
+import io.github.panxiaochao.core.utils.JacksonUtil;
+import io.github.panxiaochao.core.utils.MapUtil;
+import io.github.panxiaochao.core.utils.ObjectUtil;
+import io.github.panxiaochao.core.utils.RequestUtil;
+import io.github.panxiaochao.core.utils.SpringContextUtil;
+import io.github.panxiaochao.core.utils.StrUtil;
+import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
 import io.github.panxiaochao.operate.log.core.context.MethodCostContext;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
@@ -43,7 +49,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -99,22 +104,8 @@ public class OperateLogUtil {
 		// Method
 		Method method = methodSignature.getMethod();
 		// 设置方法名称
-		String className = target.getClass().getName();
 		String methodName = method.getName();
-		OperateLogDomain operateLogDomain = new OperateLogDomain();
-		operateLogDomain.setClassName(target.getClass().getSimpleName());
-		operateLogDomain.setClassMethod(className + "." + methodName + "()");
-		operateLogDomain.setTitle(operateLog.title());
-		operateLogDomain.setDescription(operateLog.description());
-		operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
-		operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
-		if (RequestUtil.getRequest() != null) {
-			operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
-			operateLogDomain.setRequestMethod(RequestUtil.getRequest().getMethod());
-			operateLogDomain.setRequestContentType(RequestUtil.getRequest().getContentType());
-			operateLogDomain.setIp(IpUtil.ofRequestIp());
-		}
-		operateLogDomain.setRequestDateTime(LocalDateTime.now());
+		OperateLogDomain operateLogDomain = OperateLogDomain.build(operateLog, target.getClass(), methodName);
 		if (ex != null) {
 			operateLogDomain.setCode(0);
 			operateLogDomain.setErrorMessage(StrUtil.substring(ExceptionUtil.getMessage(ex), 0, 2000));
@@ -122,11 +113,6 @@ public class OperateLogUtil {
 		else {
 			operateLogDomain.setCode(1);
 		}
-		// 设置请求浏览器和操作系统
-		String uaString = RequestUtil.getRequest().getHeader("User-Agent").toLowerCase();
-		UserAgent userAgent = UserAgentUtil.parse(uaString);
-		operateLogDomain.setBrowser(userAgent.getBrowser().toString() + " " + userAgent.getVersion());
-		operateLogDomain.setOs(userAgent.getPlatform().toString() + " " + userAgent.getOs().toString());
 		// 设置请求参数
 		if (operateLog.saveReqParams()) {
 			setRequestParam(args, operateLogDomain, operateLog.excludeParamNames());
@@ -159,7 +145,7 @@ public class OperateLogUtil {
 
 	/**
 	 * 解析参数
-	 * @param method Method
+	 * @param method 方法
 	 * @param joinPoint JoinPoint
 	 * @param key 参数key
 	 * @return 解析值

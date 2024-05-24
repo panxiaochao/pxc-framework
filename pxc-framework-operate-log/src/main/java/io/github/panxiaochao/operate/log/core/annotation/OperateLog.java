@@ -40,7 +40,7 @@ public @interface OperateLog {
 	String key() default "";
 
 	/**
-	 * 模块名
+	 * 标题.
 	 */
 	String title() default "";
 
