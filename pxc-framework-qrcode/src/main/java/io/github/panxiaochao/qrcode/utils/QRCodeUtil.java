@@ -113,7 +113,7 @@ public class QRCodeUtil {
 	private BufferedImage qrcodeImage;
 
 	/**
-	 * 创建一个带有默认值的 QRCode 生成器的格式。默认值如下
+	 * 创建一个带有默认值的 QRCode 生成器的格式.默认值如下
 	 *
 	 * <ul>
 	 * <li>图片大小: 300px</li>
@@ -139,7 +139,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 使用带默认值的「QRCode 生成器格式」来创建一个 QRCode 处理器。
+	 * 使用带默认值的「QRCode 生成器格式」来创建一个 QRCode 处理器.
 	 * @param content 所要生成 QRCode 的内容
 	 * @return QRCodeUtil
 	 */
@@ -148,7 +148,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置图片的大小。图片的大小等于实际内容与外边距的值（建议设置成偶数值）。
+	 * 设置图片的大小.图片的大小等于实际内容与外边距的值（建议设置成偶数值）.
 	 * @param size 图片的大小
 	 * @return QRCodeUtil
 	 */
@@ -158,7 +158,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置内容编码格式。
+	 * 设置内容编码格式.
 	 * @param encode 内容编码格式
 	 * @return QRCodeUtil
 	 */
@@ -170,7 +170,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置错误修正等级。其定义如下
+	 * 设置错误修正等级.其定义如下
 	 *
 	 * <ul>
 	 * <li>L: 有 7% 的内容可被修正</li>
@@ -207,7 +207,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置前景色。值为十六进制的颜色值（与 CSS 定义颜色的值相同，不支持简写），可以忽略「#」符号。
+	 * 设置前景色.值为十六进制的颜色值（与 CSS 定义颜色的值相同，不支持简写），可以忽略「#」符号.
 	 * @param foreGroundColor 前景色的值
 	 * @return QRCodeUtil
 	 */
@@ -222,7 +222,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置前景色。
+	 * 设置前景色.
 	 * @param foreGroundColor 前景色的值
 	 * @return QRCodeUtil
 	 */
@@ -232,7 +232,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置背景色。值为十六进制的颜色值（与 CSS 定义颜色的值相同，不支持简写），可以忽略「#」符号。
+	 * 设置背景色.值为十六进制的颜色值（与 CSS 定义颜色的值相同，不支持简写），可以忽略「#」符号.
 	 * @param backGroundColor 前景色的值
 	 * @return QRCodeUtil
 	 */
@@ -247,7 +247,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置背景色。
+	 * 设置背景色.
 	 * @param backGroundColor 前景色的值
 	 * @return QRCodeUtil
 	 */
@@ -257,7 +257,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置图片的文件格式 。
+	 * 设置图片的文件格式 .
 	 * @param imageFormat 图片的文件格式
 	 * @return QRCodeUtil
 	 */
@@ -269,7 +269,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 删除白边。
+	 * 删除白边.
 	 * @param deleteMargin 删除白边
 	 * @return QRCodeUtil
 	 */
@@ -279,7 +279,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置图片的外边距大小 。
+	 * 设置图片的外边距大小 .
 	 * @param margin 图片的外边距大小
 	 * @return QRCodeUtil
 	 */
@@ -289,7 +289,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 返回提供给编码器额外的参数。
+	 * 返回提供给编码器额外的参数.
 	 * @return 提供给编码器额外的参数
 	 */
 	public Map<EncodeHintType, ?> getHints() {
@@ -307,7 +307,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置添加的图片。
+	 * 设置添加的图片.
 	 * @param qrcodeImage 添加的图片
 	 * @return QRCodeUtil
 	 */
@@ -317,7 +317,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置添加的图片。
+	 * 设置添加的图片.
 	 * @param logo 添加的图片
 	 * @return QRCodeUtil
 	 */
@@ -331,7 +331,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置添加的图片。
+	 * 设置添加的图片.
 	 * @param url 添加的图片
 	 * @return QRCodeUtil
 	 */
@@ -345,7 +345,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置添加的图片。
+	 * 设置添加的图片.
 	 * @param iconPath 添加的图片
 	 * @return QRCodeUtil
 	 */
@@ -361,7 +361,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 设置添加的图片。
+	 * 设置添加的图片.
 	 * @param logoStream 添加的图片流
 	 * @return QRCodeUtil
 	 */
@@ -390,7 +390,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 把指定的内容生成为一个 QRCode 的图片，之后保存到指定的文件中。
+	 * 把指定的内容生成为一个 QRCode 的图片，之后保存到指定的文件中.
 	 * @param f 指定的文件
 	 * @return 文件
 	 */
@@ -399,7 +399,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 把指定的内容生成为一个 QRCodeUtil 的图片，之后保存到指定的文件中。
+	 * 把指定的内容生成为一个 QRCodeUtil 的图片，之后保存到指定的文件中.
 	 * @param qrCodeFile 指定的文件
 	 * @return 文件
 	 */
@@ -418,7 +418,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的 base64 image。
+	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的 base64 image.
 	 * @return base64 字符串
 	 */
 	public String toBase64() {
@@ -426,7 +426,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的 byte 数组。
+	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的 byte 数组.
 	 * @return byte array
 	 */
 	public byte[] toBytes() {
@@ -443,7 +443,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的流。
+	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的流.
 	 * @return QRCodeUtil 的图像流
 	 */
 	public ByteArrayInputStream toStream() {
@@ -460,7 +460,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的图像对象。
+	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的图像对象.
 	 * @return QRCodeUtil 的图像对象
 	 */
 	public BufferedImage toImage() {
@@ -493,7 +493,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -509,7 +509,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 图片文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -523,7 +523,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片链接中解析出其内容。
+	 * 从指定的 QRCode 图片链接中解析出其内容.
 	 * @param qrCodeUrl QRCode 图片链接
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -537,7 +537,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图像对象中解析出其内容。
+	 * 从指定的 QRCode 图像对象中解析出其内容.
 	 * @param qrCodeImage QRCode 图像对象
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -546,7 +546,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -564,7 +564,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 图片文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -580,7 +580,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片链接中解析出其内容。
+	 * 从指定的 QRCode 图片链接中解析出其内容.
 	 * @param qrCodeUrl QRCode 图片链接
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -596,7 +596,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图像对象中解析出其内容。
+	 * 从指定的 QRCode 图像对象中解析出其内容.
 	 * @param qrCodeImage QRCode 图像对象
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -607,7 +607,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图像对象中解析出其内容。
+	 * 从指定的 QRCode 图像对象中解析出其内容.
 	 * @param qrCodeImage QRCode 图像对象
 	 * @param hints hints
 	 * @return QRCodeUtil 中的内容
@@ -628,7 +628,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -637,7 +637,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片文件中解析出其内容。
+	 * 从指定的 QRCode 图片文件中解析出其内容.
 	 * @param qrCodeFile QRCode 图片文件
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -646,7 +646,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图片链接中解析出其内容。
+	 * 从指定的 QRCode 图片链接中解析出其内容.
 	 * @param qrCodeUrl QRCode 图片链接
 	 * @return QRCodeUtil 中的内容
 	 */
@@ -655,7 +655,7 @@ public class QRCodeUtil {
 	}
 
 	/**
-	 * 从指定的 QRCode 图像对象中解析出其内容。
+	 * 从指定的 QRCode 图像对象中解析出其内容.
 	 * @param qrCodeImage QRCode 图像对象
 	 * @return QRCodeUtil 中的内容
 	 */
