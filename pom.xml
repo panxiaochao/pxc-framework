@@ -73,7 +73,7 @@
 
     <!-- properties -->
     <properties>
-        <revision>2.0.6-SNAPSHOT</revision>
+        <revision>2.0.6</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -495,6 +495,7 @@
                                 <exclude>**/*.xml</exclude>
                                 <exclude>.gitignore</exclude>
                                 <exclude>.springjavaformatconfig</exclude>
+                                <exclude>package-info.java</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
