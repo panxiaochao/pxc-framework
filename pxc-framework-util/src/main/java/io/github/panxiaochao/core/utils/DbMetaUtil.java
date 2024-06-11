@@ -294,7 +294,7 @@ public class DbMetaUtil {
 							pks.add(rs.getString("COLUMN_NAME"));
 						}
 						if (pks.size() > 1) {
-							LOGGER.warn("当前表: {}，存在多主键", tableName);
+							LOGGER.warn("当前表: {}, 存在多主键: [{}]", tableName, String.join(",", pks));
 						}
 					}
 				}

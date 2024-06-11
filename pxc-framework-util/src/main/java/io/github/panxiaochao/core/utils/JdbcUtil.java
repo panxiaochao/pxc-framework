@@ -98,6 +98,18 @@ public class JdbcUtil {
 	 * @param url the database URL
 	 * @param username the username
 	 * @param password the password
+	 * @return the database connection
+	 */
+	public static DataSource getDataSource(String driver, String url, String username, String password) {
+		return getDataSource(driver, url, username, password, null);
+	}
+
+	/**
+	 * Obtain a new database DataSource with the given settings.
+	 * @param driver the driver class name
+	 * @param url the database URL
+	 * @param username the username
+	 * @param password the password
 	 * @param consumer the HikariConfig consumer, customer properties
 	 * @return the database connection
 	 */

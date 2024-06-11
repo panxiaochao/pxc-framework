@@ -54,46 +54,29 @@ import java.util.stream.Collectors;
 public class SystemServerUtil {
 
 	/**
-	 * 单例
-	 */
-	private final static SystemServerUtil SYSTEM_SERVER_UTIL = new SystemServerUtil();
-
-	/**
-	 * SystemInfo 初始化
-	 */
-	private static final SystemInfo systemInfo;
-
-	/**
 	 * 硬件信息
 	 */
-	private static final HardwareAbstractionLayer hal;
+	private static final HardwareAbstractionLayer HAL;
 
 	/**
 	 * 系统信息
 	 */
-	private static final OperatingSystem os;
+	private static final OperatingSystem OS;
 
 	static {
-		systemInfo = new SystemInfo();
-		hal = systemInfo.getHardware();
-		os = systemInfo.getOperatingSystem();
+		SystemInfo systemInfo = new SystemInfo();
+		HAL = systemInfo.getHardware();
+		OS = systemInfo.getOperatingSystem();
 	}
 
 	private SystemServerUtil() {
 	}
 
 	/**
-	 * @return SystemServerUtil
-	 */
-	public static SystemServerUtil INSTANCE() {
-		return SYSTEM_SERVER_UTIL;
-	}
-
-	/**
 	 * 获取系统服务器信息，包括CPU, 内存, JVM, 硬盘等等信息
 	 * @return ServerInfo
 	 */
-	public ServerInfo getServerInfo() {
+	public static ServerInfo getServerInfo() {
 		ServerInfo serverInfo = new ServerInfo();
 		serverInfo.setCpu(ofCpuInfo());
 		serverInfo.setMem(ofMemInfo());
@@ -108,10 +91,10 @@ public class SystemServerUtil {
 	 * 获取CPU信息
 	 * @return Cpu
 	 */
-	public Cpu ofCpuInfo() {
+	public static Cpu ofCpuInfo() {
 		// Oshi 返回的值和Windows任务管理器显示的值一致
 		GlobalConfig.set(GlobalConfig.OSHI_OS_WINDOWS_CPU_UTILITY, true);
-		CentralProcessor processor = hal.getProcessor();
+		CentralProcessor processor = HAL.getProcessor();
 		// CPU信息
 		long[] prevTicks = processor.getSystemCpuLoadTicks();
 		try {
@@ -159,8 +142,8 @@ public class SystemServerUtil {
 	 * 获取内存信息
 	 * @return Mem
 	 */
-	public Mem ofMemInfo() {
-		GlobalMemory memory = hal.getMemory();
+	public static Mem ofMemInfo() {
+		GlobalMemory memory = HAL.getMemory();
 		memory.getVirtualMemory();
 		// 内存信息
 		Mem mem = new Mem();
@@ -174,7 +157,7 @@ public class SystemServerUtil {
 	 * 获取JVM信息
 	 * @return Jvm
 	 */
-	public Jvm ofJvmInfo() {
+	public static Jvm ofJvmInfo() {
 		Jvm jvm = new Jvm();
 		Properties props = System.getProperties();
 		jvm.setTotal(Runtime.getRuntime().totalMemory());
@@ -183,6 +166,7 @@ public class SystemServerUtil {
 		jvm.setJavaVersion(props.getProperty("java.version"));
 		jvm.setHome(props.getProperty("java.home"));
 		jvm.setJvmVersion(props.getProperty("java.vm.version"));
+		jvm.setVendor(props.getProperty("java.vendor"));
 		return jvm;
 	}
 
@@ -190,9 +174,9 @@ public class SystemServerUtil {
 	 * 获取系统信息
 	 * @return SysInfo
 	 */
-	public SysInfo ofSysInfo() {
-		NetworkParams networkParams = os.getNetworkParams();
-		List<NetworkIF> networkIFs = hal.getNetworkIFs();
+	public static SysInfo ofSysInfo() {
+		NetworkParams networkParams = OS.getNetworkParams();
+		List<NetworkIF> networkIFs = HAL.getNetworkIFs();
 		List<String> ipv4s = networkIFs.stream()
 			.map(NetworkIF::getIPv4addr)
 			.filter(ArrayUtil::isNotEmpty)
@@ -215,8 +199,8 @@ public class SystemServerUtil {
 	 * 获取磁盘文件存储信息
 	 * @return DiskInfo
 	 */
-	public List<DiskInfo> ofDiskInfos() {
-		FileSystem fileSystem = os.getFileSystem();
+	public static List<DiskInfo> ofDiskInfos() {
+		FileSystem fileSystem = OS.getFileSystem();
 		List<OSFileStore> fsArray = fileSystem.getFileStores();
 		List<DiskInfo> diskInfos = new ArrayList<>();
 		for (OSFileStore fs : fsArray) {
@@ -240,7 +224,7 @@ public class SystemServerUtil {
 	 * 磁盘总体存储详情
 	 * @return DiskInfo
 	 */
-	public DiskInfo ofDiskInfo() {
+	public static DiskInfo ofDiskInfo() {
 		// 获取磁盘总体详情
 		AtomicLong storageTotal = new AtomicLong(0);
 		AtomicLong storageUsed = new AtomicLong(0);
@@ -266,9 +250,9 @@ public class SystemServerUtil {
 	 * 获取网络上传下载 单位Kb/s
 	 * @return 上传速度和下载速度
 	 */
-	public Map<String, Object> ofNetworkInterfaces() {
+	public static Map<String, Object> ofNetworkInterfaces() {
 		Map<String, Object> networkInterfaces = new HashMap<>();
-		List<NetworkIF> networkIFs = hal.getNetworkIFs();
+		List<NetworkIF> networkIFs = HAL.getNetworkIFs();
 		for (NetworkIF networkIF : networkIFs) {
 			if (ArrayUtil.isNotEmpty(networkIF.getIPv4addr())) {
 				long rxBytes = networkIF.getBytesRecv();
@@ -293,31 +277,6 @@ public class SystemServerUtil {
 		return networkInterfaces;
 	}
 
-	/**
-	 * 字节转换
-	 * @param size 字节大小
-	 * @return 转换后值
-	 */
-	private String convertFileSize(long size) {
-		long kb = 1024;
-		long mb = kb * 1024;
-		long gb = mb * 1024;
-		if (size >= gb) {
-			return String.format("%.1f GB", (float) size / gb);
-		}
-		else if (size >= mb) {
-			float f = (float) size / mb;
-			return String.format(f > 100 ? "%.0f MB" : "%.1f MB", f);
-		}
-		else if (size >= kb) {
-			float f = (float) size / kb;
-			return String.format(f > 100 ? "%.0f KB" : "%.1f KB", f);
-		}
-		else {
-			return String.format("%d B", size);
-		}
-	}
-
 	public static void main(String[] args) {
 		// System.out.println(SystemServerUtil.INSTANCE().ofSysInfo());
 		// Properties props = System.getProperties();
@@ -328,17 +287,20 @@ public class SystemServerUtil {
 		// }
 
 		// long memoryUsed = 0;
-		// for (MemoryPoolMXBean memoryPoolBean : ManagementFactory.getPlatformMXBeans(MemoryPoolMXBean.class)) {
-		// 	memoryUsed += memoryPoolBean.getUsage().getUsed();
+		// for (MemoryPoolMXBean memoryPoolBean :
+		// ManagementFactory.getPlatformMXBeans(MemoryPoolMXBean.class)) {
+		// memoryUsed += memoryPoolBean.getUsage().getUsed();
 		// }
 		// System.out.println(DataOfSize.ofBytes(memoryUsed).toMegabytes());
 		//
 		// System.out.println("打印Java内存系统信息-----------");
 		// MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 		// System.out.println("测试是否启用了内存系统的详细输出:" + memoryMXBean.isVerbose());
-		// System.out.println("返回正在等待完成的对象的大致数量:" + memoryMXBean.getObjectPendingFinalizationCount());
+		// System.out.println("返回正在等待完成的对象的大致数量:" +
+		// memoryMXBean.getObjectPendingFinalizationCount());
 		// System.out.println("返回用于对象分配的堆的当前内存使用情况:" + memoryMXBean.getHeapMemoryUsage());
-		// System.out.println("返回Java虚拟机使用的非堆内存的当前内存使用情况:" + memoryMXBean.getNonHeapMemoryUsage());
+		// System.out.println("返回Java虚拟机使用的非堆内存的当前内存使用情况:" +
+		// memoryMXBean.getNonHeapMemoryUsage());
 	}
 
 }

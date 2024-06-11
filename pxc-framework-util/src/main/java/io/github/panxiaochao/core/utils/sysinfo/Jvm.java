@@ -65,6 +65,11 @@ public class Jvm {
 	 */
 	private String home;
 
+	/**
+	 * JDK Vendor
+	 */
+	private String vendor;
+
 	public double getTotal() {
 		return ArithmeticUtil.div(total, (1024 * 1024), 2);
 	}

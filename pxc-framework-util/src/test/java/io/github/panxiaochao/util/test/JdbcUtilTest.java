@@ -89,6 +89,34 @@ public class JdbcUtilTest {
 	}
 
 	@Test
+	void getDmTables() {
+		try {
+			String driver = "dm.jdbc.driver.DmDriver";
+			String url = "jdbc:dm://134.98.6.38:5237/HZ_SPT_TEST";
+			String username = "HZ_SPT_TEST";
+			String password = "hesc@00728";
+			DataSource dataSource = JdbcUtil.getDataSource(driver, url, username, password);
+			// List<String> tables = DbMetaUtil.getTables(dataSource);
+			// System.out.println(tables);
+			// List<String> columns = DbMetaUtil.getColumnNames(dataSource,
+			// "oauth2_authorization_consent");
+			// System.out.println(columns);
+
+			// List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null, null, null);
+			// System.out.println(JacksonUtil.toString(tableMetas));
+			//
+			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, "HZ_SPT_TEST", "urp_user");
+			System.out.println(JacksonUtil.toString(columnMetas));
+
+			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource, "urp_user");
+			// System.out.println(JacksonUtil.toString(columnNames));
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Test
 	void testConnection() {
 		String driver = "com.mysql.cj.jdbc.Driver";
 		String url = "jdbc:mysql://localhost:3306/oauth2?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
