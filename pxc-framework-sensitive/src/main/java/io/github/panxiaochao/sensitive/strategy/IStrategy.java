@@ -15,27 +15,22 @@
  */
 package io.github.panxiaochao.sensitive.strategy;
 
+import java.util.function.Function;
+
 /**
  * <p>
- * 脱敏策略抽象类
+ * 策略基类
  * </p>
  *
  * @author Lypxc
- * @since 2023-08-31
+ * @since 2024-06-11
+ * @version 1.0
  */
-public class AbstractFSensitiveStrategy implements IFSensitiveStrategy {
-
-	public AbstractFSensitiveStrategy() {
-	}
+public interface IStrategy<T> {
 
 	/**
-	 * 自定义处理，需要继承改造
-	 * @param jsonValue json value 值
-	 * @return 脱敏值
+	 * 泛型函数.
 	 */
-	@Override
-	public String handler(String jsonValue) {
-		return jsonValue;
-	}
+	Function<String, T> use();
 
 }

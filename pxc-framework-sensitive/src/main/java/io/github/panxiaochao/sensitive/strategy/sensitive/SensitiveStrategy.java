@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.sensitive.enums;
+package io.github.panxiaochao.sensitive.strategy.sensitive;
 
+import io.github.panxiaochao.sensitive.strategy.IStrategy;
 import io.github.panxiaochao.sensitive.utils.DesensitizeUtil;
+import lombok.AllArgsConstructor;
 
 import java.util.function.Function;
 
@@ -27,7 +29,8 @@ import java.util.function.Function;
  * @author Lypxc
  * @since 2023-08-31
  */
-public enum FSensitiveStrategy {
+@AllArgsConstructor
+public enum SensitiveStrategy implements IStrategy<String> {
 
 	/**
 	 * 身份证脱敏
@@ -72,12 +75,9 @@ public enum FSensitiveStrategy {
 
 	private final Function<String, String> desensitize;
 
-	public Function<String, String> desensitize() {
+	@Override
+	public Function<String, String> use() {
 		return this.desensitize;
-	}
-
-	FSensitiveStrategy(Function<String, String> desensitize) {
-		this.desensitize = desensitize;
 	}
 
 }

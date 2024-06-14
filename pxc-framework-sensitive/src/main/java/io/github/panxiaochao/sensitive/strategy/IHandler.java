@@ -17,19 +17,22 @@ package io.github.panxiaochao.sensitive.strategy;
 
 /**
  * <p>
- * 脱敏策略接口
+ * 处理策略基类
  * </p>
  *
  * @author Lypxc
- * @since 2023-08-31
+ * @since 2024-06-11
+ * @version 1.0
  */
-public interface IFSensitiveStrategy {
+public interface IHandler {
 
 	/**
-	 * 处理方法
-	 * @param jsonValue json value 值
-	 * @return 脱敏后结果
+	 * 处理基类方法
+	 * @param value 值
+	 * @return 处理后结果
 	 */
-	String handler(String jsonValue);
+	default String handler(String value) {
+		return value;
+	}
 
 }

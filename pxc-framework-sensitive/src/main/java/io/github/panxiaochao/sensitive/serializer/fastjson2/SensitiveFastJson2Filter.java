@@ -16,10 +16,13 @@
 package io.github.panxiaochao.sensitive.serializer.fastjson2;
 
 import com.alibaba.fastjson2.filter.ValueFilter;
-import io.github.panxiaochao.sensitive.annotation.FSensitive;
-import io.github.panxiaochao.sensitive.enums.FSensitiveStrategy;
-import io.github.panxiaochao.sensitive.strategy.AbstractFSensitiveStrategy;
-import io.github.panxiaochao.sensitive.utils.InvokeMethodSensitiveUtil;
+import io.github.panxiaochao.core.enums.CommonResponseEnum;
+import io.github.panxiaochao.core.exception.ServerRuntimeException;
+import io.github.panxiaochao.sensitive.annotation.Sensitive;
+import io.github.panxiaochao.sensitive.strategy.IHandler;
+import io.github.panxiaochao.sensitive.strategy.sensitive.SensitiveStrategy;
+import io.github.panxiaochao.sensitive.utils.InvokeMethodUtil;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -32,7 +35,7 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2023-09-01
  */
-public class FSensitiveFastJson2Filter implements ValueFilter {
+public class SensitiveFastJson2Filter implements ValueFilter {
 
 	@Override
 	public Object apply(Object object, String name, Object value) {
@@ -41,25 +44,25 @@ public class FSensitiveFastJson2Filter implements ValueFilter {
 		}
 		// 获取字段上注解
 		try {
-			Field field = object.getClass().getDeclaredField(name);
-			FSensitive fSensitive = field.getAnnotation(FSensitive.class);
-			if (Objects.isNull(fSensitive) || field.getType() != String.class) {
+			Field field = ReflectionUtils.findField(object.getClass(), name);
+			Sensitive sensitive = field.getAnnotation(Sensitive.class);
+			if (Objects.isNull(sensitive) || field.getType() != String.class) {
 				return value;
 			}
 			// 获取属性
-			FSensitiveStrategy strategy = fSensitive.strategy();
-			String customStrategyClassName = fSensitive.customStrategy().getName();
+			SensitiveStrategy strategy = sensitive.strategy();
+			String strategyClassName = sensitive.handler().getName();
 			// 相同的class，使用自带策略
-			if (customStrategyClassName.equals(AbstractFSensitiveStrategy.class.getName())) {
-				return strategy.desensitize().apply(value.toString());
+			if (strategyClassName.equals(IHandler.class.getName())) {
+				return strategy.use().apply(value.toString());
 			}
 			else {
-				return InvokeMethodSensitiveUtil.invokeSensitiveMethod(customStrategyClassName, value);
+				return InvokeMethodUtil.invoke(strategyClassName, value);
 			}
 		}
 		catch (Exception e) {
-			// 使用默认转换
-			return value;
+			throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+					"The field [" + name + "] serialize is error! ");
 		}
 	}
 

@@ -17,11 +17,13 @@ package io.github.panxiaochao.sensitive.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.github.panxiaochao.sensitive.enums.FSensitiveStrategy;
-import io.github.panxiaochao.sensitive.serializer.jackson.FSensitiveJackJsonSerializer;
-import io.github.panxiaochao.sensitive.strategy.AbstractFSensitiveStrategy;
+import io.github.panxiaochao.sensitive.serializer.jackson.SensitiveJackJsonSerializer;
+import io.github.panxiaochao.sensitive.strategy.IHandler;
+import io.github.panxiaochao.sensitive.strategy.sensitive.SensitiveStrategy;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -34,20 +36,22 @@ import java.lang.annotation.Target;
  * @author Lypxc
  * @since 2023-08-31
  */
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @JacksonAnnotationsInside
-@JsonSerialize(using = FSensitiveJackJsonSerializer.class)
-public @interface FSensitive {
+@JsonSerialize(using = SensitiveJackJsonSerializer.class)
+@Documented
+public @interface Sensitive {
 
 	/**
-	 * 处理策略
+	 * 处理策略，当且仅handler是默认处理{@link IHandler}情况下生效
 	 */
-	FSensitiveStrategy strategy() default FSensitiveStrategy.DEFAULT;
+	SensitiveStrategy strategy() default SensitiveStrategy.DEFAULT;
 
 	/**
-	 * 自定义处理结果
+	 * 自定义处理方法
 	 */
-	Class<? extends AbstractFSensitiveStrategy> customStrategy() default AbstractFSensitiveStrategy.class;
+	Class<? extends IHandler> handler() default IHandler.class;
 
 }

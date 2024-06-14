@@ -31,15 +31,15 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2023-09-01
  */
-public class InvokeMethodSensitiveUtil {
+public class InvokeMethodUtil {
 
 	/**
-	 * 执行自定义脱敏方法
+	 * 映射自定义方法
 	 * @param className class名
 	 * @param value json value
 	 * @return 脱敏后的值
 	 */
-	public static String invokeSensitiveMethod(String className, Object value) {
+	public static Object invoke(String className, Object value) {
 		// 不同class，使用自定义策略
 		try {
 			// 防止反射内存泄漏，每次都new一个对象
@@ -55,12 +55,11 @@ public class InvokeMethodSensitiveUtil {
 			Method handlerMethod = ReflectionUtils.findMethod(obj.getClass(), "handler", String.class);
 			if (Objects.isNull(handlerMethod)) {
 				throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-						"The class [" + className + "] is not extend AbstractFSensitiveStrategy! ");
+						"The class [" + className + "] is not implements IHandler! ");
 			}
 			else {
 				ReflectionUtils.makeAccessible(handlerMethod);
-				Object handlerObject = ReflectionUtils.invokeMethod(handlerMethod, obj, value);
-				return handlerObject.toString();
+                return ReflectionUtils.invokeMethod(handlerMethod, obj, value);
 			}
 		}
 		catch (Exception e) {
