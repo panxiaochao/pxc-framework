@@ -264,6 +264,24 @@ public class BooleanUtil {
 	}
 
 	/**
+	 * 将boolean转换为字符串
+	 *
+	 * <pre>
+	 *   BooleanUtil.toString(true)   = "true"
+	 *   BooleanUtil.toString(false)  = "false"
+	 *   BooleanUtil.toString(null)  = null
+	 * </pre>
+	 * @param bool Boolean值
+	 * @return 结果值
+	 */
+	public static String toString(Boolean bool) {
+		if (ObjectUtil.isEmpty(bool)) {
+			return null;
+		}
+		return bool ? "true" : "false";
+	}
+
+	/**
 	 * 给定类是否为Boolean或者boolean
 	 * @param clazz 类
 	 * @return 是否为Boolean或者boolean
