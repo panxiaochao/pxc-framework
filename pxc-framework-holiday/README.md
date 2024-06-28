@@ -1,10 +1,28 @@
 # pxc-framework-holiday
 
+`pxc-framework-holiday`框架节假日工具框架，集成`HolidayClient`类调用。
+
+也可以自提供扩展年份json数据，格式参考：
+
+```json
+{
+  "year": 2024,
+  "days": [
+    {
+      "name": "元旦",
+      "date": "2024-01-01"
+    },
+    ...
+  ]
+}
+```
 
 ## 使用方法
+
 ### maven
 
 ```xml
+
 <dependency>
     <groupId>io.github.panxiaochao</groupId>
     <artifactId>pxc-framework-holiday</artifactId>
