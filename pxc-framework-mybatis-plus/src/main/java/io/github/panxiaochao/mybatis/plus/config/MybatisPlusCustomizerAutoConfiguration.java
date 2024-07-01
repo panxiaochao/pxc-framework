@@ -22,23 +22,29 @@ import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ParameterUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.config.properties.MpProperties;
-import io.github.panxiaochao.mybatis.plus.handler.CustomizerMetaObjectHandler;
+import io.github.panxiaochao.mybatis.plus.handler.MetaObjectHandlerCustomizer;
+import io.github.panxiaochao.mybatis.plus.handler.IMetaObjectHandler;
 import io.github.panxiaochao.mybatis.plus.injector.mysql.MySqlInjector;
 import io.github.panxiaochao.mybatis.plus.injector.oracle.OracleInjector;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 import java.sql.SQLException;
 
@@ -53,7 +59,7 @@ import java.sql.SQLException;
 @AutoConfiguration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(MpProperties.class)
-public class CustomizerMybatisPlusAutoConfiguration {
+public class MybatisPlusCustomizerAutoConfiguration {
 
 	private final MpProperties mpProperties;
 
@@ -64,10 +70,14 @@ public class CustomizerMybatisPlusAutoConfiguration {
 	@Bean
 	public MybatisPlusInterceptor mybatisPlusInterceptor() {
 		MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+		// 数据权限
+		// interceptor.addInnerInterceptor(new DataScopeInnerInterceptor());
 		// 分页插件
 		interceptor.addInnerInterceptor(paginationInnerInterceptor());
-		// 乐观锁插件
-		// interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+		// 乐观锁
+		interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+		// 防止全表更新与删除
+		interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
 		return interceptor;
 	}
 
@@ -116,8 +126,8 @@ public class CustomizerMybatisPlusAutoConfiguration {
 	 * @return MetaObjectHandler
 	 */
 	@Bean
-	public MetaObjectHandler metaObjectHandler() {
-		return new CustomizerMetaObjectHandler();
+	public MetaObjectHandler metaObjectHandler(IMetaObjectHandler metaObjectHandler) {
+		return new MetaObjectHandlerCustomizer(metaObjectHandler);
 	}
 
 	/**
@@ -148,6 +158,39 @@ public class CustomizerMybatisPlusAutoConfiguration {
 	@ConditionalOnProperty(name = "mybatis-plus.db-type", havingValue = "oracle")
 	public DefaultSqlInjector oracleInjector() {
 		return new OracleInjector();
+	}
+
+	/**
+	 * 自定义元对象字段填充默认实现类
+	 */
+	@Configuration(proxyBeanMethods = false)
+	static class MetaObjectHandlerCustomizerConfiguration {
+
+		@Bean
+		@ConditionalOnMissingBean(IMetaObjectHandler.class)
+		public DefaultMetaObjectHandlerCustomizer defaultMetaObjectHandlerCustomizer() {
+			return new DefaultMetaObjectHandlerCustomizer();
+		}
+
+		static final class DefaultMetaObjectHandlerCustomizer implements IMetaObjectHandler, Ordered {
+
+			@Override
+			public void insertFillCustomize(MetaObject metaObject) {
+				// default no something
+			}
+
+			@Override
+			public void updateFillCustomize(MetaObject metaObject) {
+				// default no something
+			}
+
+			@Override
+			public int getOrder() {
+				return 0;
+			}
+
+		}
+
 	}
 
 }

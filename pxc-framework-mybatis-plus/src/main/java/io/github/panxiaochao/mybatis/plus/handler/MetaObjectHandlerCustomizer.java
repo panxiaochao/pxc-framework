@@ -16,6 +16,7 @@
 package io.github.panxiaochao.mybatis.plus.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import io.github.panxiaochao.core.utils.ObjectUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -33,13 +34,17 @@ import java.util.Objects;
  * @author Lypxc
  * @since 2023-07-17
  */
-public class CustomizerMetaObjectHandler implements MetaObjectHandler {
-
-	private static final String FIELD_ID = "createId";
+public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 
 	private static final String FIELD_CREATE_TIME = "createTime";
 
 	private static final String FIELD_UPDATE_TIME = "updateTime";
+
+	private final IMetaObjectHandler metaObjectHandler;
+
+	public MetaObjectHandlerCustomizer(IMetaObjectHandler metaObjectHandler) {
+		this.metaObjectHandler = metaObjectHandler;
+	}
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
@@ -55,6 +60,8 @@ public class CustomizerMetaObjectHandler implements MetaObjectHandler {
 		// Date
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, false);
 		strictFillValByName(metaObject, FIELD_CREATE_TIME, new Date(), Date.class, false);
+		// 自定义实现插入逻辑
+		metaObjectHandler.insertFillCustomize(metaObject);
 	}
 
 	@Override
@@ -67,6 +74,8 @@ public class CustomizerMetaObjectHandler implements MetaObjectHandler {
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDate.now(), LocalDate.class, true);
 		// Date
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, true);
+		// 自定义实现插入逻辑
+		metaObjectHandler.updateFillCustomize(metaObject);
 	}
 
 	/**
@@ -89,7 +98,7 @@ public class CustomizerMetaObjectHandler implements MetaObjectHandler {
 		// 2. 当是insert和值为null的时候才会置值
 		if (!updateFill) {
 			Object setValueObj = metaObject.getValue(fieldName);
-			String setValueStr = Objects.isNull(setValueObj) ? "" : String.valueOf(setValueObj);
+			String setValueStr = ObjectUtil.isEmpty(setValueObj) ? "" : String.valueOf(setValueObj);
 			if (StringUtils.hasText(setValueStr)) {
 				return;
 			}
