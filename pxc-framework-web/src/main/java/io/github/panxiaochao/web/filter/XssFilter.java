@@ -15,10 +15,10 @@
  */
 package io.github.panxiaochao.web.filter;
 
-import io.github.panxiaochao.core.utils.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,31 +46,30 @@ public class XssFilter extends OncePerRequestFilter {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(XssFilter.class);
 
-	private final static PathMatcher pathMatcher = new AntPathMatcher();
+	private final static PathMatcher PATHMATCHER = new AntPathMatcher();
 
-	private final List<String> whiteList;
+	private static final String[] WHITE_SUFFIXES = new String[] { "js", "css", "ico", "png", "jpg", "jpeg", "gif",
+			"svg", "ttf", "fon", "ttc" };
+
+	private final List<String> excludeUrls;
 
 	public XssFilter(List<String> whiteList) {
-		this.whiteList = whiteList;
+		this.excludeUrls = whiteList;
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		LOGGER.info("XssFilter request url: {}", request.getRequestURI());
-		filterChain.doFilter(new XssWrapper(request), response);
-	}
-
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
-		// 如果是json数据，则不处理
-		String contentType = request.getContentType();
-		if (StrUtil.isBlank(contentType)
-				|| StrUtil.startsWithIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE)) {
-			return true;
+		String requestUrl = request.getRequestURI();
+		if (HttpMethod.OPTIONS.toString().equals(request.getMethod())
+				|| StringUtils.endsWithAny(requestUrl, WHITE_SUFFIXES)
+				|| excludeUrls.stream().anyMatch(excludeUrl -> PATHMATCHER.match(excludeUrl, requestUrl))) {
+			filterChain.doFilter(request, response);
 		}
-		// 放行不过滤的URL
-		return whiteList.stream().anyMatch(excludeUrl -> pathMatcher.match(excludeUrl, request.getRequestURI()));
+		else {
+			LOGGER.info("XssFilter request url: {}, method: {}", requestUrl, request.getMethod());
+			filterChain.doFilter(new XssWrapper(request), response);
+		}
 	}
 
 }

@@ -36,25 +36,9 @@ import java.util.List;
 public class WebProperties {
 
 	/**
-	 * Cors 配置
-	 */
-	private cors cors = new cors();
-
-	/**
 	 * Xss 配置
 	 */
 	private Xss xss = new Xss();
-
-	@Getter
-	@Setter
-	public static class cors {
-
-		/**
-		 * 是否开启 Cors, 默认开启
-		 */
-		private boolean enable = true;
-
-	}
 
 	@Getter
 	@Setter

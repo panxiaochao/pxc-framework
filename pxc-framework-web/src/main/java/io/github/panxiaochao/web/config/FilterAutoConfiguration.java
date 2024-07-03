@@ -27,9 +27,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <p>
  * Filter过滤器自动装配
@@ -64,7 +61,6 @@ public class FilterAutoConfiguration {
 	 * @return FilterRegistrationBean
 	 */
 	@Bean
-	@ConditionalOnProperty(name = "spring.pxc-framework.cors.enable", havingValue = "true")
 	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new CorsFilter());
@@ -100,9 +96,6 @@ public class FilterAutoConfiguration {
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.addServletNames("xssFilter");
 		registrationBean.setOrder(2);
-		Map<String, String> initParameters = new HashMap<String, String>();
-		initParameters.put("excludeUrls", "/favicon.ico,/img/*,/js/*,/css/*");
-		registrationBean.setInitParameters(initParameters);
 		return registrationBean;
 	}
 
