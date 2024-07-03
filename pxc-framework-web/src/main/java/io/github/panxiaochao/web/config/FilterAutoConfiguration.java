@@ -15,14 +15,20 @@
  */
 package io.github.panxiaochao.web.config;
 
+import io.github.panxiaochao.web.config.properties.WebProperties;
 import io.github.panxiaochao.web.filter.CorsFilter;
 import io.github.panxiaochao.web.filter.EncodingFilter;
 import io.github.panxiaochao.web.filter.RequestWrapperFilter;
+import io.github.panxiaochao.web.filter.XssFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -36,6 +42,7 @@ import org.springframework.core.Ordered;
  * @since 2023-06-26
  */
 @AutoConfiguration
+@EnableConfigurationProperties({ WebProperties.class })
 public class FilterAutoConfiguration {
 
 	/**
@@ -57,7 +64,7 @@ public class FilterAutoConfiguration {
 	 * @return FilterRegistrationBean
 	 */
 	@Bean
-	@ConditionalOnProperty(name = "spring.pxc-framework.cors", havingValue = "true")
+	@ConditionalOnProperty(name = "spring.pxc-framework.cors.enable", havingValue = "true")
 	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new CorsFilter());
@@ -78,6 +85,24 @@ public class FilterAutoConfiguration {
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.addServletNames("requestWrapperFilter");
 		registrationBean.setOrder(1);
+		return registrationBean;
+	}
+
+	/**
+	 * XssFilter 过滤器
+	 * @return FilterRegistrationBean
+	 */
+	@Bean
+	@ConditionalOnProperty(name = "spring.pxc-framework.xss.enable", havingValue = "true")
+	public FilterRegistrationBean<XssFilter> xssFilter(WebProperties webProperties) {
+		FilterRegistrationBean<XssFilter> registrationBean = new FilterRegistrationBean<>();
+		registrationBean.setFilter(new XssFilter(webProperties.getXss().getExcludeUrls()));
+		registrationBean.addUrlPatterns("/*");
+		registrationBean.addServletNames("xssFilter");
+		registrationBean.setOrder(2);
+		Map<String, String> initParameters = new HashMap<String, String>();
+		initParameters.put("excludeUrls", "/favicon.ico,/img/*,/js/*,/css/*");
+		registrationBean.setInitParameters(initParameters);
 		return registrationBean;
 	}
 

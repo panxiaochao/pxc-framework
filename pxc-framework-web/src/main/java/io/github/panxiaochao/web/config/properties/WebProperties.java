@@ -19,6 +19,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * <p>
  * 自定属性配置
@@ -33,8 +36,40 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class WebProperties {
 
 	/**
-	 * 是否开启 Cors, 默认开启
+	 * Cors 配置
 	 */
-	private boolean cors = true;
+	private cors cors = new cors();
+
+	/**
+	 * Xss 配置
+	 */
+	private Xss xss = new Xss();
+
+	@Getter
+	@Setter
+	public static class cors {
+
+		/**
+		 * 是否开启 Cors, 默认开启
+		 */
+		private boolean enable = true;
+
+	}
+
+	@Getter
+	@Setter
+	public static class Xss {
+
+		/**
+		 * 是否开启 XSS
+		 */
+		private boolean enable;
+
+		/**
+		 * 排除的URL列表
+		 */
+		private List<String> excludeUrls = Collections.emptyList();
+
+	}
 
 }
