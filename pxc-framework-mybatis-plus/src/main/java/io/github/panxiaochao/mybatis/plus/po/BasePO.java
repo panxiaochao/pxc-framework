@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public abstract class BasePo implements Serializable {
+public abstract class BasePO implements Serializable {
 
 	private static final long serialVersionUID = 846044951522308141L;
 

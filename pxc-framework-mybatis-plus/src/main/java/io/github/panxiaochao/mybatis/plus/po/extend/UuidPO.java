@@ -17,7 +17,7 @@ package io.github.panxiaochao.mybatis.plus.po.extend;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.github.panxiaochao.mybatis.plus.po.BasePo;
+import io.github.panxiaochao.mybatis.plus.po.BasePO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author Lypxc
  * @since 2023-07-17
  */
-public class UuidPO extends BasePo {
+public class UuidPO extends BasePO {
 
 	private static final long serialVersionUID = 230788523080038096L;
 

@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.po.extend;
+package io.github.panxiaochao.mybatis.plus.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.github.panxiaochao.mybatis.plus.po.BasePO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 主键采用数据库自增
+ * 租户基类
  * </p>
  *
  * @author Lypxc
- * @since 2023-07-17
+ * @since 2024-07-02
+ * @version 1.0
  */
 @Getter
 @Setter
-public class AutoPO extends BasePO {
+public class TenantPO implements Serializable {
 
-	private static final long serialVersionUID = -2626183000481421947L;
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 主键
+	 * 租户ID
 	 */
-	@Schema(description = "主键")
-	@TableId(value = "ID", type = IdType.AUTO)
-	private Integer id;
+	@Schema(description = "租户ID")
+	@TableId("tenant_id")
+	private String tenantId;
 
 }
