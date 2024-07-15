@@ -30,9 +30,19 @@
 
         <!-- 子工程引入 -->
 <dependency>
-<groupId>io.github.panxiaochao</groupId>
-<artifactId>pxc-framework-operate-log</artifactId>
+    <groupId>io.github.panxiaochao</groupId>
+    <artifactId>pxc-framework-operate-log</artifactId>
 </dependency>
+```
+
+```yaml
+  # 开启框架配置
+  pxc-framework:
+    operatelog:
+      # LOGGER(默认) or OTHER
+      log-type: other
+      # 当是other时，填写自定义处理类，并且继承AbstractOperateLogHandler
+      handler: io.github.panxiaochao.system.application.event.OperateLogEventHandler
 ```
 
 ## 注意事项

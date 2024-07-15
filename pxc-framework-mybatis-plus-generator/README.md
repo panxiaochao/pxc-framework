@@ -30,8 +30,8 @@
 
         <!-- 子工程引入 -->
 <dependency>
-<groupId>io.github.panxiaochao</groupId>
-<artifactId>pxc-framework-mybatis-plus-generator</artifactId>
+    <groupId>io.github.panxiaochao</groupId>
+    <artifactId>pxc-framework-mybatis-plus-generator</artifactId>
 </dependency>
 ```
 

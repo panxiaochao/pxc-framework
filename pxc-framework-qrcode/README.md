@@ -30,9 +30,12 @@
 
         <!-- 子工程引入 -->
 <dependency>
-<groupId>io.github.panxiaochao</groupId>
-<artifactId>pxc-framework-qrcode</artifactId>
+    <groupId>io.github.panxiaochao</groupId>
+    <artifactId>pxc-framework-qrcode</artifactId>
 </dependency>
 ```
+
+使用工具类[QRCodeUtil.java](src%2Fmain%2Fjava%2Fio%2Fgithub%2Fpanxiaochao%2Fqrcode%2Futils%2FQRCodeUtil.java)。
+
 
 ## 注意事项
