@@ -44,7 +44,7 @@ import java.util.TimeZone;
  *
  * <p>
  * 参考：<a href=
- * "https://codingnconcepts.com/spring-boot/customize-jackson-json-mapper/">customize-jackson-json-mapper</a><a></a>
+ * "https://codingnconcepts.com/spring-boot/customize-jackson-json-mapper/">customize-jackson-json-mapper</a>
  * </p>
  *
  * @author Lypxc

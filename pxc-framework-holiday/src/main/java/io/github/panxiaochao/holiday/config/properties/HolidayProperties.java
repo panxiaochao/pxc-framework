@@ -145,7 +145,6 @@ public class HolidayProperties implements InitializingBean {
 		else {
 			LOGGER.warn("自定义Holiday location路径为空，不加载！");
 		}
-
 	}
 
 }

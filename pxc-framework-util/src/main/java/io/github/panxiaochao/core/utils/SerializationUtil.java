@@ -236,7 +236,6 @@ public class SerializationUtil {
 	 * @param <T> the type of the object involved
 	 * @param obj the object to roundtrip
 	 * @return the serialized and deserialized object
-	 * @since 3.3
 	 */
 	@SuppressWarnings("unchecked") // OK, because we serialized a type `T`
 	public static <T> T roundtrip(final T obj) {
@@ -297,7 +296,6 @@ public class SerializationUtil {
 	 * This constructor is public to permit tools that require a JavaBean instance to
 	 * operate.
 	 * </p>
-	 * @since 2.0
 	 */
 	public SerializationUtil() {
 	}

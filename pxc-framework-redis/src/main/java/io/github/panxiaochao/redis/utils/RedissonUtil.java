@@ -54,14 +54,14 @@ public class RedissonUtil {
 	private RedissonUtil() {
 	}
 
-	private static final RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+	private static final RedissonClient REDISSON_CLIENT = SpringContextUtil.getBean(RedissonClient.class);
 
 	/**
 	 * Obtain RedissonClient
 	 * @return RedissonClient
 	 */
 	public static RedissonClient ofRedissonClient() {
-		return redissonClient;
+		return REDISSON_CLIENT;
 	}
 
 	/**

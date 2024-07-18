@@ -94,21 +94,26 @@ public class RateLimiterAspect {
 
 	@Before("@annotation(rateLimiter)")
 	public void before(JoinPoint joinPoint, RateLimiter rateLimiter) {
-		int maxCount = rateLimiter.maxCount();
-		long limitTime = rateLimiter.limitTime();
-		TimeUnit timeUnit = rateLimiter.timeUnit();
-		// 获取限流 KEY
-		String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
-		// RateType.OVERALL 全局限流
-		// RateType.PER_CLIENT 客户端单独计算限流
-		long availableCount = RedissonUtil.tryRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount,
-				timeUnit.toMillis(limitTime));
-		if (availableCount == -1) {
-			String message = StringUtils.hasText(rateLimiter.message()) ? rateLimiter.message()
-					: RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR.getMessage();
-			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR, message);
+		try {
+			int maxCount = rateLimiter.maxCount();
+			long limitTime = rateLimiter.limitTime();
+			TimeUnit timeUnit = rateLimiter.timeUnit();
+			// 获取限流 KEY
+			String rateLimiterKey = getRateLimiterKey(joinPoint, rateLimiter);
+			// RateType.OVERALL 全局限流
+			// RateType.PER_CLIENT 客户端单独计算限流
+			long availableCount = RedissonUtil.tryRateLimiter(rateLimiterKey, RateType.OVERALL, maxCount,
+					timeUnit.toMillis(limitTime));
+			if (availableCount == -1) {
+				String message = StringUtils.hasText(rateLimiter.message()) ? rateLimiter.message()
+						: RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR.getMessage();
+				throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_FREQUENT_ERROR, message);
+			}
+			LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
 		}
-		LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
+		catch (Exception e) {
+			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_SERVER_ERROR, e);
+		}
 	}
 
 	/**
@@ -189,7 +194,11 @@ public class RateLimiterAspect {
 		/**
 		 * 限流KEY解析异常
 		 */
-		RATE_LIMITER_PARSE_EXPRESSION_ERROR(6021, "限流KEY解析异常!");
+		RATE_LIMITER_PARSE_EXPRESSION_ERROR(6021, "限流KEY解析异常!"),
+		/**
+		 * 限流服务器异常
+		 */
+		RATE_LIMITER_SERVER_ERROR(6029, "服务器限流异常，请稍候再试!");
 
 		private final Integer code;
 
