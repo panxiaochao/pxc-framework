@@ -69,6 +69,7 @@
         <module>pxc-framework-mybatis-plus-generator</module>
         <module>pxc-framework-cache</module>
         <module>pxc-framework-holiday</module>
+        <module>pxc-framework-crypto</module>
     </modules>
 
     <!-- properties -->

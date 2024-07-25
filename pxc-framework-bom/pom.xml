@@ -80,6 +80,12 @@
                 <artifactId>pxc-framework-core</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 加密解密模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-crypto</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Cache 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
