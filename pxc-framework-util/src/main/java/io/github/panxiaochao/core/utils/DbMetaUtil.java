@@ -189,7 +189,6 @@ public class DbMetaUtil {
 							if (0 == rs.getShort("TYPE")) {
 								continue;
 							}
-
 							IndexMeta indexMeta = new IndexMeta();
 							indexMeta.setTableName(tableMeta.getTableName());
 							indexMeta.setNonUnique(rs.getBoolean("NON_UNIQUE"));

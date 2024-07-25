@@ -22,8 +22,8 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.datamatrix.encoder.SymbolShapeHint;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import io.github.panxiaochao.core.utils.Base64Util;
 import io.github.panxiaochao.core.utils.CharPools;
+import io.github.panxiaochao.crypto.utils.Base64Util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

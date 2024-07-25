@@ -15,6 +15,8 @@
  */
 package io.github.panxiaochao.core.utils;
 
+import org.springframework.lang.Nullable;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +28,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Supplier;
 
 /**
@@ -444,6 +447,263 @@ public class ObjectUtil {
 			return false;
 		}
 		return 0 == bigNum1.compareTo(bigNum2);
+	}
+
+	/**
+	 * 用字符串形式返回整个对象标识.
+	 * @param obj the object (may be {@code null})
+	 * @return 字符串标识
+	 */
+	public static String identityToString(@Nullable Object obj) {
+		if (obj == null) {
+			return StringPools.EMPTY;
+		}
+		return obj.getClass().getName() + StringPools.AT + getIdentityHexString(obj);
+	}
+
+	/**
+	 * 用字符串形式返回对象标识哈希码的十六进制.
+	 * @param obj the object
+	 * @return the object's identity code in hex notation
+	 */
+	public static String getIdentityHexString(Object obj) {
+		return Integer.toHexString(System.identityHashCode(obj));
+	}
+
+	/**
+	 * 返回基于内容的字符串形式
+	 * @param obj the object to build a display String for
+	 * @return a display String representation of {@code obj}
+	 * @see #nullSafeToString(Object)
+	 */
+	public static String getDisplayString(@Nullable Object obj) {
+		if (obj == null) {
+			return StringPools.EMPTY;
+		}
+		return nullSafeToString(obj);
+	}
+
+	/**
+	 * 返回指定对象的字符串表示形式.
+	 * @param obj the object to build a String representation for
+	 * @return a String representation of {@code obj}
+	 */
+	public static String nullSafeToString(@Nullable Object obj) {
+		if (obj == null) {
+			return StringPools.NULL;
+		}
+		if (obj instanceof String) {
+			return (String) obj;
+		}
+		if (obj instanceof Object[]) {
+			return nullSafeToString((Object[]) obj);
+		}
+		if (obj instanceof boolean[]) {
+			return nullSafeToString((boolean[]) obj);
+		}
+		if (obj instanceof byte[]) {
+			return nullSafeToString((byte[]) obj);
+		}
+		if (obj instanceof char[]) {
+			return nullSafeToString((char[]) obj);
+		}
+		if (obj instanceof double[]) {
+			return nullSafeToString((double[]) obj);
+		}
+		if (obj instanceof float[]) {
+			return nullSafeToString((float[]) obj);
+		}
+		if (obj instanceof int[]) {
+			return nullSafeToString((int[]) obj);
+		}
+		if (obj instanceof long[]) {
+			return nullSafeToString((long[]) obj);
+		}
+		if (obj instanceof short[]) {
+			return nullSafeToString((short[]) obj);
+		}
+		String str = obj.toString();
+		return (str != null ? str : StringPools.EMPTY);
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable Object[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (Object o : array) {
+			stringJoiner.add(String.valueOf(o));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable boolean[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (boolean b : array) {
+			stringJoiner.add(String.valueOf(b));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable byte[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (byte b : array) {
+			stringJoiner.add(String.valueOf(b));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable char[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (char c : array) {
+			stringJoiner.add('\'' + String.valueOf(c) + '\'');
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable double[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (double d : array) {
+			stringJoiner.add(String.valueOf(d));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable float[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (float f : array) {
+			stringJoiner.add(String.valueOf(f));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable int[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (int i : array) {
+			stringJoiner.add(String.valueOf(i));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable long[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (long l : array) {
+			stringJoiner.add(String.valueOf(l));
+		}
+		return stringJoiner.toString();
+	}
+
+	/**
+	 * 返回指定数组内容的字符串表示形式.
+	 * @param array the array to build a String representation for
+	 * @return a String representation of {@code array}
+	 */
+	public static String nullSafeToString(@Nullable short[] array) {
+		if (array == null) {
+			return StringPools.NULL;
+		}
+		int length = array.length;
+		if (length == 0) {
+			return StringPools.LEFT_RIGHT_BRACE;
+		}
+		StringJoiner stringJoiner = new StringJoiner(", ", StringPools.LEFT_BRACE, StringPools.RIGHT_BRACE);
+		for (short s : array) {
+			stringJoiner.add(String.valueOf(s));
+		}
+		return stringJoiner.toString();
 	}
 
 }

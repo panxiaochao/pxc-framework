@@ -15,10 +15,10 @@
  */
 package io.github.panxiaochao.core.utils;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.panxiaochao.core.enums.DatabaseType;
+import io.github.panxiaochao.crypto.utils.HexUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.NumberUtils;
@@ -418,7 +418,7 @@ public class JdbcUtil {
 					else {
 						if (object instanceof byte[]) {
 							byte[] bytes = (byte[]) object;
-							String text = HexBin.encode(bytes);
+							String text = HexUtil.encode(bytes);
 							out.print(text);
 						}
 						else {

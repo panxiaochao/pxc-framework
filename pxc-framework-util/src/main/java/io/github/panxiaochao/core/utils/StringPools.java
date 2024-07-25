@@ -69,9 +69,21 @@ public interface StringPools {
 
 	String LEFT_BRACE = "{";
 
+	String RIGHT_BRACE = "}";
+
+	String LEFT_RIGHT_BRACE = "{}";
+
 	String LEFT_BRACKET = "(";
 
+	String RIGHT_BRACKET = ")";
+
+	String LEFT_RIGHT_BRACKET = "()";
+
 	String LEFT_CHEV = "<";
+
+	String RIGHT_CHEV = ">";
+
+	String LEFT_RIGHT_CHEV = "<>";
 
 	String DOT_NEWLINE = ",\n";
 
@@ -105,12 +117,6 @@ public interface StringPools {
 
 	String TAB = "\t";
 
-	String RIGHT_BRACE = "}";
-
-	String RIGHT_BRACKET = ")";
-
-	String RIGHT_CHEV = ">";
-
 	String SEMICOLON = ";";
 
 	String SINGLE_QUOTE = "'";
@@ -126,6 +132,8 @@ public interface StringPools {
 	String LEFT_SQ_BRACKET = "[";
 
 	String RIGHT_SQ_BRACKET = "]";
+
+	String LEFT_RIGHT_SQ_BRACKET = "[]";
 
 	String TRUE = "true";
 
@@ -161,7 +169,7 @@ public interface StringPools {
 
 	String HTML_GT = "&gt;";
 
-	String[] EMPTY_ARRAY = new String[0];
+	String[] EMPTY_STRING_ARRAY = new String[0];
 
 	byte[] BYTES_NEW_LINE = NEWLINE.getBytes();
 

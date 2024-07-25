@@ -27,9 +27,14 @@ import java.util.OptionalLong;
  * Optional 自定义工具类
  * </p>
  *
+ * <p>
+ * 即将在2.8版本删除
+ * </p>
+ *
  * @author Lypxc
  * @since 2022/1/29
  */
+@Deprecated
 public class OptionalUtil {
 
 	/**
