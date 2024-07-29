@@ -24,6 +24,7 @@ import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import io.github.panxiaochao.core.utils.CharPools;
 import io.github.panxiaochao.crypto.utils.Base64Util;
+import org.springframework.util.Assert;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -466,6 +467,7 @@ public class QRCodeUtil {
 	public BufferedImage toImage() {
 		BitMatrix matrix;
 		try {
+			Assert.notNull(content, "二维码内容不能为空！");
 			// 图像数据转换，使用了矩阵转换
 			matrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, this.size, this.size,
 					this.getHints());
