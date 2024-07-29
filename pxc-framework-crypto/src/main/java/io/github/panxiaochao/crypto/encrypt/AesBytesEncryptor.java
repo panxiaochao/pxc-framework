@@ -15,17 +15,19 @@
  */
 package io.github.panxiaochao.crypto.encrypt;
 
-import io.github.panxiaochao.crypto.keygen.KeyGenerators;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * <p>
@@ -42,16 +44,21 @@ public class AesBytesEncryptor implements BytesEncryptor {
 
 	private static final String ALGORITHM_AES = "AES";
 
+	public static final int DEFAULT_KEY_SIZE = 128;
+
 	private final SecretKey secretKey;
 
 	private final Cipher encryptor;
 
 	private final Cipher decryptor;
 
+	public AesBytesEncryptor() {
+		this(null);
+	}
+
 	public AesBytesEncryptor(String password) {
 		try {
-			byte[] generateKey = KeyGenerators.secretKey(KeyGenerators.Algorithm.ALGORITHM_AES, password);
-			this.secretKey = new SecretKeySpec(generateKey, ALGORITHM_AES);
+			this.secretKey = new SecretKeySpec(secretKey(password), ALGORITHM_AES);
 			this.encryptor = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
 			this.decryptor = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
 		}
@@ -116,6 +123,29 @@ public class AesBytesEncryptor implements BytesEncryptor {
 			catch (BadPaddingException ex) {
 				throw new IllegalStateException("Unable to invoke Cipher due to bad padding", ex);
 			}
+		}
+	}
+
+	/**
+	 * 获取密钥以字节数组返回
+	 * @param password 密钥
+	 * @return 密钥字节
+	 */
+	private byte[] secretKey(String password) {
+		try {
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM_AES);
+			if (StringUtils.isNotBlank(password)) {
+				keyGenerator.init(DEFAULT_KEY_SIZE, new SecureRandom(password.getBytes(StandardCharsets.UTF_8)));
+			}
+			else {
+				keyGenerator.init(DEFAULT_KEY_SIZE);
+			}
+			SecretKey secretKey = keyGenerator.generateKey();
+			return secretKey.getEncoded();
+
+		}
+		catch (Exception ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 
