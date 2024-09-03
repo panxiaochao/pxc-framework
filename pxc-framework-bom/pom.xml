@@ -92,6 +92,12 @@
                 <artifactId>pxc-framework-cache</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 验证码 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-captcha</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Email 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

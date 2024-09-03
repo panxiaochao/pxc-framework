@@ -423,6 +423,14 @@ public class QRCodeUtil {
 	 * @return base64 字符串
 	 */
 	public String toBase64() {
+		return Base64Util.encodeToString(toBytes());
+	}
+
+	/**
+	 * 使用带默认值的「QRCodeUtil 生成器格式」，把指定的内容生成为一个 QRCodeUtil 的 base64 image.
+	 * @return base64Data 字符串
+	 */
+	public String toBase64Data() {
 		return "data:image/png;base64," + Base64Util.encodeToString(toBytes());
 	}
 

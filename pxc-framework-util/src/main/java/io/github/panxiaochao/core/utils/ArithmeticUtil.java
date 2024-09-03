@@ -201,7 +201,6 @@ public final class ArithmeticUtil {
 	 * @param v2 除数
 	 * @return 两个参数的商
 	 */
-
 	public static double div(double v1, double v2) {
 		return div(v1, v2, DEF_DIV_SCALE);
 	}

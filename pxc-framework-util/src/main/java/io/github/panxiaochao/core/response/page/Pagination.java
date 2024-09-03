@@ -109,11 +109,26 @@ public class Pagination {
 
 	/**
 	 * 获取总页数.
+	 * @return 总页数
+	 */
+	public long getTotalPages() {
+		if (total == 0) {
+			return 0L;
+		}
+		long pages = total / pageSize;
+		if (total % pageSize != 0) {
+			pages++;
+		}
+		return pages;
+	}
+
+	/**
+	 * 获取总页数.
 	 * @param total 总条数
 	 * @param pageSize 分页
-	 * @return ResponsePageBuilder
+	 * @return 总页数
 	 */
-	private long getTotalPages(final long total, final long pageSize) {
+	public long getTotalPages(final long total, final long pageSize) {
 		if (total == 0) {
 			return 0L;
 		}

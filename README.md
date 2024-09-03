@@ -30,6 +30,7 @@ New Reconstruction 2.0, base on spring framework.
 |   `依赖模块`    |                    [pxc-framework-bom](pxc-framework-bom)                    |           |
 |   `核心模块`    |                   [pxc-framework-core](pxc-framework-core)                   |           |
 |   `加解密模块`   |                 [pxc-framework-crypto](pxc-framework-crypto)                 |           |
+|   `验证码模块`   |                [pxc-framework-captcha](pxc-framework-captcha)                |           |
 |  `Cache模块`  |                  [pxc-framework-cache](pxc-framework-cache)                  |           |
 | `Holiday模块` |                [pxc-framework-holiday](pxc-framework-holiday)                |           |
 |  `Email模块`  |                  [pxc-framework-email](pxc-framework-email)                  |           |

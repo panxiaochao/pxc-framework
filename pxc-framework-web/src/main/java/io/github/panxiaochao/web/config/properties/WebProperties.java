@@ -40,6 +40,12 @@ public class WebProperties {
 	 */
 	private Xss xss = new Xss();
 
+	/**
+	 * OkHttp 配置
+	 */
+	private OkHttp okHttp = new OkHttp();
+
+
 	@Getter
 	@Setter
 	public static class Xss {
@@ -53,6 +59,37 @@ public class WebProperties {
 		 * 排除的URL列表
 		 */
 		private List<String> excludeUrls = Collections.emptyList();
+
+	}
+
+	@Getter
+	@Setter
+	public static class OkHttp {
+
+		/**
+		 * 连接超时，默认 10 秒，0 表示没有超时限制
+		 */
+		private Integer connectTimeout = 10;
+
+		/**
+		 * 响应超时，默认 10 秒，0 表示没有超时限制
+		 */
+		private Integer readTimeout = 10;
+
+		/**
+		 * 写超时，默认 10 秒，0 表示没有超时限制
+		 */
+		private Integer writeTimeout = 10;
+
+		/**
+		 * 连接池中整体的空闲连接的最大数量，默认 5 个连接数
+		 */
+		private Integer maxIdleConnections = 10;
+
+		/**
+		 * 连接空闲时间最大时间，单位秒，默认 300 秒
+		 */
+		private Long keepAliveDuration = 300L;
 
 	}
 

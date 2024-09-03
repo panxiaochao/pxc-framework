@@ -41,6 +41,7 @@ public class JdbcUtilTest {
 				hikariConfig.addDataSourceProperty("useInformationSchema", "true");
 			});
 			System.out.println(JdbcUtil.getDataBaseVersion(conn));
+			System.out.println(conn.getMetaData().getDatabaseProductName());
 			ps = conn.prepareStatement("select * from sys_user");
 			rs = ps.executeQuery();
 			JdbcUtil.printResultSet(rs, true, ",");
@@ -105,6 +106,7 @@ public class JdbcUtilTest {
 			// List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null, null, null);
 			// System.out.println(JacksonUtil.toString(tableMetas));
 			//
+			System.out.println(dataSource.getConnection().getMetaData().getDatabaseProductName());
 			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, "HZ_SPT_TEST", "urp_user");
 			System.out.println(JacksonUtil.toString(columnMetas));
 

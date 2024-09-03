@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>
- * 随机数工具
+ * 随机数工具.
  * </p>
  *
  * @author Lypxc
@@ -34,7 +34,7 @@ public class RandomUtil {
 	private RandomUtil() {
 	}
 
-	private static ThreadLocalRandom threadLocalRandom() {
+	public static ThreadLocalRandom threadLocalRandom() {
 		return ThreadLocalRandom.current();
 	}
 
