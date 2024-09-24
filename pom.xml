@@ -8,7 +8,7 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <name>pxc-framework-parent</name>
-    <description>pxc-framework Converged Project, base on spring boot 2.7.X up-to-date</description>
+    <description>pxc-framework is Converged Project, base on spring boot 3.X up-to-date</description>
     <url>https://github.com/panxiaochao/pxc-framework</url>
 
     <!-- licenses -->
@@ -75,8 +75,8 @@
 
     <!-- properties -->
     <properties>
-        <revision>2.0.7</revision>
-        <java.version>1.8</java.version>
+        <revision>3.0.0-SNAPSHOT</revision>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
