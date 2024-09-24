@@ -50,7 +50,7 @@ public class DesensitizeUtil {
 	/**
 	 * 支持的脱敏类型枚举
 	 */
-	public enum desensitizeType {
+	public enum DesensitizeType {
 
 		/**
 		 * 用户id
@@ -103,7 +103,15 @@ public class DesensitizeUtil {
 		/**
 		 * 定义了一个first_mask的规则，只显示第一个字符。
 		 */
-		FIRST_MASK
+		FIRST_MASK,
+		/**
+		 * 清空为null
+		 */
+		CLEAR_TO_NULL,
+		/**
+		 * 清空为""
+		 */
+		CLEAR_TO_EMPTY
 
 	}
 
@@ -131,7 +139,7 @@ public class DesensitizeUtil {
 	 * @param desensitizeType 脱敏类型;可以脱敏：用户id、中文名、身份证号、座机号、手机号、地址、电子邮件、密码
 	 * @return 脱敏之后的字符串
 	 */
-	public static String desensitize(CharSequence str, DesensitizeUtil.desensitizeType desensitizeType) {
+	public static String desensitize(CharSequence str, DesensitizeType desensitizeType) {
 		if (StrUtil.isBlank(str)) {
 			return StrUtil.EMPTY;
 		}
@@ -175,6 +183,12 @@ public class DesensitizeUtil {
 				break;
 			case FIRST_MASK:
 				newStr = firstMask(String.valueOf(str));
+				break;
+			case CLEAR_TO_EMPTY:
+				newStr = clear();
+				break;
+			case CLEAR_TO_NULL:
+				newStr = clearToNull();
 				break;
 			default:
 		}
@@ -432,6 +446,22 @@ public class DesensitizeUtil {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * 清空为空字符串
+	 * @return 清空后的值
+	 */
+	public static String clear() {
+		return StrUtil.EMPTY;
+	}
+
+	/**
+	 * 清空为{@code null}
+	 * @return 清空后的值(null)
+	 */
+	public static String clearToNull() {
+		return null;
 	}
 
 }

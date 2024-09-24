@@ -127,7 +127,8 @@ public class RateLimiterAspect {
 		Method method = methodSignature.getMethod();
 		String key = rateLimiter.key();
 		String classMethodName = method.getDeclaringClass().getName() + "." + method.getName();
-		if (StrUtil.containsAny(key, StringPools.HASH)) {
+		// refactor(getRateLimiterKey)[2024-09-04 11:11:39]: 判断key不为空和不是表达式
+		if (StrUtil.isNotBlank(key) && StrUtil.containsAny(key, StringPools.HASH)) {
 			// 参数
 			Object[] args = joinPoint.getArgs();
 			// 获取方法上参数的名称

@@ -68,6 +68,50 @@ public enum SensitiveStrategy implements IStrategy<String> {
 	 * 车牌
 	 */
 	CAR_NUMBER(DesensitizeUtil::carLicense),
+
+	/**
+	 * 中文名
+	 */
+	CHINESE_NAME(DesensitizeUtil::chineseName),
+
+	/**
+	 * 固定电话
+	 */
+	FIXED_PHONE(DesensitizeUtil::fixedPhone),
+
+	/**
+	 * 用户ID
+	 */
+	USER_ID(s -> String.valueOf(DesensitizeUtil.userId())),
+	/**
+	 * ipv4
+	 */
+	IPV4(DesensitizeUtil::ipv4),
+
+	/**
+	 * ipv6
+	 */
+	IPV6(DesensitizeUtil::ipv6),
+
+	/**
+	 * 中国大陆车牌，包含普通车辆、新能源车辆
+	 */
+	CAR_LICENSE(DesensitizeUtil::carLicense),
+
+	/**
+	 * 只显示第一个字符
+	 */
+	FIRST_MASK(DesensitizeUtil::firstMask),
+
+	/**
+	 * 清空为null
+	 */
+	CLEAR(s -> DesensitizeUtil.clear()),
+
+	/**
+	 * 清空为""
+	 */
+	CLEAR_TO_NULL(s -> DesensitizeUtil.clearToNull()),
 	/**
 	 * 默认, 原值返回
 	 */
