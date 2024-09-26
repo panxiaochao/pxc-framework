@@ -69,8 +69,6 @@ public class RestTemplateUtil {
 		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 		factory.setReadTimeout(10 * 1000);
 		factory.setConnectTimeout(10 * 1000);
-		// 是否使用缓存流, 使用大文件传输影响性能
-		factory.setBufferRequestBody(false);
 		REST_TEMPLATE.setRequestFactory(new BufferingClientHttpRequestFactory(factory));
 	}
 

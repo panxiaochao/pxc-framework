@@ -290,7 +290,7 @@ public class JacksonUtil {
 	 * @param vClass class
 	 * @param <K> K
 	 * @param <V> V
-	 * @return <K, V>
+	 * @return Map
 	 */
 	public static <K, V> Map<K, V> toMap(String json, Class<K> kClass, Class<V> vClass) {
 		try {
