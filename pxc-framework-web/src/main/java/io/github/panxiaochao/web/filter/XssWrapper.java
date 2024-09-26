@@ -19,8 +19,8 @@ import io.github.panxiaochao.core.utils.ArrayUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.XssUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

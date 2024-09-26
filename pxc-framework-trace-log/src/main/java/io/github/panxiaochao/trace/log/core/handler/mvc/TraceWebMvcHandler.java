@@ -20,7 +20,7 @@ import io.github.panxiaochao.trace.log.core.context.TraceLogContext;
 import io.github.panxiaochao.trace.log.core.domain.TraceLogDomain;
 import org.slf4j.MDC;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <p>

@@ -17,15 +17,15 @@ package io.github.panxiaochao.email.utils;
 
 import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
-import cn.hutool.extra.mail.UserPassAuthenticator;
 import io.github.panxiaochao.core.utils.CharPools;
 import io.github.panxiaochao.core.utils.MapUtil;
 import io.github.panxiaochao.core.utils.SpringContextUtil;
 import io.github.panxiaochao.core.utils.StrUtil;
+import jakarta.mail.Authenticator;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
 import org.springframework.util.CollectionUtils;
 
-import javax.mail.Authenticator;
-import javax.mail.Session;
 import java.io.Closeable;
 import java.io.File;
 import java.io.InputStream;
@@ -380,8 +380,7 @@ public class EmailUtil {
 		if (mailAccount.isAuth()) {
 			authenticator = new UserPassAuthenticator(mailAccount.getUser(), mailAccount.getPass());
 		}
-
-		return isSingleton ? Session.getDefaultInstance(mailAccount.getSmtpProps(), authenticator) //
+		return isSingleton ? Session.getDefaultInstance(mailAccount.getSmtpProps(), authenticator)
 				: Session.getInstance(mailAccount.getSmtpProps(), authenticator);
 	}
 
@@ -467,6 +466,32 @@ public class EmailUtil {
 			result = Collections.singletonList(addresses);
 		}
 		return result;
+	}
+
+	/**
+	 * 用户名密码验证器
+	 */
+	static class UserPassAuthenticator extends Authenticator {
+
+		private final String user;
+
+		private final String pass;
+
+		/**
+		 * 构造
+		 * @param user 用户名
+		 * @param pass 密码
+		 */
+		public UserPassAuthenticator(String user, String pass) {
+			this.user = user;
+			this.pass = pass;
+		}
+
+		@Override
+		protected PasswordAuthentication getPasswordAuthentication() {
+			return new PasswordAuthentication(this.user, this.pass);
+		}
+
 	}
 
 }
