@@ -250,7 +250,7 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 
 	/**
 	 * @param o the object to be compared.
-	 * @return 比较结果，如果c1 < c2，返回数小于0，c1==c2返回0，c1 > c2 大于0
+	 * @return 比较结果，如果c1 &lt; c2，返回数小于0，c1==c2返回0，c1 &gt; c2 大于0
 	 */
 	@Override
 	public int compareTo(Tree<T> o) {
