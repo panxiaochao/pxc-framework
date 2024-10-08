@@ -51,6 +51,11 @@ public class JdkUtil {
 	public static final boolean IS_JDK22;
 
 	/**
+	 * 是否 == JDK23
+	 */
+	public static final boolean IS_JDK23;
+
+	/**
 	 * 是否大于JDK8
 	 */
 	public static final boolean IS_GT_JDK8;
@@ -91,6 +96,7 @@ public class JdkUtil {
 		IS_JDK17 = (17 == jvmVersion);
 		IS_JDK21 = (21 == jvmVersion);
 		IS_JDK22 = (22 == jvmVersion);
+		IS_JDK23 = (23 == jvmVersion);
 		IS_GT_JDK8 = jvmVersion > 8;
 		IS_GTE_JDK17 = jvmVersion >= 17;
 		IS_ANDROID = isAndroid;

@@ -15,45 +15,44 @@
  */
 package io.github.panxiaochao.core.exception.ext;
 
-import io.github.panxiaochao.core.exception.ServerException;
 import io.github.panxiaochao.core.ienums.IEnum;
 import lombok.Getter;
 
 /**
  * <p>
- * Api and Server exception
+ * 基础运行时异常类
  * </p>
  *
  * @author Lypxc
- * @since 2022-11-28
+ * @since 2022/4/19
  */
 @Getter
-public class ApiServerException extends ServerException {
+public class ApiRuntimeException extends RuntimeException {
 
-	private static final long serialVersionUID = -4367714276298639594L;
+	private static final long serialVersionUID = -2307670685197783604L;
 
 	/**
 	 * 错误码
 	 */
 	private final int code;
 
-	public ApiServerException(IEnum<Integer> responseEnum) {
-		super(responseEnum);
+	public ApiRuntimeException(IEnum<Integer> responseEnum) {
+		super(responseEnum.getMessage());
 		this.code = responseEnum.getCode();
 	}
 
-	public ApiServerException(IEnum<Integer> responseEnum, String message) {
-		super(responseEnum, message);
+	public ApiRuntimeException(IEnum<Integer> responseEnum, String message) {
+		super(message);
 		this.code = responseEnum.getCode();
 	}
 
-	public ApiServerException(IEnum<Integer> responseEnum, Throwable cause) {
-		super(responseEnum, cause);
+	public ApiRuntimeException(IEnum<Integer> responseEnum, Throwable cause) {
+		super(responseEnum.getMessage(), cause);
 		this.code = responseEnum.getCode();
 	}
 
-	public ApiServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
-		super(responseEnum, message, cause);
+	public ApiRuntimeException(IEnum<Integer> responseEnum, String message, Throwable cause) {
+		super(message, cause);
 		this.code = responseEnum.getCode();
 	}
 

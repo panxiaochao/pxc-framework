@@ -99,12 +99,12 @@ public final class DataOfSize implements Comparable<DataOfSize>, Serializable {
 	/**
 	 * Bytes per Zettabyte.
 	 */
-	private static final long BYTES_PER_ZB = BYTES_PER_EB * 1024;
+	// private static final long BYTES_PER_ZB = BYTES_PER_EB * 1024;
 
 	/**
 	 * Bytes per Yottabyte.
 	 */
-	private static final long BYTES_PER_YB = BYTES_PER_ZB * 1024;
+	// private static final long BYTES_PER_YB = BYTES_PER_ZB * 1024;
 
 	private final long bytes;
 

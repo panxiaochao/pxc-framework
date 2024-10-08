@@ -68,18 +68,18 @@ public class SerializationUtil {
 	 */
 	static class ClassLoaderAwareObjectInputStream extends ObjectInputStream {
 
-		private static final Map<String, Class<?>> primitiveTypes = new HashMap<>();
+		private static final Map<String, Class<?>> PRIMITIVE_TYPES = new HashMap<>();
 
 		static {
-			primitiveTypes.put("byte", byte.class);
-			primitiveTypes.put("short", short.class);
-			primitiveTypes.put("int", int.class);
-			primitiveTypes.put("long", long.class);
-			primitiveTypes.put("float", float.class);
-			primitiveTypes.put("double", double.class);
-			primitiveTypes.put("boolean", boolean.class);
-			primitiveTypes.put("char", char.class);
-			primitiveTypes.put("void", void.class);
+			PRIMITIVE_TYPES.put("byte", byte.class);
+			PRIMITIVE_TYPES.put("short", short.class);
+			PRIMITIVE_TYPES.put("int", int.class);
+			PRIMITIVE_TYPES.put("long", long.class);
+			PRIMITIVE_TYPES.put("float", float.class);
+			PRIMITIVE_TYPES.put("double", double.class);
+			PRIMITIVE_TYPES.put("boolean", boolean.class);
+			PRIMITIVE_TYPES.put("char", char.class);
+			PRIMITIVE_TYPES.put("void", void.class);
 		}
 
 		private final ClassLoader classLoader;
@@ -115,7 +115,7 @@ public class SerializationUtil {
 					return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
 				}
 				catch (final ClassNotFoundException cnfe) {
-					final Class<?> cls = primitiveTypes.get(name);
+					final Class<?> cls = PRIMITIVE_TYPES.get(name);
 					if (cls != null) {
 						return cls;
 					}
@@ -238,7 +238,7 @@ public class SerializationUtil {
 	 * @return the serialized and deserialized object
 	 */
 	@SuppressWarnings("unchecked") // OK, because we serialized a type `T`
-	public static <T> T roundtrip(final T obj) {
+	public static <T> T roundTrip(final T obj) {
 		return (T) deserialize(serialize(obj));
 	}
 
@@ -251,9 +251,9 @@ public class SerializationUtil {
 	 * @throws RuntimeException (runtime) if the serialization fails
 	 */
 	public static <T> byte[] serialize(final T obj) {
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-		serialize(obj, baos);
-		return baos.toByteArray();
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(512);
+		serialize(obj, byteArrayOutputStream);
+		return byteArrayOutputStream.toByteArray();
 	}
 
 	/**
