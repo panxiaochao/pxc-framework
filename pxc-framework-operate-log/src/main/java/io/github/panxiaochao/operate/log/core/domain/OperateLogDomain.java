@@ -149,6 +149,11 @@ public class OperateLogDomain implements Serializable {
 	private String errorMessage;
 
 	/**
+	 * 精简版-错误原因
+	 */
+	private String errorSimpleMessage;
+
+	/**
 	 * 基础构建日志对象
 	 */
 	public static OperateLogDomain build(OperateLog operateLog, Class<?> targetClass, String methodName) {

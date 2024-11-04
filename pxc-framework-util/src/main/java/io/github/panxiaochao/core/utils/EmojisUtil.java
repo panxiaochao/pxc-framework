@@ -73,10 +73,8 @@ public class EmojisUtil {
 	 * 将子串中的Emoji别名（两个":"包围的格式）和其HTML表示形式替换为为Unicode Emoji符号.
 	 *
 	 * <pre>
-	 *     <code>:smile:</code> 替换为 <code>😄</code>
-	 *     <code>&amp;#128516;</code> 替换为<code>😄</code>
-	 *     <code>:boy|type_6:</code> 替换为 <code>👦🏿</code>
-	 * </pre>
+	 *     <code>:smile:</code> 替换为 <code>😄</code> <code>&amp;#128516;</code>
+	 * 替换为<code>😄</code> <code>:boy|type_6:</code> 替换为 <code>👦🏿</code> </pre>
 	 * @param str 包含Emoji别名或者HTML表现形式的字符串
 	 * @return 替换后的字符串
 	 */
@@ -90,17 +88,17 @@ public class EmojisUtil {
 	 * 例如： <code>😄</code> 转换为 <code>:smile:</code>
 	 *
 	 * <p>
-	 * {@link EmojiParser.FitzpatrickAction}参数被设置为{@link EmojiParser.FitzpatrickAction#PARSE}，则别名后会增加"|"并追加fitzpatrick类型
+	 * {@code EmojiParser.FitzpatrickAction}参数被设置为PARSE，则别名后会增加"|"并追加fitzpatrick类型
 	 * <p>
 	 * 例如：<code>👦🏿</code> 转换为 <code>:boy|type_6:</code>
 	 *
 	 * <p>
-	 * {@link EmojiParser.FitzpatrickAction}参数被设置为{@link EmojiParser.FitzpatrickAction#REMOVE}，则别名后的"|"和类型将被去除
+	 * {@code EmojiParser.FitzpatrickAction}参数被设置为REMOVE，则别名后的"|"和类型将被去除
 	 * <p>
 	 * 例如：<code>👦🏿</code> 转换为 <code>:boy:</code>
 	 *
 	 * <p>
-	 * {@link EmojiParser.FitzpatrickAction}参数被设置为{@link EmojiParser.FitzpatrickAction#IGNORE}，则别名后的类型将被忽略
+	 * {@code EmojiParser.FitzpatrickAction}参数被设置为IGNORE，则别名后的类型将被忽略
 	 * <p>
 	 * 例如：<code>👦🏿</code> 转换为 <code>:boy:🏿</code>
 	 * @param str 包含Emoji Unicode字符的字符串
@@ -115,7 +113,7 @@ public class EmojisUtil {
 	 * <p>
 	 * 例如：<code>👦🏿</code> 转换为 <code>:boy|type_6:</code>
 	 * @param str 包含Emoji Unicode字符的字符串
-	 * @param fitzpatrickAction {@link EmojiParser.FitzpatrickAction}
+	 * @param fitzpatrickAction {@code EmojiParser.FitzpatrickAction}
 	 * @return 替换后的字符串
 	 */
 	public static String toAlias(String str, EmojiParser.FitzpatrickAction fitzpatrickAction) {
