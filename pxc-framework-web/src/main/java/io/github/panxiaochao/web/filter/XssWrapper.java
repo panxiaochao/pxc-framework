@@ -54,14 +54,14 @@ public class XssWrapper extends HttpServletRequestWrapper {
 	@Override
 	public String[] getParameterValues(String name) {
 		String[] parameters = super.getParameterValues(name);
-		if (ArrayUtil.isEmpty(parameters)) {
-			return null;
+		if (!ArrayUtil.isEmpty(parameters)) {
+			String[] encodedValues = new String[parameters.length];
+			for (int i = 0; i < parameters.length; i++) {
+				encodedValues[i] = filterXss(parameters[i]);
+			}
+			return encodedValues;
 		}
-		String[] encodedValues = new String[parameters.length];
-		for (int i = 0; i < parameters.length; i++) {
-			encodedValues[i] = filterXss(parameters[i]);
-		}
-		return encodedValues;
+		return parameters;
 	}
 
 	/**
@@ -85,10 +85,12 @@ public class XssWrapper extends HttpServletRequestWrapper {
 		Map<String, String[]> parameters = super.getParameterMap();
 		for (String key : parameters.keySet()) {
 			String[] values = parameters.get(key);
-			for (int i = 0; i < values.length; i++) {
-				values[i] = filterXss(values[i]);
+			if (values != null) {
+				for (int i = 0; i < values.length; i++) {
+					values[i] = filterXss(values[i]);
+				}
+				map.put(key, values);
 			}
-			map.put(key, values);
 		}
 		return map;
 	}

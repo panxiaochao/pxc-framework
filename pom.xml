@@ -83,41 +83,41 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2021.0.x 版本支持 2.6.x, 2.7.x (Starting with 2021.0.3) -->
         <spring-boot.version>2.7.18</spring-boot.version>
-        <spring.version>5.3.33</spring.version>
+        <spring.version>5.3.39</spring.version>
         <spring-cloud.version>2021.0.9</spring-cloud.version>
         <spring-cloud-openfeign.version>3.1.9</spring-cloud-openfeign.version>
         <spring-cloud-gateway.version>3.1.9</spring-cloud-gateway.version>
-        <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
+        <springdoc-openapi.version>1.8.0</springdoc-openapi.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
-        <lombok.version>1.18.30</lombok.version>
+        <lombok.version>1.18.34</lombok.version>
         <transmittable-thread-local.version>2.14.5</transmittable-thread-local.version>
-        <oshi.version>6.4.8</oshi.version>
+        <oshi.version>6.6.5</oshi.version>
         <ip2region.version>2.7.0</ip2region.version>
-        <commons-io.version>2.15.0</commons-io.version>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
-        <hutool.version>5.8.28</hutool.version>
-        <swagger-annotations.version>2.2.9</swagger-annotations.version>
+        <commons-io.version>2.17.0</commons-io.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <hutool.version>5.8.33</hutool.version>
+        <swagger-annotations.version>2.2.25</swagger-annotations.version>
         <zxing.version>3.5.3</zxing.version>
-        <fastjson.version>1.2.83_noneautotype</fastjson.version>
-        <fastjson2.version>2.0.49</fastjson2.version>
-        <jackson.version>2.17.0</jackson.version>
+        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson2.version>2.0.53</fastjson2.version>
+        <jackson.version>2.18.1</jackson.version>
         <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
         <okhttp.version>4.12.0</okhttp.version>
         <aspectjweaver.version>1.9.7</aspectjweaver.version>
         <commons-pool2.version>2.12.0</commons-pool2.version>
+        <!-- caffeine 3.X 需要JDK 11以上 -->
         <caffeine.version>2.9.3</caffeine.version>
-        <lombok.version>1.18.32</lombok.version>
-        <mysql.version>8.3.0</mysql.version>
-        <freemarker.version>2.3.32</freemarker.version>
+        <mysql.version>8.4.0</mysql.version>
+        <freemarker.version>2.3.33</freemarker.version>
         <!-- 3.27.0 以上起码需要Springboot 3.X版本，起因是是netty-bom需要4.1.105.Final以上版本 -->
         <redisson.version>3.26.0</redisson.version>
         <javax-mail-api.version>1.6.2</javax-mail-api.version>
         <hikari.version>4.0.3</hikari.version>
         <slf4j-api.version>2.0.13</slf4j-api.version>
         <dm.version>8.1.3.140</dm.version>
-        <tomcat.version>9.0.83</tomcat.version>
-        <jsoup.version>1.17.2</jsoup.version>
-        <httpclient5.version>5.3.1</httpclient5.version>
+        <tomcat.version>9.0.97</tomcat.version>
+        <jsoup.version>1.18.1</jsoup.version>
+        <httpclient5.version>5.4.1</httpclient5.version>
         <emoji-java.version>5.1.1</emoji-java.version>
 
         <!-- 插件版本 -->
