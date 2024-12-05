@@ -112,7 +112,12 @@ public class RateLimiterAspect {
 			LOGGER.info("缓存key: {}, 限制数: {}, 剩余数: {}", rateLimiterKey, maxCount, availableCount);
 		}
 		catch (Exception e) {
-			throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_SERVER_ERROR, e);
+			if (e instanceof ServerRuntimeException) {
+				throw e;
+			}
+			else {
+				throw new RuntimeException(RateLimiterErrorEnum.RATE_LIMITER_SERVER_ERROR.getMessage(), e);
+			}
 		}
 	}
 
