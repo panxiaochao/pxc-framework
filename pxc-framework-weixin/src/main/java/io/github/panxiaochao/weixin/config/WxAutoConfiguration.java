@@ -1,0 +1,101 @@
+/*
+ * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.github.panxiaochao.weixin.config;
+
+import io.github.panxiaochao.weixin.config.properties.WxProperties;
+import io.github.panxiaochao.weixin.core.mp.PlusWxMpMessageRouter;
+import io.github.panxiaochao.weixin.core.mp.PlusWxMpService;
+import io.github.panxiaochao.weixin.enums.StorageType;
+import io.github.panxiaochao.weixin.manager.IWxManager;
+import io.github.panxiaochao.weixin.manager.WxMemoryManager;
+import io.github.panxiaochao.weixin.manager.WxRedisTemplateManager;
+import io.github.panxiaochao.weixin.manager.WxRedissonManager;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.WxMpService;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * <p>
+ * 微信相关组件自动配置类
+ * </p>
+ *
+ * @author Lypxc
+ * @since 2024-12-10
+ * @version 1.0
+ */
+@AutoConfiguration
+@EnableConfigurationProperties(WxProperties.class)
+public class WxAutoConfiguration {
+
+	/**
+	 * 微信状态管理多元化管理
+	 * @param wxProperties the wxProperties
+	 * @return IWxAppIdManager
+	 */
+	@Bean
+	public IWxManager wxManager(final WxProperties wxProperties) {
+		final StorageType storageType = wxProperties.getStorageType();
+		IWxManager wxManager;
+		switch (storageType) {
+			case Redisson:
+				wxManager = new WxRedissonManager();
+				break;
+			case RedisTemplate:
+				wxManager = new WxRedisTemplateManager();
+				break;
+			default:
+				wxManager = new WxMemoryManager();
+				break;
+		}
+		return wxManager;
+	}
+
+	/**
+	 * 微信公众号自动配置类
+	 */
+	@Configuration
+	static class WxMpConfiguration {
+
+		/**
+		 * 微信公众号初始化
+		 * @param wxProperties 属性配置
+		 * @return WxMpService
+		 */
+		@Bean
+		public WxMpService wxMpService(ObjectProvider<WxProperties> wxProperties) {
+			return new PlusWxMpService(wxProperties.getIfAvailable()).build();
+		}
+
+		/**
+		 * 消息路由处理器
+		 * @param wxMpService wxMpService
+		 * @return WxMpMessageRouter
+		 */
+		@Bean
+		@ConditionalOnProperty(name = "spring.pxc-framework.wx.mp.enabled", havingValue = "true")
+		public WxMpMessageRouter wxMpMessageRouter(ObjectProvider<WxProperties> wxProperties,
+				ObjectProvider<WxMpService> wxMpService) {
+			return new PlusWxMpMessageRouter(wxProperties.getIfAvailable(), wxMpService.getIfAvailable()).build();
+		}
+
+	}
+
+}

@@ -179,6 +179,12 @@
             <!-- Mvc Web 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-weixin</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- Mvc Web 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
                 <artifactId>pxc-framework-web</artifactId>
                 <version>${revision}</version>
             </dependency>

@@ -46,6 +46,7 @@ New Reconstruction 2.0, base on spring framework.
 |  `防重复提交模块`  |           [pxc-framework-repeatsubmit](pxc-framework-repeatsubmit)           | 6010-6019 |
 |   `Web模块`   |                    [pxc-framework-web](pxc-framework-web)                    |           |
 |  `脱敏加密模块`   |              [pxc-framework-sensitive](pxc-framework-sensitive)              |           |
+|   `微信模块`    |                 [pxc-framework-weixin](pxc-framework-weixin)                 |           |
 
 ## 鸣谢 JetBrains 对开源项目的支持
 
