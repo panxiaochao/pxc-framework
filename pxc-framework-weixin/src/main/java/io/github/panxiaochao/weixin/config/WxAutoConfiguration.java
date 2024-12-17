@@ -17,6 +17,7 @@ package io.github.panxiaochao.weixin.config;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
+import com.github.binarywang.wxpay.service.WxPayService;
 import io.github.panxiaochao.weixin.config.properties.WxProperties;
 import io.github.panxiaochao.weixin.core.cp.PlusWxCpService;
 import io.github.panxiaochao.weixin.core.cp.service.WxCpMultiService;
@@ -26,6 +27,7 @@ import io.github.panxiaochao.weixin.core.mp.PlusWxMpMessageRouter;
 import io.github.panxiaochao.weixin.core.mp.PlusWxMpService;
 import io.github.panxiaochao.weixin.core.open.PlusWxOpenMessageRouter;
 import io.github.panxiaochao.weixin.core.open.PlusWxOpenService;
+import io.github.panxiaochao.weixin.core.pay.PlusWxPayService;
 import io.github.panxiaochao.weixin.enums.StorageType;
 import io.github.panxiaochao.weixin.manager.IWxManager;
 import io.github.panxiaochao.weixin.manager.WxMemoryManager;
@@ -180,6 +182,25 @@ public class WxAutoConfiguration {
 		@Bean
 		public WxCpMultiService wxCpMultiService(WxProperties wxProperties) {
 			return new PlusWxCpService(wxProperties).build();
+		}
+
+	}
+
+	/**
+	 * 微信支付自动配置类
+	 */
+	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.pay.enabled", havingValue = "true")
+	static class WxPayConfiguration {
+
+		/**
+		 * 微信支付初始化
+		 * @param wxProperties 属性配置
+		 * @return WxPayService
+		 */
+		@Bean
+		public WxPayService wxPayService(ObjectProvider<WxProperties> wxProperties) {
+			return new PlusWxPayService(wxProperties.getIfAvailable()).build();
 		}
 
 	}

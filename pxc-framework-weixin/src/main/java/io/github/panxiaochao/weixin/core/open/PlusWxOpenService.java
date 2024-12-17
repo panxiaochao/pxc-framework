@@ -34,7 +34,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import java.util.Objects;
 
 /**
- * {@code CustomizerWxOpenService}
+ *
  * <p>
  * WxOpenService 初始化 重点！！！
  * </p>
