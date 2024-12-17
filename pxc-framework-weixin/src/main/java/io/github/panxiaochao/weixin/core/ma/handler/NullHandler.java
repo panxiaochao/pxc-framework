@@ -13,35 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.po;
+package io.github.panxiaochao.weixin.core.ma.handler;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaMessage;
+import cn.binarywang.wx.miniapp.message.WxMaXmlOutMessage;
+import me.chanjar.weixin.common.session.WxSessionManager;
 
-import java.io.Serializable;
+import java.util.Map;
 
 /**
+ *
  * <p>
- * 租户基类
+ * 默认 Null 处理
  * </p>
  *
  * @author Lypxc
- * @since 2024-07-02
- * @version 1.0
+ * @since 2024-12-17
  */
-@Getter
-@Setter
-public abstract class TenantPO extends BasePO implements Serializable {
+public class NullHandler extends AbstractMaHandler {
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 租户ID
-	 */
-	@Schema(description = "租户ID")
-	@TableId("tenant_id")
-	private String tenantId;
+	@Override
+	public WxMaXmlOutMessage handle(WxMaMessage wxMaMessage, Map<String, Object> map, WxMaService wxMaService,
+			WxSessionManager wxSessionManager) {
+		return null;
+	}
 
 }

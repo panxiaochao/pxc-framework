@@ -15,9 +15,13 @@
  */
 package io.github.panxiaochao.weixin.config;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import io.github.panxiaochao.weixin.config.properties.WxProperties;
 import io.github.panxiaochao.weixin.core.cp.PlusWxCpService;
 import io.github.panxiaochao.weixin.core.cp.service.WxCpMultiService;
+import io.github.panxiaochao.weixin.core.ma.PlusWxMaMessageRouter;
+import io.github.panxiaochao.weixin.core.ma.PlusWxMaService;
 import io.github.panxiaochao.weixin.core.mp.PlusWxMpMessageRouter;
 import io.github.panxiaochao.weixin.core.mp.PlusWxMpService;
 import io.github.panxiaochao.weixin.core.open.PlusWxOpenMessageRouter;
@@ -100,6 +104,35 @@ public class WxAutoConfiguration {
 		public WxMpMessageRouter wxMpMessageRouter(ObjectProvider<WxProperties> wxProperties,
 				ObjectProvider<WxMpService> wxMpService) {
 			return new PlusWxMpMessageRouter(wxProperties.getIfAvailable(), wxMpService.getIfAvailable()).build();
+		}
+
+	}
+
+	/**
+	 * 微信小程序自动配置类
+	 */
+	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.ma.enabled", havingValue = "true")
+	static class WxMiniAppConfiguration {
+
+		/**
+		 * 微信小程序初始化
+		 * @param wxProperties 属性配置
+		 * @return WxMaService
+		 */
+		@Bean
+		public WxMaService wxMaService(WxProperties wxProperties) {
+			return new PlusWxMaService(wxProperties).build();
+		}
+
+		/**
+		 * 消息路由处理器
+		 * @param wxMaService wxMaService
+		 * @return WxMaMessageRouter
+		 */
+		@Bean
+		public WxMaMessageRouter wxMaMessageRouter(WxProperties wxProperties, WxMaService wxMaService) {
+			return new PlusWxMaMessageRouter(wxProperties, wxMaService).build();
 		}
 
 	}

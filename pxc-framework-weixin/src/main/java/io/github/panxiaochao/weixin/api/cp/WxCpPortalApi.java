@@ -31,7 +31,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,8 +61,6 @@ import java.util.Objects;
 public class WxCpPortalApi {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	private final ApplicationContext applicationContext;
 
 	@GetMapping(produces = "text/plain;charset=utf-8")
 	@Operation(summary = "微信服务器的认证消息接口", description = "公众号接入开发模式时腾讯调用此接口握手", method = "GET")

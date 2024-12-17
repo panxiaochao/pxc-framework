@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2023-2024 潘骁超 (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.mybatis.plus.po;
+package io.github.panxiaochao.weixin.core.ma.handler;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.Serializable;
+import cn.binarywang.wx.miniapp.message.WxMaMessageHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ *
  * <p>
- * 租户基类
+ * 小程序抽象类消息
  * </p>
  *
  * @author Lypxc
- * @since 2024-07-02
- * @version 1.0
+ * @since 2024-12-17
  */
-@Getter
-@Setter
-public abstract class TenantPO extends BasePO implements Serializable {
+public abstract class AbstractMaHandler implements WxMaMessageHandler {
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 租户ID
-	 */
-	@Schema(description = "租户ID")
-	@TableId("tenant_id")
-	private String tenantId;
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 }

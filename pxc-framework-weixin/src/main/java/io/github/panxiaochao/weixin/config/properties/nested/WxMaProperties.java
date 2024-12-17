@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.weixin.config.properties.nested;
 
+import io.github.panxiaochao.weixin.core.ma.handler.AbstractMaHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,13 +40,18 @@ public class WxMaProperties {
 	private boolean enabled;
 
 	/**
+	 * 指定key前缀.
+	 */
+	private String keyPrefix = "wx:ma";
+
+	/**
 	 * 多小程序配置
 	 */
-	private List<MiniAppConfig> configs;
+	private List<MaConfig> configs;
 
 	@Getter
 	@Setter
-	public static class MiniAppConfig {
+	public static class MaConfig {
 
 		/**
 		 * 设置微信小程序的 appId
@@ -65,12 +71,17 @@ public class WxMaProperties {
 		/**
 		 * 消息加解密密钥 EncodingAESKey
 		 */
-		private String encodingAesKey;
+		private String aesKey;
 
 		/**
 		 * 消息格式，XML或者JSON
 		 */
 		private String msgDataFormat;
+
+		/**
+		 * 是否使用稳定版 Access Token
+		 */
+		private boolean useStableAccessToken;
 
 	}
 
@@ -89,7 +100,7 @@ public class WxMaProperties {
 		/**
 		 * 设置消息处理器
 		 */
-		// private Class<? extends AbstractMaHandler> handler;
+		private Class<? extends AbstractMaHandler> handler;
 
 		/**
 		 * 消息类型，默认 event

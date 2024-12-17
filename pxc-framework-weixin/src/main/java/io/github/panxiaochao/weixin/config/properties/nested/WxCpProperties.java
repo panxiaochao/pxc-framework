@@ -62,11 +62,11 @@ public class WxCpProperties {
 		 * 企业微信应用的 Secret
 		 */
 		private String corpSecret;
+
 		/**
 		 * 企业微信应用的 AgentId
 		 */
 		private Integer agentId;
-
 
 		/**
 		 * 企业微信应用的 token
