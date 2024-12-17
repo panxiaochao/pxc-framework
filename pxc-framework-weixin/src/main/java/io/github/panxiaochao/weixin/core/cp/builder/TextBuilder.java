@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.weixin.constants;
+package io.github.panxiaochao.weixin.core.cp.builder;
+
+import me.chanjar.weixin.cp.api.WxCpService;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlMessage;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
 
 /**
+ *
  * <p>
- * Key 常量类
+ * 文本消息
  * </p>
  *
  * @author Lypxc
- * @since 2024-12-13
+ * @since 2024-12-17
  */
-public interface WxConstant {
+public class TextBuilder extends AbstractCpBuilder {
 
-	String MP_KEY = String.format("wx:%s:current:appId", "mp");
-
-	String MA_KEY = String.format("wx:%s:current:appId", "ma");
-
-	String CP_KEY = String.format("wx:%s:current:corpId", "cp");
-
-	String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
-
-	String PAY_KEY = String.format("wx:%s:current:appId", "pay");
-
-	String OPEN_KEY = String.format("wx:%s:current:appId", "open");
-
-	String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
+	@Override
+	public WxCpXmlOutMessage build(String content, WxCpXmlMessage wxMessage, WxCpService service) {
+		return WxCpXmlOutMessage.TEXT()
+			.content(content)
+			.fromUser(wxMessage.getToUserName())
+			.toUser(wxMessage.getFromUserName())
+			.build();
+	}
 
 }

@@ -24,7 +24,7 @@ import java.security.MessageDigest;
  * </p>
  *
  * @author Lypxc
- * @since 2023-03-15
+ * @since 2024-12-17
  */
 public class SHA1Util {
 

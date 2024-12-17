@@ -13,30 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.weixin.constants;
+package io.github.panxiaochao.weixin.core.cp.builder;
+
+import me.chanjar.weixin.cp.api.WxCpService;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlMessage;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ *
  * <p>
- * Key 常量类
+ * 消息抽象
  * </p>
  *
  * @author Lypxc
- * @since 2024-12-13
+ * @since 2024-12-17
  */
-public interface WxConstant {
+public abstract class AbstractCpBuilder {
 
-	String MP_KEY = String.format("wx:%s:current:appId", "mp");
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	String MA_KEY = String.format("wx:%s:current:appId", "ma");
-
-	String CP_KEY = String.format("wx:%s:current:corpId", "cp");
-
-	String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
-
-	String PAY_KEY = String.format("wx:%s:current:appId", "pay");
-
-	String OPEN_KEY = String.format("wx:%s:current:appId", "open");
-
-	String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
+	/**
+	 * @param content 内容
+	 * @param wxMessage 消息
+	 * @param cpService cpService
+	 * @return WxMpXmlOutMessage
+	 */
+	public abstract WxCpXmlOutMessage build(String content, WxCpXmlMessage wxMessage, WxCpService cpService);
 
 }

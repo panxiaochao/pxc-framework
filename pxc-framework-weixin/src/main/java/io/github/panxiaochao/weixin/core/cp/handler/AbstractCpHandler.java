@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.weixin.constants;
+package io.github.panxiaochao.weixin.core.cp.handler;
+
+import me.chanjar.weixin.cp.message.WxCpMessageHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ *
  * <p>
- * Key 常量类
+ * 企业号/企业微信抽象类消息
  * </p>
  *
  * @author Lypxc
- * @since 2024-12-13
+ * @since 2024-12-17
  */
-public interface WxConstant {
+public abstract class AbstractCpHandler implements WxCpMessageHandler {
 
-	String MP_KEY = String.format("wx:%s:current:appId", "mp");
-
-	String MA_KEY = String.format("wx:%s:current:appId", "ma");
-
-	String CP_KEY = String.format("wx:%s:current:corpId", "cp");
-
-	String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
-
-	String PAY_KEY = String.format("wx:%s:current:appId", "pay");
-
-	String OPEN_KEY = String.format("wx:%s:current:appId", "open");
-
-	String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 }

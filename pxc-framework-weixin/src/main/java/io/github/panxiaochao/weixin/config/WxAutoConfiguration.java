@@ -16,8 +16,12 @@
 package io.github.panxiaochao.weixin.config;
 
 import io.github.panxiaochao.weixin.config.properties.WxProperties;
+import io.github.panxiaochao.weixin.core.cp.PlusWxCpService;
+import io.github.panxiaochao.weixin.core.cp.service.WxCpMultiService;
 import io.github.panxiaochao.weixin.core.mp.PlusWxMpMessageRouter;
 import io.github.panxiaochao.weixin.core.mp.PlusWxMpService;
+import io.github.panxiaochao.weixin.core.open.PlusWxOpenMessageRouter;
+import io.github.panxiaochao.weixin.core.open.PlusWxOpenService;
 import io.github.panxiaochao.weixin.enums.StorageType;
 import io.github.panxiaochao.weixin.manager.IWxManager;
 import io.github.panxiaochao.weixin.manager.WxMemoryManager;
@@ -25,6 +29,8 @@ import io.github.panxiaochao.weixin.manager.WxRedisTemplateManager;
 import io.github.panxiaochao.weixin.manager.WxRedissonManager;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.open.api.WxOpenService;
+import me.chanjar.weixin.open.api.impl.WxOpenMessageRouter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -72,6 +78,7 @@ public class WxAutoConfiguration {
 	 * 微信公众号自动配置类
 	 */
 	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.mp.enabled", havingValue = "true")
 	static class WxMpConfiguration {
 
 		/**
@@ -90,10 +97,56 @@ public class WxAutoConfiguration {
 		 * @return WxMpMessageRouter
 		 */
 		@Bean
-		@ConditionalOnProperty(name = "spring.pxc-framework.wx.mp.enabled", havingValue = "true")
 		public WxMpMessageRouter wxMpMessageRouter(ObjectProvider<WxProperties> wxProperties,
 				ObjectProvider<WxMpService> wxMpService) {
 			return new PlusWxMpMessageRouter(wxProperties.getIfAvailable(), wxMpService.getIfAvailable()).build();
+		}
+
+	}
+
+	/**
+	 * 微信开放平台自动配置类
+	 */
+	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.open.enabled", havingValue = "true")
+	static class WxOpenConfiguration {
+
+		/**
+		 * 微信开放平台 初始化
+		 * @param wxProperties 属性配置
+		 * @return WxOpenService
+		 */
+		@Bean
+		public WxOpenService wxOpenService(WxProperties wxProperties) {
+			return new PlusWxOpenService(wxProperties).build();
+		}
+
+		/**
+		 * 微信开放平台 消息路由处理器
+		 * @return WxOpenMessageRouter
+		 */
+		@Bean
+		public WxOpenMessageRouter wxOpenMessageRouter(WxProperties wxProperties, WxOpenService wxOpenService) {
+			return new PlusWxOpenMessageRouter(wxProperties, wxOpenService).build();
+		}
+
+	}
+
+	/**
+	 * 企业号/企业微信自动配置类
+	 */
+	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.cp.enabled", havingValue = "true")
+	static class WxCpConfiguration {
+
+		/**
+		 * 微信公众号初始化
+		 * @param wxProperties 属性配置
+		 * @return WxCpMultiService
+		 */
+		@Bean
+		public WxCpMultiService wxCpMultiService(WxProperties wxProperties) {
+			return new PlusWxCpService(wxProperties).build();
 		}
 
 	}

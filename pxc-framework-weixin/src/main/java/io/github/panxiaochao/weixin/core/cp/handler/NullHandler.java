@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.weixin.constants;
+package io.github.panxiaochao.weixin.core.cp.handler;
+
+import me.chanjar.weixin.common.session.WxSessionManager;
+import me.chanjar.weixin.cp.api.WxCpService;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlMessage;
+import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
+
+import java.util.Map;
 
 /**
+ *
  * <p>
- * Key 常量类
+ * 默认 Null 处理
  * </p>
  *
  * @author Lypxc
- * @since 2024-12-13
+ * @since 2024-12-17
  */
-public interface WxConstant {
+public class NullHandler extends AbstractCpHandler {
 
-	String MP_KEY = String.format("wx:%s:current:appId", "mp");
-
-	String MA_KEY = String.format("wx:%s:current:appId", "ma");
-
-	String CP_KEY = String.format("wx:%s:current:corpId", "cp");
-
-	String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
-
-	String PAY_KEY = String.format("wx:%s:current:appId", "pay");
-
-	String OPEN_KEY = String.format("wx:%s:current:appId", "open");
-
-	String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
+	@Override
+	public WxCpXmlOutMessage handle(WxCpXmlMessage wxMessage, Map<String, Object> context, WxCpService cpService,
+			WxSessionManager sessionManager) {
+		return null;
+	}
 
 }

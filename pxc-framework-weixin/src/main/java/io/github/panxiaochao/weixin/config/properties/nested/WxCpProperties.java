@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.weixin.config.properties.nested;
 
+import io.github.panxiaochao.weixin.core.cp.handler.AbstractCpHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,28 +40,33 @@ public class WxCpProperties {
 	private boolean enabled;
 
 	/**
-	 * 企业微信的 corpId
+	 * 指定key前缀.
 	 */
-	private String corpId;
+	private String keyPrefix = "wx:cp";
 
 	/**
 	 * 企业号/企业微信
 	 */
-	private WxCpConfig config;
+	private List<WxCpConfig> config;
 
 	@Getter
 	@Setter
 	public static class WxCpConfig {
 
 		/**
-		 * 企业微信应用的 AgentId
+		 * 企业微信的 corpId
 		 */
-		private Integer agentId;
+		private String corpId;
 
 		/**
 		 * 企业微信应用的 Secret
 		 */
-		private String secret;
+		private String corpSecret;
+		/**
+		 * 企业微信应用的 AgentId
+		 */
+		private Integer agentId;
+
 
 		/**
 		 * 企业微信应用的 token
@@ -70,7 +76,17 @@ public class WxCpProperties {
 		/**
 		 * 企业微信应用的 EncodingAESKey
 		 */
-		private String encodingAesKey;
+		private String aesKey;
+
+		/**
+		 * 微信企业号应用 会话存档私钥
+		 */
+		private String msgAuditPriKey;
+
+		/**
+		 * 微信企业号应用 会话存档类库路径
+		 */
+		private String msgAuditLibPath;
 
 	}
 
@@ -89,7 +105,7 @@ public class WxCpProperties {
 		/**
 		 * 设置消息处理器
 		 */
-		// private Class<? extends AbstractCpHandler> handler;
+		private Class<? extends AbstractCpHandler> handler;
 
 		/**
 		 * 消息类型，默认 event

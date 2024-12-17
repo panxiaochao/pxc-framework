@@ -39,53 +39,44 @@ public class WxOpenProperties {
 	private boolean enabled;
 
 	/**
-	 * 微信开放平台配置
+	 * 指定key前缀.
 	 */
-	private WxOpenConfig config;
+	private String keyPrefix = "wx:open";
 
 	/**
-	 * 基础信息配置
+	 * 微信开放平台的appid
 	 */
-	@Getter
-	@Setter
-	public static class WxOpenConfig {
+	private String appId;
 
-		/**
-		 * 微信三方平台的appid
-		 */
-		private String componentAppId;
+	/**
+	 * 微信开放平台的app secret
+	 */
+	private String secret;
 
-		/**
-		 * 微信三方平台的app secret
-		 */
-		private String componentSecret;
+	/**
+	 * 微信开放平台的token
+	 */
+	private String token;
 
-		/**
-		 * 微信三方平台的token
-		 */
-		private String componentToken;
+	/**
+	 * 微信开放平台的EncodingAESKey
+	 */
+	private String aesKey;
 
-		/**
-		 * 微信三方平台的EncodingAESKey
-		 */
-		private String componentAesKey;
+	/**
+	 * 授权 URL
+	 */
+	private String authorizeUrl;
 
-		/**
-		 * 授权 URL
-		 */
-		private String authorizeUrl;
+	/**
+	 * 微信公众号 AppId
+	 */
+	private String mpAppId;
 
-		/**
-		 * 微信公众号 AppId
-		 */
-		private String wxMpAppId;
-
-		/**
-		 * 微信小程序 AppId
-		 */
-		private String wxMaAppId;
-
-	}
+	/**
+	 * 微信小程序 AppId
+	 */
+	private String maAppId;
 
 	/**
 	 * 配置多个消息处理器
