@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.weixin.config.properties;
 
+import io.github.panxiaochao.weixin.config.properties.nested.WxChannelProperties;
 import io.github.panxiaochao.weixin.config.properties.nested.WxCpProperties;
 import io.github.panxiaochao.weixin.config.properties.nested.WxMaProperties;
 import io.github.panxiaochao.weixin.config.properties.nested.WxMpProperties;
@@ -80,5 +81,11 @@ public class WxProperties {
 	 **/
 	@NestedConfigurationProperty
 	private WxOpenProperties open = new WxOpenProperties();
+
+	/**
+	 * 微信视频号
+	 **/
+	@NestedConfigurationProperty
+	private WxChannelProperties channel = new WxChannelProperties();
 
 }

@@ -13,40 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.weixin.core.cp.service;
+package io.github.panxiaochao.weixin.core.channel.service;
 
-import me.chanjar.weixin.cp.api.WxCpService;
-import me.chanjar.weixin.cp.message.WxCpMessageRouter;
+import me.chanjar.weixin.channel.api.WxChannelService;
 
 /**
  * <p>
- * 多企业微信 {@link WxCpService} 所有实例存放类
+ * 视频号 {@link WxChannelService} 所有实例存放类.
  * </p>
  *
  * @author Lypxc
- * @since 2024-12-17
+ * @since 2024-12-18
  * @version 1.0
  */
-public interface WxCpMultiService {
+public interface WxChannelMultiService {
 
 	/**
-	 * 通过key, 获取WxCpService
+	 * 通过key 获取 WxChannelService
 	 * @param key key
-	 * @return WxCpService
+	 * @return WxChannelService
 	 */
-	WxCpService getWxCpService(String key);
+	WxChannelService getWxChannelService(String key);
+
+	// /**
+	// * 通过key, 获取WxChannelMessageRouter
+	// * @param key key
+	// * @return WxChannelMessageRouter
+	// */
+	// WxChannelMessageRouter getWxChannelMessageRouter(String key);
 
 	/**
-	 * 通过key, 获取WxCpMessageRouter
-	 * @param key key
-	 * @return WxCpMessageRouter
-	 */
-	WxCpMessageRouter getWxCpMessageRouter(String key);
-
-	/**
-	 * 通过key，从列表中移除一个 WxCpService 实例
+	 * 根据key，从列表中移除一个 WxChannelService 实例
 	 * @param key key
 	 */
-	void removeWxCpService(String key);
+	void removeWxChannelService(String key);
 
 }

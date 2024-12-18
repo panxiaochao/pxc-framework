@@ -49,7 +49,7 @@ public class WxCpMultiServiceImpl implements WxCpMultiService {
 	/**
 	 * 通过key, 获取WxCpMessageRouter
 	 * @param key key
-	 * @return WxCpService
+	 * @return WxCpMessageRouter
 	 */
 	@Override
 	public WxCpMessageRouter getWxCpMessageRouter(String key) {
@@ -66,7 +66,7 @@ public class WxCpMultiServiceImpl implements WxCpMultiService {
 	}
 
 	/**
-	 * 设置WxCpService，通过key
+	 * 设置WxCpMessageRouter，通过key
 	 * @param key key
 	 * @param wxCpMessageRouter wxCpMessageRouter
 	 */

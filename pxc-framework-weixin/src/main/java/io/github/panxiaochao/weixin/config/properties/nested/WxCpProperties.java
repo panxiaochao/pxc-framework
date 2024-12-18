@@ -37,7 +37,7 @@ public class WxCpProperties {
 	/**
 	 * 是否开启
 	 */
-	private boolean enabled;
+	private boolean enabled = false;
 
 	/**
 	 * 指定key前缀.

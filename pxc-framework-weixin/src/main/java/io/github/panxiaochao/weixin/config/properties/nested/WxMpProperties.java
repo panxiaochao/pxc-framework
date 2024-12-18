@@ -37,7 +37,7 @@ public class WxMpProperties {
 	/**
 	 * 是否开启
 	 */
-	private boolean enabled;
+	private boolean enabled = false;
 
 	/**
 	 * 指定key前缀.
@@ -89,7 +89,7 @@ public class WxMpProperties {
 		/**
 		 * 是否使用稳定版 Access Token, 默认true
 		 */
-		private boolean useStableAccessToken = true;
+		private boolean useStableAccessToken = false;
 
 	}
 

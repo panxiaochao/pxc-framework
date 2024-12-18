@@ -15,7 +15,6 @@
  */
 package io.github.panxiaochao.weixin.config.properties.nested;
 
-import io.github.panxiaochao.weixin.core.ma.handler.AbstractMaHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +23,7 @@ import java.util.List;
 /**
  *
  * <p>
- * 微信小程序配置属性
+ * 微信视频号 配置属性
  * </p>
  *
  * @author Lypxc
@@ -32,7 +31,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class WxMaProperties {
+public class WxChannelProperties {
 
 	/**
 	 * 是否开启
@@ -42,70 +41,41 @@ public class WxMaProperties {
 	/**
 	 * 指定key前缀.
 	 */
-	private String keyPrefix = "wx:ma";
+	private String keyPrefix = "wx:channel";
 
 	/**
-	 * 多小程序配置
+	 * 视频号
 	 */
-	private List<MaConfig> configs;
+	private List<WxChannelConfig> config;
 
 	@Getter
 	@Setter
-	public static class MaConfig {
+	public static class WxChannelConfig {
 
 		/**
-		 * 设置微信小程序的 appId
+		 * 设置微信视频号的 appid.
 		 */
 		private String appId;
 
 		/**
-		 * 设置微信小程序的 appSecret
+		 * 设置微信视频号的 secret.
 		 */
-		private String appSecret;
+		private String secret;
 
 		/**
-		 * 令牌 token
+		 * 设置微信视频号的 token.
 		 */
 		private String token;
 
 		/**
-		 * 消息加解密密钥 EncodingAESKey
+		 * 设置微信视频号的 EncodingAESKey.
 		 */
 		private String aesKey;
-
-		/**
-		 * 消息格式，XML或者JSON
-		 */
-		private String msgDataFormat;
 
 		/**
 		 * 是否使用稳定版 Access Token
 		 */
 		private boolean useStableAccessToken = false;
-
-	}
-
-	/**
-	 * 配置多个消息处理器
-	 */
-	private List<MaHandler> handlers;
-
-	/**
-	 * 自定义消息处理器
-	 */
-	@Getter
-	@Setter
-	public static class MaHandler {
-
-		/**
-		 * 设置消息处理器
-		 */
-		private Class<? extends AbstractMaHandler> handler;
-
-		/**
-		 * 消息类型，默认 event
-		 */
-		private String content;
 
 	}
 

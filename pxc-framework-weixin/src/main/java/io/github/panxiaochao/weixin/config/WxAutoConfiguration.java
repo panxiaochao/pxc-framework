@@ -19,6 +19,8 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.github.panxiaochao.weixin.config.properties.WxProperties;
+import io.github.panxiaochao.weixin.core.channel.PlusWxChannelService;
+import io.github.panxiaochao.weixin.core.channel.service.WxChannelMultiService;
 import io.github.panxiaochao.weixin.core.cp.PlusWxCpService;
 import io.github.panxiaochao.weixin.core.cp.service.WxCpMultiService;
 import io.github.panxiaochao.weixin.core.ma.PlusWxMaMessageRouter;
@@ -33,6 +35,7 @@ import io.github.panxiaochao.weixin.manager.IWxManager;
 import io.github.panxiaochao.weixin.manager.WxMemoryManager;
 import io.github.panxiaochao.weixin.manager.WxRedisTemplateManager;
 import io.github.panxiaochao.weixin.manager.WxRedissonManager;
+import me.chanjar.weixin.channel.message.WxChannelMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.open.api.WxOpenService;
@@ -115,7 +118,7 @@ public class WxAutoConfiguration {
 	 */
 	@Configuration
 	@ConditionalOnProperty(name = "spring.pxc-framework.wx.ma.enabled", havingValue = "true")
-	static class WxMiniAppConfiguration {
+	static class WxMaConfiguration {
 
 		/**
 		 * 微信小程序初始化
@@ -175,7 +178,7 @@ public class WxAutoConfiguration {
 	static class WxCpConfiguration {
 
 		/**
-		 * 微信公众号初始化
+		 * 企业号/企业微信初始化
 		 * @param wxProperties 属性配置
 		 * @return WxCpMultiService
 		 */
@@ -201,6 +204,34 @@ public class WxAutoConfiguration {
 		@Bean
 		public WxPayService wxPayService(ObjectProvider<WxProperties> wxProperties) {
 			return new PlusWxPayService(wxProperties.getIfAvailable()).build();
+		}
+
+	}
+
+	/**
+	 * 微信视频号自动配置类
+	 */
+	@Configuration
+	@ConditionalOnProperty(name = "spring.pxc-framework.wx.channel.enabled", havingValue = "true")
+	static class WxChannelConfiguration {
+
+		/**
+		 * 微信视频号初始化
+		 * @param wxProperties 属性配置
+		 * @return WxChannelMultiService
+		 */
+		@Bean
+		public WxChannelMultiService wxChannelMultiService(WxProperties wxProperties) {
+			return new PlusWxChannelService(wxProperties).build();
+		}
+
+		/**
+		 * 微信视频号 消息路由器
+		 * @return WxChannelMessageRouter
+		 */
+		@Bean
+		public WxChannelMessageRouter wxChannelMessageRouter() {
+			return new WxChannelMessageRouter();
 		}
 
 	}
