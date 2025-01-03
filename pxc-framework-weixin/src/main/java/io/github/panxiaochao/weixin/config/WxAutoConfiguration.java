@@ -40,6 +40,8 @@ import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.open.api.WxOpenService;
 import me.chanjar.weixin.open.api.impl.WxOpenMessageRouter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -59,6 +61,11 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfiguration
 @EnableConfigurationProperties(WxProperties.class)
 public class WxAutoConfiguration {
+
+	/**
+	 * LOGGER WxAutoConfiguration.class
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(WxAutoConfiguration.class);
 
 	/**
 	 * 微信状态管理多元化管理
@@ -97,6 +104,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxMpService wxMpService(ObjectProvider<WxProperties> wxProperties) {
+			LOGGER.info("配置微信公众号[WxMpService]成功！");
 			return new PlusWxMpService(wxProperties.getIfAvailable()).build();
 		}
 
@@ -127,6 +135,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxMaService wxMaService(WxProperties wxProperties) {
+			LOGGER.info("配置微信小程序[WxMaService]成功！");
 			return new PlusWxMaService(wxProperties).build();
 		}
 
@@ -156,6 +165,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxOpenService wxOpenService(WxProperties wxProperties) {
+			LOGGER.info("配置微信开放平台[WxOpenService]成功！");
 			return new PlusWxOpenService(wxProperties).build();
 		}
 
@@ -184,6 +194,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxCpMultiService wxCpMultiService(WxProperties wxProperties) {
+			LOGGER.info("配置企业号/企业微信[WxCpMultiService]成功！");
 			return new PlusWxCpService(wxProperties).build();
 		}
 
@@ -203,6 +214,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxPayService wxPayService(ObjectProvider<WxProperties> wxProperties) {
+			LOGGER.info("配置微信支付[WxPayService]成功！");
 			return new PlusWxPayService(wxProperties.getIfAvailable()).build();
 		}
 
@@ -222,6 +234,7 @@ public class WxAutoConfiguration {
 		 */
 		@Bean
 		public WxChannelMultiService wxChannelMultiService(WxProperties wxProperties) {
+			LOGGER.info("配置微信视频号[WxChannelMultiService]成功！");
 			return new PlusWxChannelService(wxProperties).build();
 		}
 

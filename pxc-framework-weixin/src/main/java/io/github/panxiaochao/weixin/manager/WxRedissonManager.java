@@ -41,7 +41,7 @@ public class WxRedissonManager implements IWxManager {
 		if (Objects.isNull(redissonClient)) {
 			redissonClient = SpringContextUtil.getBean("redissonClient");
 		}
-		Objects.requireNonNull(redissonClient, () -> "请正确配置Redisson相关配置！");
+		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
 		this.redissonClient = redissonClient;
 	}
 

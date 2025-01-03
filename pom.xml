@@ -72,6 +72,7 @@
         <module>pxc-framework-crypto</module>
         <module>pxc-framework-captcha</module>
         <module>pxc-framework-weixin</module>
+        <module>pxc-framework-dynamic-datasource</module>
     </modules>
 
     <!-- properties -->
@@ -121,7 +122,8 @@
         <httpclient5.version>5.4.1</httpclient5.version>
         <emoji-java.version>5.1.1</emoji-java.version>
         <weixin-java.version>4.6.8.B</weixin-java.version>
-
+        <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
+        <jasypt.version>3.0.5</jasypt.version>
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
         <maven-compiler-plugin.verison>3.11.0</maven-compiler-plugin.verison>
@@ -418,6 +420,18 @@
                 <groupId>com.github.binarywang</groupId>
                 <artifactId>weixin-java-channel</artifactId>
                 <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 动态数据源 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <!--配置文件加解密-->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

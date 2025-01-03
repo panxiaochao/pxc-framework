@@ -52,7 +52,7 @@ public class PlusWxOpenService {
 	 * @return WxOpenService
 	 */
 	public WxOpenService build() {
-		if (!wxProperties.getOpen().isEnabled()) {
+		if (!wxProperties.getOpen().getEnabled()) {
 			return new WxOpenServiceImpl();
 		}
 		final WxOpenProperties openProperties = wxProperties.getOpen();

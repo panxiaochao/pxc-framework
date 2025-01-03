@@ -37,7 +37,7 @@ public class WxMaProperties {
 	/**
 	 * 是否开启
 	 */
-	private boolean enabled = false;
+	private Boolean enabled;
 
 	/**
 	 * 指定key前缀.

@@ -40,7 +40,7 @@ public class PlusWxPayService {
 	 * @return WxPayService
 	 */
 	public WxPayService build() {
-		if (!wxProperties.getPay().isEnabled()) {
+		if (!wxProperties.getPay().getEnabled()) {
 			return new WxPayServiceImpl();
 		}
 		WxPayConfig payConfig = new WxPayConfig();

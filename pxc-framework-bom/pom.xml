@@ -86,6 +86,12 @@
                 <artifactId>pxc-framework-crypto</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-dynamic-datasource</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Cache 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>

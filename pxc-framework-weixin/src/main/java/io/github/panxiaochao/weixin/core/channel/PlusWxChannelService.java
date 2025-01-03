@@ -62,7 +62,7 @@ public class PlusWxChannelService {
 	 */
 	public WxChannelMultiService build() {
 		WxChannelMultiServiceImpl wxChannelMultiService = new WxChannelMultiServiceImpl();
-		if (wxProperties.getChannel().isEnabled()) {
+		if (wxProperties.getChannel().getEnabled()) {
 			final List<WxChannelProperties.WxChannelConfig> cpPropertiesList = wxProperties.getChannel().getConfig();
 			if (CollectionUtils.isEmpty(cpPropertiesList)) {
 				throw new RuntimeException("请配置微信视频号相关参数！");

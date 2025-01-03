@@ -59,7 +59,7 @@ public class PlusWxMaService {
 	 * @return WxMaService
 	 */
 	public WxMaService build() {
-		if (!wxProperties.getMa().isEnabled()) {
+		if (!wxProperties.getMa().getEnabled()) {
 			return new WxMaServiceImpl();
 		}
 		final List<WxMaProperties.MaConfig> maPropertiesList = wxProperties.getMa().getConfigs();

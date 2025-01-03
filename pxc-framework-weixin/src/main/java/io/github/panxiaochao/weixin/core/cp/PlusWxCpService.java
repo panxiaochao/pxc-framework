@@ -66,7 +66,7 @@ public class PlusWxCpService {
 	 */
 	public WxCpMultiService build() {
 		WxCpMultiServiceImpl wxCpMultiService = new WxCpMultiServiceImpl();
-		if (wxProperties.getCp().isEnabled()) {
+		if (wxProperties.getCp().getEnabled()) {
 			final List<WxCpProperties.WxCpConfig> cpPropertiesList = wxProperties.getCp().getConfig();
 			if (CollectionUtils.isEmpty(cpPropertiesList)) {
 				throw new RuntimeException("请配置企业号/企业微信相关参数！");

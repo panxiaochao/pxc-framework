@@ -62,7 +62,7 @@ public class PlusWxMpService {
 	 * @return WxMpService
 	 */
 	public WxMpService build() {
-		if (!wxProperties.getMp().isEnabled()) {
+		if (!wxProperties.getMp().getEnabled()) {
 			return new WxMpServiceImpl();
 		}
 		final List<WxMpProperties.MpConfig> mpPropertiesList = wxProperties.getMp().getConfigs();

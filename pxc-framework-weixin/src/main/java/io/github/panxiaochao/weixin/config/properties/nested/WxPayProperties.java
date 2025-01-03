@@ -34,7 +34,7 @@ public class WxPayProperties {
 	/**
 	 * 是否开启
 	 */
-	private boolean enabled = false;
+	private Boolean enabled;
 
 	/**
 	 * 微信支付配置，单个实例
