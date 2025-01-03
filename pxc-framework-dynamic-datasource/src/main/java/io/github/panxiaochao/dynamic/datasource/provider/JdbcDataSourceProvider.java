@@ -20,6 +20,8 @@ import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.provider.AbstractJdbcDataSourceProvider;
 import io.github.panxiaochao.dynamic.datasource.config.properties.DsProperties;
 import org.jasypt.encryption.StringEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +40,11 @@ import java.util.Map;
  * @version 1.0
  */
 public class JdbcDataSourceProvider extends AbstractJdbcDataSourceProvider {
+
+	/**
+	 * LOGGER JdbcDataSourceProvider.class
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcDataSourceProvider.class);
 
 	private final DsProperties properties;
 
@@ -75,7 +82,7 @@ public class JdbcDataSourceProvider extends AbstractJdbcDataSourceProvider {
 			while (rs.next()) {
 				String name = rs.getString("name");
 				String url = rs.getString("url");
-				String username = rs.getString("userName");
+				String username = rs.getString("username");
 				String password = rs.getString("password");
 				DataSourceProperty property = new DataSourceProperty();
 				property.setUsername(username);
@@ -86,7 +93,7 @@ public class JdbcDataSourceProvider extends AbstractJdbcDataSourceProvider {
 			}
 		}
 		else {
-			throw new RuntimeException("请配置动态数据库查询语句参数[queryDsSql]");
+			LOGGER.error("请配置动态数据库查询语句参数[queryDsSql]");
 		}
 
 		// 添加默认主数据源

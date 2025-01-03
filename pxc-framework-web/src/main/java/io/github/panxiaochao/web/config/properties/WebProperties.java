@@ -41,10 +41,25 @@ public class WebProperties {
 	private Xss xss = new Xss();
 
 	/**
+	 * Cors 配置
+	 */
+	private Cors cors = new Cors();
+
+	/**
 	 * OkHttp 配置
 	 */
 	private OkHttp okHttp = new OkHttp();
 
+	@Getter
+	@Setter
+	public static class Cors {
+
+		/**
+		 * 是否开启 跨域Cors
+		 */
+		private boolean enabled;
+
+	}
 
 	@Getter
 	@Setter
@@ -53,7 +68,7 @@ public class WebProperties {
 		/**
 		 * 是否开启 XSS
 		 */
-		private boolean enable;
+		private boolean enabled;
 
 		/**
 		 * 排除的URL列表

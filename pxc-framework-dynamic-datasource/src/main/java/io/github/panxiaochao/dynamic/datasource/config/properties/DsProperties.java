@@ -34,11 +34,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DsProperties {
 
 	/**
-	 * 开关
-	 */
-	private Boolean enable;
-
-	/**
 	 * 查询数据库中多数据源数据的SQL
 	 */
 	private String queryDsSql;

@@ -22,6 +22,7 @@ import com.baomidou.dynamic.datasource.processor.DsSessionProcessor;
 import com.baomidou.dynamic.datasource.processor.DsSpelExpressionProcessor;
 import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import io.github.panxiaochao.dynamic.datasource.config.properties.DsProperties;
+import io.github.panxiaochao.dynamic.datasource.filter.ClearDataSourceFilter;
 import io.github.panxiaochao.dynamic.datasource.processor.LastDsProcessor;
 import io.github.panxiaochao.dynamic.datasource.provider.JdbcDataSourceProvider;
 import org.jasypt.encryption.StringEncryptor;
@@ -29,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -46,10 +46,7 @@ import org.springframework.context.expression.BeanFactoryResolver;
  * @version 1.0
  */
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-// @AutoConfigureBefore(name =
-// "com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration")
 @EnableConfigurationProperties(DsProperties.class)
-// @ConditionalOnProperty(name = "spring.pxc-framework.dynamic.enabled", havingValue = "true")
 public class DynamicDSAutoConfiguration {
 
 	/**
@@ -103,12 +100,12 @@ public class DynamicDSAutoConfiguration {
 	// }
 
 	/**
-	 * 清除Ttl数据源过滤器
-	 * @return 清除Ttl数据源过滤器
+	 * 清除数据源过滤器
+	 * @return ClearDataSourceFilter
 	 */
-	// @Bean
-	// public ClearTtlDataSourceFilter clearTtlDsFilter() {
-	// return new ClearTtlDataSourceFilter();
-	// }
+	@Bean
+	public ClearDataSourceFilter clearDataSourceFilter() {
+		return new ClearDataSourceFilter();
+	}
 
 }
