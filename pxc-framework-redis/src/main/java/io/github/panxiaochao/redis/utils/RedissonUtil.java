@@ -133,6 +133,14 @@ public class RedissonUtil {
 	}
 
 	/**
+	 * 检查redis中是否存在keys
+	 * @return true or false
+	 */
+	public static boolean countExists(String... keys) {
+		return getRKey().countExists(keys) > 0;
+	}
+
+	/**
 	 * 按 keys 删除多个对象
 	 * @param keys - object names
 	 */
@@ -151,11 +159,20 @@ public class RedissonUtil {
 
 	/**
 	 * 设置值
-	 * @param key key
-	 * @param value T value
+	 * @param key 缓存的键值
+	 * @param value 缓存的值
 	 */
 	public static <T> void set(String key, T value) {
-		set(key, value, Duration.ofMillis(0));
+		set(key, value, Duration.ofMillis(-1));
+	}
+
+	/**
+	 * 获得key剩余存活时间
+	 * @param key 缓存键值
+	 * @return 剩余存活时间
+	 */
+	public static <T> long getRemainTimeToLive(String key) {
+		return getRBucket(key).remainTimeToLive();
 	}
 
 	/**
@@ -230,9 +247,9 @@ public class RedissonUtil {
 
 	/**
 	 * 设置值.
-	 * @param key key
-	 * @param value T value
-	 * @param duration expiration duration
+	 * @param key 缓存的键值
+	 * @param value 缓存的值
+	 * @param duration 过期时间
 	 */
 	public static <T> void set(String key, T value, Duration duration) {
 		if (duration.toMillis() <= 0) {
@@ -244,6 +261,27 @@ public class RedissonUtil {
 			bucket.setAsync(value);
 			bucket.expireAsync(duration);
 			batch.execute();
+		}
+	}
+
+	/**
+	 * 设置值并保持之前的过期时间，需要Redis 6.X以上版本.
+	 * @param key 缓存的键值
+	 * @param value 缓存的值
+	 */
+	public static <T> void setAndKeepTtL(String key, T value) {
+		RBucket<T> bucket = getRBucket(key);
+		try {
+			bucket.setAndKeepTTL(value);
+		}
+		catch (Exception e) {
+			long timeToLive = bucket.remainTimeToLive();
+			if (timeToLive == -1) {
+				bucket.set(value);
+			}
+			else {
+				set(key, value, Duration.ofMillis(timeToLive));
+			}
 		}
 	}
 
@@ -398,6 +436,18 @@ public class RedissonUtil {
 	public static <T> List<T> getList(String key, final int... indexes) {
 		RList<T> rList = getRList(key);
 		return rList.get(indexes);
+	}
+
+	/**
+	 * 通过范围获取List缓存
+	 * @param key 缓存的键值
+	 * @param form 起始下标
+	 * @param to 截止下标
+	 * @return 缓存的对象
+	 */
+	public static <T> List<T> getListRange(String key, int form, int to) {
+		RList<T> rList = getRList(key);
+		return rList.range(form, to);
 	}
 
 	/**
