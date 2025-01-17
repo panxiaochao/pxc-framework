@@ -81,8 +81,8 @@ public class JdbcUtilTest {
 			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, null, "oauth2_authorization");
 			System.out.println(JacksonUtil.toString(columnMetas));
 
-			List<String> columnNames = DbMetaUtil.getColumnNames(dataSource, "oauth2_authorization");
-			System.out.println(JacksonUtil.toString(columnNames));
+			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource, "oauth2_authorization");
+			// System.out.println(JacksonUtil.toString(columnNames));
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
