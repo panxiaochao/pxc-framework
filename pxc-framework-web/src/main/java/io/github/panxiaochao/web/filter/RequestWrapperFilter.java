@@ -16,10 +16,12 @@
 package io.github.panxiaochao.web.filter;
 
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,11 +34,13 @@ import java.io.IOException;
  * @author Lypxc
  * @since 2023-06-26
  */
-public class RequestWrapperFilter extends OncePerRequestFilter {
+public class RequestWrapperFilter implements Filter {
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws ServletException, IOException {
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		String contentType = request.getContentType();
 		// 判断请求类型
 		if (!StringUtils.hasText(contentType)) {
@@ -48,12 +52,12 @@ public class RequestWrapperFilter extends OncePerRequestFilter {
 		}
 		else {
 			// 重新包装 Request Wrapper
-			HttpServletRequest requestWrapper = new RequestWrapper(request);
-			if (null == requestWrapper) {
-				filterChain.doFilter(request, response);
+			request = new RequestWrapper(request);
+			if (null == request) {
+				filterChain.doFilter(servletRequest, response);
 			}
 			else {
-				filterChain.doFilter(requestWrapper, response);
+				filterChain.doFilter(request, response);
 			}
 		}
 	}

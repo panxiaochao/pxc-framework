@@ -57,7 +57,7 @@ public class WebProperties {
 		/**
 		 * 是否开启 跨域Cors
 		 */
-		private boolean enabled;
+		private Boolean enabled;
 
 	}
 
@@ -68,7 +68,7 @@ public class WebProperties {
 		/**
 		 * 是否开启 XSS
 		 */
-		private boolean enabled;
+		private Boolean enabled;
 
 		/**
 		 * 排除的URL列表
