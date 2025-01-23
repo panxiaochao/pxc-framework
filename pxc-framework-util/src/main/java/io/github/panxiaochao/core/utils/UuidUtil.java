@@ -28,15 +28,6 @@ import java.util.UUID;
 public class UuidUtil {
 
 	/**
-	 * （在2.9版本删除）获取原生UUID.
-	 * @return return UUID
-	 */
-	@Deprecated
-	public static String getUUID() {
-		return getUuid();
-	}
-
-	/**
 	 * 获取原生UUID
 	 * @return return UUID
 	 */
@@ -45,20 +36,11 @@ public class UuidUtil {
 	}
 
 	/**
-	 * （在2.9版本删除）获取原生UUID，去除-的简化UUID.
-	 * @return return simple UUID
-	 */
-	@Deprecated
-	public static String getSimpleUUID() {
-		return getSimpleUuid();
-	}
-
-	/**
 	 * 获取原生UUID，去除-的简化UUID.
 	 * @return return simple UUID
 	 */
 	public static String getSimpleUuid() {
-		return getUUID().replaceAll("-", "");
+		return getUuid().replaceAll("-", "");
 	}
 
 }
