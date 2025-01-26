@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-redis</artifactId>
-    <description>[2.0.8-SNAPSHOT]pxc framework redis 模块，统一采用Redisson组件</description>
+    <description>[2.0.8]pxc framework redis 模块，统一采用Redisson组件</description>
 
     <dependencies>
         <!-- 核心模块 -->

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>pxc-framework-weixin</artifactId>
-    <description>[2.0.8-SNAPSHOT]pxc framework weixin 微信模块</description>
+    <description>[2.0.8]pxc framework weixin 微信模块</description>
 
     <dependencies>
         <dependency>
