@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * 请求排序
+ * 请求字段排序
  * </p>
  *
  * @author Lypxc
@@ -60,6 +60,7 @@ public class OrderItems implements Serializable {
 	}
 
 	/**
+	 * 以某个字段升序
 	 * @param column 字段
 	 * @return OrderItems
 	 */
@@ -68,6 +69,7 @@ public class OrderItems implements Serializable {
 	}
 
 	/**
+	 * 以某个字段降序
 	 * @param column 字段
 	 * @return OrderItems
 	 */
@@ -76,6 +78,7 @@ public class OrderItems implements Serializable {
 	}
 
 	/**
+	 * 以多个字段升序
 	 * @param columns 字段
 	 * @return OrderItems
 	 */
@@ -84,6 +87,7 @@ public class OrderItems implements Serializable {
 	}
 
 	/**
+	 * 以多个字段降序
 	 * @param columns 字段
 	 * @return OrderItems
 	 */
@@ -92,6 +96,7 @@ public class OrderItems implements Serializable {
 	}
 
 	/**
+	 * 自主构建字段是否升序或降序
 	 * @param column 字段
 	 * @param asc 排序
 	 * @return OrderItems

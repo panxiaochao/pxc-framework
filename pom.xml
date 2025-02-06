@@ -71,6 +71,8 @@
         <module>pxc-framework-holiday</module>
         <module>pxc-framework-crypto</module>
         <module>pxc-framework-captcha</module>
+        <module>pxc-framework-weixin</module>
+        <module>pxc-framework-dynamic-datasource</module>
     </modules>
 
     <!-- properties -->
@@ -116,7 +118,10 @@
         <tomcat.version>10.1.30</tomcat.version>
         <jsoup.version>1.17.2</jsoup.version>
         <httpclient5.version>5.3.1</httpclient5.version>
-
+        <emoji-java.version>5.1.1</emoji-java.version>
+        <weixin-java.version>4.6.8.B</weixin-java.version>
+        <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
+        <jasypt.version>3.0.5</jasypt.version>
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-compiler-plugin.verison>3.11.0</maven-compiler-plugin.verison>
@@ -160,7 +165,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring-boot.version}</version>
-                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -175,6 +184,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
@@ -342,6 +356,60 @@
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
                 <version>${httpclient5.version}</version>
+            </dependency>
+            <!-- emoji-java -->
+            <dependency>
+                <groupId>com.vdurmont</groupId>
+                <artifactId>emoji-java</artifactId>
+                <version>${emoji-java.version}</version>
+            </dependency>
+            <!-- 微信小程序 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-miniapp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 微信小支付 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-pay</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 微信公众号 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-mp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 企业号/企业微信 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-cp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 微信开放平台 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-open</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 视频号/微信小店 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-channel</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!-- 动态数据源 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <!--配置文件加解密-->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.servlet</groupId>

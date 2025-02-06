@@ -18,7 +18,7 @@ package io.github.panxiaochao.web.handler;
 import io.github.panxiaochao.core.enums.CommonResponseEnum;
 import io.github.panxiaochao.core.exception.ServerException;
 import io.github.panxiaochao.core.exception.ServerRuntimeException;
-import io.github.panxiaochao.core.exception.ext.ApiServerException;
+import io.github.panxiaochao.core.exception.ext.ApiException;
 import io.github.panxiaochao.core.response.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,8 +88,8 @@ public class RestExceptionHandler {
 	 * @param e 异常
 	 * @return 异常结果
 	 */
-	@ExceptionHandler(value = ApiServerException.class)
-	public R<String> handleBusinessException(ServerException e) {
+	@ExceptionHandler(value = ApiException.class)
+	public R<String> handleBusinessException(ApiException e) {
 		LOG.error(e.getMessage(), e);
 		return R.fail(e.getMessage());
 	}

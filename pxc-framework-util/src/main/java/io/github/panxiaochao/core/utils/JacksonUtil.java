@@ -120,6 +120,7 @@ public class JacksonUtil {
 	}
 
 	/**
+	 * JSON 转 Bean
 	 * @param json json
 	 * @param tClass class
 	 * @param <T> T类型
@@ -136,6 +137,7 @@ public class JacksonUtil {
 	}
 
 	/**
+	 * InputStream 转 Bean
 	 * @param inputStream 流
 	 * @param tClass class
 	 * @param <T> T类型
@@ -203,6 +205,57 @@ public class JacksonUtil {
 	/**
 	 * Json string deserialize to Object.
 	 * @param json json string
+	 * @param cls {@link Type} of object
+	 * @param <T> General type
+	 * @return object
+	 */
+	public static <T> T toBean(byte[] json, Type cls) {
+		try {
+			return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.constructType(cls));
+		}
+		catch (Exception e) {
+			LOGGER.error("json解析出错：{}", json, e);
+			return null;
+		}
+	}
+
+	/**
+	 * Object deserialize to Bean.
+	 * @param fromValue object
+	 * @param <T> General type
+	 * @return object
+	 */
+	public static <T> T toBean(Object fromValue) {
+		try {
+			return OBJECT_MAPPER.convertValue(fromValue, new TypeReference<T>() {
+			});
+		}
+		catch (Exception e) {
+			LOGGER.error("json解析出错：{}", toString(fromValue), e);
+			return null;
+		}
+	}
+
+	/**
+	 * Object deserialize to Bean.
+	 * @param fromValue object
+	 * @param cls {@link Type} of object
+	 * @param <T> General type
+	 * @return object
+	 */
+	public static <T> T toBean(Object fromValue, Class<T> cls) {
+		try {
+			return OBJECT_MAPPER.convertValue(fromValue, cls);
+		}
+		catch (Exception e) {
+			LOGGER.error("json解析出错：{}", toString(fromValue), e);
+			return null;
+		}
+	}
+
+	/**
+	 * Json string deserialize to Object.
+	 * @param json json string
 	 * @param typeReference {@link TypeReference} of object
 	 * @param <T> General type
 	 * @return object
@@ -230,23 +283,6 @@ public class JacksonUtil {
 		}
 		catch (IOException e) {
 			LOGGER.error("json解析出错：{}", jsonNode, e);
-			return null;
-		}
-	}
-
-	/**
-	 * Json string deserialize to Object.
-	 * @param json json string
-	 * @param cls {@link Type} of object
-	 * @param <T> General type
-	 * @return object
-	 */
-	public static <T> T toBean(byte[] json, Type cls) {
-		try {
-			return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.constructType(cls));
-		}
-		catch (Exception e) {
-			LOGGER.error("json解析出错：{}", json, e);
 			return null;
 		}
 	}

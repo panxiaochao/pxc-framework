@@ -35,7 +35,7 @@ public class EmailProperties {
 	/**
 	 * 过滤开关
 	 */
-	private Boolean enable;
+	private Boolean enabled;
 
 	/**
 	 * SMTP 服务器域名

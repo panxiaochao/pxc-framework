@@ -31,7 +31,7 @@ import java.util.Set;
  * @author Lypxc
  * @since 2023-08-09
  */
-public class ConvertUtils {
+public class ConvertUtil {
 
 	private static final String NULL_STR = "null";
 
@@ -175,18 +175,18 @@ public class ConvertUtils {
 	 * However, this method accepts 'on' and 'yes', 't', 'y' as true values.
 	 *
 	 * <pre>
-	 *   ConvertUtils.toBoolean(null)    = false
-	 *   ConvertUtils.toBoolean("true")  = true
-	 *   ConvertUtils.toBoolean("TRUE")  = true
-	 *   ConvertUtils.toBoolean("tRUe")  = true
-	 *   ConvertUtils.toBoolean("on")    = true
-	 *   ConvertUtils.toBoolean("yes")   = true
-	 *   ConvertUtils.toBoolean("false") = false
-	 *   ConvertUtils.toBoolean("x gti") = false
-	 *   ConvertUtils.toBooleanObject("y") = true
-	 *   ConvertUtils.toBooleanObject("n") = false
-	 *   ConvertUtils.toBooleanObject("t") = true
-	 *   ConvertUtils.toBooleanObject("f") = false
+	 *   ConvertUtil.toBoolean(null)    = false
+	 *   ConvertUtil.toBoolean("true")  = true
+	 *   ConvertUtil.toBoolean("TRUE")  = true
+	 *   ConvertUtil.toBoolean("tRUe")  = true
+	 *   ConvertUtil.toBoolean("on")    = true
+	 *   ConvertUtil.toBoolean("yes")   = true
+	 *   ConvertUtil.toBoolean("false") = false
+	 *   ConvertUtil.toBoolean("x gti") = false
+	 *   ConvertUtil.toBooleanObject("y") = true
+	 *   ConvertUtil.toBooleanObject("n") = false
+	 *   ConvertUtil.toBooleanObject("t") = true
+	 *   ConvertUtil.toBooleanObject("f") = false
 	 * </pre>
 	 * @param str the String to check
 	 * @return the boolean value of the string, {@code false} if no match or the String is
@@ -216,22 +216,22 @@ public class ConvertUtils {
 	 *
 	 * <pre>
 	 *   // N.B. case is not significant
-	 *   ConvertUtils.toBooleanObject(null)    = null
-	 *   ConvertUtils.toBooleanObject("true")  = Boolean.TRUE
-	 *   ConvertUtils.toBooleanObject("T")     = Boolean.TRUE // i.e. T[RUE]
-	 *   ConvertUtils.toBooleanObject("false") = Boolean.FALSE
-	 *   ConvertUtils.toBooleanObject("f")     = Boolean.FALSE // i.e. f[alse]
-	 *   ConvertUtils.toBooleanObject("No")    = Boolean.FALSE
-	 *   ConvertUtils.toBooleanObject("n")     = Boolean.FALSE // i.e. n[o]
-	 *   ConvertUtils.toBooleanObject("on")    = Boolean.TRUE
-	 *   ConvertUtils.toBooleanObject("ON")    = Boolean.TRUE
-	 *   ConvertUtils.toBooleanObject("off")   = Boolean.FALSE
-	 *   ConvertUtils.toBooleanObject("oFf")   = Boolean.FALSE
-	 *   ConvertUtils.toBooleanObject("yes")   = Boolean.TRUE
-	 *   ConvertUtils.toBooleanObject("Y")     = Boolean.TRUE // i.e. Y[ES]
-	 *   ConvertUtils.toBooleanObject("blue")  = null
-	 *   ConvertUtils.toBooleanObject("true ") = null // trailing space (too long)
-	 *   ConvertUtils.toBooleanObject("ono")   = null // does not match on or no
+	 *   ConvertUtil.toBooleanObject(null)    = null
+	 *   ConvertUtil.toBooleanObject("true")  = Boolean.TRUE
+	 *   ConvertUtil.toBooleanObject("T")     = Boolean.TRUE // i.e. T[RUE]
+	 *   ConvertUtil.toBooleanObject("false") = Boolean.FALSE
+	 *   ConvertUtil.toBooleanObject("f")     = Boolean.FALSE // i.e. f[alse]
+	 *   ConvertUtil.toBooleanObject("No")    = Boolean.FALSE
+	 *   ConvertUtil.toBooleanObject("n")     = Boolean.FALSE // i.e. n[o]
+	 *   ConvertUtil.toBooleanObject("on")    = Boolean.TRUE
+	 *   ConvertUtil.toBooleanObject("ON")    = Boolean.TRUE
+	 *   ConvertUtil.toBooleanObject("off")   = Boolean.FALSE
+	 *   ConvertUtil.toBooleanObject("oFf")   = Boolean.FALSE
+	 *   ConvertUtil.toBooleanObject("yes")   = Boolean.TRUE
+	 *   ConvertUtil.toBooleanObject("Y")     = Boolean.TRUE // i.e. Y[ES]
+	 *   ConvertUtil.toBooleanObject("blue")  = null
+	 *   ConvertUtil.toBooleanObject("true ") = null // trailing space (too long)
+	 *   ConvertUtil.toBooleanObject("ono")   = null // does not match on or no
 	 * </pre>
 	 * @param str the String to check; upper and lower case are treated as the same
 	 * @return the Boolean value of the string, {@code null} if no match or {@code null}

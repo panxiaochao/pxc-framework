@@ -109,6 +109,7 @@ public class OperateLogUtil {
 		if (ex != null) {
 			operateLogDomain.setCode(0);
 			operateLogDomain.setErrorMessage(StrUtil.substring(ExceptionUtil.getMessage(ex), 0, 2000));
+			operateLogDomain.setErrorSimpleMessage(ex.getMessage());
 		}
 		else {
 			operateLogDomain.setCode(1);

@@ -27,7 +27,7 @@ New Reconstruction 2.0, base on spring framework.
 
 |     模块名     |                                      位置                                      | 错误码号段     |
 |:-----------:|:----------------------------------------------------------------------------:|-----------|
-|   `依赖模块`    |                    [pxc-framework-bom](pxc-framework-bom)                    |           |
+|  `全部依赖模块`   |                    [pxc-framework-bom](pxc-framework-bom)                    |           |
 |   `核心模块`    |                   [pxc-framework-core](pxc-framework-core)                   |           |
 |   `加解密模块`   |                 [pxc-framework-crypto](pxc-framework-crypto)                 |           |
 |   `验证码模块`   |                [pxc-framework-captcha](pxc-framework-captcha)                |           |
@@ -46,6 +46,8 @@ New Reconstruction 2.0, base on spring framework.
 |  `防重复提交模块`  |           [pxc-framework-repeatsubmit](pxc-framework-repeatsubmit)           | 6010-6019 |
 |   `Web模块`   |                    [pxc-framework-web](pxc-framework-web)                    |           |
 |  `脱敏加密模块`   |              [pxc-framework-sensitive](pxc-framework-sensitive)              |           |
+|   `微信模块`    |                 [pxc-framework-weixin](pxc-framework-weixin)                 |           |
+|  `动态数据源模块`  |     [pxc-framework-dynamic-datasource](pxc-framework-dynamic-datasource)     |           |
 
 ## 鸣谢 JetBrains 对开源项目的支持
 

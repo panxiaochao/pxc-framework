@@ -37,9 +37,10 @@ public final class ArithmeticUtil {
 	private static final int DEF_DIV_SCALE = 10;
 
 	/**
-	 * @param x x
-	 * @param y y
-	 * @return int
+	 * 将两个整数相加，检查是否溢出.
+	 * @param x an addend
+	 * @param y an addend
+	 * @return the sum {@code x+y}
 	 */
 	public static int addAndCheck(int x, int y) {
 		long s = (long) x + (long) y;
@@ -50,14 +51,15 @@ public final class ArithmeticUtil {
 	}
 
 	/**
-	 * @param a a
-	 * @param b b
-	 * @return long
+	 * 将两个长整数相加，检查是否溢出.
+	 * @param x an addend
+	 * @param y an addend
+	 * @return the sum {@code x+y}
 	 */
-	public static long addAndCheck(long a, long b) {
-		final long result = a + b;
-		if (!((a ^ b) < 0 | (a ^ result) >= 0)) {
-			throw new ArithmeticException(String.format("overflow in addition: %d + %d", a, b));
+	public static long addAndCheck(long x, long y) {
+		final long result = x + y;
+		if (!((x ^ y) < 0 | (x ^ result) >= 0)) {
+			throw new ArithmeticException(String.format("overflow in addition: %d + %d", x, y));
 		}
 		return result;
 	}
@@ -104,6 +106,43 @@ public final class ArithmeticUtil {
 
 	/**
 	 * 提供精确的减法运算
+	 * @param x 被减数
+	 * @param y 减数
+	 * @return 两个参数的差
+	 */
+	public static int sub(int x, int y) {
+		long s = (long) x - (long) y;
+		if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
+			throw new ArithmeticException(String.format("arithmetic sub exception: %d - %d", x, y));
+		}
+		return (int) s;
+	}
+
+	/**
+	 * 提供精确的减法运算
+	 * @param a 被减数
+	 * @param b 减数
+	 * @return 两个参数的差
+	 */
+	public static long sub(long a, long b) {
+		long ret;
+		if (b == Long.MIN_VALUE) {
+			if (a < 0) {
+				ret = a - b;
+			}
+			else {
+				throw new ArithmeticException(String.format("overflow in addition: %d - %d", a, b));
+			}
+		}
+		else {
+			// use additive inverse
+			ret = addAndCheck(a, -b);
+		}
+		return ret;
+	}
+
+	/**
+	 * 提供精确的减法运算
 	 * @param v1 被减数
 	 * @param v2 减数
 	 * @return 两个参数的差
@@ -140,6 +179,20 @@ public final class ArithmeticUtil {
 		BigDecimal b1 = new BigDecimal(v1);
 		BigDecimal b2 = new BigDecimal(v2);
 		return b1.subtract(b2).setScale(scale, RoundingMode.HALF_UP).toString();
+	}
+
+	/**
+	 * 提供精确的乘法运算
+	 * @param x 被乘数
+	 * @param y 乘数
+	 * @return 两个参数的积
+	 */
+	public static int mul(int x, int y) {
+		long m = ((long) x) * ((long) y);
+		if (m < Integer.MIN_VALUE || m > Integer.MAX_VALUE) {
+			throw new ArithmeticException(String.format("arithmetic mul exception: %d * %d", x, y));
+		}
+		return (int) m;
 	}
 
 	/**
@@ -306,6 +359,40 @@ public final class ArithmeticUtil {
 		BigDecimal b2 = new BigDecimal(v2);
 		int bj = b1.compareTo(b2);
 		return bj > 0;
+	}
+
+	/**
+	 * 幂次方计算.
+	 * @param k 数字.
+	 * @param e 指数（必须为正数或零）.
+	 * @return k<sup>e</sup>
+	 */
+	public static int pow(final int k, final int e) {
+		if (e < 0) {
+			throw new IllegalArgumentException("指数必须为正数或0");
+		}
+		try {
+			int exp = e;
+			int result = 1;
+			int k2p = k;
+			while (true) {
+				if ((exp & 0x1) != 0) {
+					result = mul(result, k2p);
+				}
+
+				exp >>= 1;
+				if (exp == 0) {
+					break;
+				}
+
+				k2p = mul(k2p, k2p);
+			}
+
+			return result;
+		}
+		catch (Exception ex) {
+			throw new ArithmeticException(ex.getMessage());
+		}
 	}
 
 }

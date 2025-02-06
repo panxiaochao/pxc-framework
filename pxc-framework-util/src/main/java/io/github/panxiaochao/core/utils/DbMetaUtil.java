@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -96,7 +97,7 @@ public class DbMetaUtil {
 		try {
 			conn = dataSource.getConnection();
 			final String catalog = getCatalog(conn);
-			if (null == schema) {
+			if (!StringUtils.hasText(schema)) {
 				schema = getSchema(conn);
 			}
 			final DatabaseMetaData metaData = conn.getMetaData();
@@ -131,6 +132,20 @@ public class DbMetaUtil {
 	 * @return Table数组
 	 */
 	public static List<TableMeta> getTableMeta(DataSource dataSource, String catalog, String schema, String tableName) {
+		return getTableMeta(dataSource, catalog, schema, tableName, TableType.TABLE);
+	}
+
+	/**
+	 * 获取表的元数据信息数组
+	 * @param dataSource 数据源
+	 * @param tableName 表名, 若为空查所有
+	 * @param catalog catalog name
+	 * @param schema schema name
+	 * @param types 表类型
+	 * @return Table数组
+	 */
+	public static List<TableMeta> getTableMeta(DataSource dataSource, String catalog, String schema, String tableName,
+			TableType... types) {
 		final List<TableMeta> tableMetas = new ArrayList<>();
 		Connection conn = null;
 		try {
@@ -142,20 +157,15 @@ public class DbMetaUtil {
 				schema = getSchema(conn);
 			}
 			final DatabaseMetaData metaData = conn.getMetaData();
+			String[] tableTypes = Arrays.stream(types).map(TableType::getName).toArray(String[]::new);
 			// 获得表元数据（表注释）
-			try (final ResultSet rs = metaData.getTables(catalog, schema, tableName,
-					new String[] { TableType.TABLE.getName() })) {
+			try (final ResultSet rs = metaData.getTables(catalog, schema, tableName, tableTypes)) {
 				if (null != rs) {
 					while (rs.next()) {
 						TableMeta table = TableMeta.build(rs);
 						tableMetas.add(table);
 					}
 				}
-			}
-
-			// 中间判断一下，如果数组为空直接返回
-			if (CollectionUtil.isEmpty(tableMetas)) {
-				return tableMetas;
 			}
 
 			for (TableMeta tableMeta : tableMetas) {
@@ -204,6 +214,61 @@ public class DbMetaUtil {
 							indexInfoMap.put(key, indexMeta);
 						}
 						tableMeta.setIndexInfoList(CollectionUtil.toList(indexInfoMap.values()));
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			throw new RuntimeException("获取数据库表元数据信息失败", e);
+		}
+		finally {
+			JdbcUtil.close(conn);
+		}
+		return tableMetas;
+	}
+
+	/**
+	 * 获取表的简化元数据信息数组
+	 * @param dataSource 数据源
+	 * @param tableName 表名, 若为空查所有
+	 * @param catalog catalog name
+	 * @param schema schema name
+	 * @return Table数组
+	 */
+	public static List<TableMeta> getSimplifyTableMeta(DataSource dataSource, String catalog, String schema,
+			String tableName) {
+		return getSimplifyTableMeta(dataSource, catalog, schema, tableName, TableType.TABLE);
+	}
+
+	/**
+	 * 获取表的简化元数据信息数组
+	 * @param dataSource 数据源
+	 * @param tableName 表名, 若为空查所有
+	 * @param catalog catalog name
+	 * @param schema schema name
+	 * @param types 表类型
+	 * @return Table数组
+	 */
+	public static List<TableMeta> getSimplifyTableMeta(DataSource dataSource, String catalog, String schema,
+			String tableName, TableType... types) {
+		final List<TableMeta> tableMetas = new ArrayList<>();
+		Connection conn = null;
+		try {
+			conn = dataSource.getConnection();
+			if (null == catalog) {
+				catalog = getCatalog(conn);
+			}
+			if (null == schema) {
+				schema = getSchema(conn);
+			}
+			final DatabaseMetaData metaData = conn.getMetaData();
+			String[] tableTypes = Arrays.stream(types).map(TableType::getName).toArray(String[]::new);
+			// 获得表元数据（表注释）
+			try (final ResultSet rs = metaData.getTables(catalog, schema, tableName, tableTypes)) {
+				if (null != rs) {
+					while (rs.next()) {
+						TableMeta table = TableMeta.build(rs);
+						tableMetas.add(table);
 					}
 				}
 			}

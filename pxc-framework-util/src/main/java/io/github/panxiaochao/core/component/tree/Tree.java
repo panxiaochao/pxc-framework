@@ -120,7 +120,7 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 	}
 
 	/**
-	 * 递归树并处理子树下的节点：
+	 * 递归树并处理子树下的节点.
 	 * @param consumer 节点处理器
 	 */
 	public void walk(Consumer<Tree<T>> consumer) {

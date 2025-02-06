@@ -56,6 +56,11 @@ public enum CommonResponseEnum implements IResponseEnum<Integer> {
 	UNAUTHORIZED(401, "未授权"),
 
 	/**
+	 *
+	 */
+	FORBIDDEN(403, "禁止执行访问"),
+
+	/**
 	 * 资源不存在
 	 */
 	NOT_FOUND(404, "资源不存在"),
@@ -68,7 +73,22 @@ public enum CommonResponseEnum implements IResponseEnum<Integer> {
 	/**
 	 * 服务器忙，请稍候重试
 	 */
-	INTERNAL_SERVER_ERROR(500, "服务器异常，请联系管理员");
+	INTERNAL_SERVER_ERROR(500, "服务器异常，请联系管理员"),
+
+	/**
+	 * 错误网关
+	 */
+	BAD_GATEWAY(502, "错误网关"),
+
+	/**
+	 * 服务不可用
+	 */
+	SERVICE_UNAVAILABLE(503, "服务不可用"),
+
+	/**
+	 * 网关超时
+	 */
+	GATEWAY_TIMEOUT(504, "网关超时");
 
 	private final Integer code;
 

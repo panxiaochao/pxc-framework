@@ -28,7 +28,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum DataScopeEnum {
+public enum DataScopeType {
 
 	// 数据权限（1.全部数据 2.自定义数据 3.本部门数据 4.本部门及以下数据 5.仅本人数据）
 	/**
@@ -81,10 +81,10 @@ public enum DataScopeEnum {
 	 * @param code 权限值
 	 * @return 返回数据权限
 	 */
-	public DataScopeEnum ofCode(String code) {
-		for (DataScopeEnum dataScopeEnum : values()) {
-			if (dataScopeEnum.getCode().equals(code)) {
-				return dataScopeEnum;
+	public DataScopeType ofCode(String code) {
+		for (DataScopeType dataScopeType : values()) {
+			if (dataScopeType.getCode().equals(code)) {
+				return dataScopeType;
 			}
 		}
 		return null;

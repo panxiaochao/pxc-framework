@@ -31,16 +31,16 @@ public class UuidUtil {
 	 * 获取原生UUID
 	 * @return return UUID
 	 */
-	public static String getUUID() {
+	public static String getUuid() {
 		return UUID.randomUUID().toString();
 	}
 
 	/**
-	 * 获取原生UUID，去除-的简化UUID
+	 * 获取原生UUID，去除-的简化UUID.
 	 * @return return simple UUID
 	 */
-	public static String getSimpleUUID() {
-		return getUUID().replaceAll("-", "");
+	public static String getSimpleUuid() {
+		return getUuid().replaceAll("-", "");
 	}
 
 }

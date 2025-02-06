@@ -33,7 +33,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class TenantPO implements Serializable {
+public abstract class TenantPO extends BasePO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

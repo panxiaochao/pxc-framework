@@ -41,6 +41,21 @@ public interface CommonConstant {
 	String YES = "Y";
 
 	/**
+	 * 成功
+	 */
+	String SUCCESS = "1";
+
+	/**
+	 * 真
+	 */
+	String TRUE = "1";
+
+	/**
+	 * 真，Boolean
+	 */
+	Boolean TRUE_BOOLEAN = Boolean.TRUE;
+
+	/**
 	 * 删除，标记位 1
 	 */
 	Integer IS_DELETE = 1;

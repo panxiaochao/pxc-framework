@@ -58,7 +58,7 @@ public class TraceLogDomain implements Serializable {
 	public TraceLogDomain(TraceLogDomainBuilder builder) {
 		// traceId 如果没有取到TraceId，就重新生成一个
 		if (StringUtils.hasText(builder.getTraceId())) {
-			builder.setTraceId(UuidUtil.getSimpleUUID());
+			builder.setTraceId(UuidUtil.getSimpleUuid());
 		}
 		TraceLogContext.setTraceId(builder.getTraceId());
 		// spanId 如果为空，会放入初始值

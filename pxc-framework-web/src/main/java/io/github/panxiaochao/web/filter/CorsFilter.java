@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 package io.github.panxiaochao.web.filter;
-
-import org.springframework.web.filter.OncePerRequestFilter;
-
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author Lypxc
  * @since 2023-06-26
  */
-public class CorsFilter extends OncePerRequestFilter {
+public class CorsFilter implements Filter {
 
 	/**
 	 * 当前跨域请求最大有效时长，同一个域名不会再进行检查，默认3600
@@ -47,10 +47,17 @@ public class CorsFilter extends OncePerRequestFilter {
 			"PATCH");
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		// 解决跨域的问题
 		cors(request, response);
+		// 预请求，直接放行
+		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			response.setStatus(HttpServletResponse.SC_OK);
+			return;
+		}
 		// 放行
 		filterChain.doFilter(request, response);
 	}
