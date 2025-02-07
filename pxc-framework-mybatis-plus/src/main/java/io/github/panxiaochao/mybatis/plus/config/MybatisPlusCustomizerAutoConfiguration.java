@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.config.properties.MpProperties;
-import io.github.panxiaochao.mybatis.plus.handler.MetaObjectHandlerCustomizer;
 import io.github.panxiaochao.mybatis.plus.handler.IMetaObjectHandler;
+import io.github.panxiaochao.mybatis.plus.handler.MetaObjectHandlerCustomizer;
 import io.github.panxiaochao.mybatis.plus.injector.mysql.MySqlInjector;
 import io.github.panxiaochao.mybatis.plus.injector.oracle.OracleInjector;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +45,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-
-import java.sql.SQLException;
 
 /**
  * <p>
@@ -105,8 +103,11 @@ public class MybatisPlusCustomizerAutoConfiguration {
 		public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds,
 				ResultHandler resultHandler, BoundSql boundSql) {
 			IPage<?> page = ParameterUtils.findPage(parameter).orElse(null);
+			if (null == page) {
+				return;
+			}
 			// size 小于 0 直接设置为 0
-			if (null != page && page.getSize() < 0) {
+			if (page.getSize() < 0) {
 				page.setSize(0);
 			}
 			super.beforeQuery(executor, ms, page, rowBounds, resultHandler, boundSql);

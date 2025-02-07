@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,12 @@ import okhttp3.OkHttpClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
@@ -51,11 +48,6 @@ public class OkHttpAutoConfiguration {
 	private final WebProperties properties;
 
 	@Bean
-	public ClientHttpRequestFactory httpRequestFactory(okhttp3.OkHttpClient okHttpClient) {
-		return new OkHttp3ClientHttpRequestFactory(okHttpClient);
-	}
-
-	@Bean
 	public ConnectionPool connectionPool() {
 		return new ConnectionPool(properties.getOkHttp().getMaxIdleConnections(),
 				properties.getOkHttp().getKeepAliveDuration(), TimeUnit.SECONDS);
@@ -73,7 +65,6 @@ public class OkHttpAutoConfiguration {
 		builder.connectionPool(connectionPool);
 		builder.followRedirects(true);
 		builder.followSslRedirects(true);
-		// builder.hostnameVerifier((hostname, session) -> true);
 		// 设置默认主机验证规则
 		builder.setHostnameVerifier$okhttp((hostname, session) -> true);
 		return builder.build();
@@ -82,11 +73,11 @@ public class OkHttpAutoConfiguration {
 	public X509TrustManager x509TrustManager() {
 		return new X509TrustManager() {
 			@Override
-			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			public void checkClientTrusted(X509Certificate[] chain, String authType) {
 			}
 
 			@Override
-			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			public void checkServerTrusted(X509Certificate[] chain, String authType) {
 			}
 
 			@Override

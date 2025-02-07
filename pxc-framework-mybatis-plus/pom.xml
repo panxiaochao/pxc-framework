@@ -18,24 +18,21 @@
             <groupId>io.github.panxiaochao</groupId>
             <artifactId>pxc-framework-util</artifactId>
         </dependency>
+        <!-- spring boot3 引入可选模块 -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>spring-boot-autoconfigure</artifactId>
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>mybatis-spring</artifactId>
-                    <groupId>org.mybatis</groupId>
-                </exclusion>
             </exclusions>
         </dependency>
+        <!-- jdk 11+ 引入可选模块 -->
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>3.0.4</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package io.github.panxiaochao.dynamic.datasource.config;
 
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
-import com.baomidou.dynamic.datasource.processor.DsHeaderProcessor;
+import com.baomidou.dynamic.datasource.processor.DsJakartaHeaderProcessor;
 import com.baomidou.dynamic.datasource.processor.DsProcessor;
-import com.baomidou.dynamic.datasource.processor.DsSessionProcessor;
+import com.baomidou.dynamic.datasource.processor.DsJakartaSessionProcessor;
 import com.baomidou.dynamic.datasource.processor.DsSpelExpressionProcessor;
 import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import io.github.panxiaochao.dynamic.datasource.config.properties.DsProperties;
@@ -74,8 +74,8 @@ public class DynamicDSAutoConfiguration {
 	@Bean
 	public DsProcessor dsProcessor(BeanFactory beanFactory) {
 		DsProcessor lastDsProcessor = new LastDsProcessor();
-		DsProcessor headerProcessor = new DsHeaderProcessor();
-		DsProcessor sessionProcessor = new DsSessionProcessor();
+		DsProcessor headerProcessor = new DsJakartaHeaderProcessor();
+		DsProcessor sessionProcessor = new DsJakartaSessionProcessor();
 		DsSpelExpressionProcessor dsSpelExpressionProcessor = new DsSpelExpressionProcessor();
 		dsSpelExpressionProcessor.setBeanResolver(new BeanFactoryResolver(beanFactory));
 		lastDsProcessor.setNextProcessor(headerProcessor);
@@ -83,21 +83,6 @@ public class DynamicDSAutoConfiguration {
 		sessionProcessor.setNextProcessor(dsSpelExpressionProcessor);
 		return lastDsProcessor;
 	}
-
-	/**
-	 * 默认数据源创建器
-	 * @param hikariDataSourceCreator Hikari数据源创建器
-	 * @return 默认数据源创建器
-	 */
-	// @Bean
-	// public DefaultDataSourceCreator defaultDataSourceCreator(HikariDataSourceCreator
-	// hikariDataSourceCreator) {
-	// DefaultDataSourceCreator defaultDataSourceCreator = new DefaultDataSourceCreator();
-	// List<DataSourceCreator> creators = new ArrayList<>();
-	// creators.add(hikariDataSourceCreator);
-	// defaultDataSourceCreator.setCreators(creators);
-	// return defaultDataSourceCreator;
-	// }
 
 	/**
 	 * 清除数据源过滤器

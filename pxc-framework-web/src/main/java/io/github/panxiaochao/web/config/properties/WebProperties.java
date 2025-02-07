@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,11 @@ public class WebProperties {
 	 * OkHttp 配置
 	 */
 	private OkHttp okHttp = new OkHttp();
+
+	/**
+	 * RestTemplate 增强配置
+	 */
+	private RestTemplate restTemplate = new RestTemplate();
 
 	@Getter
 	@Setter
@@ -105,6 +110,52 @@ public class WebProperties {
 		 * 连接空闲时间最大时间，单位秒，默认 300 秒
 		 */
 		private Long keepAliveDuration = 300L;
+
+	}
+
+	@Getter
+	@Setter
+	public static class RestTemplate {
+
+		/**
+		 * 是否开启增强 RestTemplate
+		 */
+		private Boolean enabled;
+
+		/**
+		 * 连接超时，默认 10 秒，0 表示没有超时限制
+		 */
+		private long connectTimeout = 10;
+
+		/**
+		 * 响应超时，默认 10 秒，0 表示没有超时限制
+		 */
+		private long readTimeout = 10;
+
+		/**
+		 * 连接空闲时间最大时间，单位秒，默认 300 秒
+		 */
+		private long timeToLive = 300;
+
+		/**
+		 * 重试次数，默认 3 次重试
+		 */
+		private Integer maxRetries = 3;
+
+		/**
+		 * 重试间隔时间，默认 3 秒
+		 */
+		private long retryInterval = 3;
+
+		/**
+		 * 连接池中整体的空闲连接的最大数量，默认 200 个连接数
+		 */
+		private Integer maxConnTotal = 200;
+
+		/**
+		 * 连接池中每个路由的最大连接数，默认 50 个连接数
+		 */
+		private Integer maxConnPerRoute = 50;
 
 	}
 
