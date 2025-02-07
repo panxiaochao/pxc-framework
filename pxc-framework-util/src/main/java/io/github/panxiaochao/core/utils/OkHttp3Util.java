@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import java.util.Objects;
 
 /**
  * <p>
- * Http连接工具类
+ * OkHttp3 连接工具类.
  * </p>
  *
  * @author Lypxc
@@ -79,7 +79,7 @@ public class OkHttp3Util {
 	 */
 	public static String doGet(String url, Map<String, Object> params, Map<String, Object> headers) {
 		StringBuilder sb = new StringBuilder(url);
-		if (params != null && !params.keySet().isEmpty()) {
+		if (params != null && !params.isEmpty()) {
 			boolean firstFlag = true;
 			for (String key : params.keySet()) {
 				if (firstFlag) {
@@ -91,12 +91,11 @@ public class OkHttp3Util {
 				}
 			}
 		}
-
 		Request.Builder builder = new Request.Builder();
 		// 添加请求头
-		if (Objects.nonNull(headers)) {
+		if (headers != null && !headers.isEmpty()) {
 			for (Map.Entry<String, Object> entry : headers.entrySet()) {
-				builder.addHeader(entry.getKey(), java.lang.String.valueOf(entry.getValue()));
+				builder.addHeader(entry.getKey(), String.valueOf(entry.getValue()));
 			}
 		}
 
@@ -113,21 +112,18 @@ public class OkHttp3Util {
 	 */
 	public static String doPost(String url, Map<String, String> params, Map<String, Object> headers) {
 		FormBody.Builder formBodyBuilder = new FormBody.Builder();
-
-		if (params != null && !params.keySet().isEmpty()) {
+		if (params != null && !params.isEmpty()) {
 			for (String key : params.keySet()) {
 				formBodyBuilder.add(key, params.get(key));
 			}
 		}
-
 		Request.Builder builder = new Request.Builder();
 		// 添加请求头
-		if (Objects.nonNull(headers)) {
+		if (headers != null && !headers.isEmpty()) {
 			for (Map.Entry<String, Object> entry : headers.entrySet()) {
 				builder.header(entry.getKey(), String.valueOf(entry.getValue()));
 			}
 		}
-
 		Request request = builder.url(url).post(formBodyBuilder.build()).build();
 		return execute(request);
 	}
@@ -159,7 +155,7 @@ public class OkHttp3Util {
 			RequestBody requestBody = RequestBody.create(data, contentType);
 			Request.Builder builder = new Request.Builder();
 			// 添加请求头
-			if (Objects.nonNull(headers)) {
+			if (headers != null && !headers.isEmpty()) {
 				for (Map.Entry<String, Object> entry : headers.entrySet()) {
 					builder.header(entry.getKey(), String.valueOf(entry.getValue()));
 				}

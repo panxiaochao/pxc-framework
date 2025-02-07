@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -56,9 +55,8 @@ public class RestTemplateUtil {
 	static {
 		List<HttpMessageConverter<?>> httpMessageConverters = REST_TEMPLATE.getMessageConverters();
 		httpMessageConverters.forEach(httpMessageConverter -> {
-			if (httpMessageConverter instanceof StringHttpMessageConverter) {
+			if (httpMessageConverter instanceof StringHttpMessageConverter messageConverter) {
 				// 解决乱码问题
-				StringHttpMessageConverter messageConverter = (StringHttpMessageConverter) httpMessageConverter;
 				messageConverter.setDefaultCharset(StandardCharsets.UTF_8);
 			}
 		});
@@ -107,49 +105,37 @@ public class RestTemplateUtil {
 			log.info("==========================request end================================================");
 		}
 
+		/**
+		 * 跟踪返回结果
+		 * @param response 返回结果
+		 * @throws IOException IOException
+		 */
 		private void traceResponse(ClientHttpResponse response) throws IOException {
-			String responseBody = FileCopyUtils
-				.copyToString(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8));
-			// StringBuilder inputStringBuilder = new StringBuilder();
-			// try (BufferedReader bufferedReader = new BufferedReader(new
-			// InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
-			// String line = bufferedReader.readLine();
-			// while (line != null) {
-			// inputStringBuilder.append(line);
-			// inputStringBuilder.append('\n');
-			// line = bufferedReader.readLine();
-			// }
-			// }
+			String responseBody = ResourceUtil.read(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8));
 			log.info("============================ response begin ============================");
 			log.info("Status code  : {}", response.getStatusCode());
 			log.info("Status text  : {}", response.getStatusText());
 			log.info("Headers      : {}", response.getHeaders());
 			log.info("Response body: {}", responseBody);
-			// WARNING:
-			// comment
-			// out
-			// in
-			// production
-			// to
-			// improve
-			// performance
 			log.info("============================ response end ============================");
 		}
 
 	}
 
 	public static void main(String[] args) throws IOException {
-		String url = "https://wx.hzwindow.com.cn/hzwechat/hzwx/applet/page/img/image";
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		// 接口参数
-		MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
-		multiValueMap.add("token", "b5b3hc8e008dba62a449fdc1977");
-		// 处理文件
-		FileSystemResource fileSystemResource = new FileSystemResource(new File("/Users/Lypxc/Desktop/1.jpg"));
-		multiValueMap.add("file", fileSystemResource);
-		HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(multiValueMap, headers);
-		REST_TEMPLATE.postForEntity(url, httpEntity, String.class);
+		// String url = "https://wx.hzwindow.com.cn/hzwechat/hzwx/applet/page/img/image";
+		// HttpHeaders headers = new HttpHeaders();
+		// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		// // 接口参数
+		// MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
+		// multiValueMap.add("token", "b5b3hc8e008dba62a449fdc1977");
+		// // 处理文件
+		// FileSystemResource fileSystemResource = new FileSystemResource(new
+		// File("/Users/Lypxc/Desktop/1.jpg"));
+		// multiValueMap.add("file", fileSystemResource);
+		// HttpEntity<MultiValueMap<String, Object>> httpEntity = new
+		// HttpEntity<>(multiValueMap, headers);
+		// REST_TEMPLATE.postForEntity(url, httpEntity, String.class);
 	}
 
 }

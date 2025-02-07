@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024 Lypxc (545685602@qq.com)
+ * Copyright © 2025-2026 Lypxc (545685602@qq.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,16 +120,16 @@ public class Redisson3AutoConfiguration {
 	}
 
 	/**
-	 * Redis 序列化配置 采用 RedissonConnectionFactory 工厂
-	 * @return RedisTemplate
+	 * 创建并配置RedisTemplate模板 用于Redis操作，支持泛型
+	 * @param redisConnectionFactory Redis连接工厂，用于创建Redis连接
+	 * @return 返回RedisTemplate模板实例
 	 */
 	@Bean(name = "redisTemplate")
 	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, T> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
 		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
-				Object.class);
-		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
+				objectMapper(), Object.class);
 		// 使用 StringRedisSerializer 来序列化和反序列化redis的key值
 		template.setKeySerializer(RedisSerializer.string());
 		template.setHashKeySerializer(RedisSerializer.string());
