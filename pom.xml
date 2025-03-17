@@ -121,7 +121,7 @@
         <jsoup.version>1.18.1</jsoup.version>
         <httpclient5.version>5.4.1</httpclient5.version>
         <emoji-java.version>5.1.1</emoji-java.version>
-        <weixin-java.version>4.6.8.B</weixin-java.version>
+        <weixin-java.version>4.7.2.B</weixin-java.version>
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <jasypt.version>3.0.5</jasypt.version>
         <!-- 插件版本 -->
