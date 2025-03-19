@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.tree;
+package io.github.panxiaochao.component.tree;
 
-import io.github.panxiaochao.core.component.select.Select;
-import io.github.panxiaochao.core.component.select.SelectBuilder;
-import io.github.panxiaochao.core.component.select.SelectOption;
-import io.github.panxiaochao.core.utils.JacksonUtil;
-import io.github.panxiaochao.core.utils.MapUtil;
-import io.github.panxiaochao.core.utils.ObjectUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -183,7 +179,7 @@ public class TreeBuilder<E> implements Serializable {
 		target.setLabelValue(source.getLabelValue());
 		// 扩展属性字段
 		final Map<String, Object> extra = source.getExtra();
-		if (MapUtil.isNotEmpty(extra)) {
+		if (!extra.isEmpty()) {
 			extra.forEach(target::putExtra);
 		}
 	}
@@ -192,17 +188,17 @@ public class TreeBuilder<E> implements Serializable {
 	 * 开始构建树
 	 */
 	private void buildTreeMap() {
-		if (MapUtil.isEmpty(this.treeMap)) {
+		if (this.treeMap.isEmpty()) {
 			return;
 		}
-		final Map<E, Tree<E>> eTreeMap = MapUtil.comparingByValue(this.treeMap, isDesc);
+		final Map<E, Tree<E>> eTreeMap = comparingByValue(this.treeMap, isDesc);
 		E parentId;
 		for (Tree<E> node : eTreeMap.values()) {
 			if (null == node) {
 				continue;
 			}
 			parentId = node.getParentId();
-			if (ObjectUtil.equals(this.root.getId(), parentId)) {
+			if (Objects.equals(this.root.getId(), parentId)) {
 				this.root.addChildren(node);
 				continue;
 			}
@@ -276,59 +272,22 @@ public class TreeBuilder<E> implements Serializable {
 		return this.root.getChildren();
 	}
 
-	public static void main(String[] args) {
-		// 构建 TreeNode 列表
-		List<TreeNode<String>> nodeList = new ArrayList<>();
-		nodeList.add(TreeNode.of("1", "0", "系统管理", 5, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-		nodeList.add(TreeNode.of("11", "1", "用户管理", 222222, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-		nodeList.add(TreeNode.of("111", "11", "用户添加", 0, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-
-		nodeList.add(TreeNode.of("2", "0", "店铺管理", 1, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-		nodeList.add(TreeNode.of("21", "2", "商品管理", 44, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-		nodeList.add(TreeNode.of("221", "21", "商品添加", 2, (extraMap) -> {
-			extraMap.put("a", "1");
-			extraMap.put("b", new Object());
-			extraMap.put("c", new ArrayList<>());
-		}));
-
-		List<Tree<String>> treeSingle = TreeBuilder.of("0").append(nodeList).deep(1).fastBuild().toTreeList();
-
-		// System.out.println(JacksonUtil.toString(treeSingle));
-
-		// 构建 SelectOption 列表
-		List<SelectOption<String>> selectOptionsList = new ArrayList<>();
-		selectOptionsList.add(SelectOption.of("0", "张三0", 5));
-		selectOptionsList.add(SelectOption.of("1", "张三1", 4));
-		selectOptionsList.add(SelectOption.of("2", "张三2", 3));
-		selectOptionsList.add(SelectOption.of("3", "张三3", 2));
-		selectOptionsList.add(SelectOption.of("4", "张三4", 7));
-		selectOptionsList.add(SelectOption.of("5", "张三5", 8));
-		selectOptionsList.add(SelectOption.of("6", "张三6", 1));
-
-		List<Select<String>> select = SelectBuilder.of(selectOptionsList).desc().fastBuild().toSelectList();
-
-		System.out.println(JacksonUtil.toString(select));
-
+	/**
+	 * 按照值排序，可选是否倒序
+	 * @param map 需要对值排序的map
+	 * @param <K> 键类型
+	 * @param <V> 值类型
+	 * @param isDesc 是否倒序
+	 * @return 排序后新的Map
+	 */
+	private <K, V extends Comparable<? super V>> Map<K, V> comparingByValue(Map<K, V> map, boolean isDesc) {
+		Map<K, V> result = new LinkedHashMap<>();
+		Comparator<Map.Entry<K, V>> entryComparator = Map.Entry.comparingByValue();
+		if (isDesc) {
+			entryComparator = entryComparator.reversed();
+		}
+		map.entrySet().stream().sorted(entryComparator).forEachOrdered(e -> result.put(e.getKey(), e.getValue()));
+		return result;
 	}
 
 }

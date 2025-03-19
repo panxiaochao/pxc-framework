@@ -73,6 +73,7 @@
         <module>pxc-framework-captcha</module>
         <module>pxc-framework-weixin</module>
         <module>pxc-framework-dynamic-datasource</module>
+        <module>pxc-framework-component</module>
     </modules>
 
     <!-- properties -->
@@ -206,6 +207,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>

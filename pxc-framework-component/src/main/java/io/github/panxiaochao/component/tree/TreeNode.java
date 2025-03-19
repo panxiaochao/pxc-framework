@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.tree;
+package io.github.panxiaochao.component.tree;
 
 import lombok.Getter;
 
@@ -52,7 +52,7 @@ public class TreeNode<T> implements Serializable {
 	private CharSequence labelValue;
 
 	/**
-	 * 顺序 越小优先级越高
+	 * 权重 越小优先级越高
 	 */
 	private Comparable<?> weight;
 
@@ -122,30 +122,50 @@ public class TreeNode<T> implements Serializable {
 		}
 	}
 
+	/**
+	 * 设置节点 ID
+	 * @param id 节点 ID
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public TreeNode<T> setId(T id) {
 		this.id = id;
 		return this;
 	}
 
+	/**
+	 * 设置父节点 ID
+	 * @param parentId 父节点 ID
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public TreeNode<T> setParentId(T parentId) {
 		this.parentId = parentId;
 		return this;
 	}
 
+	/**
+	 * 设置节点值
+	 * @param labelValue 节点值
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public TreeNode<T> setLabelValue(CharSequence labelValue) {
 		this.labelValue = labelValue;
 		return this;
 	}
 
+	/**
+	 * 设置节点权重
+	 * @param weight 节点权重
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public TreeNode<T> setWeight(Comparable<?> weight) {
 		this.weight = weight;
 		return this;
 	}
 
 	/**
-	 * 设置扩展字段
-	 * @param extra 扩展字段
-	 * @return this
+	 * 设置扩展字段，替换整个扩展属性 Map
+	 * @param extra 扩展字段的 Map
+	 * @return 当前树节点实例，支持链式调用
 	 */
 	public TreeNode<T> setExtra(Map<String, Object> extra) {
 		this.extra = extra;
@@ -163,15 +183,11 @@ public class TreeNode<T> implements Serializable {
 	}
 
 	/**
-	 * 设置所有扩展字段
-	 * @param extraAll 扩展字段
-	 * @return this
+	 * 重写 equals 方法，根据节点 ID 判断两个节点是否相等
+	 * @param o 要比较的对象
+	 * @return 如果两个节点的 ID 相等，则返回 true，否则返回 false
 	 */
-	public TreeNode<T> setExtraAll(Map<String, Object> extraAll) {
-		this.extra.putAll(extraAll);
-		return this;
-	}
-
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -183,6 +199,11 @@ public class TreeNode<T> implements Serializable {
 		return Objects.equals(id, treeNode.getId());
 	}
 
+	/**
+	 * 重写 hashCode 方法，根据节点 ID 生成哈希码
+	 * @return 节点 ID 的哈希码
+	 */
+	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}

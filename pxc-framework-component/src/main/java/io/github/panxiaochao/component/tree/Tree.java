@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.tree;
+package io.github.panxiaochao.component.tree;
 
-import io.github.panxiaochao.core.utils.ArrayUtil;
-import io.github.panxiaochao.core.utils.ObjectUtil;
 import lombok.Getter;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -40,63 +40,112 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 
 	private static final long serialVersionUID = 1L;
 
+	// 树节点属性配置
 	private final TreeNodeProperties treeNodeProperties;
 
+	// 父节点
 	private Tree<T> parent;
 
 	/**
-	 * 无参构造
+	 * 无参构造方法，使用默认的树节点属性配置
 	 */
-	public Tree(TreeNodeProperties properties) {
-		this.treeNodeProperties = ObjectUtil.getIfNull(properties, TreeNodeProperties.builder());
+	public Tree() {
+		this.treeNodeProperties = TreeNodeProperties.builder();
 	}
 
 	/**
-	 * 设置父节点
+	 * 有参构造方法，可传入自定义的树节点属性配置
+	 * @param properties 树节点属性配置，如果为 null 则使用默认配置
+	 */
+	public Tree(TreeNodeProperties properties) {
+		this.treeNodeProperties = ObjectUtils.getIfNull(properties, TreeNodeProperties::builder);
+	}
+
+	/**
+	 * 设置父节点，并更新父节点 ID
 	 * @param parent 父节点
-	 * @return this
+	 * @return 当前树节点实例，支持链式调用
 	 */
 	public Tree<T> setParent(Tree<T> parent) {
 		this.parent = parent;
 		if (null != parent) {
 			this.setParentId(parent.getId());
 		}
+		else {
+			this.setParentId(null);
+		}
 		return this;
 	}
 
+	/**
+	 * 获取节点 ID
+	 * @return 节点 ID
+	 */
 	@SuppressWarnings("unchecked")
 	public T getId() {
 		return (T) this.get(treeNodeProperties.getIdKey());
 	}
 
+	/**
+	 * 设置节点 ID
+	 * @param id 节点 ID
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public Tree<T> setId(T id) {
 		this.put(treeNodeProperties.getIdKey(), id);
 		return this;
 	}
 
+	/**
+	 * 获取父节点 ID
+	 * @return 父节点 ID
+	 */
 	@SuppressWarnings("unchecked")
 	public T getParentId() {
 		return (T) this.get(treeNodeProperties.getParentIdKey());
 	}
 
+	/**
+	 * 设置父节点 ID
+	 * @param parentId 父节点 ID
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public Tree<T> setParentId(T parentId) {
 		this.put(treeNodeProperties.getParentIdKey(), parentId);
 		return this;
 	}
 
+	/**
+	 * 获取节点标签值
+	 * @return 节点标签值
+	 */
 	public CharSequence getLabelValue() {
 		return (CharSequence) this.get(treeNodeProperties.getLabelKey());
 	}
 
+	/**
+	 * 设置节点标签值
+	 * @param labelValue 节点标签值
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public Tree<T> setLabelValue(CharSequence labelValue) {
 		this.put(treeNodeProperties.getLabelKey(), labelValue);
 		return this;
 	}
 
+	/**
+	 * 获取节点权重
+	 * @return 节点权重
+	 */
 	public Comparable<?> getWeight() {
 		return (Comparable<?>) this.get(treeNodeProperties.getWeightKey());
 	}
 
+	/**
+	 * 设置节点权重
+	 * @param weight 节点权重
+	 * @return 当前树节点实例，支持链式调用
+	 */
 	public Tree<T> setWeight(Comparable<?> weight) {
 		this.put(treeNodeProperties.getWeightKey(), weight);
 		return this;
@@ -197,9 +246,8 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 	 * @param children 子节点列表
 	 * @return this
 	 */
-	@SafeVarargs
-	public final Tree<T> addChildren(Tree<T>... children) {
-		if (ArrayUtil.isNotEmpty(children)) {
+	public Tree<T> addChildren(Tree<T>... children) {
+		if (ArrayUtils.isNotEmpty(children)) {
 			List<Tree<T>> childrenList = this.getChildren();
 			if (null == childrenList) {
 				childrenList = new ArrayList<>();
@@ -229,7 +277,7 @@ public class Tree<T> extends LinkedHashMap<String, Object> implements Comparable
 	 * @return 新的节点
 	 */
 	public Tree<T> cloneTree() {
-		final Tree<T> result = ObjectUtil.clone(this);
+		final Tree<T> result = ObjectUtils.clone(this);
 		result.setChildren(cloneChildren());
 		return result;
 	}

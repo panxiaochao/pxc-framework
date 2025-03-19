@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.select;
+package io.github.panxiaochao.component.select;
 
 import lombok.Getter;
 
@@ -98,6 +98,18 @@ public class SelectOption<T> implements Serializable {
 	public static <T> SelectOption<T> of(T key, CharSequence title, Comparable<?> weight,
 			Consumer<Map<String, Object>> extraMap) {
 		return of(false, key, title, key, weight, extraMap);
+	}
+
+	/**
+	 * 构造方法
+	 * @param disabled 是否禁用
+	 * @param key 和 value 含义一致。如果 Vue 需要你设置此项，此项值与 value 的值相同，然后可以省略 value 设置
+	 * @param title 选中该 Option 后，显示文本
+	 * @return 下拉菜单节点
+	 * @param <T> 节点参数类型
+	 */
+	public static <T> SelectOption<T> of(boolean disabled, T key, CharSequence title) {
+		return of(disabled, key, title, key, null, null);
 	}
 
 	/**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.select;
+package io.github.panxiaochao.component.select;
 
 import lombok.Getter;
 
