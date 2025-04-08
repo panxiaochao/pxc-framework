@@ -49,9 +49,3 @@ New Reconstruction 2.0, base on spring framework.
 |   `微信模块`    |                 [pxc-framework-weixin](pxc-framework-weixin)                 |           |
 |  `动态数据源模块`  |     [pxc-framework-dynamic-datasource](pxc-framework-dynamic-datasource)     |           |
 |   `组件模块`    |              [pxc-framework-component](pxc-framework-component)              |           |
-
-## 鸣谢 JetBrains 对开源项目的支持
-
-<a href="https://www.jetbrains.com?from=pxc-framework" target="_blank">
-<img width="200" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo.">
-</a>
