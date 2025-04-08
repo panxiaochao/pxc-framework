@@ -1898,4 +1898,117 @@ public class StrUtil {
 				&& str.regionMatches(true, str.length() - suffix.length(), suffix, 0, suffix.length()));
 	}
 
+	/**
+	 * 大写首字母<br>
+	 * 例如：str = name, return Name
+	 * @param str 字符串
+	 * @return 字符串
+	 */
+	public static String upperFirst(CharSequence str) {
+		if (null == str) {
+			return null;
+		}
+		if (str.length() > 0) {
+			char firstChar = str.charAt(0);
+			if (Character.isLowerCase(firstChar)) {
+				return Character.toUpperCase(firstChar) + subSuf(str, 1);
+			}
+		}
+		return str.toString();
+	}
+
+	/**
+	 * 小写首字母<br>
+	 * 例如：str = Name, return name
+	 * @param str 字符串
+	 * @return 字符串
+	 */
+	public static String lowerFirst(CharSequence str) {
+		if (null == str) {
+			return null;
+		}
+		if (str.length() > 0) {
+			char firstChar = str.charAt(0);
+			if (Character.isUpperCase(firstChar)) {
+				return Character.toLowerCase(firstChar) + subSuf(str, 1);
+			}
+		}
+		return str.toString();
+	}
+
+	/**
+	 * 切割指定位置之前部分的字符串
+	 * @param string 字符串
+	 * @param toIndexExclude 切割到的位置（不包括）
+	 * @return 切割后的剩余的前半部分字符串
+	 */
+	public static String subPre(CharSequence string, int toIndexExclude) {
+		return sub(string, 0, toIndexExclude);
+	}
+
+	/**
+	 * 切割指定位置之后部分的字符串
+	 * @param string 字符串
+	 * @param fromIndex 切割开始的位置（包括）
+	 * @return 切割后后剩余的后半部分字符串
+	 */
+	public static String subSuf(CharSequence string, int fromIndex) {
+		if (isEmpty(string)) {
+			return null;
+		}
+		return sub(string, fromIndex, string.length());
+	}
+
+	/**
+	 * 改进JDK subString<br>
+	 * index从0开始计算，最后一个字符为-1<br>
+	 * 如果from和to位置一样，返回 "" <br>
+	 * 如果from或to为负数，则按照length从后向前数位置，如果绝对值大于字符串长度，则from归到0，to归到length<br>
+	 * 如果经过修正的index中from大于to，则互换from和to example: <br>
+	 * abcdefgh 2 3 =》 c <br>
+	 * abcdefgh 2 -3 =》 cde <br>
+	 * @param str String
+	 * @param fromIndexInclude 开始的index（包括）
+	 * @param toIndexExclude 结束的index（不包括）
+	 * @return 字串
+	 */
+	public static String sub(CharSequence str, int fromIndexInclude, int toIndexExclude) {
+		if (isEmpty(str)) {
+			return null;
+		}
+		int len = str.length();
+
+		if (fromIndexInclude < 0) {
+			fromIndexInclude = len + fromIndexInclude;
+			if (fromIndexInclude < 0) {
+				fromIndexInclude = 0;
+			}
+		}
+		else if (fromIndexInclude > len) {
+			fromIndexInclude = len;
+		}
+
+		if (toIndexExclude < 0) {
+			toIndexExclude = len + toIndexExclude;
+			if (toIndexExclude < 0) {
+				toIndexExclude = len;
+			}
+		}
+		else if (toIndexExclude > len) {
+			toIndexExclude = len;
+		}
+
+		if (toIndexExclude < fromIndexInclude) {
+			int tmp = fromIndexInclude;
+			fromIndexInclude = toIndexExclude;
+			toIndexExclude = tmp;
+		}
+
+		if (fromIndexInclude == toIndexExclude) {
+			return EMPTY;
+		}
+
+		return str.toString().substring(fromIndexInclude, toIndexExclude);
+	}
+
 }
