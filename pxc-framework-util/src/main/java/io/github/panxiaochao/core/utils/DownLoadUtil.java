@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,12 +58,21 @@ public class DownLoadUtil {
 			return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, contentDispositionValue)
 				.contentType(MimeType.findByFileName(fileName))
+				.contentLength(bodyBytes.length)
 				.body(bodyBytes);
 		}
 		catch (Exception e) {
 			LOGGER.error("下载文件失败", e);
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+			return fail();
 		}
+	}
+
+	/**
+	 * 下载失败
+	 * @return ResponseEntity<byte[]>
+	 */
+	public static ResponseEntity<byte[]> fail() {
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
 	}
 
 	/**
@@ -106,8 +116,10 @@ public class DownLoadUtil {
 	@NotNull
 	private static String getContentDispositionValue(String fileName) {
 		String percentEncodedFileName = percentEncode(fileName);
-		return String.format("attachment; filename=%s;filename*=utf-8''%s", percentEncodedFileName,
-				percentEncodedFileName);
+		return ContentDisposition.attachment()
+			.filename(percentEncodedFileName, StandardCharsets.UTF_8)
+			.build()
+			.toString();
 	}
 
 	private static String percentEncode(String s) {
