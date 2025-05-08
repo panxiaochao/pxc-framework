@@ -46,6 +46,8 @@ public class IpInfo {
 
 	private static final Pattern T_PATTERN = Pattern.compile("\\t");
 
+	private static final String UNKNOWN = "unknown";
+
 	/**
 	 * 国家
 	 */
@@ -156,9 +158,9 @@ public class IpInfo {
 	}
 
 	/**
-	 * 读取 IpInfo
-	 * @param ipInfo IpInfo
-	 * @param function Function
+	 * 读取 IpInfo 信息
+	 * @param ipInfo IpInfo 对象
+	 * @param function Function 函数式接口，返回 info
 	 * @return info
 	 */
 	public static String readInfo(IpInfo ipInfo, Function<IpInfo, String> function) {
@@ -166,6 +168,14 @@ public class IpInfo {
 			return null;
 		}
 		return function.apply(ipInfo);
+	}
+
+	/**
+	 * 返回Ip未知的情况下，返回 “Unknown”
+	 * @return 返回 UnKnown
+	 */
+	public static String ipUnknown() {
+		return UNKNOWN;
 	}
 
 }

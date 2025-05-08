@@ -15,6 +15,8 @@
  */
 package io.github.panxiaochao.operate.log.core.annotation;
 
+import io.github.panxiaochao.operate.log.core.enums.BusinessType;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -55,9 +57,9 @@ public @interface OperateLog {
 	BusinessType businessType() default BusinessType.OTHER;
 
 	/**
-	 * 操作人类型
+	 * 操作人设备类型
 	 */
-	OperatorUserType operatorUserType() default OperatorUserType.WEB;
+	String operatorType() default "";
 
 	/**
 	 * 排除指定的请求参数名
@@ -73,85 +75,5 @@ public @interface OperateLog {
 	 * 是否保存响应的参数
 	 */
 	boolean saveResData() default true;
-
-	/**
-	 * 业务类型
-	 */
-	enum BusinessType {
-
-		/**
-		 * 新增
-		 */
-		INSERT,
-		/**
-		 * 修改
-		 */
-		UPDATE,
-		/**
-		 * 删除
-		 */
-		DELETE,
-		/**
-		 * 查询
-		 */
-		QUERY,
-		/**
-		 * 授权
-		 */
-		GRANT,
-		/**
-		 * 导出
-		 */
-		EXPORT,
-		/**
-		 * 导入
-		 */
-		IMPORT,
-		/**
-		 * 登录
-		 */
-		LOGIN,
-		/**
-		 * 登出
-		 */
-		LOGOUT,
-		/**
-		 * 强退
-		 */
-		FORCE_LOGOUT,
-		/**
-		 * 生成代码
-		 */
-		GENERATE_CODE,
-		/**
-		 * 清空数据
-		 */
-		CLEAN,
-		/**
-		 * 其它
-		 */
-		OTHER
-
-	}
-
-	/**
-	 * 操作人类型
-	 */
-	enum OperatorUserType {
-
-		/**
-		 * PC 用户
-		 */
-		WEB,
-		/**
-		 * PHONE 用户
-		 */
-		MOBILE,
-		/**
-		 * 其它
-		 */
-		OTHER
-
-	}
 
 }
