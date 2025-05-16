@@ -52,7 +52,7 @@ public class OperateLogAutoConfiguration {
 
 	@Bean
 	public OperateLogDao operateLogDao(OperateLogProperties operateLogProperties) {
-		if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
+		if (operateLogProperties.logType.equals(OperateLogType.CUSTOM)) {
 			if (!Objects.isNull(operateLogProperties.getHandler())) {
 				AbstractOperateLogHandler handler;
 				Component cpt = AnnotationUtils.findAnnotation(operateLogProperties.getHandler(), Component.class);

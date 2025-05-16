@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.select;
+package io.github.panxiaochao.component.select;
 
-import io.github.panxiaochao.core.utils.MapUtil;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class SelectBuilder<E> implements Serializable {
 	 */
 	private SelectBuilder(List<SelectOption<E>> selectList, SelectOptionProperties properties) {
 		this.root = new Select<>(properties);
-		this.selectMap = MapUtil.newHashMap();
+		this.selectMap = new HashMap<>();
 		this.selectList = new ArrayList<>();
 		this.isDesc = false;
 		this.append(selectList);
@@ -144,7 +144,7 @@ public class SelectBuilder<E> implements Serializable {
 		target.setTitle(source.getTitle());
 		// 扩展属性字段
 		final Map<String, Object> extra = source.getExtra();
-		if (MapUtil.isNotEmpty(extra)) {
+		if (!extra.isEmpty()) {
 			extra.forEach(target::putExtra);
 		}
 	}
@@ -153,7 +153,7 @@ public class SelectBuilder<E> implements Serializable {
 	 * 开始构建下拉菜单
 	 */
 	private void buildSelectMap() {
-		if (MapUtil.isEmpty(this.selectMap)) {
+		if (this.selectMap.isEmpty()) {
 			return;
 		}
 		List<Select<E>> selectList = new ArrayList<>();

@@ -15,23 +15,34 @@
  */
 package io.github.panxiaochao.operate.log.core.enums;
 
+import lombok.Getter;
+
 /**
  * <p>
- * 操作日志类型
+ * 操作日志状态枚举
  * </p>
  *
  * @author Lypxc
- * @since 2023-07-03
+ * @since 2025-05-08
+ * @version 1.0
  */
-public enum OperateLogType {
+@Getter
+public enum OperateLogStatus {
 
 	/**
-	 * 日志
+	 * 成功
 	 */
-	LOGGER,
+	SUCCESS(1),
+
 	/**
-	 * 自定义实现
+	 * 失败
 	 */
-	CUSTOM
+	FAIL(0);
+
+	private final int code;
+
+	OperateLogStatus(int code) {
+		this.code = code;
+	}
 
 }

@@ -21,6 +21,7 @@ import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.core.utils.ObjectUtil;
 import io.github.panxiaochao.core.utils.RequestUtil;
 import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
+import io.github.panxiaochao.operate.log.core.enums.OperateLogStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -56,12 +57,12 @@ public class OperateLogDomain implements Serializable {
 	/**
 	 * 业务类型
 	 */
-	private Integer businessType;
+	private String businessType;
 
 	/**
-	 * 操作人员类型
+	 * 操作人员设备类型
 	 */
-	private Integer operateUsertype;
+	private String operateType;
 
 	/**
 	 * 请求url
@@ -166,8 +167,8 @@ public class OperateLogDomain implements Serializable {
 		if (ObjectUtil.isNotEmpty(operateLog)) {
 			operateLogDomain.setTitle(operateLog.title());
 			operateLogDomain.setDescription(operateLog.description());
-			operateLogDomain.setBusinessType(operateLog.businessType().ordinal());
-			operateLogDomain.setOperateUsertype(operateLog.operatorUserType().ordinal());
+			operateLogDomain.setBusinessType(operateLog.businessType().name());
+			operateLogDomain.setOperateType(operateLog.operatorType());
 		}
 		if (RequestUtil.getRequest() != null) {
 			operateLogDomain.setRequestUrl(RequestUtil.getRequest().getRequestURI());
@@ -181,7 +182,7 @@ public class OperateLogDomain implements Serializable {
 			operateLogDomain.setOs(userAgent.getPlatform().toString() + " " + userAgent.getOs().toString());
 		}
 		operateLogDomain.setRequestDateTime(LocalDateTime.now());
-		operateLogDomain.setCode(1);
+		operateLogDomain.setCode(OperateLogStatus.SUCCESS.getCode());
 		operateLogDomain.setCostTime(0);
 		return operateLogDomain;
 	}

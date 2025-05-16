@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.tree;
+package io.github.panxiaochao.component.tree;
 
 import lombok.Getter;
 
@@ -32,18 +32,37 @@ public class TreeNodeProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 节点ID的键名，默认为 "id"
+	 */
 	private String idKey = "id";
 
+	/**
+	 * 父节点ID的键名，默认为 "parentId"
+	 */
 	private String parentIdKey = "parentId";
 
+	/**
+	 * 子节点列表的键名，默认为 "children"
+	 *
+	 */
 	private String childrenKey = "children";
 
+	/**
+	 * 节点权重的键名，默认为 "weight"
+	 *
+	 */
 	private String weightKey = "weight";
 
+	/**
+	 * 节点标签的键名，默认为 "name"
+	 *
+	 */
 	private String labelKey = "name";
 
 	/**
-	 * 静态构造
+	 * 静态构造方法，用于创建一个新的 TreeNodeProperties 实例
+	 * @return 新的 TreeNodeProperties 实例
 	 */
 	public static TreeNodeProperties builder() {
 		return new TreeNodeProperties();

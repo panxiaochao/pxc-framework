@@ -51,7 +51,7 @@ public class OperateLogEventListener {
 
 	/**
 	 * <p>
-	 * 异步自定义操作日志：
+	 * 异步自定义操作日志.
 	 * </p>
 	 * <pre>
 	 *     1、可以支持使用异步存储操作
@@ -67,12 +67,15 @@ public class OperateLogEventListener {
 			if (info != null) {
 				operateLogDomain.setAddress(info.getAddressAndIsp());
 			}
+			else {
+				operateLogDomain.setAddress(IpInfo.ipUnknown());
+			}
 		}
 		LOGGER.info("[ip]: {}, [address]: {}, [classMethod]: {}, [requestDateTime]: {}, [costTime]: {}ms",
 				operateLogDomain.getIp(), operateLogDomain.getAddress(), operateLogDomain.getClassMethod(),
 				operateLogDomain.getRequestDateTime(), operateLogDomain.getCostTime());
-		// 如果是其他自定义操作
-		if (operateLogProperties.logType.equals(OperateLogType.OTHER)) {
+		// 如果是其他自定义实现类操作
+		if (operateLogProperties.logType.equals(OperateLogType.CUSTOM)) {
 			operateLogDao.handle(operateLogDomain);
 		}
 	}

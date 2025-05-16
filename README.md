@@ -1,29 +1,48 @@
-# pxc-framework
+# 霄徵（pxc-framework）
 
-pxc-framework Converged Project, base on spring boot 2.7.X up-to-date.
+`霄徵`是`pxc-framework`中文名字，寓意摘星踏月问天途，喻求索之道。
 
-New Reconstruction 2.0, base on spring framework.
+`pxc-framework`是一个复合型框架和工具包，由多个子模块组成，用于快速开发，是基于`Spring Boot` 2.7.X 的最新版本。
 
-# Platform Introduction
+## 系统介绍
 
 ![Static Badge](https://img.shields.io/badge/1.8%2B-red?logo=oracle&logoColor=%23F80000&label=JDK&link=https%3A%2F%2Fwww.oracle.com%2Fjava%2Ftechnologies%2Fdownloads%2F%23java8)
 ![GitHub](https://img.shields.io/github/license/panxiaochao/pxc-framework?color=%230094F5)
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.panxiaochao/pxc-framework-core?color=%2300B388)
 
-### current version
+## 🔖 版本说明
 
-- Spring Boot 2.7.18
-- JDK 1.8
+|     最新版本     | Spring Boot 版本 |        维护状态        |
+|:------------:|:--------------:|:------------------:|
+|    2.0.8     |     2.7.x      | :white_check_mark: |
+|    2.0.7     |     2.7.x      | :white_check_mark: |
+|    2.0.6     |     2.7.x      | :white_check_mark: |
+|    2.0.5     |     2.7.x      |        :x:         |
+|    2.0.4     |     2.7.x      |        :x:         |
+|    2.0.3     |     2.7.x      |        :x:         |
+|    2.0.2     |     2.7.x      |        :x:         |
+|    2.0.1     |     2.7.x      |        :x:         |
+|    2.0.0     |     2.7.x      |        :x:         |
+| 2022-2.7-1.5 |     2.7.x      |        :x:         |
+| 2022-2.7-1.4 |     2.7.x      |        :x:         |
 
-### old version
+## 🏷️ 版本号说明
+
+`release` 版本号格式为 `x.x.x`， 基本上保持跟 `Spring boot` 大版本一致。
+
+例如 `2.0.8` 版本号， `2` 为 `Spring boot` `2.X` 大版本。
+
+`snapshots` 版本号格式为 `x.x.x-SNAPSHOT`。
+
+## 老版本
 
 老版本 1.X：[pxc-framework](https://github.com/panxiaochao/pxc-framework)
 
-### current version
+## 当前版本号
 
-`2.0.7`
+`2.0.8`
 
-### current module
+## 🌱 模块列表
 
 |     模块名     |                                      位置                                      | 错误码号段     |
 |:-----------:|:----------------------------------------------------------------------------:|-----------|
@@ -48,9 +67,4 @@ New Reconstruction 2.0, base on spring framework.
 |  `脱敏加密模块`   |              [pxc-framework-sensitive](pxc-framework-sensitive)              |           |
 |   `微信模块`    |                 [pxc-framework-weixin](pxc-framework-weixin)                 |           |
 |  `动态数据源模块`  |     [pxc-framework-dynamic-datasource](pxc-framework-dynamic-datasource)     |           |
-
-## 鸣谢 JetBrains 对开源项目的支持
-
-<a href="https://www.jetbrains.com?from=pxc-framework" target="_blank">
-<img width="200" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo.">
-</a>
+|   `组件模块`    |              [pxc-framework-component](pxc-framework-component)              |           |

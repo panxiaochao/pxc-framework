@@ -46,6 +46,12 @@ public class CorsFilter implements Filter {
 	private static final List<String> ALLOWED_METHODS = Arrays.asList("OPTIONS", "HEAD", "GET", "PUT", "POST", "DELETE",
 			"PATCH");
 
+	/**
+	 * 允许被客户端访问的请求头
+	 */
+	private static final List<String> EXPOSE_HEADERS = Arrays.asList("Content-Disposition", "Content-Length",
+			"Content-Type", "Cache-Control", "Expires", "Content-Language", "Last-Modified", "Pragma", "Authorization");
+
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
@@ -66,7 +72,10 @@ public class CorsFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", String.join(",", ALLOWED_METHODS));
+		// 以下是允许前端向后端自定义的 HTTP 请求头, “你可以发送这些自定义的请求头部。”
 		response.setHeader("Access-Control-Allow-Headers", "*");
+		// 以下是允许后端向前段放出，哪些可以被前段访问的 HTTP 请求头, “你可以读取这些自定义的响应头部。”
+		response.setHeader("Access-Control-Expose-Headers", String.join(",", EXPOSE_HEADERS));
 		response.setHeader("Access-Control-Max-Age", MAX_AGE);
 	}
 

@@ -55,9 +55,14 @@ public class ResourceUtil {
 		if (in == null) {
 			return EMPTY_CONTENT;
 		}
-		ByteArrayOutputStream output = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
-		copy(in, output);
-		return output.toByteArray();
+		ByteArrayOutputStream out = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
+		try {
+			copy(in, out);
+		}
+		finally {
+			close(in);
+		}
+		return out.toByteArray();
 	}
 
 	public static String readFromResource(String resource) throws IOException {

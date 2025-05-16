@@ -28,6 +28,7 @@ import io.github.panxiaochao.core.utils.StringPools;
 import io.github.panxiaochao.operate.log.core.annotation.OperateLog;
 import io.github.panxiaochao.operate.log.core.context.MethodCostContext;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
+import io.github.panxiaochao.operate.log.core.enums.OperateLogStatus;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
@@ -107,12 +108,12 @@ public class OperateLogUtil {
 		String methodName = method.getName();
 		OperateLogDomain operateLogDomain = OperateLogDomain.build(operateLog, target.getClass(), methodName);
 		if (ex != null) {
-			operateLogDomain.setCode(0);
+			operateLogDomain.setCode(OperateLogStatus.FAIL.getCode());
 			operateLogDomain.setErrorMessage(StrUtil.substring(ExceptionUtil.getMessage(ex), 0, 2000));
 			operateLogDomain.setErrorSimpleMessage(ex.getMessage());
 		}
 		else {
-			operateLogDomain.setCode(1);
+			operateLogDomain.setCode(OperateLogStatus.SUCCESS.getCode());
 		}
 		// 设置请求参数
 		if (operateLog.saveReqParams()) {
@@ -125,7 +126,7 @@ public class OperateLogUtil {
 				// 兼容返回是 0 或者 200 的情况
 				if (jsonNode.get("code") != null && jsonNode.get("code").asInt() != 0
 						&& jsonNode.get("code").asInt() != 200) {
-					operateLogDomain.setCode(0);
+					operateLogDomain.setCode(OperateLogStatus.FAIL.getCode());
 					operateLogDomain.setErrorMessage(jsonNode.get("message").asText());
 				}
 			}

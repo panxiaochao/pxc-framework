@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.component.select;
+package io.github.panxiaochao.component.select;
 
-import io.github.panxiaochao.core.utils.ObjectUtil;
 import lombok.Getter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
@@ -41,7 +41,7 @@ public class Select<T> extends LinkedHashMap<String, Object> {
 	 * 无参构造
 	 */
 	public Select(SelectOptionProperties properties) {
-		this.selectOptionProperties = ObjectUtil.getIfNull(properties, SelectOptionProperties.builder());
+		this.selectOptionProperties = (properties != null) ? properties : SelectOptionProperties.builder();
 	}
 
 	public boolean getDisabled() {
@@ -133,7 +133,7 @@ public class Select<T> extends LinkedHashMap<String, Object> {
 	 * @return 新的节点
 	 */
 	public Select<T> cloneTree() {
-		return ObjectUtil.clone(this);
+		return ObjectUtils.clone(this);
 	}
 
 }

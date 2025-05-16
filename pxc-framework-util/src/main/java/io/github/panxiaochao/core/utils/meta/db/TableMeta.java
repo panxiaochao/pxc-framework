@@ -18,10 +18,12 @@ package io.github.panxiaochao.core.utils.meta.db;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -73,22 +75,25 @@ public class TableMeta implements Serializable {
 	/**
 	 * 主键字段名列表
 	 */
-	private Set<String> pkNames = new LinkedHashSet<>();
+	private Set<String> pkNames = Collections.synchronizedSet(new LinkedHashSet<>());
 
 	/**
 	 * 索引信息
 	 */
-	private List<IndexMeta> indexInfoList = new LinkedList<>();
+	private List<IndexMeta> indexInfoList = Collections.synchronizedList(new LinkedList<>());
 
 	/**
 	 * 数据库 字段对象
 	 */
-	private Map<String, ColumnMeta> columns = new LinkedHashMap<>();
+	private Map<String, ColumnMeta> columns = Collections.unmodifiableMap(new LinkedHashMap<>());
 
 	/**
 	 * 构建数据表元数据
 	 */
 	public static TableMeta build(ResultSet rs) {
+		if (rs == null) {
+			throw new IllegalArgumentException("ResultSet cannot be null");
+		}
 		TableMeta table = new TableMeta();
 		try {
 			table.setCatalog(rs.getString("TABLE_CAT"));
@@ -98,7 +103,7 @@ public class TableMeta implements Serializable {
 			table.setTableType(rs.getString("TABLE_TYPE"));
 		}
 		catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Error while building TableMeta from ResultSet", e);
 		}
 		return table;
 	}
@@ -109,7 +114,7 @@ public class TableMeta implements Serializable {
 	 * @return true or false
 	 */
 	public boolean isPrimaryKey(String columnName) {
-		return getPkNames().contains(columnName);
+		return StringUtils.hasText(columnName) && getPkNames().contains(columnName);
 	}
 
 }

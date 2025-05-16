@@ -17,21 +17,66 @@ package io.github.panxiaochao.operate.log.core.enums;
 
 /**
  * <p>
- * 操作日志类型
+ * 业务类型枚举
  * </p>
  *
  * @author Lypxc
- * @since 2023-07-03
+ * @since 2025-05-08
+ * @version 1.0
  */
-public enum OperateLogType {
+public enum BusinessType {
 
 	/**
-	 * 日志
+	 * 新增
 	 */
-	LOGGER,
+	INSERT,
 	/**
-	 * 自定义实现
+	 * 修改
 	 */
-	CUSTOM
+	UPDATE,
+	/**
+	 * 删除
+	 */
+	DELETE,
+	/**
+	 * 查询
+	 */
+	QUERY,
+	/**
+	 * 授权
+	 */
+	GRANT,
+	/**
+	 * 导出
+	 */
+	EXPORT,
+	/**
+	 * 导入
+	 */
+	IMPORT,
+	/**
+	 * 登录
+	 */
+	LOGIN,
+	/**
+	 * 登出
+	 */
+	LOGOUT,
+	/**
+	 * 强退
+	 */
+	FORCE_LOGOUT,
+	/**
+	 * 生成代码
+	 */
+	GENERATE_CODE,
+	/**
+	 * 清空数据
+	 */
+	CLEAN,
+	/**
+	 * 其它
+	 */
+	OTHER
 
 }

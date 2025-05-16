@@ -101,6 +101,12 @@
                 <artifactId>pxc-framework-captcha</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 组件 模块 -->
+            <dependency>
+                <groupId>io.github.panxiaochao</groupId>
+                <artifactId>pxc-framework-component</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <!-- Email 模块 -->
             <dependency>
                 <groupId>io.github.panxiaochao</groupId>
