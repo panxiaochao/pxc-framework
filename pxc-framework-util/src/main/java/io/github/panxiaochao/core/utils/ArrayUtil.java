@@ -298,7 +298,7 @@ public class ArrayUtil {
 				throw new IllegalArgumentException(
 						"Cannot store " + type2.getName() + " in an array of " + type1.getName(), ase);
 			}
-			throw ase; // No, so rethrow original
+			throw ase;
 		}
 		return joinedArray;
 	}

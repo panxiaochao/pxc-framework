@@ -15,6 +15,7 @@
  */
 package io.github.panxiaochao.mybatis.plus.config;
 
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
@@ -25,12 +26,14 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import io.github.panxiaochao.core.utils.BooleanUtil;
 import io.github.panxiaochao.core.utils.IpUtil;
 import io.github.panxiaochao.mybatis.plus.config.properties.MpProperties;
-import io.github.panxiaochao.mybatis.plus.handler.MetaObjectHandlerCustomizer;
 import io.github.panxiaochao.mybatis.plus.handler.IMetaObjectHandler;
+import io.github.panxiaochao.mybatis.plus.handler.MetaObjectHandlerCustomizer;
 import io.github.panxiaochao.mybatis.plus.injector.mysql.MySqlInjector;
 import io.github.panxiaochao.mybatis.plus.injector.oracle.OracleInjector;
+import io.github.panxiaochao.mybatis.plus.interceptor.SqlLogInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -119,6 +122,19 @@ public class MybatisPlusCustomizerAutoConfiguration {
 	 */
 	public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
 		return new OptimisticLockerInnerInterceptor();
+	}
+
+	/**
+	 * 配置 mybatis plus 插件
+	 */
+	@Bean
+	public ConfigurationCustomizer configurationCustomizer() {
+		return configuration -> {
+			if (BooleanUtil.isTrue(BooleanUtil.toBoolean(mpProperties.getSqlLogTrace()))) {
+				// 添加sql日志拦截器
+				configuration.addInterceptor(new SqlLogInterceptor());
+			}
+		};
 	}
 
 	/**

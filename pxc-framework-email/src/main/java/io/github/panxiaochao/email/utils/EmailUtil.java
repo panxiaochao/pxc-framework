@@ -381,7 +381,7 @@ public class EmailUtil {
 			authenticator = new UserPassAuthenticator(mailAccount.getUser(), mailAccount.getPass());
 		}
 
-		return isSingleton ? Session.getDefaultInstance(mailAccount.getSmtpProps(), authenticator) //
+		return isSingleton ? Session.getDefaultInstance(mailAccount.getSmtpProps(), authenticator)
 				: Session.getInstance(mailAccount.getSmtpProps(), authenticator);
 	}
 
