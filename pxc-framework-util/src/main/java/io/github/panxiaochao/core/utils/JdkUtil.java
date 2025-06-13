@@ -31,39 +31,64 @@ public class JdkUtil {
 	public static final int JVM_VERSION;
 
 	/**
-	 * 是否 == JDK8
+	 * 是否 == JDK_8
 	 */
 	public static final boolean IS_JDK8;
 
 	/**
-	 * 是否 == JDK17
+	 * 是否 == JDK_17
 	 */
 	public static final boolean IS_JDK17;
 
 	/**
-	 * 是否 == JDK21
+	 * 是否 == JDK_21
 	 */
 	public static final boolean IS_JDK21;
 
 	/**
-	 * 是否 == JDK22
+	 * 是否 == JDK_22
 	 */
 	public static final boolean IS_JDK22;
 
 	/**
-	 * 是否 == JDK23
+	 * 是否 == JDK_23
 	 */
 	public static final boolean IS_JDK23;
 
 	/**
-	 * 是否大于JDK8
+	 * 是否 == JDK_24
 	 */
-	public static final boolean IS_GT_JDK8;
+	public static final boolean IS_JDK24;
 
 	/**
-	 * 是否大于等于JDK17
+	 * 是否大于等于JDK_8
+	 */
+	public static final boolean IS_GTE_JDK8;
+
+	/**
+	 * 是否大于等于JDK_17
 	 */
 	public static final boolean IS_GTE_JDK17;
+
+	/**
+	 * 是否大于等于JDK_21
+	 */
+	public static final boolean IS_GTE_JDK21;
+
+	/**
+	 * 是否大于等于JDK_22
+	 */
+	public static final boolean IS_GTE_JDK22;
+
+	/**
+	 * 是否大于等于JDK_23
+	 */
+	public static final boolean IS_GTE_JDK23;
+
+	/**
+	 * 是否大于等于JDK_24
+	 */
+	public static final boolean IS_GTE_JDK24;
 
 	/**
 	 * 是否Android环境
@@ -97,8 +122,13 @@ public class JdkUtil {
 		IS_JDK21 = (21 == jvmVersion);
 		IS_JDK22 = (22 == jvmVersion);
 		IS_JDK23 = (23 == jvmVersion);
-		IS_GT_JDK8 = jvmVersion > 8;
+		IS_JDK24 = (24 == jvmVersion);
+		IS_GTE_JDK8 = jvmVersion >= 8;
 		IS_GTE_JDK17 = jvmVersion >= 17;
+		IS_GTE_JDK21 = jvmVersion >= 21;
+		IS_GTE_JDK22 = jvmVersion >= 22;
+		IS_GTE_JDK23 = jvmVersion >= 23;
+		IS_GTE_JDK24 = jvmVersion >= 24;
 		IS_ANDROID = isAndroid;
 	}
 
