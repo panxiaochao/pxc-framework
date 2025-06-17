@@ -4,7 +4,8 @@ import io.github.panxiaochao.core.utils.DbMetaUtil;
 import io.github.panxiaochao.core.utils.JacksonUtil;
 import io.github.panxiaochao.core.utils.JdbcUtil;
 import io.github.panxiaochao.core.utils.meta.db.ColumnMeta;
-import io.github.panxiaochao.core.utils.meta.db.TableMeta;
+import io.github.panxiaochao.core.utils.meta.ddl.IDatabase;
+import io.github.panxiaochao.core.utils.meta.ddl.impl.DatabaseMySqlImpl;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
@@ -32,9 +33,9 @@ public class JdbcUtilTest {
 		try {
 			// System.out.println(JdbcUtil.getDatabaseType(dataSource));
 			String driver = "com.mysql.cj.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/oauth2?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
+			String url = "jdbc:mysql://localhost:3308/pxc-system?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
 			String username = "root";
-			String password = "root123456";
+			String password = "123456";
 			conn = JdbcUtil.getConnection(driver, url, username, password, hikariConfig -> {
 				// 设置可以获取tables remarks信息
 				hikariConfig.addDataSourceProperty("remarks", "true");
@@ -42,9 +43,10 @@ public class JdbcUtilTest {
 			});
 			System.out.println(JdbcUtil.getDataBaseVersion(conn));
 			System.out.println(conn.getMetaData().getDatabaseProductName());
-			ps = conn.prepareStatement("select * from sys_user");
+			ps = conn.prepareStatement("select * from test");
 			rs = ps.executeQuery();
-			JdbcUtil.printResultSet(rs, true, ",");
+			// JdbcUtil.printResultSet(rs, true, ",");
+			JdbcUtil.printResultSetColumnsInfo(rs);
 			// System.out.println(JdbcUtil.getResultSetValue(rs, 1));
 		}
 		catch (SQLException ex) {
@@ -61,9 +63,9 @@ public class JdbcUtilTest {
 	void getTables() {
 		try {
 			String driver = "com.mysql.cj.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/oauth2?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
+			String url = "jdbc:mysql://localhost:3308/pxc-system?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
 			String username = "root";
-			String password = "root123456";
+			String password = "123456";
 			DataSource dataSource = JdbcUtil.getDataSource(driver, url, username, password, hikariConfig -> {
 				// 设置可以获取tables remarks信息
 				hikariConfig.addDataSourceProperty("remarks", "true");
@@ -75,14 +77,20 @@ public class JdbcUtilTest {
 			// "oauth2_authorization_consent");
 			// System.out.println(columns);
 
-			List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null, null, null);
-			System.out.println(JacksonUtil.toString(tableMetas));
+			// List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null,
+			// null, null);
+			// System.out.println(JacksonUtil.toString(tableMetas));
 
-			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, null, "oauth2_authorization");
+			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, null, "test");
 			System.out.println(JacksonUtil.toString(columnMetas));
 
-			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource, "oauth2_authorization");
+			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource,
+			// "oauth2_authorization");
 			// System.out.println(JacksonUtil.toString(columnNames));
+
+			IDatabase database = new DatabaseMySqlImpl();
+			String createTableDDL = database.generateCreateTableSql(null, "test1", "测试", columnMetas);
+			System.out.println(createTableDDL);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -103,14 +111,16 @@ public class JdbcUtilTest {
 			// "oauth2_authorization_consent");
 			// System.out.println(columns);
 
-			// List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null, null, null);
+			// List<TableMeta> tableMetas = DbMetaUtil.getTableMeta(dataSource, null,
+			// null, null);
 			// System.out.println(JacksonUtil.toString(tableMetas));
 			//
 			System.out.println(dataSource.getConnection().getMetaData().getDatabaseProductName());
 			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, "HZ_SPT_TEST", "urp_user");
 			System.out.println(JacksonUtil.toString(columnMetas));
 
-			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource, "urp_user");
+			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource,
+			// "urp_user");
 			// System.out.println(JacksonUtil.toString(columnNames));
 		}
 		catch (Exception e) {

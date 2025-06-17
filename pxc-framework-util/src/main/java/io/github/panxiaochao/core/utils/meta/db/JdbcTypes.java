@@ -15,19 +15,22 @@
  */
 package io.github.panxiaochao.core.utils.meta.db;
 
+import lombok.Getter;
+
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * <p>
- * JDBC 字段类型枚举
+ * JDBC 字段类型枚举，{@link java.sql.Types}
  * </p>
  *
  * @author Lypxc、Clinton Begin
  * @since 2024-05-07
  * @version 1.0
  */
+@Getter
 public enum JdbcTypes {
 
 	ARRAY(Types.ARRAY),

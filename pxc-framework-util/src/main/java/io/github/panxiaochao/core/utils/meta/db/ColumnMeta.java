@@ -92,7 +92,7 @@ public class ColumnMeta implements Serializable {
 	private String jdbcTypeName;
 
 	/**
-	 * 字段 长度
+	 * 字段 长度，或者精度
 	 * <p>
 	 * <pre>
 	 * 1.对于数值数据，这是最大精度。
@@ -105,7 +105,7 @@ public class ColumnMeta implements Serializable {
 	private int columnLength;
 
 	/**
-	 * 针对数值类的精度
+	 * 小数点位数
 	 */
 	private int scale;
 
