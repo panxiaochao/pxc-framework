@@ -3,6 +3,7 @@ package io.github.panxiaochao.core.utils.meta.ddl;
 import io.github.panxiaochao.core.enums.DatabaseType;
 import io.github.panxiaochao.core.utils.meta.db.ColumnMeta;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -23,6 +24,24 @@ public interface IDatabase {
 	DatabaseType getDatabaseType();
 
 	/**
+	 * 获取指定物理表的DDL语句
+	 * @param connection JDBC连接
+	 * @param schemaName 模式名称
+	 * @param tableName 表名称
+	 * @return 字段元信息列表
+	 */
+	String getTableDdl(Connection connection, String schemaName, String tableName);
+
+	/**
+	 * 获取指定视图表的DDL语句
+	 * @param connection JDBC连接
+	 * @param schemaName 模式名称
+	 * @param tableName 表或视图名称
+	 * @return 字段元信息列表
+	 */
+	String getViewDdl(Connection connection, String schemaName, String tableName);
+
+	/**
 	 * 生成创建表 DDL
 	 * @return 创建表 DDL-SQL
 	 */
@@ -36,5 +55,16 @@ public interface IDatabase {
 	 * @return 表全名
 	 */
 	String getQuotedSchemaTableCombination(String schemaName, String tableName);
+
+	/**
+	 * 获取表字段注释定义
+	 * @param schemaName 模式名称
+	 * @param tableName 表名称
+	 * @param tableComment 表注释
+	 * @param columnMetas 字段元信息列表
+	 * @return 表字段注释定义
+	 */
+	List<String> getTableColumnCommentDefinition(String schemaName, String tableName, String tableComment,
+			List<ColumnMeta> columnMetas);
 
 }

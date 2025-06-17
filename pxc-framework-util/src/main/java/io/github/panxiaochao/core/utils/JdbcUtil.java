@@ -437,26 +437,26 @@ public class JdbcUtil {
 			ResultSetMetaData metadata = rs.getMetaData();
 			int columnCount = metadata.getColumnCount();
 			for (int i = 1; i <= columnCount; i++) {
-				out.println("metadata.getCatalogName(" + i + "): " + metadata.getCatalogName(i));
-				out.println("metadata.getSchemaName(" + i + "): " + metadata.getSchemaName(i));
-				out.println("metadata.getTableName(" + i + "): " + metadata.getTableName(i));
-				out.println("metadata.getColumnName(" + i + "): " + metadata.getColumnName(i));
-				out.println("metadata.getColumnLabel(" + i + "): " + metadata.getColumnLabel(i));
-				out.println("metadata.getColumnClassName(" + i + "): " + metadata.getColumnClassName(i));
-				out.println("metadata.getColumnTypeName(" + i + "): " + metadata.getColumnTypeName(i));
-				out.println("metadata.getColumnType(" + i + "): " + metadata.getColumnType(i));
-				out.println("metadata.getPrecision(" + i + "): " + metadata.getPrecision(i));
-				out.println("metadata.getScale(" + i + "): " + metadata.getScale(i));
-				out.println("metadata.getColumnDisplaySize(" + i + "): " + metadata.getColumnDisplaySize(i));
-				out.println("metadata.isAutoIncrement(" + i + "): " + metadata.isAutoIncrement(i));
-				out.println("metadata.isCaseSensitive(" + i + "): " + metadata.isCaseSensitive(i));
-				out.println("metadata.isCurrency(" + i + "): " + metadata.isCurrency(i));
-				out.println("metadata.isDefinitelyWritable(" + i + "): " + metadata.isDefinitelyWritable(i));
-				out.println("metadata.isNullable(" + i + "): " + metadata.isNullable(i));
-				out.println("metadata.isReadOnly(" + i + "): " + metadata.isReadOnly(i));
-				out.println("metadata.isSearchable(" + i + "): " + metadata.isSearchable(i));
-				out.println("metadata.isSigned(" + i + "): " + metadata.isSigned(i));
-				out.println("metadata.isWritable(" + i + "): " + metadata.isWritable(i));
+				out.println("CatalogName: " + metadata.getCatalogName(i));
+				out.println("SchemaName: " + metadata.getSchemaName(i));
+				out.println("TableName: " + metadata.getTableName(i));
+				out.println("ColumnName: " + metadata.getColumnName(i));
+				out.println("ColumnLabel: " + metadata.getColumnLabel(i));
+				out.println("ColumnClassName: " + metadata.getColumnClassName(i));
+				out.println("ColumnTypeName: " + metadata.getColumnTypeName(i));
+				out.println("ColumnType: " + metadata.getColumnType(i));
+				out.println("Precision: " + metadata.getPrecision(i));
+				out.println("Scale: " + metadata.getScale(i));
+				out.println("ColumnDisplaySize: " + metadata.getColumnDisplaySize(i));
+				out.println("AutoIncrement: " + metadata.isAutoIncrement(i));
+				out.println("CaseSensitive: " + metadata.isCaseSensitive(i));
+				out.println("Currency: " + metadata.isCurrency(i));
+				out.println("DefinitelyWritable: " + metadata.isDefinitelyWritable(i));
+				out.println("Nullable: " + metadata.isNullable(i));
+				out.println("ReadOnly: " + metadata.isReadOnly(i));
+				out.println("Searchable: " + metadata.isSearchable(i));
+				out.println("Signed: " + metadata.isSigned(i));
+				out.println("Writable: " + metadata.isWritable(i));
 				out.println("-------------------------------------------------------------\n");
 			}
 		}

@@ -3,12 +3,19 @@ package io.github.panxiaochao.core.utils.meta.ddl.impl;
 import io.github.panxiaochao.core.enums.DatabaseType;
 import io.github.panxiaochao.core.utils.StrUtil;
 import io.github.panxiaochao.core.utils.meta.db.ColumnMeta;
+import io.github.panxiaochao.core.utils.meta.ddl.AbstractDatabase;
 import io.github.panxiaochao.core.utils.meta.ddl.IDatabase;
 import org.apache.commons.lang3.StringUtils;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -20,13 +27,75 @@ import java.util.stream.Collectors;
  * @since 2025-06-13
  * @version 1.0
  */
-public class DatabaseMySqlImpl implements IDatabase {
+public class DatabaseMySqlImpl extends AbstractDatabase implements IDatabase {
 
-	private static final String SHOW_CREATE_TABLE_SQL = "SHOW CREATE TABLE `%s`.`%s` ";
+	private static final String SHOW_CREATE_TABLE_SQL = "SHOW CREATE TABLE %s";
+
+	private static final String SHOW_CREATE_VIEW_SQL = "SHOW CREATE VIEW %s";
 
 	@Override
 	public DatabaseType getDatabaseType() {
 		return DatabaseType.MYSQL;
+	}
+
+	/**
+	 * 获取指定物理表的DDL语句
+	 * @param connection JDBC连接
+	 * @param schemaName 模式名称
+	 * @param tableName 表名称
+	 * @return 字段元信息列表
+	 */
+	@Override
+	public String getTableDdl(Connection connection, String schemaName, String tableName) {
+		String sql = String.format(SHOW_CREATE_TABLE_SQL, getQuotedSchemaTableCombination(schemaName, tableName));
+		List<String> result = new ArrayList<>();
+		try (Statement st = connection.createStatement()) {
+			if (st.execute(sql)) {
+				try (ResultSet rs = st.getResultSet()) {
+					if (rs != null) {
+						while (rs.next()) {
+							String value = rs.getString(2);
+							Optional.ofNullable(value).ifPresent(result::add);
+						}
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result.stream().findAny().orElse(null);
+	}
+
+	/**
+	 * 获取指定视图表的DDL语句
+	 * @param connection JDBC连接
+	 * @param schemaName 模式名称
+	 * @param tableName 表或视图名称
+	 * @return 字段元信息列表
+	 */
+	@Override
+	public String getViewDdl(Connection connection, String schemaName, String tableName) {
+		String sql = String.format(SHOW_CREATE_VIEW_SQL, getQuotedSchemaTableCombination(schemaName, tableName));
+		List<String> result = new ArrayList<>();
+		try (Statement st = connection.createStatement()) {
+			if (st.execute(sql)) {
+				try (ResultSet rs = st.getResultSet()) {
+					if (rs != null) {
+						while (rs.next()) {
+							String value = rs.getString(2);
+							Optional.ofNullable(value).ifPresent(result::add);
+						}
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result.stream().findAny().orElse(null);
 	}
 
 	/**
@@ -36,12 +105,10 @@ public class DatabaseMySqlImpl implements IDatabase {
 	@Override
 	public String generateCreateTableSql(String schemaName, String tableName, String tableComment,
 			List<ColumnMeta> columnMetas) {
+		if (null == columnMetas || columnMetas.isEmpty()) {
+			return "";
+		}
 		List<String> ddlCommands = new ArrayList<>();
-		// 获取主键数组
-		List<String> pks = columnMetas.stream()
-			.filter(ColumnMeta::isPrimaryKey)
-			.map(ColumnMeta::getColumnName)
-			.collect(Collectors.toList());
 		ddlCommands.add("CREATE TABLE");
 		ddlCommands.add(getQuotedSchemaTableCombination(schemaName, tableName));
 		ddlCommands.add("(");
@@ -55,11 +122,17 @@ public class DatabaseMySqlImpl implements IDatabase {
 			ColumnMeta v = columnMetas.get(i);
 			ddlCommands.add(reflectionFieldSqlFromColumnMeta(v));
 		}
+		// 获取主键数组
+		List<String> pks = columnMetas.stream()
+			.filter(ColumnMeta::isPrimaryKey)
+			.map(ColumnMeta::getColumnName)
+			.collect(Collectors.toList());
 		ddlCommands.add(appendPrimaryKeyForCreateTableSql(pks));
 		ddlCommands.add(")");
 		ddlCommands.add("ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci");
 		if (StrUtil.isNotBlank(tableComment)) {
-			ddlCommands.add("COMMENT='" + tableComment + "'");
+			String safeComment = tableComment.replace("'", "\\'");
+			ddlCommands.add("COMMENT='" + safeComment + "'");
 		}
 		return String.join(" ", ddlCommands);
 	}
@@ -69,7 +142,7 @@ public class DatabaseMySqlImpl implements IDatabase {
 		List<String> columnDdl = new ArrayList<>();
 		columnDdl.add("`" + column.getColumnName() + "`");
 		// jdbcType 转换
-		getJdbcType(column, type, columnDdl);
+		columnDdl.add(super.getFieldDefineSqlFormJdbcType(column, type));
 		if (!column.isNullable()) {
 			columnDdl.add("NOT NULL");
 		}
@@ -99,91 +172,7 @@ public class DatabaseMySqlImpl implements IDatabase {
 		if (StrUtil.isNotBlank(column.getColumnComment())) {
 			columnDdl.add(String.format("COMMENT '%s' ", column.getColumnComment().replace("'", "\\'")));
 		}
-
 		return String.join(" ", columnDdl);
-	}
-
-	private void getJdbcType(ColumnMeta column, int type, List<String> columnDdl) {
-		switch (type) {
-			// 数值类型
-			case Types.TINYINT:
-			case Types.SMALLINT:
-			case Types.INTEGER:
-			case Types.BIGINT:
-				if (type == Types.TINYINT && column.getColumnLength() == 1) {
-					columnDdl.add("TINYINT(1)");
-				}
-				else {
-					columnDdl.add(column.getJdbcTypeName());
-				}
-				break;
-			// 浮点类型
-			case Types.REAL:
-			case Types.FLOAT:
-			case Types.DOUBLE:
-			case Types.NUMERIC:
-			case Types.DECIMAL:
-				if (column.getColumnLength() > 0 && column.getScale() > 0) {
-					if (column.getColumnLength() >= column.getScale()) {
-						columnDdl.add(column.getJdbcTypeName() + "(" + column.getColumnLength() + ","
-								+ column.getScale() + ")");
-					}
-					else {
-						throw new RuntimeException(column.getColumnName() + " 字段长度不能小于精度");
-					}
-				}
-				else if (column.getColumnLength() > 0) {
-					columnDdl.add(column.getJdbcTypeName());
-				}
-				break;
-			// 日期类型
-			case Types.DATE:
-			case Types.TIME:
-			case Types.TIMESTAMP:
-			case Types.TIMESTAMP_WITH_TIMEZONE:
-				columnDdl.add(column.getJdbcTypeName());
-				break;
-			// 字符串类型
-			case Types.CHAR:
-			case Types.NCHAR:
-			case Types.VARCHAR:
-			case Types.NVARCHAR:
-				if ("ENUM".equalsIgnoreCase(column.getJdbcTypeName())
-						|| "SET".equalsIgnoreCase(column.getJdbcTypeName())) {
-					columnDdl.add(column.getJdbcTypeName() + "('" + column.getColumnLength() + "')");
-				}
-				else if ("TINYTEXT".equalsIgnoreCase(column.getJdbcTypeName())) {
-					columnDdl.add(column.getJdbcTypeName());
-				}
-				else {
-					columnDdl.add(column.getJdbcTypeName() + "(" + column.getColumnLength() + ")");
-				}
-				break;
-			case Types.LONGVARCHAR:
-			case Types.LONGNVARCHAR:
-			case Types.NCLOB:
-			case Types.CLOB:
-			case Types.BLOB:
-			case Types.LONGVARBINARY:
-			case Types.VARBINARY:
-			case Types.SQLXML:
-			case Types.ROWID:
-			case Types.BINARY:
-				columnDdl.add(column.getJdbcTypeName());
-				break;
-			// 布尔类型
-			case Types.BIT:
-			case Types.BOOLEAN:
-				if (column.getColumnLength() == 1) {
-					columnDdl.add("TINYINT(1)");
-				}
-				else {
-					columnDdl.add(column.getJdbcTypeName() + "(" + column.getColumnLength() + ")");
-				}
-				break;
-			default:
-				columnDdl.add(column.getJdbcTypeName() + "(" + column.getColumnLength() + ")");
-		}
 	}
 
 	public String appendPrimaryKeyForCreateTableSql(List<String> pks) {
@@ -214,6 +203,20 @@ public class DatabaseMySqlImpl implements IDatabase {
 			return String.format("`%s`", tableName);
 		}
 		return String.format("`%s`.`%s`", schemaName, tableName);
+	}
+
+	/**
+	 * 获取表字段注释定义
+	 * @param schemaName 模式名称
+	 * @param tableName 表名称
+	 * @param tableComment 表注释
+	 * @param columnMetas 字段元信息列表
+	 * @return 表字段注释定义
+	 */
+	@Override
+	public List<String> getTableColumnCommentDefinition(String schemaName, String tableName, String tableComment,
+			List<ColumnMeta> columnMetas) {
+		return Collections.emptyList();
 	}
 
 }
