@@ -38,7 +38,11 @@ public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 
 	private static final String FIELD_CREATE_TIME = "createTime";
 
+	private static final String FIELD_CREATE_AT = "createAt";
+
 	private static final String FIELD_UPDATE_TIME = "updateTime";
+
+	private static final String FIELD_UPDATE_AT = "updateAt";
 
 	private final IMetaObjectHandler metaObjectHandler;
 
@@ -60,6 +64,18 @@ public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 		// Date
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, false);
 		strictFillValByName(metaObject, FIELD_CREATE_TIME, new Date(), Date.class, false);
+		// Long
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, System.currentTimeMillis(), Long.class, false);
+		strictFillValByName(metaObject, FIELD_CREATE_AT, System.currentTimeMillis(), Long.class, false);
+		// LocalDateTime
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, LocalDateTime.now(), LocalDateTime.class, false);
+		strictFillValByName(metaObject, FIELD_CREATE_AT, LocalDateTime.now(), LocalDateTime.class, false);
+		// LocalDate
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, LocalDate.now(), LocalDate.class, false);
+		strictFillValByName(metaObject, FIELD_CREATE_AT, LocalDate.now(), LocalDate.class, false);
+		// Date
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, new Date(), Date.class, false);
+		strictFillValByName(metaObject, FIELD_CREATE_AT, new Date(), Date.class, false);
 		// 自定义实现插入逻辑
 		metaObjectHandler.insertFillCustomize(metaObject);
 	}
@@ -74,6 +90,14 @@ public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDate.now(), LocalDate.class, true);
 		// Date
 		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, true);
+		// Long
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, System.currentTimeMillis(), Long.class, true);
+		// LocalDateTime
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, LocalDateTime.now(), LocalDateTime.class, true);
+		// LocalDate
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, LocalDate.now(), LocalDate.class, true);
+		// Date
+		strictFillValByName(metaObject, FIELD_UPDATE_AT, new Date(), Date.class, true);
 		// 自定义实现插入逻辑
 		metaObjectHandler.updateFillCustomize(metaObject);
 	}
