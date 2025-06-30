@@ -85,7 +85,7 @@ public class JdbcUtilTest {
 			// null, null);
 			// System.out.println(JacksonUtil.toString(tableMetas));
 
-			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, null, "test");
+			List<ColumnMeta> columnMetas = DbMetaUtil.getColumnMeta(dataSource, null, null, "database_field_tag");
 			System.out.println(JacksonUtil.toString(columnMetas));
 
 			// List<String> columnNames = DbMetaUtil.getColumnNames(dataSource,
@@ -95,7 +95,7 @@ public class JdbcUtilTest {
 			AbstractDatabase database = DatabaseFactory.getDatabaseInstance(DatabaseType.MYSQL);
 			String createTableDDL = database.generateCreateTableSql(null, "test1", "测试", columnMetas);
 			System.out.println(createTableDDL);
-			System.out.println(database.getTableDdl(dataSource.getConnection(), null, "test1"));
+			// System.out.println(database.getTableDdl(dataSource.getConnection(), null, "test1"));
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
