@@ -17,7 +17,6 @@ package io.github.panxiaochao.core.utils;
 
 import io.github.panxiaochao.core.enums.MimeType;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -26,7 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -50,7 +48,7 @@ public class DownLoadUtil {
 	 * 下载文件
 	 * @param bodyBytes 文件字节数组
 	 * @param fileName 文件名
-	 * @return ResponseEntity<byte[]>
+	 * @return ResponseEntity&lt;byte[]&gt;
 	 */
 	public static ResponseEntity<byte[]> download(byte[] bodyBytes, String fileName) {
 		try {
@@ -69,7 +67,7 @@ public class DownLoadUtil {
 
 	/**
 	 * 下载失败
-	 * @return ResponseEntity<byte[]>
+	 * @return ResponseEntity&lt;byte[]&gt;
 	 */
 	public static ResponseEntity<byte[]> fail() {
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
@@ -79,7 +77,7 @@ public class DownLoadUtil {
 	 * 下载模板
 	 * @param templatePath 模板路径 resource 目录下的路径包括模板文件名, 例如: excel/temp.xlsx 重点:
 	 * 模板文件必须放置到启动类对应的 resource 目录下
-	 * @return ResponseEntity<byte[]>
+	 * @return ResponseEntity&lt;byte[]&gt;
 	 */
 	public static ResponseEntity<byte[]> downloadTemplate(String templatePath) {
 		try {
@@ -113,7 +111,6 @@ public class DownLoadUtil {
 		return (lastSlashIndex != -1) ? templatePath.substring(lastSlashIndex + 1) : templatePath;
 	}
 
-	@NotNull
 	private static String getContentDispositionValue(String fileName) {
 		String percentEncodedFileName = percentEncode(fileName);
 		return ContentDisposition.attachment()
@@ -123,13 +120,7 @@ public class DownLoadUtil {
 	}
 
 	private static String percentEncode(String s) {
-		String encode;
-		try {
-			encode = URLEncoder.encode(s, StandardCharsets.UTF_8.name());
-		}
-		catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		String encode = URLEncoder.encode(s, StandardCharsets.UTF_8);
 		return encode.replaceAll("\\+", "%20");
 	}
 
