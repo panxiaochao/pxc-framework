@@ -19,12 +19,17 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -254,6 +259,51 @@ public class RequestUtil {
 			return false;
 		}
 		return contentType.toLowerCase().startsWith("multipart/");
+	}
+
+	/**
+	 * 将字符串渲染到客户端（以 JSON 格式返回）
+	 * @param response 渲染对象
+	 * @param content 待渲染的字符串
+	 */
+	public static void renderString(HttpServletResponse response, String content) {
+		try {
+			response.setStatus(HttpStatus.OK.value());
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+			response.getWriter().print(content);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 对内容进行 URL 编码
+	 * @param str 内容
+	 * @return 编码后的内容
+	 */
+	public static String urlEncode(String str) {
+		try {
+			return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 对内容进行 URL 解码
+	 * @param encodedStr 编码后的内容
+	 * @return 解码后的内容
+	 */
+	public static String urlDecode(String encodedStr) {
+		try {
+			return URLDecoder.decode(encodedStr, StandardCharsets.UTF_8.name());
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

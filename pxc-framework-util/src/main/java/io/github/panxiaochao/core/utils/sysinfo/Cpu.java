@@ -39,7 +39,7 @@ public class Cpu {
 	private String cpuName;
 
 	/**
-	 * 物理CPU数
+	 * 物理CPU核心数
 	 */
 	private int physicalPackageCount;
 
@@ -52,6 +52,11 @@ public class Cpu {
 	 * 能效核心数
 	 */
 	private int efficiencyCount;
+
+	/**
+	 * 性能核心数
+	 */
+	private int performanceCount;
 
 	/**
 	 * 逻辑处理核心数

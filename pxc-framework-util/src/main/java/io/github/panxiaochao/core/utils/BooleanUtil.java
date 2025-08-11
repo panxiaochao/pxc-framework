@@ -297,6 +297,96 @@ public class BooleanUtil {
 	}
 
 	/**
+	 * Converts a boolean to a String returning one of the input Strings.
+	 *
+	 * <pre>
+	 *   BooleanUtils.toString(true, "true", "false")   = "true"
+	 *   BooleanUtils.toString(false, "true", "false")  = "false"
+	 * </pre>
+	 * @param bool the Boolean to check
+	 * @param trueString the String to return if {@code true}, may be {@code null}
+	 * @param falseString the String to return if {@code false}, may be {@code null}
+	 * @return one of the two input Strings
+	 */
+	public static String toString(final boolean bool, final String trueString, final String falseString) {
+		return bool ? trueString : falseString;
+	}
+
+	/**
+	 * Converts a Boolean to a String returning one of the input Strings.
+	 *
+	 * <pre>
+	 *   BooleanUtils.toString(Boolean.TRUE, "true", "false", null)   = "true"
+	 *   BooleanUtils.toString(Boolean.FALSE, "true", "false", null)  = "false"
+	 *   BooleanUtils.toString(null, "true", "false", null)           = null;
+	 * </pre>
+	 * @param bool the Boolean to check
+	 * @param trueString the String to return if {@code true}, may be {@code null}
+	 * @param falseString the String to return if {@code false}, may be {@code null}
+	 * @param nullString the String to return if {@code null}, may be {@code null}
+	 * @return one of the three input Strings
+	 */
+	public static String toString(final Boolean bool, final String trueString, final String falseString,
+			final String nullString) {
+		if (bool == null) {
+			return nullString;
+		}
+		return bool.booleanValue() ? trueString : falseString;
+	}
+
+	/**
+	 * Converts a boolean to an int using the convention that {@code true} is {@code 1}
+	 * and {@code false} is {@code 0}.
+	 *
+	 * <pre>
+	 *   BooleanUtils.toInteger(true)  = 1
+	 *   BooleanUtils.toInteger(false) = 0
+	 * </pre>
+	 * @param bool the boolean to convert
+	 * @return one if {@code true}, zero if {@code false}
+	 */
+	public static int toInteger(final boolean bool) {
+		return bool ? 1 : 0;
+	}
+
+	/**
+	 * Converts a boolean to an int specifying the conversion values.
+	 *
+	 * <pre>
+	 *   BooleanUtils.toInteger(true, 1, 0)  = 1
+	 *   BooleanUtils.toInteger(false, 1, 0) = 0
+	 * </pre>
+	 * @param bool the to convert
+	 * @param trueValue the value to return if {@code true}
+	 * @param falseValue the value to return if {@code false}
+	 * @return the appropriate value
+	 */
+	public static int toInteger(final boolean bool, final int trueValue, final int falseValue) {
+		return bool ? trueValue : falseValue;
+	}
+
+	/**
+	 * Converts a Boolean to an int specifying the conversion values.
+	 *
+	 * <pre>
+	 *   BooleanUtils.toInteger(Boolean.TRUE, 1, 0, 2)  = 1
+	 *   BooleanUtils.toInteger(Boolean.FALSE, 1, 0, 2) = 0
+	 *   BooleanUtils.toInteger(null, 1, 0, 2)          = 2
+	 * </pre>
+	 * @param bool the Boolean to convert
+	 * @param trueValue the value to return if {@code true}
+	 * @param falseValue the value to return if {@code false}
+	 * @param nullValue the value to return if {@code null}
+	 * @return the appropriate value
+	 */
+	public static int toInteger(final Boolean bool, final int trueValue, final int falseValue, final int nullValue) {
+		if (bool == null) {
+			return nullValue;
+		}
+		return bool.booleanValue() ? trueValue : falseValue;
+	}
+
+	/**
 	 * 给定类是否为Boolean或者boolean
 	 * @param clazz 类
 	 * @return 是否为Boolean或者boolean

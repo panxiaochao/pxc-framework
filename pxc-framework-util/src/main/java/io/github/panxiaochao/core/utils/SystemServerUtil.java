@@ -33,7 +33,9 @@ import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 import oshi.util.GlobalConfig;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -122,12 +124,10 @@ public class SystemServerUtil {
 				- prevTicks[CentralProcessor.TickType.STEAL.getIndex()];
 		long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
 		// 能效核心数
-		long efficiencyCount = processor.getPhysicalProcessors().stream().filter(s -> s.getEfficiency() == 1).count();
 		Cpu cpu = new Cpu();
 		cpu.setCpuName(processor.getProcessorIdentifier().getName());
 		cpu.setPhysicalPackageCount(processor.getPhysicalPackageCount());
 		cpu.setPhysicalProcessorCount(processor.getPhysicalProcessorCount());
-		cpu.setEfficiencyCount((int) efficiencyCount);
 		cpu.setLogicalProcessorCount(processor.getLogicalProcessorCount());
 		cpu.setVendor(processor.getProcessorIdentifier().getVendor());
 		cpu.setTotal(totalCpu);
@@ -135,6 +135,27 @@ public class SystemServerUtil {
 		cpu.setUser(user);
 		cpu.setWait(ioWait);
 		cpu.setFree(idle);
+		if (cpu.getCpuName().contains("Apple")) {
+			try {
+				// macOS 原生支持直接获取
+				int pCores = runSysctlCommand("sysctl -n hw.perflevel0.physicalcpu");
+				int eCores = runSysctlCommand("sysctl -n hw.perflevel1.physicalcpu");
+				cpu.setEfficiencyCount(eCores);
+				cpu.setPerformanceCount(pCores);
+			}
+			catch (Exception e) {
+				cpu.setEfficiencyCount(-1);
+				cpu.setPerformanceCount(-1);
+			}
+		}
+		else {
+			long efficiencyCount = processor.getPhysicalProcessors()
+				.stream()
+				.filter(s -> s.getEfficiency() == 1)
+				.count();
+			cpu.setEfficiencyCount((int) efficiencyCount);
+			cpu.setPerformanceCount(cpu.getPhysicalProcessorCount() - cpu.getEfficiencyCount());
+		}
 		return cpu;
 	}
 
@@ -275,6 +296,17 @@ public class SystemServerUtil {
 			}
 		}
 		return networkInterfaces;
+	}
+
+	private static int runSysctlCommand(String command) throws Exception {
+		Process process = Runtime.getRuntime().exec(command);
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String result = reader.readLine().trim();
+			return Integer.parseInt(result);
+		}
+		catch (Exception e) {
+			return -1;
+		}
 	}
 
 	public static void main(String[] args) {

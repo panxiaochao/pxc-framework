@@ -24,6 +24,8 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -36,46 +38,108 @@ import java.util.Objects;
  */
 public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 
+	/**
+	 * 实体类中表示创建时间的字段名，通常为时间类型
+	 */
 	private static final String FIELD_CREATE_TIME = "createTime";
 
+	/**
+	 * 实体类中表示创建日期的字段名，通常为日期类型
+	 */
+	private static final String FIELD_CREATE_AT = "createAt";
+
+	/**
+	 * 实体类中表示更新时间的字段名，通常为时间类型
+	 */
 	private static final String FIELD_UPDATE_TIME = "updateTime";
 
+	/**
+	 * 实体类中表示更新日期的字段名，通常为日期类型
+	 */
+	private static final String FIELD_UPDATE_AT = "updateAt";
+
+	/**
+	 * 存储时间类型与其对应值生成器的映射。 不同的时间类型（如 Long、LocalDateTime 等）对应不同的值生成逻辑。
+	 */
+	private static final Map<Class<?>, ValueSupplier> TIME_VALUE_SUPPLIERS = new HashMap<>();
+
+	static {
+		// 为 Long 类型的时间字段提供当前时间戳
+		TIME_VALUE_SUPPLIERS.put(Long.class, System::currentTimeMillis);
+		// 为 LocalDateTime 类型的时间字段提供当前日期时间
+		TIME_VALUE_SUPPLIERS.put(LocalDateTime.class, LocalDateTime::now);
+		// 为 LocalDate 类型的时间字段提供当前日期
+		TIME_VALUE_SUPPLIERS.put(LocalDate.class, LocalDate::now);
+		// 为 Date 类型的时间字段提供当前日期时间
+		TIME_VALUE_SUPPLIERS.put(Date.class, Date::new);
+	}
+
+	/**
+	 * 函数式接口，定义一个值供应方法，用于生成不同类型的时间值。
+	 */
+	@FunctionalInterface
+	private interface ValueSupplier {
+
+		/**
+		 * 获取生成的值。
+		 * @return 生成的时间值
+		 */
+		Object get();
+
+	}
+
+	/**
+	 * 自定义元对象处理器，用于处理额外的插入和更新填充逻辑。
+	 */
 	private final IMetaObjectHandler metaObjectHandler;
 
+	/**
+	 * 构造函数，初始化自定义元对象处理器。
+	 * @param metaObjectHandler 自定义元对象处理器实例
+	 */
 	public MetaObjectHandlerCustomizer(IMetaObjectHandler metaObjectHandler) {
 		this.metaObjectHandler = metaObjectHandler;
 	}
 
+	/**
+	 * 插入操作时的字段填充方法。 在实体对象插入数据库前，自动填充创建时间和更新时间字段，并调用自定义插入逻辑。
+	 * @param metaObject 包含实体对象属性信息的元对象
+	 */
 	@Override
 	public void insertFill(MetaObject metaObject) {
-		// Long
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, System.currentTimeMillis(), Long.class, false);
-		strictFillValByName(metaObject, FIELD_CREATE_TIME, System.currentTimeMillis(), Long.class, false);
-		// LocalDateTime
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDateTime.now(), LocalDateTime.class, false);
-		strictFillValByName(metaObject, FIELD_CREATE_TIME, LocalDateTime.now(), LocalDateTime.class, false);
-		// LocalDate
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDate.now(), LocalDate.class, false);
-		strictFillValByName(metaObject, FIELD_CREATE_TIME, LocalDate.now(), LocalDate.class, false);
-		// Date
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, false);
-		strictFillValByName(metaObject, FIELD_CREATE_TIME, new Date(), Date.class, false);
-		// 自定义实现插入逻辑
+		// 调用填充时间字段的方法，传入是否为更新操作的标识（false 表示插入操作）
+		fillTimeFields(metaObject, false);
+		// 调用自定义实现的插入填充逻辑
 		metaObjectHandler.insertFillCustomize(metaObject);
 	}
 
+	/**
+	 * 更新操作时的字段填充方法。 在实体对象更新数据库前，自动填充更新时间字段，并调用自定义更新逻辑。
+	 * @param metaObject 包含实体对象属性信息的元对象
+	 */
 	@Override
 	public void updateFill(MetaObject metaObject) {
-		// Long
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, System.currentTimeMillis(), Long.class, true);
-		// LocalDateTime
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDateTime.now(), LocalDateTime.class, true);
-		// LocalDate
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, LocalDate.now(), LocalDate.class, true);
-		// Date
-		strictFillValByName(metaObject, FIELD_UPDATE_TIME, new Date(), Date.class, true);
-		// 自定义实现插入逻辑
+		// 调用填充时间字段的方法，传入是否为更新操作的标识（true 表示更新操作）
+		fillTimeFields(metaObject, true);
+		// 调用自定义实现的更新填充逻辑
 		metaObjectHandler.updateFillCustomize(metaObject);
+	}
+
+	/**
+	 * 填充时间字段
+	 * @param metaObject 元数据对象
+	 * @param updateFill 是否是更新操作
+	 */
+	private void fillTimeFields(MetaObject metaObject, boolean updateFill) {
+		String[] fields = updateFill ? new String[] { FIELD_UPDATE_TIME, FIELD_UPDATE_AT }
+				: new String[] { FIELD_CREATE_TIME, FIELD_CREATE_AT, FIELD_UPDATE_TIME, FIELD_UPDATE_AT };
+		for (String field : fields) {
+			for (Map.Entry<Class<?>, ValueSupplier> entry : TIME_VALUE_SUPPLIERS.entrySet()) {
+				Class<?> fieldType = entry.getKey();
+				Object fieldVal = entry.getValue().get();
+				strictFillValByName(metaObject, field, fieldVal, fieldType, updateFill);
+			}
+		}
 	}
 
 	/**
@@ -105,10 +169,8 @@ public class MetaObjectHandlerCustomizer implements MetaObjectHandler {
 		}
 		// 3. 判断 fieldType 和 getterType 是否相同
 		Class<?> getterType = metaObject.getGetterType(fieldName);
-		if (Objects.equals(getterType, fieldType)) {
-			if (ClassUtils.isAssignableValue(getterType, fieldVal)) {
-				metaObject.setValue(fieldName, fieldVal);
-			}
+		if (Objects.equals(getterType, fieldType) && ClassUtils.isAssignableValue(getterType, fieldVal)) {
+			metaObject.setValue(fieldName, fieldVal);
 		}
 	}
 

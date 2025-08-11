@@ -38,4 +38,9 @@ public class MpProperties {
 	 */
 	private DbType dbType = DbType.MYSQL;
 
+	/**
+	 * 是否开启sql日志追踪, 支持: true 和 false , 1 和 0 , on 和 off
+	 */
+	private String sqlLogTrace = "false";
+
 }

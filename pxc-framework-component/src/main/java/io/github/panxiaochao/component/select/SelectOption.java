@@ -249,6 +249,7 @@ public class SelectOption<T> implements Serializable {
 		return this;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -260,6 +261,7 @@ public class SelectOption<T> implements Serializable {
 		return Objects.equals(key, selectOption.getKey());
 	}
 
+	@Override
 	public int hashCode() {
 		return Objects.hash(key);
 	}
