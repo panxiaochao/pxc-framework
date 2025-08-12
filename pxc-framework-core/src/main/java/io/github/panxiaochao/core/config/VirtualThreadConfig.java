@@ -53,12 +53,15 @@ public class VirtualThreadConfig {
 	}
 
 	/**
-	 * 虚拟线程执行器
+	 * 虚拟线程执行器，name = virtualThreadExecutor <br/>
+	 * <pre>
+	 *     使用方法: &#64;Async("virtualThreadExecutor")
+	 * </pre>
 	 * @return Executor
 	 */
-	@Bean
+	@Bean(name = "virtualThreadExecutor")
 	@Conditional(Jdk21OrHigherCondition.class)
-	Executor virtualThreadExecutor() {
+	public Executor virtualThreadExecutor() {
 		try {
 			// 使用反射避免直接引用JDK21+方法
 			Class<?> executorsClass = Class.forName("java.util.concurrent.Executors");
