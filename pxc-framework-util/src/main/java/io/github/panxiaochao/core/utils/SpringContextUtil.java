@@ -21,9 +21,11 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -224,6 +226,15 @@ public class SpringContextUtil implements ApplicationContextAware {
 	public void setApplicationContext(@NonNull final ApplicationContext applicationContext) {
 		SpringContextUtil.applicationContext = applicationContext;
 		LOGGER.info("配置[ApplicationContext]成功！");
+	}
+
+	/**
+	 * 是否是虚拟线程
+	 * @return true: 是虚拟线程 false: 不是虚拟线程
+	 */
+	public static boolean isVirtual() {
+		Environment environment = applicationContext.getEnvironment();
+		return Threading.VIRTUAL.isActive(environment);
 	}
 
 }
