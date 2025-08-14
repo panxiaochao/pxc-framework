@@ -17,7 +17,6 @@ package io.github.panxiaochao.holiday.core;
 
 import io.github.panxiaochao.core.utils.Singleton;
 import io.github.panxiaochao.core.utils.StringPools;
-import io.github.panxiaochao.core.utils.date.LocalDateTimeUtil;
 import io.github.panxiaochao.holiday.constants.HolidayConstant;
 import io.github.panxiaochao.holiday.entity.Holiday;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 /**
  * <p>
@@ -62,18 +62,16 @@ public class HolidayClient {
 	 * @return true Or false
 	 */
 	public boolean isWeekday(String day) {
-		checkDay(day);
 		return !isPublicHoliday(day);
 	}
 
 	/**
-	 * 是否是公休日（休息日）
+	 * 是否是工休日（周六和周日）
 	 * @param day 日期
 	 * @return true Or false
 	 */
 	public boolean isPublicHoliday(String day) {
-		checkDay(day);
-		LocalDate localDate = praseLocalDate(day);
+		LocalDate localDate = parseAndValidateDate(day);
 		int week = localDate.getDayOfWeek().getValue();
 		return week == 6 || week == 7;
 	}
@@ -84,15 +82,9 @@ public class HolidayClient {
 	 * @return true Or false
 	 */
 	public boolean isHoliday(String day) {
-		checkDay(day);
-		LocalDate localDate = praseLocalDate(day);
-		int year = localDate.getYear();
-		Holiday holiday = Singleton.INST.get(HolidayConstant.KEY_PREFIX + year);
-		if (holiday == null) {
-			LOGGER.error("没有对应年[{}]的数据，请升级或者自行维护数据！", year);
-			return false;
-		}
-		return holiday.getDays().stream().anyMatch(f -> f.getDate().equals(day));
+		LocalDate localDate = parseAndValidateDate(day);
+		Holiday holiday = getHolidayOfYear(String.valueOf(localDate.getYear()));
+		return holiday != null && holiday.getDays().stream().anyMatch(f -> f.getDate().equals(day));
 	}
 
 	/**
@@ -101,15 +93,9 @@ public class HolidayClient {
 	 * @return true Or false
 	 */
 	public boolean isWorkDay(String day) {
-		checkDay(day);
-		LocalDate localDate = praseLocalDate(day);
-		int year = localDate.getYear();
-		Holiday holiday = Singleton.INST.get(HolidayConstant.KEY_PREFIX + year);
-		if (holiday == null) {
-			LOGGER.error("没有对应年[{}]的数据，请升级或者自行维护数据！", year);
-			return false;
-		}
-		return holiday.getWorkdays().stream().anyMatch(f -> f.getDate().equals(day));
+		LocalDate localDate = parseAndValidateDate(day);
+		Holiday holiday = getHolidayOfYear(String.valueOf(localDate.getYear()));
+		return holiday != null && holiday.getWorkdays().stream().anyMatch(f -> f.getDate().equals(day));
 	}
 
 	/**
@@ -118,35 +104,67 @@ public class HolidayClient {
 	 * @return 假期天数
 	 */
 	public int holidaysCount(String year) {
-		Holiday holiday = Singleton.INST.get(HolidayConstant.KEY_PREFIX + year);
-		if (holiday == null) {
-			LOGGER.error("没有[{}]年的节假日期数据，请升级或者自行维护数据！", year);
-			return 0;
-		}
-		return holiday.getDays().size();
+		Holiday holiday = getHolidayOfYear(year);
+		return holiday != null ? holiday.getDays().size() : 0;
 	}
 
 	/**
-	 * 日期验证是否合法
+	 * 获取某一天的假期信息
 	 * @param day 日期
+	 * @return 假期信息
 	 */
-	private void checkDay(String day) {
-		if (!StringUtils.hasText(day) || day.split(StringPools.DASH).length != 3) {
-			throw new IllegalArgumentException("Invalid day: " + day + ", make sure date format 'yyyy-MM-dd'");
+	public Holiday.Days getHoliday(String day) {
+		LocalDate localDate = parseAndValidateDate(day);
+		Holiday holiday = getHolidayOfYear(String.valueOf(localDate.getYear()));
+		if (holiday == null) {
+			return null;
 		}
+		return holiday.getDays().stream().filter(f -> f.getDate().equals(day)).findFirst().orElse(null);
 	}
 
 	/**
-	 * 解析日期为LocalDate
+	 * 解析日期为LocalDate 和 验证日期格式
 	 * @param day 日期
 	 * @return LocalDate
 	 */
-	private LocalDate praseLocalDate(String day) {
+	private LocalDate parseAndValidateDate(String day) {
+		if (!StringUtils.hasText(day) || day.split(StringPools.DASH).length != 3) {
+			throw new IllegalArgumentException("Check Invalid day: " + day + ", make sure date format 'yyyy-MM-dd'");
+		}
 		String[] days = StringUtils.split(day, StringPools.SPACE);
-		if (days != null) {
+		// 兼容带空格
+		if (days != null && days.length > 0) {
 			day = days[0];
 		}
-		return LocalDateTimeUtil.stringToLocalDate(day);
+		try {
+			// 1. 使用 uuuu 代替 yyyy，u 代表的是带符号年份（Signed Year），它不需要指定时代（默认就是公元后）。
+			// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+			// .withResolverStyle(ResolverStyle.STRICT);
+			// 2.兼容 1900 年之前, 手动设置 1，表示公元 0 表示公元前
+			// DateTimeFormatter formatter = new
+			// DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd")
+			// .parseDefaulting(ChronoField.ERA, 1)
+			// .toFormatter()
+			// .withResolverStyle(ResolverStyle.STRICT);
+			// 3.直接使用 LocalDate.parse() 方法，自带严格模式
+			return LocalDate.parse(day);
+		}
+		catch (DateTimeParseException e) {
+			throw new IllegalArgumentException("Parse Invalid day: " + day + ", errMsg: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 获取指定年份的 Holiday 数据
+	 * @param year 年份
+	 * @return Holiday 对象
+	 */
+	private Holiday getHolidayOfYear(String year) {
+		Holiday holiday = Singleton.INST.get(HolidayConstant.KEY_PREFIX + year);
+		if (holiday == null) {
+			LOGGER.error("没有对应年[{}]的数据，请升级或者自行维护数据！", year);
+		}
+		return holiday;
 	}
 
 }
