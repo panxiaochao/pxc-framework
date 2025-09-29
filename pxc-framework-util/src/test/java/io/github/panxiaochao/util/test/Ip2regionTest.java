@@ -16,6 +16,7 @@ public class Ip2regionTest {
 
 	@Test
 	void getRegion() {
+		System.out.println(Ip2regionUtil.memorySearch("60.191.8.98"));
 		System.out.println(Ip2regionUtil.memorySearch("220.248.12.158"));
 		System.out.println(Ip2regionUtil.memorySearch("222.240.36.135"));
 		System.out.println(Ip2regionUtil.memorySearch("172.30.13.97"));
@@ -30,6 +31,7 @@ public class Ip2regionTest {
 
 	@Test
 	void getRegionV6() {
+		System.out.println(Ip2regionUtil.memorySearch("240e:57f:32ff:ffff:ffff:ffff:ffff:ffff"));
 		System.out.println(Ip2regionUtil.memorySearch("::ffff:1111:2222"));
 		System.out.println(Ip2regionUtil.memorySearch("2001:db8::ffff:1111:2222"));
 		System.out.println(Ip2regionUtil.memorySearch("::1"));

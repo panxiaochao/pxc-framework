@@ -35,7 +35,15 @@ public class Ip2regionUtil {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionUtil.class);
 
-	private static final Searcher SEARCHER = Ip2RegionLoader.searcher();
+	/**
+	 * ip2region_v4.xdb 搜索对象
+	 */
+	private static final Searcher SEARCHER_V4 = Ip2RegionLoader.searcherV4();
+
+	/**
+	 * ip2region_v6.xdb 搜索对象
+	 */
+	private static final Searcher SEARCHER_V6 = Ip2RegionLoader.searcherV6();
 
 	/**
 	 * IP解析, 返回<code>IpInfo</code>对象
@@ -44,17 +52,16 @@ public class Ip2regionUtil {
 	 */
 	public static IpInfo memorySearch(String ip) {
 		try {
-			// 1.ipv4
 			String[] ipV4Part = IpInfo.getIpv4Part(ip);
 			if (ipV4Part.length == 4) {
-				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER.search(ip));
+				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V4.search(ip));
 				ipInfo.setIp(ip);
 				return ipInfo;
 			}
 			else if (ip.contains(":")) {
-				// 2.ipv6
-				// TODO 现在没有工具支撑，ipv6情况下返回 null
-				return null;
+				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
+				ipInfo.setIp(ip);
+				return ipInfo;
 			}
 			else {
 				// 3.不合法 IP
