@@ -1,7 +1,11 @@
 package io.github.panxiaochao.core.utils.meta.db;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
+ * 数据库字段类型
  * </p>
  *
  * @author lypxc
@@ -72,64 +76,61 @@ public class ColumnTypes {
 	 */
 	public static final int TYPE_INET = 11;
 
-	public static int transformJdbcType(int jdbcType) {
-		int resultType;
-		switch (jdbcType) {
-			case java.sql.Types.CHAR:
-			case java.sql.Types.NCHAR:
-			case java.sql.Types.VARCHAR:
-			case java.sql.Types.NVARCHAR:
-				resultType = ColumnTypes.TYPE_STRING;
-				break;
-			case java.sql.Types.LONGVARCHAR:
-			case java.sql.Types.LONGNVARCHAR:
-			case java.sql.Types.CLOB:
-			case java.sql.Types.NCLOB:
-			case java.sql.Types.SQLXML:
-			case java.sql.Types.ROWID:
-				resultType = ColumnTypes.TYPE_STRING;
-				break;
-			case java.sql.Types.BIGINT:
-				resultType = ColumnTypes.TYPE_BIGNUMBER;
-				break;
-			case java.sql.Types.INTEGER:
-            case java.sql.Types.TINYINT:
-            case java.sql.Types.SMALLINT:
-                resultType = ColumnTypes.TYPE_INTEGER;
-				break;
-            case java.sql.Types.DECIMAL:
-			case java.sql.Types.DOUBLE:
-			case java.sql.Types.FLOAT:
-			case java.sql.Types.REAL:
-			case java.sql.Types.NUMERIC:
-				resultType = ColumnTypes.TYPE_NUMBER;
-				break;
-			case java.sql.Types.TIMESTAMP:
-			case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
-				resultType = ColumnTypes.TYPE_TIMESTAMP;
-				break;
-			case java.sql.Types.DATE:
-				resultType = ColumnTypes.TYPE_DATE;
-				break;
-			case java.sql.Types.TIME:
-			case java.sql.Types.TIME_WITH_TIMEZONE:
-				resultType = ColumnTypes.TYPE_TIME;
-				break;
-			case java.sql.Types.BOOLEAN:
-			case java.sql.Types.BIT:
-				resultType = ColumnTypes.TYPE_BOOLEAN;
-				break;
-			case java.sql.Types.BINARY:
-			case java.sql.Types.BLOB:
-			case java.sql.Types.VARBINARY:
-			case java.sql.Types.LONGVARBINARY:
-				resultType = ColumnTypes.TYPE_BINARY;
-				break;
-			default:
-				resultType = ColumnTypes.TYPE_STRING;
-				break;
+	private static final Map<Integer, Integer> JDBC_TYPE_MAP = new HashMap<>();
+
+	static {
+		// 字符串类型映射
+		int[] stringTypes = { java.sql.Types.CHAR, java.sql.Types.NCHAR, java.sql.Types.VARCHAR,
+				java.sql.Types.NVARCHAR, java.sql.Types.LONGVARCHAR, java.sql.Types.LONGNVARCHAR, java.sql.Types.CLOB,
+				java.sql.Types.NCLOB, java.sql.Types.SQLXML, java.sql.Types.ROWID };
+		for (int type : stringTypes) {
+			JDBC_TYPE_MAP.put(type, TYPE_STRING);
 		}
-		return resultType;
+
+		// 整数类型映射
+		int[] integerTypes = { java.sql.Types.INTEGER, java.sql.Types.TINYINT, java.sql.Types.SMALLINT };
+		for (int type : integerTypes) {
+			JDBC_TYPE_MAP.put(type, TYPE_INTEGER);
+		}
+
+		// 数字类型映射
+		int[] numberTypes = { java.sql.Types.DECIMAL, java.sql.Types.DOUBLE, java.sql.Types.FLOAT, java.sql.Types.REAL,
+				java.sql.Types.NUMERIC };
+		for (int type : numberTypes) {
+			JDBC_TYPE_MAP.put(type, TYPE_NUMBER);
+		}
+
+		// 时间类型映射
+		JDBC_TYPE_MAP.put(java.sql.Types.TIMESTAMP, TYPE_TIMESTAMP);
+		JDBC_TYPE_MAP.put(java.sql.Types.TIMESTAMP_WITH_TIMEZONE, TYPE_TIMESTAMP);
+		JDBC_TYPE_MAP.put(java.sql.Types.DATE, TYPE_DATE);
+
+		// 时间类型映射
+		JDBC_TYPE_MAP.put(java.sql.Types.TIME, TYPE_TIME);
+		JDBC_TYPE_MAP.put(java.sql.Types.TIME_WITH_TIMEZONE, TYPE_TIME);
+
+		// 布尔类型映射
+		JDBC_TYPE_MAP.put(java.sql.Types.BOOLEAN, TYPE_BOOLEAN);
+		JDBC_TYPE_MAP.put(java.sql.Types.BIT, TYPE_BOOLEAN);
+
+		// 二进制类型映射
+		int[] binaryTypes = { java.sql.Types.BINARY, java.sql.Types.BLOB, java.sql.Types.VARBINARY,
+				java.sql.Types.LONGVARBINARY };
+		for (int type : binaryTypes) {
+			JDBC_TYPE_MAP.put(type, TYPE_BINARY);
+		}
+
+		// BIGINT 类型映射
+		JDBC_TYPE_MAP.put(java.sql.Types.BIGINT, TYPE_BIGNUMBER);
+	}
+
+	/**
+	 * 根据 JDBC 类型转换为内部类型
+	 * @param jdbcType JDBC 类型 {@link java.sql.Types}
+	 * @return 对应的内部类型常量
+	 */
+	public static int transformJdbcType(int jdbcType) {
+		return JDBC_TYPE_MAP.getOrDefault(jdbcType, TYPE_STRING);
 	}
 
 }

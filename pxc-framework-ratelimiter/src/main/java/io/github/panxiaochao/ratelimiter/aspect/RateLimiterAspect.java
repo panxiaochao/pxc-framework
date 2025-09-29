@@ -132,16 +132,25 @@ public class RateLimiterAspect {
 		Method method = methodSignature.getMethod();
 		String key = rateLimiter.key();
 		String classMethodName = method.getDeclaringClass().getName() + "." + method.getName();
-		// refactor(getRateLimiterKey)[2024-09-04 11:11:39]: 判断key不为空和不是表达式
+		// 解析EL表达式
+		key = parseExpressionKey(joinPoint, method, key);
+		// 构建完整的限流Key
+		return buildCompleteKey(rateLimiter, key, classMethodName);
+	}
+
+	/**
+	 * 解析EL表达式获取动态Key
+	 */
+	private String parseExpressionKey(JoinPoint joinPoint, Method method, String key) {
 		if (StrUtil.isNotBlank(key) && StrUtil.containsAny(key, StringPools.HASH)) {
-			// 参数
 			Object[] args = joinPoint.getArgs();
-			// 获取方法上参数的名称
 			String[] parameterNames = parameterNameDiscoverer.getParameterNames(method);
 			Objects.requireNonNull(parameterNames, "限流Key解析异常, 请确认方法体是否存在定义参数！");
+
 			for (int i = 0; i < parameterNames.length; i++) {
 				evaluationContext.setVariable(parameterNames[i], args[i]);
 			}
+
 			try {
 				Expression expression;
 				if (StringUtils.startsWithIgnoreCase(key, parserContext.getExpressionPrefix())
@@ -152,36 +161,40 @@ public class RateLimiterAspect {
 					expression = expressionParser.parseExpression(key);
 				}
 				String value = expression.getValue(evaluationContext, String.class);
-				if (StringUtils.hasText(value)) {
-					key = value + ":";
-				}
-				else {
-					key = StringPools.EMPTY;
-				}
+				return StringUtils.hasText(value) ? value + ":" : StringPools.EMPTY;
 			}
 			catch (Exception e) {
 				throw new ServerRuntimeException(RateLimiterErrorEnum.RATE_LIMITER_PARSE_EXPRESSION_ERROR);
 			}
 		}
+		return key;
+	}
+
+	/**
+	 * 构建完整的限流Key
+	 */
+	private String buildCompleteKey(RateLimiter rateLimiter, String key, String classMethodName) {
 		StringBuilder stringBuilder = new StringBuilder(RATE_LIMITER_KEY);
 		stringBuilder.append(key);
-		if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP) {
-			// 根据IP限流
-			stringBuilder.append(IpUtil.ofRequestIp());
-		}
-		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.METHOD) {
-			// 根据METHOD限流
-			stringBuilder.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
-		}
-		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.IP_METHOD) {
-			// 根据IP+METHOD限流
-			stringBuilder.append(IpUtil.ofRequestIp())
-				.append(":")
-				.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
-		}
-		else if (rateLimiter.rateLimiterType() == RateLimiter.RateLimiterType.SINGLE) {
-			// 获取客户端实例id
-			stringBuilder.append(RedissonUtil.getRedissonId());
+
+		switch (rateLimiter.rateLimiterType()) {
+			case IP:
+				stringBuilder.append(IpUtil.ofRequestIp());
+				break;
+			case METHOD:
+				stringBuilder.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
+				break;
+			case IP_METHOD:
+				stringBuilder.append(IpUtil.ofRequestIp())
+					.append(":")
+					.append(DigestUtils.md5DigestAsHex(classMethodName.getBytes(StandardCharsets.UTF_8)));
+				break;
+			case SINGLE:
+				stringBuilder.append(RedissonUtil.getRedissonId());
+				break;
+			default:
+				// 默认使用全局限流
+				break;
 		}
 		return stringBuilder.toString();
 	}

@@ -15,7 +15,6 @@
  */
 package io.github.panxiaochao.core.utils;
 
-
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -77,9 +76,9 @@ public class ConvertUtil {
 	 * Convert Object value to long value if parameter value is legal. And it
 	 * automatically defaults to 0 if parameter value is null or other object.
 	 * @param val object value
-	 * @return Converted long value and its default value is 0.
+	 * @return Converted long value and its default value is null.
 	 */
-	public static long toLong(Object val) {
+	public static Long toLong(Object val) {
 		if (val instanceof Long) {
 			return (Long) val;
 		}
@@ -90,10 +89,10 @@ public class ConvertUtil {
 	 * Convert String value to long value if parameter value is legal. And it
 	 * automatically defaults to 0 if parameter value is null or blank str.
 	 * @param val String value which need to be converted to int value.
-	 * @return Converted long value and its default value is 0.
+	 * @return Converted long value and its default value is null.
 	 */
-	public static long toLong(String val) {
-		return toLong(val, 0L);
+	public static Long toLong(String val) {
+		return toLong(val, null);
 	}
 
 	/**
@@ -101,9 +100,9 @@ public class ConvertUtil {
 	 * value if parameter value is null or blank str.
 	 * @param val value
 	 * @param defaultValue default value
-	 * @return long value if input value is legal, otherwise default value
+	 * @return Long value if input value is legal, otherwise default value
 	 */
-	public static long toLong(String val, long defaultValue) {
+	public static Long toLong(String val, Long defaultValue) {
 		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
@@ -121,10 +120,10 @@ public class ConvertUtil {
 	 * defaults to 0 if parameter value is null or blank str.
 	 * </p>
 	 * @param val String value which need to be converted to int value.
-	 * @return Converted int value and its default value is 0.
+	 * @return Converted int value and its default value is null.
 	 */
-	public static long toInteger(String val) {
-		return toInteger(val, 0);
+	public static Integer toInteger(String val) {
+		return toInteger(val, null);
 	}
 
 	/**
@@ -132,9 +131,9 @@ public class ConvertUtil {
 	 * value if parameter value is null or blank str.
 	 * @param val value
 	 * @param defaultValue default value
-	 * @return int value if input value is legal, otherwise default value
+	 * @return Integer value if input value is legal, otherwise default value
 	 */
-	public static long toInteger(String val, int defaultValue) {
+	public static Integer toInteger(String val, Integer defaultValue) {
 		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
@@ -153,7 +152,7 @@ public class ConvertUtil {
 	 * @param defaultValue default value
 	 * @return boolean value if input value is legal, otherwise default value
 	 */
-	public static boolean toBoolean(String val, boolean defaultValue) {
+	public static Boolean toBoolean(String val, boolean defaultValue) {
 		if (!StringUtils.hasText(val)) {
 			return defaultValue;
 		}
@@ -192,7 +191,7 @@ public class ConvertUtil {
 	 * @return the boolean value of the string, {@code false} if no match or the String is
 	 * null
 	 */
-	public static boolean toBoolean(final String str) {
+	public static Boolean toBoolean(final String str) {
 		return Boolean.TRUE.equals(toBooleanObject(str));
 	}
 
