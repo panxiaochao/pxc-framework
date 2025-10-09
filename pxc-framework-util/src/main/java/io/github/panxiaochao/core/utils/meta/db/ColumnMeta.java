@@ -120,44 +120,51 @@ public class ColumnMeta implements Serializable {
 	public static ColumnMeta build(ResultSet rs) {
 		ColumnMeta columnMeta = new ColumnMeta();
 		try {
-			columnMeta.setSchema(rs.getString("TABLE_SCHEM"));
-			columnMeta.setTableName(rs.getString("TABLE_NAME"));
-			columnMeta.setColumnName(rs.getString("COLUMN_NAME"));
-			columnMeta.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
-			columnMeta.setColumnDefault(rs.getString("COLUMN_DEF"));
-			columnMeta.setNullable(rs.getBoolean("NULLABLE"));
-			columnMeta.setJdbcType(rs.getInt("DATA_TYPE"));
-			columnMeta.setJdbcTypeName(rs.getString("TYPE_NAME"));
-			columnMeta.setColumnLength(rs.getInt("COLUMN_SIZE"));
-			columnMeta.setColumnComment(formatComment(rs.getString("REMARKS")));
-
-			// 保留小数位数
-			try {
-				int digit = rs.getInt("DECIMAL_DIGITS");
-				columnMeta.setScale(digit);
-			}
-			catch (SQLException ignore) {
-				// 某些驱动可能不支持，跳过
-			}
-
-			// 是否自增
-			try {
-				String auto = rs.getString("IS_AUTOINCREMENT");
-				if ("YES".equalsIgnoreCase(auto)) {
-					columnMeta.setAutoIncrement(Boolean.TRUE);
-				}
-				else {
-					columnMeta.setAutoIncrement(Boolean.FALSE);
-				}
-			}
-			catch (SQLException ignore) {
-				// 某些驱动可能不支持，跳过
-			}
+			populateBasicInfo(columnMeta, rs);
+			populateOptionalFields(columnMeta, rs);
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 		return columnMeta;
+	}
+
+	private static void populateBasicInfo(ColumnMeta columnMeta, ResultSet rs) throws SQLException {
+		columnMeta.setSchema(rs.getString("TABLE_SCHEM"));
+		columnMeta.setTableName(rs.getString("TABLE_NAME"));
+		columnMeta.setColumnName(rs.getString("COLUMN_NAME"));
+		columnMeta.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+		columnMeta.setColumnDefault(rs.getString("COLUMN_DEF"));
+		columnMeta.setNullable(rs.getBoolean("NULLABLE"));
+		columnMeta.setJdbcType(rs.getInt("DATA_TYPE"));
+		columnMeta.setJdbcTypeName(rs.getString("TYPE_NAME"));
+		columnMeta.setColumnLength(rs.getInt("COLUMN_SIZE"));
+		columnMeta.setColumnComment(formatComment(rs.getString("REMARKS")));
+	}
+
+	private static void populateOptionalFields(ColumnMeta columnMeta, ResultSet rs) {
+		populateScale(columnMeta, rs);
+		populateAutoIncrement(columnMeta, rs);
+	}
+
+	private static void populateScale(ColumnMeta columnMeta, ResultSet rs) {
+		try {
+			int digit = rs.getInt("DECIMAL_DIGITS");
+			columnMeta.setScale(digit);
+		}
+		catch (SQLException ignore) {
+			// 某些驱动可能不支持，跳过
+		}
+	}
+
+	private static void populateAutoIncrement(ColumnMeta columnMeta, ResultSet rs) {
+		try {
+			String auto = rs.getString("IS_AUTOINCREMENT");
+			columnMeta.setAutoIncrement("YES".equalsIgnoreCase(auto));
+		}
+		catch (SQLException ignore) {
+			// 某些驱动可能不支持，跳过
+		}
 	}
 
 	/**

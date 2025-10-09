@@ -21,8 +21,10 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -66,46 +68,28 @@ public class ResourceUtil {
 	}
 
 	public static String readFromResource(String resource) throws IOException {
-		if (resource == null || resource.isEmpty() || resource.contains("..") || resource.contains("?")
-				|| resource.contains(":")) {
-			return null;
-		}
-
-		InputStream in = null;
-		try {
-			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
-			if (in == null) {
-				in = ResourceUtil.class.getResourceAsStream(resource);
-			}
-
-			if (in == null) {
-				return null;
-			}
-			return read(in);
-		}
-		finally {
-			close(in);
+		try (InputStream in = getResourceAsStream(resource)) {
+			return in == null ? null : read(in);
 		}
 	}
 
 	public static byte[] readByteArrayFromResource(String resource) throws IOException {
+		try (InputStream in = getResourceAsStream(resource)) {
+			return in == null ? null : readByteArray(in);
+		}
+	}
+
+	private static InputStream getResourceAsStream(String resource) {
 		if (resource == null || resource.isEmpty() || resource.contains("..") || resource.contains("?")
 				|| resource.contains(":")) {
 			return null;
 		}
 
-		InputStream in = null;
-		try {
-			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
-			if (in == null) {
-				return null;
-			}
-
-			return readByteArray(in);
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+		if (in == null) {
+			in = ResourceUtil.class.getResourceAsStream(resource);
 		}
-		finally {
-			close(in);
-		}
+		return in;
 	}
 
 	/**
@@ -121,7 +105,7 @@ public class ResourceUtil {
 			out.flush();
 		}
 		catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to copy byte array to output stream", e);
 		}
 	}
 
@@ -140,7 +124,7 @@ public class ResourceUtil {
 			writer.flush();
 		}
 		catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to copy string to output stream", e);
 		}
 	}
 
@@ -237,59 +221,34 @@ public class ResourceUtil {
 	}
 
 	public static String getStackTrace(Throwable ex) {
-		StringWriter buf = new StringWriter();
-		ex.printStackTrace(new PrintWriter(buf));
-		return buf.toString();
+		if (ex == null) {
+			return StrUtil.EMPTY;
+		}
+		StringWriter writer = new StringWriter();
+		ex.printStackTrace(new PrintWriter(writer));
+		return writer.toString();
 	}
 
 	public static String toString(StackTraceElement[] stackTrace) {
-		StringBuilder buf = new StringBuilder();
-		for (StackTraceElement item : stackTrace) {
-			buf.append(item.toString());
-			buf.append("\n");
+		if (stackTrace == null || stackTrace.length == 0) {
+			return StrUtil.EMPTY;
 		}
-		return buf.toString();
+		return Arrays.stream(stackTrace).map(StackTraceElement::toString).collect(Collectors.joining("\n"));
 	}
 
 	public static Boolean getBoolean(Properties properties, String key) {
 		String property = properties.getProperty(key);
-		if ("true".equals(property)) {
-			return Boolean.TRUE;
-		}
-		else if ("false".equals(property)) {
-			return Boolean.FALSE;
-		}
-		return null;
+		return BooleanUtil.toBoolean(property);
 	}
 
 	public static Integer getInteger(Properties properties, String key) {
 		String property = properties.getProperty(key);
-
-		if (property == null) {
-			return null;
-		}
-		try {
-			return Integer.parseInt(property);
-		}
-		catch (NumberFormatException ex) {
-			// skip
-		}
-		return null;
+		return ConvertUtil.toInteger(property);
 	}
 
 	public static Long getLong(Properties properties, String key) {
 		String property = properties.getProperty(key);
-
-		if (property == null) {
-			return null;
-		}
-		try {
-			return Long.parseLong(property);
-		}
-		catch (NumberFormatException ex) {
-			// skip
-		}
-		return null;
+		return ConvertUtil.toLong(property);
 	}
 
 	public static Class<?> loadClass(String className) {
@@ -399,45 +358,31 @@ public class ResourceUtil {
 	}
 
 	public static void loadFromFile(String path, Set<String> set) {
-		InputStream is = null;
-		BufferedReader reader = null;
-		try {
-			is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-			reader = new BufferedReader(new InputStreamReader(is));
-			for (;;) {
-				String line = reader.readLine();
-				if (line == null) {
-					break;
-				}
-
+		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
 				line = line.trim().toLowerCase();
-
-				if (line.length() == 0) {
-					continue;
+				if (!line.isEmpty()) {
+					set.add(line);
 				}
-				set.add(line);
 			}
 		}
 		catch (Exception ex) {
-			// skip
-		}
-		finally {
-			close(is);
-			close(reader);
+			LOGGER.debug("Failed to load file: {}", path, ex);
 		}
 	}
 
 	public static void close(Closeable x) {
-		if (x == null) {
-			return;
+		if (x != null) {
+			try {
+				x.close();
+			}
+			catch (Exception e) {
+				LOGGER.debug("close error", e);
+			}
 		}
 
-		try {
-			x.close();
-		}
-		catch (Exception e) {
-			LOGGER.debug("close error", e);
-		}
 	}
 
 }

@@ -126,6 +126,7 @@ public class IpInfo {
 	 * @return IpInfo
 	 */
 	public static IpInfo toIpInfo(String region) {
+		System.out.println("region: " + region);
 		IpInfo ipInfo = new IpInfo();
 		if (!StringUtils.hasText(region)) {
 			return ipInfo;
@@ -136,10 +137,10 @@ public class IpInfo {
 			splitInfoArr = Arrays.copyOf(splitInfoArr, 5);
 		}
 		ipInfo.setCountry(filterZero(splitInfoArr[0]));
-		ipInfo.setArea(filterZero(splitInfoArr[1]));
-		ipInfo.setProvince(filterZero(splitInfoArr[2]));
-		ipInfo.setCity(filterZero(splitInfoArr[3]));
-		ipInfo.setIsp(filterZero(splitInfoArr[4]));
+		// ipInfo.setArea(filterZero(splitInfoArr[1]));
+		ipInfo.setProvince(filterZero(splitInfoArr[1]));
+		ipInfo.setCity(filterZero(splitInfoArr[2]));
+		ipInfo.setIsp(filterZero(splitInfoArr[3]));
 		ipInfo.setRegion(region);
 		return ipInfo;
 	}
