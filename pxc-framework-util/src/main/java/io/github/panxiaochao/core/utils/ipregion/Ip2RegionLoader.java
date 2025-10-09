@@ -66,12 +66,13 @@ public class Ip2RegionLoader {
 		try {
 			SEARCHER_V4 = Searcher.newWithBuffer(Version.IPv4, loadContentFromFile(IP2REGION_V4_DB_LOCATION));
 			LOGGER.info("配置[ip2region_v4]成功！");
-			SEARCHER_V6 = Searcher.newWithBuffer(Version.IPv6, loadContentFromFile(IP2REGION_V6_DB_LOCATION));
-			LOGGER.info("配置[ip2region_v6]成功！");
 		}
 		catch (IOException e) {
 			throw new RuntimeException("load ip2region_v4 file db is error", e);
 		}
+		// V2 版本不提供支持，因为V2版本的db文件体积太大，打包不合适
+		// V3 版本进行模块拆分，采用自定义db文件路径
+		SEARCHER_V6 = null;
 	}
 
 	/**

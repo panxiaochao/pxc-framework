@@ -59,9 +59,10 @@ public class Ip2regionUtil {
 				return ipInfo;
 			}
 			else if (ip.contains(":")) {
-				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
-				ipInfo.setIp(ip);
-				return ipInfo;
+				// IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
+				// ipInfo.setIp(ip);
+				LOGGER.error("不支持 IPv6 地址, 请自定义实现或采用V3版本自定义模块！");
+				return null;
 			}
 			else {
 				// 3.不合法 IP
