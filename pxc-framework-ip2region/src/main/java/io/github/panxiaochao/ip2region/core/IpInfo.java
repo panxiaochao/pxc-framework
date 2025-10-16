@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.core.utils.ipregion;
+package io.github.panxiaochao.ip2region.core;
 
-import io.github.panxiaochao.core.utils.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -93,7 +92,7 @@ public class IpInfo {
 		regionSet.add(area);
 		regionSet.add(province);
 		regionSet.add(city);
-		regionSet.removeIf(StrUtil::isBlank);
+		regionSet.removeIf(s -> !StringUtils.hasText(s));
 		return String.join("|", regionSet);
 	}
 
@@ -108,7 +107,7 @@ public class IpInfo {
 		regionSet.add(province);
 		regionSet.add(city);
 		regionSet.add(isp);
-		regionSet.removeIf(StrUtil::isBlank);
+		regionSet.removeIf(s -> !StringUtils.hasText(s));
 		return String.join("|", regionSet);
 	}
 

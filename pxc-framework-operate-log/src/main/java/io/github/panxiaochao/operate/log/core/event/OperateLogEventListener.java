@@ -15,8 +15,8 @@
  */
 package io.github.panxiaochao.operate.log.core.event;
 
-import io.github.panxiaochao.core.utils.Ip2regionUtil;
-import io.github.panxiaochao.core.utils.ipregion.IpInfo;
+import io.github.panxiaochao.ip2region.core.Ip2regionClient;
+import io.github.panxiaochao.ip2region.core.IpInfo;
 import io.github.panxiaochao.operate.log.config.properties.OperateLogProperties;
 import io.github.panxiaochao.operate.log.core.OperateLogDao;
 import io.github.panxiaochao.operate.log.core.domain.OperateLogDomain;
@@ -49,6 +49,8 @@ public class OperateLogEventListener {
 
 	private final OperateLogDao operateLogDao;
 
+	private final Ip2regionClient ip2regionClient;
+
 	/**
 	 * <p>
 	 * 异步自定义操作日志.
@@ -63,7 +65,7 @@ public class OperateLogEventListener {
 	@EventListener
 	public void operateLog(OperateLogDomain operateLogDomain) {
 		if (StringUtils.hasText(operateLogDomain.getIp())) {
-			IpInfo info = Ip2regionUtil.memorySearch(operateLogDomain.getIp());
+			IpInfo info = ip2regionClient.memorySearch(operateLogDomain.getIp());
 			if (info != null) {
 				operateLogDomain.setAddress(info.getAddressAndIsp());
 			}

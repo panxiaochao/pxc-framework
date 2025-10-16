@@ -74,6 +74,7 @@
         <module>pxc-framework-weixin</module>
         <module>pxc-framework-dynamic-datasource</module>
         <module>pxc-framework-component</module>
+        <module>pxc-framework-ip2region</module>
     </modules>
 
     <!-- properties -->
@@ -85,8 +86,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2025.0.X 版本支持 3.5.x -->
-        <spring-boot.version>3.5.4</spring-boot.version>
-        <spring-data-redis.version>3.5.2</spring-data-redis.version>
+        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-data-redis.version>3.5.4</spring-data-redis.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-openfeign.version>4.3.0</spring-cloud-openfeign.version>
         <spring-cloud-gateway.version>4.3.0</spring-cloud-gateway.version>
@@ -97,7 +98,8 @@
         <oshi.version>6.8.2</oshi.version>
         <ip2region.version>3.1.0</ip2region.version>
         <commons-io.version>2.20.0</commons-io.version>
-        <commons-lang3.version>3.18.0</commons-lang3.version>
+        <commons-lang3.version>3.19.0</commons-lang3.version>
+        <commons-text.version>1.14.0</commons-text.version>
         <hutool.version>5.8.39</hutool.version>
         <swagger-annotations.version>2.2.35</swagger-annotations.version>
         <zxing.version>3.5.3</zxing.version>
@@ -124,6 +126,7 @@
         <weixin-java.version>4.7.7.B</weixin-java.version>
         <dynamic-datasource-spring-boot3.version>4.3.1</dynamic-datasource-spring-boot3.version>
         <jasypt-spring-boot-starter.version>3.0.5</jasypt-spring-boot-starter.version>
+        <logback.version>1.5.19</logback.version>
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-compiler-plugin.verison>3.13.0</maven-compiler-plugin.verison>
@@ -236,6 +239,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
@@ -427,6 +435,17 @@
                 <artifactId>jakarta.servlet-api</artifactId>
                 <version>${jakarta.servlet-api.version}</version>
             </dependency>
+            <!-- logback -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -586,6 +605,7 @@
                                 <exclude>.gitignore</exclude>
                                 <exclude>.springjavaformatconfig</exclude>
                                 <exclude>package-info.java</exclude>
+                                <exclude>**/*.txt</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
