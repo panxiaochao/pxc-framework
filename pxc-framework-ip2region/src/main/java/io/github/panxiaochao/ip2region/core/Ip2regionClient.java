@@ -30,8 +30,10 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.function.Function;
 
 /**
@@ -76,9 +78,14 @@ public class Ip2regionClient implements InitializingBean {
 				return ipInfo;
 			}
 			else if (ip.contains(":")) {
-				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
-				ipInfo.setIp(ip);
-				return ipInfo;
+				if (SEARCHER_V6 == null) {
+					LOGGER.warn("IPV6 未初始化，请检查配置");
+				}
+				else {
+					IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
+					ipInfo.setIp(ip);
+					return ipInfo;
+				}
 			}
 			else {
 				// 3.不合法 IP
@@ -88,7 +95,7 @@ public class Ip2regionClient implements InitializingBean {
 		}
 		catch (Exception e) {
 			LOGGER.error("memorySearch ip {} parse is error", ip, e);
-			return null;
+			throw new RuntimeException("memorySearch ip " + ip + " parse is error: " + e.getMessage());
 		}
 	}
 
@@ -125,7 +132,14 @@ public class Ip2regionClient implements InitializingBean {
 		Resource[] resources = getResources(filePath);
 		for (Resource resource : resources) {
 			Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
-					+ " (please add config file or check your holiday json configuration)");
+					+ " (please add config file or check your ip2region db configuration)");
+			// try {
+			// File file = resource.getFile();
+			// validateDbFromPath(file);
+			// }
+			// catch (IOException e) {
+			// throw new RuntimeException(e);
+			// }
 			try (InputStream inputStream = resource.getInputStream()) {
 				byte[] bytes = IOUtils.toByteArray(inputStream);
 				final LongByteArray byteArray = new LongByteArray();
@@ -141,20 +155,21 @@ public class Ip2regionClient implements InitializingBean {
 
 	/**
 	 * 验证xdb文件是否适配当前Searcher客户端
-	 * @param dbPath 路径
-	 * @return boolean
+	 * @param dbFile 路径
 	 */
-	private boolean validateDbFromPath(String dbPath) {
+	private void validateDbFromPath(File dbFile) {
 		try {
-			Searcher.verifyFromFile(dbPath);
-			return true;
+			// mode: r 只读模式打开文件
+			final RandomAccessFile handle = new RandomAccessFile(dbFile, "r");
+			Searcher.verify(handle);
+			handle.close();
 		}
 		catch (Exception e) {
 			// 适用性验证失败！！！
 			// 当前查询客户端实现不适用于 dbPath 指定的 xdb 文件的查询.
 			// 应该停止启动服务，使用合适的 xdb 文件或者升级到适合 dbPath 的 Searcher 实现。
-			LOGGER.error("当前查询客户端实现不适用于 dbPath 指定的 xdb 文件的查询. 路径：{}", dbPath);
-			return false;
+			LOGGER.error("当前查询客户端实现不适用于 dbPath 指定的 xdb 文件的查询. 路径：{}", dbFile.getPath());
+			throw new RuntimeException("当前查询客户端实现不适用于 dbPath 指定的 xdb 文件的查询. 路径：" + dbFile.getPath());
 		}
 	}
 
@@ -162,27 +177,22 @@ public class Ip2regionClient implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		String v4dbLocation = ip2regionProperties.getV4dbLocation();
 		if (StringUtils.hasText(v4dbLocation)) {
-			// 验证路径合法性
-			LongByteArray byteArray;
-			if (validateDbFromPath(v4dbLocation)) {
-				byteArray = loadContentFromFile(v4dbLocation);
-			}
-			else {
-				// 默认加载自带的 ip2region_v4.db 数据库
-				byteArray = loadContentFromFile(Ip2regionConstant.IP2REGION_V4_DB_LOCATION);
-			}
+			LongByteArray byteArray = loadContentFromFile(v4dbLocation);
 			SEARCHER_V4 = Searcher.newWithBuffer(Version.IPv4, byteArray);
-			LOGGER.info("配置[ip2region_v4]成功！");
+			LOGGER.info("配置自定义[ip2region_v4]成功！");
+		}
+		else {
+			// 默认加载自带的 ip2region_v4.db 数据库
+			LongByteArray byteArray = loadContentFromFile(Ip2regionConstant.IP2REGION_V4_DB_LOCATION);
+			SEARCHER_V4 = Searcher.newWithBuffer(Version.IPv4, byteArray);
+			LOGGER.info("配置默认[ip2region_v4]成功！");
 		}
 		// 自定义 IPV6 数据库
 		String v6dbLocation = ip2regionProperties.getV6dbLocation();
 		if (StringUtils.hasText(v6dbLocation)) {
-			// 验证路径合法性
-			if (validateDbFromPath(v6dbLocation)) {
-				LongByteArray byteArray = loadContentFromFile(v6dbLocation);
-				SEARCHER_V6 = Searcher.newWithBuffer(Version.IPv6, byteArray);
-				LOGGER.info("配置[ip2region_v6]成功！");
-			}
+			LongByteArray byteArray = loadContentFromFile(v6dbLocation);
+			SEARCHER_V6 = Searcher.newWithBuffer(Version.IPv6, byteArray);
+			LOGGER.info("配置自定义[ip2region_v6]成功！");
 		}
 	}
 
