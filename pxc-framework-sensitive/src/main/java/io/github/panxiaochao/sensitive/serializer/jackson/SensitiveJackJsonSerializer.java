@@ -42,57 +42,57 @@ import java.util.Objects;
  */
 public class SensitiveJackJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
 
-	/**
-	 * 策略
-	 */
-	private final IStrategy<String> strategy;
+    /**
+     * 策略
+     */
+    private final IStrategy<String> strategy;
 
-	/**
-	 * 自定义策略 className
-	 */
-	private final String strategyClassName;
+    /**
+     * 自定义策略 className
+     */
+    private final String strategyClassName;
 
-	public SensitiveJackJsonSerializer() {
-		this(null, null);
-	}
+    public SensitiveJackJsonSerializer() {
+        this(null, null);
+    }
 
-	public SensitiveJackJsonSerializer(IStrategy<String> strategy, String strategyClassName) {
-		this.strategy = strategy;
-		this.strategyClassName = strategyClassName;
-	}
+    public SensitiveJackJsonSerializer(IStrategy<String> strategy, String strategyClassName) {
+        this.strategy = strategy;
+        this.strategyClassName = strategyClassName;
+    }
 
-	@Override
-	public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) {
-		try {
-			// 默认方法
-			if (strategyClassName.equals(IHandler.class.getName())) {
-				gen.writeString(strategy.use().apply(value));
-			}
-			else {
-				Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
-				gen.writeString(invokeValue.toString());
-			}
-		}
-		catch (Exception e) {
-			throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-					"The field [" + gen.getOutputContext().getCurrentName() + "] serialize is error! ");
-		}
-	}
+    @Override
+    public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) {
+        try {
+            // 默认方法
+            if (strategyClassName.equals(IHandler.class.getName())) {
+                gen.writeString(strategy.use().apply(value));
+            }
+            else {
+                Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
+                gen.writeString(invokeValue.toString());
+            }
+        }
+        catch (Exception e) {
+            throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+                    "The field [" + gen.getOutputContext().getCurrentName() + "] serialize is error! ");
+        }
+    }
 
-	@Override
-	public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
-		if (ObjectUtil.isNotEmpty(property) && Objects.equals(String.class, property.getType().getRawClass())) {
-			Sensitive sensitive = property.getAnnotation(Sensitive.class);
-			if (null == sensitive) {
-				sensitive = property.getContextAnnotation(Sensitive.class);
-			}
-			if (null != sensitive) {
-				Assert.notNull(sensitive.strategy(), "The strategy must not be null");
-				Assert.notNull(sensitive.handler(), "The handler must not be null");
-				return new SensitiveJackJsonSerializer(sensitive.strategy(), sensitive.handler().getName());
-			}
-		}
-		return new SensitiveJackJsonSerializer();
-	}
+    @Override
+    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
+        if (ObjectUtil.isNotEmpty(property) && Objects.equals(String.class, property.getType().getRawClass())) {
+            Sensitive sensitive = property.getAnnotation(Sensitive.class);
+            if (null == sensitive) {
+                sensitive = property.getContextAnnotation(Sensitive.class);
+            }
+            if (null != sensitive) {
+                Assert.notNull(sensitive.strategy(), "The strategy must not be null");
+                Assert.notNull(sensitive.handler(), "The handler must not be null");
+                return new SensitiveJackJsonSerializer(sensitive.strategy(), sensitive.handler().getName());
+            }
+        }
+        return new SensitiveJackJsonSerializer();
+    }
 
 }

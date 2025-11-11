@@ -33,50 +33,50 @@ import java.util.List;
 @Setter
 public class WxChannelProperties {
 
-	/**
-	 * 是否开启
-	 */
-	private Boolean enabled;
+    /**
+     * 是否开启
+     */
+    private Boolean enabled;
 
-	/**
-	 * 指定key前缀.
-	 */
-	private String keyPrefix = "wx:channel";
+    /**
+     * 指定key前缀.
+     */
+    private String keyPrefix = "wx:channel";
 
-	/**
-	 * 视频号
-	 */
-	private List<WxChannelConfig> config;
+    /**
+     * 视频号
+     */
+    private List<WxChannelConfig> config;
 
-	@Getter
-	@Setter
-	public static class WxChannelConfig {
+    @Getter
+    @Setter
+    public static class WxChannelConfig {
 
-		/**
-		 * 设置微信视频号的 appid.
-		 */
-		private String appId;
+        /**
+         * 设置微信视频号的 appid.
+         */
+        private String appId;
 
-		/**
-		 * 设置微信视频号的 secret.
-		 */
-		private String secret;
+        /**
+         * 设置微信视频号的 secret.
+         */
+        private String secret;
 
-		/**
-		 * 设置微信视频号的 token.
-		 */
-		private String token;
+        /**
+         * 设置微信视频号的 token.
+         */
+        private String token;
 
-		/**
-		 * 设置微信视频号的 EncodingAESKey.
-		 */
-		private String aesKey;
+        /**
+         * 设置微信视频号的 EncodingAESKey.
+         */
+        private String aesKey;
 
-		/**
-		 * 是否使用稳定版 Access Token
-		 */
-		private boolean useStableAccessToken = false;
+        /**
+         * 是否使用稳定版 Access Token
+         */
+        private boolean useStableAccessToken = false;
 
-	}
+    }
 
 }

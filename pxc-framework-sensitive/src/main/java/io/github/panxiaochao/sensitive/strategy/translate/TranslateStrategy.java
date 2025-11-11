@@ -33,20 +33,20 @@ import java.util.function.Function;
 @AllArgsConstructor
 public enum TranslateStrategy implements IStrategy<Object> {
 
-	/**
-	 * 布尔值翻译
-	 */
-	BOOLEAN(TranslateUtil::toBoolean),
-	/**
-	 * 默认, 原值返回
-	 */
-	DEFAULT(s -> s);
+    /**
+     * 布尔值翻译
+     */
+    BOOLEAN(TranslateUtil::toBoolean),
+    /**
+     * 默认, 原值返回
+     */
+    DEFAULT(s -> s);
 
-	private final Function<String, Object> translate;
+    private final Function<String, Object> translate;
 
-	@Override
-	public Function<String, Object> use() {
-		return this.translate;
-	}
+    @Override
+    public Function<String, Object> use() {
+        return this.translate;
+    }
 
 }

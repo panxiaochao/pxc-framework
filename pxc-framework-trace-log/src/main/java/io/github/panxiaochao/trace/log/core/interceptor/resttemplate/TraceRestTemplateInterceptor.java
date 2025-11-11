@@ -41,18 +41,18 @@ import java.io.IOException;
  */
 public class TraceRestTemplateInterceptor implements ClientHttpRequestInterceptor {
 
-	@Override
-	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
-			throws IOException {
-		String traceId = TraceLogContext.getTraceId();
-		if (StringUtils.hasText(traceId)) {
-			request.getHeaders().add(TraceLogConstant.TRACE_ID, traceId);
-			request.getHeaders().add(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
-			request.getHeaders().add(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
-			request.getHeaders().add(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
-			request.getHeaders().add(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
-		}
-		return execution.execute(request, body);
-	}
+    @Override
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+            throws IOException {
+        String traceId = TraceLogContext.getTraceId();
+        if (StringUtils.hasText(traceId)) {
+            request.getHeaders().add(TraceLogConstant.TRACE_ID, traceId);
+            request.getHeaders().add(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
+            request.getHeaders().add(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
+            request.getHeaders().add(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
+            request.getHeaders().add(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
+        }
+        return execution.execute(request, body);
+    }
 
 }

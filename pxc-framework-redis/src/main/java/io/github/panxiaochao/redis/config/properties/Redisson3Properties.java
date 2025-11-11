@@ -32,19 +32,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.pxc-framework.redisson", ignoreInvalidFields = true)
 public class Redisson3Properties {
 
-	/**
-	 * redis 缓存 key 前缀
-	 */
-	private String keyPrefix;
+    /**
+     * redis 缓存 key 前缀
+     */
+    private String keyPrefix;
 
-	/**
-	 * 线程池数量, 默认16
-	 */
-	private int threads = 16;
+    /**
+     * 线程池数量, 默认16
+     */
+    private int threads = 16;
 
-	/**
-	 * Netty线程池数量, 默认32
-	 */
-	private int nettyThreads = 32;
+    /**
+     * Netty线程池数量, 默认32
+     */
+    private int nettyThreads = 32;
 
 }

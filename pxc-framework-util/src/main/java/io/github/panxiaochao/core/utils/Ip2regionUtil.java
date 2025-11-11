@@ -33,57 +33,57 @@ import java.util.function.Function;
  */
 public class Ip2regionUtil {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionUtil.class);
 
-	/**
-	 * ip2region_v4.xdb 搜索对象
-	 */
-	private static final Searcher SEARCHER_V4 = Ip2RegionLoader.searcherV4();
+    /**
+     * ip2region_v4.xdb 搜索对象
+     */
+    private static final Searcher SEARCHER_V4 = Ip2RegionLoader.searcherV4();
 
-	/**
-	 * ip2region_v6.xdb 搜索对象
-	 */
-	private static final Searcher SEARCHER_V6 = Ip2RegionLoader.searcherV6();
+    /**
+     * ip2region_v6.xdb 搜索对象
+     */
+    private static final Searcher SEARCHER_V6 = Ip2RegionLoader.searcherV6();
 
-	/**
-	 * IP解析, 返回<code>IpInfo</code>对象
-	 * @param ip 解析的ip
-	 * @return IpInfo
-	 */
-	public static IpInfo memorySearch(String ip) {
-		try {
-			String[] ipV4Part = IpInfo.getIpv4Part(ip);
-			if (ipV4Part.length == 4) {
-				IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V4.search(ip));
-				ipInfo.setIp(ip);
-				return ipInfo;
-			}
-			else if (ip.contains(":")) {
-				// IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
-				// ipInfo.setIp(ip);
-				LOGGER.error("不支持 IPv6 地址, 请自定义实现或采用V3版本自定义模块！");
-				return null;
-			}
-			else {
-				// 3.不合法 IP
-				LOGGER.error("invalid ip address {}", ip);
-			}
-			return null;
-		}
-		catch (Exception e) {
-			LOGGER.error("memorySearch ip {} parse is error", ip, e);
-			return null;
-		}
-	}
+    /**
+     * IP解析, 返回<code>IpInfo</code>对象
+     * @param ip 解析的ip
+     * @return IpInfo
+     */
+    public static IpInfo memorySearch(String ip) {
+        try {
+            String[] ipV4Part = IpInfo.getIpv4Part(ip);
+            if (ipV4Part.length == 4) {
+                IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V4.search(ip));
+                ipInfo.setIp(ip);
+                return ipInfo;
+            }
+            else if (ip.contains(":")) {
+                // IpInfo ipInfo = IpInfo.toIpInfo(SEARCHER_V6.search(ip));
+                // ipInfo.setIp(ip);
+                LOGGER.error("不支持 IPv6 地址, 请自定义实现或采用V3版本自定义模块！");
+                return null;
+            }
+            else {
+                // 3.不合法 IP
+                LOGGER.error("invalid ip address {}", ip);
+            }
+            return null;
+        }
+        catch (Exception e) {
+            LOGGER.error("memorySearch ip {} parse is error", ip, e);
+            return null;
+        }
+    }
 
-	/**
-	 * 读取 ipInfo 中的信息
-	 * @param ip ip
-	 * @param function Function
-	 * @return 地址
-	 */
-	public static String getInfo(String ip, Function<IpInfo, String> function) {
-		return IpInfo.readInfo(memorySearch(ip), function);
-	}
+    /**
+     * 读取 ipInfo 中的信息
+     * @param ip ip
+     * @param function Function
+     * @return 地址
+     */
+    public static String getInfo(String ip, Function<IpInfo, String> function) {
+        return IpInfo.readInfo(memorySearch(ip), function);
+    }
 
 }

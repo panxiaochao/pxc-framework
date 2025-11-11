@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.panxiaochao</groupId>
@@ -126,13 +126,13 @@
         <dynamic-datasource.version>4.3.1</dynamic-datasource.version>
         <jasypt.version>3.0.5</jasypt.version>
         <!-- 插件版本 -->
-        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
-        <maven-compiler-plugin.verison>3.11.0</maven-compiler-plugin.verison>
-        <maven-source-plugin.verison>3.2.1</maven-source-plugin.verison>
-        <maven-javadoc-plugin.verison>3.5.0</maven-javadoc-plugin.verison>
-        <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-compiler-plugin.verison>3.14.1</maven-compiler-plugin.verison>
+        <maven-source-plugin.verison>3.3.1</maven-source-plugin.verison>
+        <maven-javadoc-plugin.verison>3.12.0</maven-javadoc-plugin.verison>
+        <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <spring-javaformat-maven-plugin.version>0.0.41</spring-javaformat-maven-plugin.version>
+        <spring-javaformat-maven-plugin.version>0.0.47</spring-javaformat-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -427,7 +427,7 @@
                 <artifactId>weixin-java-channel</artifactId>
                 <version>${weixin-java.version}</version>
             </dependency>
-            <!-- 动态数据源 -->
+            <!-- 动态  数据源 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
@@ -644,20 +644,27 @@
                       1.springjavaformatconfig file exists
                       2.For a Maven-based project, spring-javaformat-maven-plugin plugin is defined in pom.xml
              -->
-            <!--            <plugin>-->
-            <!--                <groupId>io.spring.javaformat</groupId>-->
-            <!--                <artifactId>spring-javaformat-maven-plugin</artifactId>-->
-            <!--                <version>${spring-javaformat-maven-plugin.version}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>validate</phase>-->
-            <!--                        <inherited>true</inherited>-->
-            <!--                        <goals>-->
-            <!--                            <goal>validate</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <inherited>true</inherited>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

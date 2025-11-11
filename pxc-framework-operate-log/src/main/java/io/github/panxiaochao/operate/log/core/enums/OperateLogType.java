@@ -25,13 +25,13 @@ package io.github.panxiaochao.operate.log.core.enums;
  */
 public enum OperateLogType {
 
-	/**
-	 * 日志
-	 */
-	LOGGER,
-	/**
-	 * 自定义实现
-	 */
-	CUSTOM
+    /**
+     * 日志
+     */
+    LOGGER,
+    /**
+     * 自定义实现
+     */
+    CUSTOM
 
 }

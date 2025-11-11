@@ -49,63 +49,63 @@ import org.springframework.context.expression.BeanFactoryResolver;
 @EnableConfigurationProperties(DsProperties.class)
 public class DynamicDSAutoConfiguration {
 
-	/**
-	 * LOGGER DynamicDSAutoConfiguration.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDSAutoConfiguration.class);
+    /**
+     * LOGGER DynamicDSAutoConfiguration.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDSAutoConfiguration.class);
 
-	/**
-	 * 动态数据源提供者
-	 * @param defaultDataSourceCreator 默认数据源创建器
-	 * @param properties 数据源配置属性
-	 * @return 动态数据源提供者
-	 */
-	@Bean
-	public DynamicDataSourceProvider dynamicDataSourceProvider(DefaultDataSourceCreator defaultDataSourceCreator,
-			StringEncryptor stringEncryptor, DataSourceProperties dataSourceProperties, DsProperties properties) {
-		LOGGER.info("配置[DynamicDataSourceProvider]成功！");
-		return new JdbcDataSourceProvider(defaultDataSourceCreator, stringEncryptor, dataSourceProperties, properties);
-	}
+    /**
+     * 动态数据源提供者
+     * @param defaultDataSourceCreator 默认数据源创建器
+     * @param properties 数据源配置属性
+     * @return 动态数据源提供者
+     */
+    @Bean
+    public DynamicDataSourceProvider dynamicDataSourceProvider(DefaultDataSourceCreator defaultDataSourceCreator,
+            StringEncryptor stringEncryptor, DataSourceProperties dataSourceProperties, DsProperties properties) {
+        LOGGER.info("配置[DynamicDataSourceProvider]成功！");
+        return new JdbcDataSourceProvider(defaultDataSourceCreator, stringEncryptor, dataSourceProperties, properties);
+    }
 
-	/**
-	 * 获取数据源处理器
-	 * @return 数据源处理器
-	 */
-	@Bean
-	public DsProcessor dsProcessor(BeanFactory beanFactory) {
-		DsProcessor lastDsProcessor = new LastDsProcessor();
-		DsProcessor headerProcessor = new DsHeaderProcessor();
-		DsProcessor sessionProcessor = new DsSessionProcessor();
-		DsSpelExpressionProcessor dsSpelExpressionProcessor = new DsSpelExpressionProcessor();
-		dsSpelExpressionProcessor.setBeanResolver(new BeanFactoryResolver(beanFactory));
-		lastDsProcessor.setNextProcessor(headerProcessor);
-		headerProcessor.setNextProcessor(sessionProcessor);
-		sessionProcessor.setNextProcessor(dsSpelExpressionProcessor);
-		return lastDsProcessor;
-	}
+    /**
+     * 获取数据源处理器
+     * @return 数据源处理器
+     */
+    @Bean
+    public DsProcessor dsProcessor(BeanFactory beanFactory) {
+        DsProcessor lastDsProcessor = new LastDsProcessor();
+        DsProcessor headerProcessor = new DsHeaderProcessor();
+        DsProcessor sessionProcessor = new DsSessionProcessor();
+        DsSpelExpressionProcessor dsSpelExpressionProcessor = new DsSpelExpressionProcessor();
+        dsSpelExpressionProcessor.setBeanResolver(new BeanFactoryResolver(beanFactory));
+        lastDsProcessor.setNextProcessor(headerProcessor);
+        headerProcessor.setNextProcessor(sessionProcessor);
+        sessionProcessor.setNextProcessor(dsSpelExpressionProcessor);
+        return lastDsProcessor;
+    }
 
-	/**
-	 * 默认数据源创建器
-	 * @param hikariDataSourceCreator Hikari数据源创建器
-	 * @return 默认数据源创建器
-	 */
-	// @Bean
-	// public DefaultDataSourceCreator defaultDataSourceCreator(HikariDataSourceCreator
-	// hikariDataSourceCreator) {
-	// DefaultDataSourceCreator defaultDataSourceCreator = new DefaultDataSourceCreator();
-	// List<DataSourceCreator> creators = new ArrayList<>();
-	// creators.add(hikariDataSourceCreator);
-	// defaultDataSourceCreator.setCreators(creators);
-	// return defaultDataSourceCreator;
-	// }
+    /**
+     * 默认数据源创建器
+     * @param hikariDataSourceCreator Hikari数据源创建器
+     * @return 默认数据源创建器
+     */
+    // @Bean
+    // public DefaultDataSourceCreator defaultDataSourceCreator(HikariDataSourceCreator
+    // hikariDataSourceCreator) {
+    // DefaultDataSourceCreator defaultDataSourceCreator = new DefaultDataSourceCreator();
+    // List<DataSourceCreator> creators = new ArrayList<>();
+    // creators.add(hikariDataSourceCreator);
+    // defaultDataSourceCreator.setCreators(creators);
+    // return defaultDataSourceCreator;
+    // }
 
-	/**
-	 * 清除数据源过滤器
-	 * @return ClearDataSourceFilter
-	 */
-	@Bean
-	public ClearDataSourceFilter clearDataSourceFilter() {
-		return new ClearDataSourceFilter();
-	}
+    /**
+     * 清除数据源过滤器
+     * @return ClearDataSourceFilter
+     */
+    @Bean
+    public ClearDataSourceFilter clearDataSourceFilter() {
+        return new ClearDataSourceFilter();
+    }
 
 }

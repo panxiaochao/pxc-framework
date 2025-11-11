@@ -56,109 +56,109 @@ import java.util.Objects;
 @Tag(name = "微信小程序接入方法", description = "微信小程序接入方法")
 public class WxMaPortalApi {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private WxMaService wxMaService;
+    private WxMaService wxMaService;
 
-	@GetMapping(produces = "text/plain;charset=utf-8")
-	public String authGet(@RequestParam(name = "signature", required = false) String signature,
-			@RequestParam(name = "timestamp", required = false) String timestamp,
-			@RequestParam(name = "nonce", required = false) String nonce,
-			@RequestParam(name = "echostr", required = false) String echostr) {
-		logger.info("接收到来自微信服务器的认证消息：signature = [{}], timestamp = [{}], nonce = [{}], echostr = [{}]", signature,
-				timestamp, nonce, echostr);
-		if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
-			throw new IllegalArgumentException("请求参数非法，请核实!");
-		}
-		final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
-		if (!getWxMaService().switchover(wxManager.get(WxConstant.MA_KEY))) {
-			throw new IllegalArgumentException(
-					String.format("未找到对应appid=[%s]的配置，请核实！", wxManager.get(WxConstant.MA_KEY)));
-		}
-		if (getWxMaService().checkSignature(timestamp, nonce, signature)) {
-			// 清理ThreadLocal
-			WxMaConfigHolder.remove();
-			return echostr;
-		}
-		// 清理ThreadLocal
-		WxMaConfigHolder.remove();
-		return "非法请求";
-	}
+    @GetMapping(produces = "text/plain;charset=utf-8")
+    public String authGet(@RequestParam(name = "signature", required = false) String signature,
+            @RequestParam(name = "timestamp", required = false) String timestamp,
+            @RequestParam(name = "nonce", required = false) String nonce,
+            @RequestParam(name = "echostr", required = false) String echostr) {
+        logger.info("接收到来自微信服务器的认证消息：signature = [{}], timestamp = [{}], nonce = [{}], echostr = [{}]", signature,
+                timestamp, nonce, echostr);
+        if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
+            throw new IllegalArgumentException("请求参数非法，请核实!");
+        }
+        final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
+        if (!getWxMaService().switchover(wxManager.get(WxConstant.MA_KEY))) {
+            throw new IllegalArgumentException(
+                    String.format("未找到对应appid=[%s]的配置，请核实！", wxManager.get(WxConstant.MA_KEY)));
+        }
+        if (getWxMaService().checkSignature(timestamp, nonce, signature)) {
+            // 清理ThreadLocal
+            WxMaConfigHolder.remove();
+            return echostr;
+        }
+        // 清理ThreadLocal
+        WxMaConfigHolder.remove();
+        return "非法请求";
+    }
 
-	@PostMapping(produces = "application/xml; charset=UTF-8")
-	public String post(HttpServletRequest request,
-			@RequestParam(name = "msg_signature", required = false) String msgSignature,
-			@RequestParam(name = "encrypt_type", required = false) String encryptType,
-			@RequestParam(name = "signature", required = false) String signature,
-			@RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce) throws IOException {
-		byte[] buffer = IOUtils.toByteArray(request.getInputStream());
-		logger.info(
-				"接收微信请求：[msg_signature=[{}], encrypt_type=[{}], signature=[{}],"
-						+ " timestamp=[{}], nonce=[{}], requestBody=[{}] ",
-				msgSignature, encryptType, signature, timestamp, nonce, new String(buffer, StandardCharsets.UTF_8));
-		final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
-		if (!getWxMaService().switchover(wxManager.get(WxConstant.MA_KEY))) {
-			throw new IllegalArgumentException(
-					String.format("未找到对应appid=[%s]的配置，请核实！", wxManager.get(WxConstant.MA_KEY)));
-		}
-		final boolean isJson = Objects.equals(getWxMaService().getWxMaConfig().getMsgDataFormat(),
-				WxMaConstants.MsgDataFormat.JSON);
+    @PostMapping(produces = "application/xml; charset=UTF-8")
+    public String post(HttpServletRequest request,
+            @RequestParam(name = "msg_signature", required = false) String msgSignature,
+            @RequestParam(name = "encrypt_type", required = false) String encryptType,
+            @RequestParam(name = "signature", required = false) String signature,
+            @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce) throws IOException {
+        byte[] buffer = IOUtils.toByteArray(request.getInputStream());
+        logger.info(
+                "接收微信请求：[msg_signature=[{}], encrypt_type=[{}], signature=[{}],"
+                        + " timestamp=[{}], nonce=[{}], requestBody=[{}] ",
+                msgSignature, encryptType, signature, timestamp, nonce, new String(buffer, StandardCharsets.UTF_8));
+        final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
+        if (!getWxMaService().switchover(wxManager.get(WxConstant.MA_KEY))) {
+            throw new IllegalArgumentException(
+                    String.format("未找到对应appid=[%s]的配置，请核实！", wxManager.get(WxConstant.MA_KEY)));
+        }
+        final boolean isJson = Objects.equals(getWxMaService().getWxMaConfig().getMsgDataFormat(),
+                WxMaConstants.MsgDataFormat.JSON);
 
-		if (StringUtils.isBlank(encryptType)) {
-			String bufferString = IOUtils.toString(buffer, StandardCharsets.UTF_8.name());
-			// 明文传输的消息
-			WxMaMessage inMessage;
-			if (isJson) {
-				inMessage = WxMaMessage.fromJson(bufferString);
-			}
-			else {
-				// xml
-				inMessage = WxMaMessage.fromXml(bufferString);
-			}
-			this.route(inMessage);
-			// 清理ThreadLocal
-			WxMaConfigHolder.remove();
-			return "success";
-		}
-		if ("aes".equals(encryptType)) {
-			InputStream in = new ByteArrayInputStream(buffer);
-			Objects.requireNonNull(in, "微信请求流内容为空！");
-			// 是aes加密的消息
-			WxMaMessage inMessage;
-			if (isJson) {
-				inMessage = WxMaMessage.fromEncryptedJson(in, getWxMaService().getWxMaConfig());
-			}
-			else {
-				// xml
-				inMessage = WxMaMessage.fromEncryptedXml(in, getWxMaService().getWxMaConfig(), timestamp, nonce,
-						msgSignature);
-			}
+        if (StringUtils.isBlank(encryptType)) {
+            String bufferString = IOUtils.toString(buffer, StandardCharsets.UTF_8.name());
+            // 明文传输的消息
+            WxMaMessage inMessage;
+            if (isJson) {
+                inMessage = WxMaMessage.fromJson(bufferString);
+            }
+            else {
+                // xml
+                inMessage = WxMaMessage.fromXml(bufferString);
+            }
+            this.route(inMessage);
+            // 清理ThreadLocal
+            WxMaConfigHolder.remove();
+            return "success";
+        }
+        if ("aes".equals(encryptType)) {
+            InputStream in = new ByteArrayInputStream(buffer);
+            Objects.requireNonNull(in, "微信请求流内容为空！");
+            // 是aes加密的消息
+            WxMaMessage inMessage;
+            if (isJson) {
+                inMessage = WxMaMessage.fromEncryptedJson(in, getWxMaService().getWxMaConfig());
+            }
+            else {
+                // xml
+                inMessage = WxMaMessage.fromEncryptedXml(in, getWxMaService().getWxMaConfig(), timestamp, nonce,
+                        msgSignature);
+            }
 
-			this.route(inMessage);
-			// 清理ThreadLocal
-			WxMaConfigHolder.remove();
-			return "success";
-		}
-		// 清理ThreadLocal
-		WxMaConfigHolder.remove();
-		throw new RuntimeException("不可识别的加密类型：" + encryptType);
-	}
+            this.route(inMessage);
+            // 清理ThreadLocal
+            WxMaConfigHolder.remove();
+            return "success";
+        }
+        // 清理ThreadLocal
+        WxMaConfigHolder.remove();
+        throw new RuntimeException("不可识别的加密类型：" + encryptType);
+    }
 
-	private void route(WxMaMessage message) {
-		try {
-			final WxMaMessageRouter wxMaMessageRouter = SpringContextUtil.getBean(WxMaMessageRouter.class);
-			wxMaMessageRouter.route(message);
-		}
-		catch (Exception e) {
-			logger.error("路由消息时出现异常！", e);
-		}
-	}
+    private void route(WxMaMessage message) {
+        try {
+            final WxMaMessageRouter wxMaMessageRouter = SpringContextUtil.getBean(WxMaMessageRouter.class);
+            wxMaMessageRouter.route(message);
+        }
+        catch (Exception e) {
+            logger.error("路由消息时出现异常！", e);
+        }
+    }
 
-	private WxMaService getWxMaService() {
-		if (this.wxMaService == null) {
-			this.wxMaService = SpringContextUtil.getBean(WxMaService.class);
-		}
-		return this.wxMaService;
-	}
+    private WxMaService getWxMaService() {
+        if (this.wxMaService == null) {
+            this.wxMaService = SpringContextUtil.getBean(WxMaService.class);
+        }
+        return this.wxMaService;
+    }
 
 }

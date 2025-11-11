@@ -30,64 +30,64 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DataScopeType {
 
-	// 数据权限（1.全部数据 2.自定义数据 3.本部门数据 4.本部门及以下数据 5.仅本人数据）
-	/**
-	 * 全部数据
-	 */
-	ALL("1", "", "", "全部数据"),
+    // 数据权限（1.全部数据 2.自定义数据 3.本部门数据 4.本部门及以下数据 5.仅本人数据）
+    /**
+     * 全部数据
+     */
+    ALL("1", "", "", "全部数据"),
 
-	/**
-	 * 自定义数据
-	 */
-	CUSTOM("2", " #{#orgId} IN ( #{@sdss.getRoleCustom( #user.roleId )} ) ", " 1 = 0 ", "自定义数据"),
+    /**
+     * 自定义数据
+     */
+    CUSTOM("2", " #{#orgId} IN ( #{@sdss.getRoleCustom( #user.roleId )} ) ", " 1 = 0 ", "自定义数据"),
 
-	/**
-	 * 本部门数据
-	 */
-	ORG("3", " #{#orgId} = #{#user.orgId} ", " 1 = 0 ", "本部门数据"),
+    /**
+     * 本部门数据
+     */
+    ORG("3", " #{#orgId} = #{#user.orgId} ", " 1 = 0 ", "本部门数据"),
 
-	/**
-	 * 本部门及以下数据
-	 */
-	ORG_AND_CHILD("4", " #{#orgId} IN ( #{@sdss.getOrgAndChild( #user.orgId )} )", " 1 = 0 ", "本部门及以下数据"),
+    /**
+     * 本部门及以下数据
+     */
+    ORG_AND_CHILD("4", " #{#orgId} IN ( #{@sdss.getOrgAndChild( #user.orgId )} )", " 1 = 0 ", "本部门及以下数据"),
 
-	/**
-	 * 仅本人数据
-	 */
-	SELF("5", " #{#createId} = #{#user.userId} ", " 1 = 0 ", "仅本人数据");
+    /**
+     * 仅本人数据
+     */
+    SELF("5", " #{#createId} = #{#user.userId} ", " 1 = 0 ", "仅本人数据");
 
-	/**
-	 * code
-	 */
-	private final String code;
+    /**
+     * code
+     */
+    private final String code;
 
-	/**
-	 * SQL语法，采用 spel 模板表达式
-	 */
-	private final String sqlTemplate;
+    /**
+     * SQL语法，采用 spel 模板表达式
+     */
+    private final String sqlTemplate;
 
-	/**
-	 * 不满足 sqlTemplate 则填充
-	 */
-	private final String elseSql;
+    /**
+     * 不满足 sqlTemplate 则填充
+     */
+    private final String elseSql;
 
-	/**
-	 * 备注
-	 */
-	private final String message;
+    /**
+     * 备注
+     */
+    private final String message;
 
-	/**
-	 * 根据code获取数据权限
-	 * @param code 权限值
-	 * @return 返回数据权限
-	 */
-	public DataScopeType ofCode(String code) {
-		for (DataScopeType dataScopeType : values()) {
-			if (dataScopeType.getCode().equals(code)) {
-				return dataScopeType;
-			}
-		}
-		return null;
-	}
+    /**
+     * 根据code获取数据权限
+     * @param code 权限值
+     * @return 返回数据权限
+     */
+    public DataScopeType ofCode(String code) {
+        for (DataScopeType dataScopeType : values()) {
+            if (dataScopeType.getCode().equals(code)) {
+                return dataScopeType;
+            }
+        }
+        return null;
+    }
 
 }

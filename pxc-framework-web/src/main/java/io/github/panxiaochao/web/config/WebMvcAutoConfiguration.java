@@ -34,16 +34,16 @@ import java.util.List;
 @AutoConfiguration
 public class WebMvcAutoConfiguration implements WebMvcConfigurer {
 
-	/**
-	 * 设置 StringHttpMessageConverter 编码 UTF-8
-	 * @param converters the list of configured converters to be extended
-	 */
-	@Override
-	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.stream()
-			.filter(c -> c instanceof StringHttpMessageConverter)
-			.map(c -> (StringHttpMessageConverter) c)
-			.forEach(c -> c.setDefaultCharset(StandardCharsets.UTF_8));
-	}
+    /**
+     * 设置 StringHttpMessageConverter 编码 UTF-8
+     * @param converters the list of configured converters to be extended
+     */
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.stream()
+            .filter(c -> c instanceof StringHttpMessageConverter)
+            .map(c -> (StringHttpMessageConverter) c)
+            .forEach(c -> c.setDefaultCharset(StandardCharsets.UTF_8));
+    }
 
 }

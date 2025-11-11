@@ -26,9 +26,9 @@ package io.github.panxiaochao.crypto.keygen;
  */
 public interface StrKeyGenerator {
 
-	/**
-	 * Generate a new key.
-	 */
-	String generateKey();
+    /**
+     * Generate a new key.
+     */
+    String generateKey();
 
 }

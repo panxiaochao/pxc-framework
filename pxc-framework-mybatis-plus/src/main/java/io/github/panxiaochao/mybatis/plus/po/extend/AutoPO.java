@@ -34,13 +34,13 @@ import lombok.Setter;
 @Setter
 public class AutoPO extends BasePO {
 
-	private static final long serialVersionUID = -2626183000481421947L;
+    private static final long serialVersionUID = -2626183000481421947L;
 
-	/**
-	 * 主键
-	 */
-	@Schema(description = "主键")
-	@TableId(value = "ID", type = IdType.AUTO)
-	private Integer id;
+    /**
+     * 主键
+     */
+    @Schema(description = "主键")
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
 
 }

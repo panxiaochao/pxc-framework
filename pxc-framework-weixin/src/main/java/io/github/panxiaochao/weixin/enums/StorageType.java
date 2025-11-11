@@ -26,17 +26,17 @@ package io.github.panxiaochao.weixin.enums;
  */
 public enum StorageType {
 
-	/**
-	 * 内存.
-	 */
-	Memory,
-	/**
-	 * redis(Redisson).
-	 */
-	Redisson,
-	/**
-	 * redis(RedisTemplate).
-	 */
-	RedisTemplate
+    /**
+     * 内存.
+     */
+    Memory,
+    /**
+     * redis(Redisson).
+     */
+    Redisson,
+    /**
+     * redis(RedisTemplate).
+     */
+    RedisTemplate
 
 }

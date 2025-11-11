@@ -41,96 +41,96 @@ import java.nio.charset.StandardCharsets;
  */
 public class DownLoadUtil {
 
-	/**
-	 * LOGGER DownLoadUtil.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(DownLoadUtil.class);
+    /**
+     * LOGGER DownLoadUtil.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DownLoadUtil.class);
 
-	/**
-	 * 下载文件
-	 * @param bodyBytes 文件字节数组
-	 * @param fileName 文件名
-	 * @return ResponseEntity<byte[]>
-	 */
-	public static ResponseEntity<byte[]> download(byte[] bodyBytes, String fileName) {
-		try {
-			final String contentDispositionValue = getContentDispositionValue(fileName);
-			return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, contentDispositionValue)
-				.contentType(MimeType.findByFileName(fileName))
-				.contentLength(bodyBytes.length)
-				.body(bodyBytes);
-		}
-		catch (Exception e) {
-			LOGGER.error("下载文件失败", e);
-			return fail();
-		}
-	}
+    /**
+     * 下载文件
+     * @param bodyBytes 文件字节数组
+     * @param fileName 文件名
+     * @return ResponseEntity<byte[]>
+     */
+    public static ResponseEntity<byte[]> download(byte[] bodyBytes, String fileName) {
+        try {
+            final String contentDispositionValue = getContentDispositionValue(fileName);
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDispositionValue)
+                .contentType(MimeType.findByFileName(fileName))
+                .contentLength(bodyBytes.length)
+                .body(bodyBytes);
+        }
+        catch (Exception e) {
+            LOGGER.error("下载文件失败", e);
+            return fail();
+        }
+    }
 
-	/**
-	 * 下载失败
-	 * @return ResponseEntity<byte[]>
-	 */
-	public static ResponseEntity<byte[]> fail() {
-		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
-	}
+    /**
+     * 下载失败
+     * @return ResponseEntity<byte[]>
+     */
+    public static ResponseEntity<byte[]> fail() {
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+    }
 
-	/**
-	 * 下载模板
-	 * @param templatePath 模板路径 resource 目录下的路径包括模板文件名, 例如: excel/temp.xlsx 重点:
-	 * 模板文件必须放置到启动类对应的 resource 目录下
-	 * @return ResponseEntity<byte[]>
-	 */
-	public static ResponseEntity<byte[]> downloadTemplate(String templatePath) {
-		try {
-			ClassPathResource templateResource = new ClassPathResource(templatePath);
-			// 检查资源是否存在
-			if (!templateResource.exists()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			}
-			String fileName = extractFileNameFromPath(templatePath);
-			byte[] bodyBytes = IOUtils.toByteArray(templateResource.getInputStream());
+    /**
+     * 下载模板
+     * @param templatePath 模板路径 resource 目录下的路径包括模板文件名, 例如: excel/temp.xlsx 重点:
+     * 模板文件必须放置到启动类对应的 resource 目录下
+     * @return ResponseEntity<byte[]>
+     */
+    public static ResponseEntity<byte[]> downloadTemplate(String templatePath) {
+        try {
+            ClassPathResource templateResource = new ClassPathResource(templatePath);
+            // 检查资源是否存在
+            if (!templateResource.exists()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            String fileName = extractFileNameFromPath(templatePath);
+            byte[] bodyBytes = IOUtils.toByteArray(templateResource.getInputStream());
 
-			final String contentDispositionValue = getContentDispositionValue(fileName);
-			return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, contentDispositionValue)
-				.contentType(MimeType.findByFileName(fileName))
-				.body(bodyBytes);
-		}
-		catch (Exception e) {
-			LOGGER.error("下载文件失败", e);
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
-		}
-	}
+            final String contentDispositionValue = getContentDispositionValue(fileName);
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDispositionValue)
+                .contentType(MimeType.findByFileName(fileName))
+                .body(bodyBytes);
+        }
+        catch (Exception e) {
+            LOGGER.error("下载文件失败", e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+        }
+    }
 
-	/**
-	 * 从路径中提取文件名
-	 * @param templatePath 模板路径
-	 * @return 文件名
-	 */
-	private static String extractFileNameFromPath(String templatePath) {
-		int lastSlashIndex = templatePath.lastIndexOf('/');
-		return (lastSlashIndex != -1) ? templatePath.substring(lastSlashIndex + 1) : templatePath;
-	}
+    /**
+     * 从路径中提取文件名
+     * @param templatePath 模板路径
+     * @return 文件名
+     */
+    private static String extractFileNameFromPath(String templatePath) {
+        int lastSlashIndex = templatePath.lastIndexOf('/');
+        return (lastSlashIndex != -1) ? templatePath.substring(lastSlashIndex + 1) : templatePath;
+    }
 
-	@NotNull
-	private static String getContentDispositionValue(String fileName) {
-		String percentEncodedFileName = percentEncode(fileName);
-		return ContentDisposition.attachment()
-			.filename(percentEncodedFileName, StandardCharsets.UTF_8)
-			.build()
-			.toString();
-	}
+    @NotNull
+    private static String getContentDispositionValue(String fileName) {
+        String percentEncodedFileName = percentEncode(fileName);
+        return ContentDisposition.attachment()
+            .filename(percentEncodedFileName, StandardCharsets.UTF_8)
+            .build()
+            .toString();
+    }
 
-	private static String percentEncode(String s) {
-		String encode;
-		try {
-			encode = URLEncoder.encode(s, StandardCharsets.UTF_8.name());
-		}
-		catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-		return encode.replaceAll("\\+", "%20");
-	}
+    private static String percentEncode(String s) {
+        String encode;
+        try {
+            encode = URLEncoder.encode(s, StandardCharsets.UTF_8.name());
+        }
+        catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return encode.replaceAll("\\+", "%20");
+    }
 
 }

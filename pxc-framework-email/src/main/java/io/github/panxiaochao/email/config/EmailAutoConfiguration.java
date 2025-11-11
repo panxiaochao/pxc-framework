@@ -35,21 +35,21 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnProperty(name = "spring.pxc-framework.email.enabled", havingValue = "true")
 public class EmailAutoConfiguration {
 
-	@Bean
-	public MailAccount mailAccount(EmailProperties emailProperties) {
-		MailAccount account = new MailAccount();
-		account.setHost(emailProperties.getHost());
-		account.setPort(emailProperties.getPort());
-		account.setAuth(emailProperties.getAuth());
-		account.setFrom(emailProperties.getFrom());
-		account.setUser(emailProperties.getLoginName());
-		account.setPass(emailProperties.getPassword());
-		account.setSocketFactoryPort(emailProperties.getPort());
-		account.setStarttlsEnable(emailProperties.getStarttlsEnable());
-		account.setSslEnable(emailProperties.getSslEnable());
-		account.setTimeout(emailProperties.getTimeout());
-		account.setConnectionTimeout(emailProperties.getConnectionTimeout());
-		return account;
-	}
+    @Bean
+    public MailAccount mailAccount(EmailProperties emailProperties) {
+        MailAccount account = new MailAccount();
+        account.setHost(emailProperties.getHost());
+        account.setPort(emailProperties.getPort());
+        account.setAuth(emailProperties.getAuth());
+        account.setFrom(emailProperties.getFrom());
+        account.setUser(emailProperties.getLoginName());
+        account.setPass(emailProperties.getPassword());
+        account.setSocketFactoryPort(emailProperties.getPort());
+        account.setStarttlsEnable(emailProperties.getStarttlsEnable());
+        account.setSslEnable(emailProperties.getSslEnable());
+        account.setTimeout(emailProperties.getTimeout());
+        account.setConnectionTimeout(emailProperties.getConnectionTimeout());
+        return account;
+    }
 
 }

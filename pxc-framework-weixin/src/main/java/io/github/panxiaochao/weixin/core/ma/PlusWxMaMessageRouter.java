@@ -39,29 +39,29 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PlusWxMaMessageRouter {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	private final WxMaService wxMaService;
+    private final WxMaService wxMaService;
 
-	public WxMaMessageRouter build() {
-		final WxMaMessageRouter newRouter = new WxMaMessageRouter(wxMaService);
-		// 记录所有事件的日志 （异步执行）
-		newRouter.rule().handler(new LogHandler()).next();
-		// 加载自定义处理器
-		final List<WxMaProperties.MaHandler> handlers = wxProperties.getMa().getHandlers();
-		if (!CollectionUtils.isEmpty(handlers)) {
-			for (WxMaProperties.MaHandler maHandler : handlers) {
-				try {
-					AbstractMaHandler handler = SpringContextUtil.getBean(maHandler.getHandler());
-					Objects.requireNonNull(handler, "请在自定义处理器中加入@Component");
-					newRouter.rule().async(false).content(maHandler.getContent()).handler(handler).end();
-				}
-				catch (Exception e) {
-					throw new RuntimeException("加载微信小程序自定义处理器错误！", e);
-				}
-			}
-		}
-		return newRouter;
-	}
+    public WxMaMessageRouter build() {
+        final WxMaMessageRouter newRouter = new WxMaMessageRouter(wxMaService);
+        // 记录所有事件的日志 （异步执行）
+        newRouter.rule().handler(new LogHandler()).next();
+        // 加载自定义处理器
+        final List<WxMaProperties.MaHandler> handlers = wxProperties.getMa().getHandlers();
+        if (!CollectionUtils.isEmpty(handlers)) {
+            for (WxMaProperties.MaHandler maHandler : handlers) {
+                try {
+                    AbstractMaHandler handler = SpringContextUtil.getBean(maHandler.getHandler());
+                    Objects.requireNonNull(handler, "请在自定义处理器中加入@Component");
+                    newRouter.rule().async(false).content(maHandler.getContent()).handler(handler).end();
+                }
+                catch (Exception e) {
+                    throw new RuntimeException("加载微信小程序自定义处理器错误！", e);
+                }
+            }
+        }
+        return newRouter;
+    }
 
 }

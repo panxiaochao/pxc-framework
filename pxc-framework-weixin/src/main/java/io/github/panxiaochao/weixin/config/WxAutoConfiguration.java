@@ -62,191 +62,191 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(WxProperties.class)
 public class WxAutoConfiguration {
 
-	/**
-	 * LOGGER WxAutoConfiguration.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(WxAutoConfiguration.class);
+    /**
+     * LOGGER WxAutoConfiguration.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(WxAutoConfiguration.class);
 
-	/**
-	 * 微信状态管理多元化管理
-	 * @param wxProperties the wxProperties
-	 * @return IWxAppIdManager
-	 */
-	@Bean
-	public IWxManager wxManager(final WxProperties wxProperties) {
-		final StorageType storageType = wxProperties.getStorageType();
-		IWxManager wxManager;
-		switch (storageType) {
-			case Redisson:
-				wxManager = new WxRedissonManager();
-				break;
-			case RedisTemplate:
-				wxManager = new WxRedisTemplateManager();
-				break;
-			default:
-				wxManager = new WxMemoryManager();
-				break;
-		}
-		return wxManager;
-	}
+    /**
+     * 微信状态管理多元化管理
+     * @param wxProperties the wxProperties
+     * @return IWxAppIdManager
+     */
+    @Bean
+    public IWxManager wxManager(final WxProperties wxProperties) {
+        final StorageType storageType = wxProperties.getStorageType();
+        IWxManager wxManager;
+        switch (storageType) {
+            case Redisson:
+                wxManager = new WxRedissonManager();
+                break;
+            case RedisTemplate:
+                wxManager = new WxRedisTemplateManager();
+                break;
+            default:
+                wxManager = new WxMemoryManager();
+                break;
+        }
+        return wxManager;
+    }
 
-	/**
-	 * 微信公众号自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.mp.enabled", havingValue = "true")
-	static class WxMpConfiguration {
+    /**
+     * 微信公众号自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.mp.enabled", havingValue = "true")
+    static class WxMpConfiguration {
 
-		/**
-		 * 微信公众号初始化
-		 * @param wxProperties 属性配置
-		 * @return WxMpService
-		 */
-		@Bean
-		public WxMpService wxMpService(ObjectProvider<WxProperties> wxProperties) {
-			LOGGER.info("配置微信公众号[WxMpService]成功！");
-			return new PlusWxMpService(wxProperties.getIfAvailable()).build();
-		}
+        /**
+         * 微信公众号初始化
+         * @param wxProperties 属性配置
+         * @return WxMpService
+         */
+        @Bean
+        public WxMpService wxMpService(ObjectProvider<WxProperties> wxProperties) {
+            LOGGER.info("配置微信公众号[WxMpService]成功！");
+            return new PlusWxMpService(wxProperties.getIfAvailable()).build();
+        }
 
-		/**
-		 * 消息路由处理器
-		 * @param wxMpService wxMpService
-		 * @return WxMpMessageRouter
-		 */
-		@Bean
-		public WxMpMessageRouter wxMpMessageRouter(ObjectProvider<WxProperties> wxProperties,
-				ObjectProvider<WxMpService> wxMpService) {
-			return new PlusWxMpMessageRouter(wxProperties.getIfAvailable(), wxMpService.getIfAvailable()).build();
-		}
+        /**
+         * 消息路由处理器
+         * @param wxMpService wxMpService
+         * @return WxMpMessageRouter
+         */
+        @Bean
+        public WxMpMessageRouter wxMpMessageRouter(ObjectProvider<WxProperties> wxProperties,
+                ObjectProvider<WxMpService> wxMpService) {
+            return new PlusWxMpMessageRouter(wxProperties.getIfAvailable(), wxMpService.getIfAvailable()).build();
+        }
 
-	}
+    }
 
-	/**
-	 * 微信小程序自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.ma.enabled", havingValue = "true")
-	static class WxMaConfiguration {
+    /**
+     * 微信小程序自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.ma.enabled", havingValue = "true")
+    static class WxMaConfiguration {
 
-		/**
-		 * 微信小程序初始化
-		 * @param wxProperties 属性配置
-		 * @return WxMaService
-		 */
-		@Bean
-		public WxMaService wxMaService(WxProperties wxProperties) {
-			LOGGER.info("配置微信小程序[WxMaService]成功！");
-			return new PlusWxMaService(wxProperties).build();
-		}
+        /**
+         * 微信小程序初始化
+         * @param wxProperties 属性配置
+         * @return WxMaService
+         */
+        @Bean
+        public WxMaService wxMaService(WxProperties wxProperties) {
+            LOGGER.info("配置微信小程序[WxMaService]成功！");
+            return new PlusWxMaService(wxProperties).build();
+        }
 
-		/**
-		 * 消息路由处理器
-		 * @param wxMaService wxMaService
-		 * @return WxMaMessageRouter
-		 */
-		@Bean
-		public WxMaMessageRouter wxMaMessageRouter(WxProperties wxProperties, WxMaService wxMaService) {
-			return new PlusWxMaMessageRouter(wxProperties, wxMaService).build();
-		}
+        /**
+         * 消息路由处理器
+         * @param wxMaService wxMaService
+         * @return WxMaMessageRouter
+         */
+        @Bean
+        public WxMaMessageRouter wxMaMessageRouter(WxProperties wxProperties, WxMaService wxMaService) {
+            return new PlusWxMaMessageRouter(wxProperties, wxMaService).build();
+        }
 
-	}
+    }
 
-	/**
-	 * 微信开放平台自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.open.enabled", havingValue = "true")
-	static class WxOpenConfiguration {
+    /**
+     * 微信开放平台自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.open.enabled", havingValue = "true")
+    static class WxOpenConfiguration {
 
-		/**
-		 * 微信开放平台 初始化
-		 * @param wxProperties 属性配置
-		 * @return WxOpenService
-		 */
-		@Bean
-		public WxOpenService wxOpenService(WxProperties wxProperties) {
-			LOGGER.info("配置微信开放平台[WxOpenService]成功！");
-			return new PlusWxOpenService(wxProperties).build();
-		}
+        /**
+         * 微信开放平台 初始化
+         * @param wxProperties 属性配置
+         * @return WxOpenService
+         */
+        @Bean
+        public WxOpenService wxOpenService(WxProperties wxProperties) {
+            LOGGER.info("配置微信开放平台[WxOpenService]成功！");
+            return new PlusWxOpenService(wxProperties).build();
+        }
 
-		/**
-		 * 微信开放平台 消息路由处理器
-		 * @return WxOpenMessageRouter
-		 */
-		@Bean
-		public WxOpenMessageRouter wxOpenMessageRouter(WxProperties wxProperties, WxOpenService wxOpenService) {
-			return new PlusWxOpenMessageRouter(wxProperties, wxOpenService).build();
-		}
+        /**
+         * 微信开放平台 消息路由处理器
+         * @return WxOpenMessageRouter
+         */
+        @Bean
+        public WxOpenMessageRouter wxOpenMessageRouter(WxProperties wxProperties, WxOpenService wxOpenService) {
+            return new PlusWxOpenMessageRouter(wxProperties, wxOpenService).build();
+        }
 
-	}
+    }
 
-	/**
-	 * 企业号/企业微信自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.cp.enabled", havingValue = "true")
-	static class WxCpConfiguration {
+    /**
+     * 企业号/企业微信自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.cp.enabled", havingValue = "true")
+    static class WxCpConfiguration {
 
-		/**
-		 * 企业号/企业微信初始化
-		 * @param wxProperties 属性配置
-		 * @return WxCpMultiService
-		 */
-		@Bean
-		public WxCpMultiService wxCpMultiService(WxProperties wxProperties) {
-			LOGGER.info("配置企业号/企业微信[WxCpMultiService]成功！");
-			return new PlusWxCpService(wxProperties).build();
-		}
+        /**
+         * 企业号/企业微信初始化
+         * @param wxProperties 属性配置
+         * @return WxCpMultiService
+         */
+        @Bean
+        public WxCpMultiService wxCpMultiService(WxProperties wxProperties) {
+            LOGGER.info("配置企业号/企业微信[WxCpMultiService]成功！");
+            return new PlusWxCpService(wxProperties).build();
+        }
 
-	}
+    }
 
-	/**
-	 * 微信支付自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.pay.enabled", havingValue = "true")
-	static class WxPayConfiguration {
+    /**
+     * 微信支付自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.pay.enabled", havingValue = "true")
+    static class WxPayConfiguration {
 
-		/**
-		 * 微信支付初始化
-		 * @param wxProperties 属性配置
-		 * @return WxPayService
-		 */
-		@Bean
-		public WxPayService wxPayService(ObjectProvider<WxProperties> wxProperties) {
-			LOGGER.info("配置微信支付[WxPayService]成功！");
-			return new PlusWxPayService(wxProperties.getIfAvailable()).build();
-		}
+        /**
+         * 微信支付初始化
+         * @param wxProperties 属性配置
+         * @return WxPayService
+         */
+        @Bean
+        public WxPayService wxPayService(ObjectProvider<WxProperties> wxProperties) {
+            LOGGER.info("配置微信支付[WxPayService]成功！");
+            return new PlusWxPayService(wxProperties.getIfAvailable()).build();
+        }
 
-	}
+    }
 
-	/**
-	 * 微信视频号自动配置类
-	 */
-	@Configuration
-	@ConditionalOnProperty(name = "spring.pxc-framework.wx.channel.enabled", havingValue = "true")
-	static class WxChannelConfiguration {
+    /**
+     * 微信视频号自动配置类
+     */
+    @Configuration
+    @ConditionalOnProperty(name = "spring.pxc-framework.wx.channel.enabled", havingValue = "true")
+    static class WxChannelConfiguration {
 
-		/**
-		 * 微信视频号初始化
-		 * @param wxProperties 属性配置
-		 * @return WxChannelMultiService
-		 */
-		@Bean
-		public WxChannelMultiService wxChannelMultiService(WxProperties wxProperties) {
-			LOGGER.info("配置微信视频号[WxChannelMultiService]成功！");
-			return new PlusWxChannelService(wxProperties).build();
-		}
+        /**
+         * 微信视频号初始化
+         * @param wxProperties 属性配置
+         * @return WxChannelMultiService
+         */
+        @Bean
+        public WxChannelMultiService wxChannelMultiService(WxProperties wxProperties) {
+            LOGGER.info("配置微信视频号[WxChannelMultiService]成功！");
+            return new PlusWxChannelService(wxProperties).build();
+        }
 
-		/**
-		 * 微信视频号 消息路由器
-		 * @return WxChannelMessageRouter
-		 */
-		@Bean
-		public WxChannelMessageRouter wxChannelMessageRouter() {
-			return new WxChannelMessageRouter();
-		}
+        /**
+         * 微信视频号 消息路由器
+         * @return WxChannelMessageRouter
+         */
+        @Bean
+        public WxChannelMessageRouter wxChannelMessageRouter() {
+            return new WxChannelMessageRouter();
+        }
 
-	}
+    }
 
 }

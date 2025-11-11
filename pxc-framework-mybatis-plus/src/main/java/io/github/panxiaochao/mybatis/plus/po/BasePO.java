@@ -36,34 +36,34 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class BasePO implements Serializable {
 
-	private static final long serialVersionUID = 846044951522308141L;
+    private static final long serialVersionUID = 846044951522308141L;
 
-	/**
-	 * 创建时间
-	 */
-	@Schema(description = "创建时间")
-	@TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+    /**
+     * 创建时间
+     */
+    @Schema(description = "创建时间")
+    @TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-	/**
-	 * 更新时间
-	 */
-	@Schema(description = "更新时间")
-	@TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
-	private LocalDateTime updateTime;
+    /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    @TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
-	/**
-	 * 创建人
-	 */
-	// @Schema(description = "创建人")
-	// @TableField(value = "CREATE_ID", fill = FieldFill.INSERT)
-	// private Long createId;
+    /**
+     * 创建人
+     */
+    // @Schema(description = "创建人")
+    // @TableField(value = "CREATE_ID", fill = FieldFill.INSERT)
+    // private Long createId;
 
-	/**
-	 * 更新人
-	 */
-	// @Schema(description = "更新人")
-	// @TableField(value = "UPDATE_ID", fill = FieldFill.INSERT_UPDATE)
-	// private Long updateId;
+    /**
+     * 更新人
+     */
+    // @Schema(description = "更新人")
+    // @TableField(value = "UPDATE_ID", fill = FieldFill.INSERT_UPDATE)
+    // private Long updateId;
 
 }

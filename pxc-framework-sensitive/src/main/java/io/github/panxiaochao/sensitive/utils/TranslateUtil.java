@@ -30,16 +30,16 @@ import java.util.Objects;
  */
 public class TranslateUtil {
 
-	/**
-	 * 常规转换为 Boolean 值
-	 * @param bool 常规布尔值对象
-	 * @return true or false
-	 */
-	public static Boolean toBoolean(Object bool) {
-		if (Objects.isNull(bool)) {
-			return null;
-		}
-		return BooleanUtil.toBoolean(bool.toString());
-	}
+    /**
+     * 常规转换为 Boolean 值
+     * @param bool 常规布尔值对象
+     * @return true or false
+     */
+    public static Boolean toBoolean(Object bool) {
+        if (Objects.isNull(bool)) {
+            return null;
+        }
+        return BooleanUtil.toBoolean(bool.toString());
+    }
 
 }

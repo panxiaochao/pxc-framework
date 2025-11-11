@@ -25,19 +25,19 @@ package io.github.panxiaochao.cache.constants;
  */
 public enum CacheManagerType {
 
-	/**
-	 * Caffeine backed caching.
-	 */
-	CAFFEINE,
+    /**
+     * Caffeine backed caching.
+     */
+    CAFFEINE,
 
-	/**
-	 * Redis backed caching.
-	 */
-	REDIS,
+    /**
+     * Redis backed caching.
+     */
+    REDIS,
 
-	/**
-	 * Simple in-memory caching.
-	 */
-	SIMPLE
+    /**
+     * Simple in-memory caching.
+     */
+    SIMPLE
 
 }

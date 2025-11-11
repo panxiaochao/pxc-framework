@@ -46,35 +46,35 @@ import java.util.Objects;
 @Tag(name = "企业微信JSConf", description = "企业微信JSConf")
 public class WxCpJsConfApi {
 
-	@PostMapping("/getJsConf")
-	@Operation(summary = "创建调用jsapi签名", description = "创建调用jsapi签名", method = "POST")
-	@Parameter(name = "corpId", description = "企业微信ID")
-	@Parameter(name = "agentId", description = "企业微信AgentId")
-	@Parameter(name = "uri", description = "url")
-	public Map<String, Object> getJsConf(@PathVariable String corpId, @PathVariable Integer agentId, String uri)
-			throws WxErrorException {
-		final WxCpMultiService wxCpMultiService = SpringContextUtil.getBean(WxCpMultiService.class);
-		Objects.requireNonNull(wxCpMultiService, "请配置WxCpMultiService类！");
-		WxCpService wxCpService = wxCpMultiService.getWxCpService(corpId + agentId);
-		if (wxCpService == null) {
-			throw new IllegalArgumentException(
-					String.format("未找到对应corpId=[%s], agentId=[%d]的配置，请核实！", corpId, agentId));
-		}
-		WxJsapiSignature wxJsapiSignature = wxCpService.createJsapiSignature(uri);
-		String signature = wxJsapiSignature.getSignature();
-		String nonceStr = wxJsapiSignature.getNonceStr();
-		long timestamp = wxJsapiSignature.getTimestamp();
+    @PostMapping("/getJsConf")
+    @Operation(summary = "创建调用jsapi签名", description = "创建调用jsapi签名", method = "POST")
+    @Parameter(name = "corpId", description = "企业微信ID")
+    @Parameter(name = "agentId", description = "企业微信AgentId")
+    @Parameter(name = "uri", description = "url")
+    public Map<String, Object> getJsConf(@PathVariable String corpId, @PathVariable Integer agentId, String uri)
+            throws WxErrorException {
+        final WxCpMultiService wxCpMultiService = SpringContextUtil.getBean(WxCpMultiService.class);
+        Objects.requireNonNull(wxCpMultiService, "请配置WxCpMultiService类！");
+        WxCpService wxCpService = wxCpMultiService.getWxCpService(corpId + agentId);
+        if (wxCpService == null) {
+            throw new IllegalArgumentException(
+                    String.format("未找到对应corpId=[%s], agentId=[%d]的配置，请核实！", corpId, agentId));
+        }
+        WxJsapiSignature wxJsapiSignature = wxCpService.createJsapiSignature(uri);
+        String signature = wxJsapiSignature.getSignature();
+        String nonceStr = wxJsapiSignature.getNonceStr();
+        long timestamp = wxJsapiSignature.getTimestamp();
 
-		Map<String, Object> res = new HashMap<>();
-		// 必填，企业微信的corpID
-		res.put("appId", corpId);
-		// 必填，生成签名的时间戳
-		res.put("timestamp", timestamp);
-		// 必填，生成签名的随机串
-		res.put("nonceStr", nonceStr);
-		// 必填，签名，见 附录-JS-SDK使用权限签名算法
-		res.put("signature", signature);
-		return res;
-	}
+        Map<String, Object> res = new HashMap<>();
+        // 必填，企业微信的corpID
+        res.put("appId", corpId);
+        // 必填，生成签名的时间戳
+        res.put("timestamp", timestamp);
+        // 必填，生成签名的随机串
+        res.put("nonceStr", nonceStr);
+        // 必填，签名，见 附录-JS-SDK使用权限签名算法
+        res.put("signature", signature);
+        return res;
+    }
 
 }

@@ -31,57 +31,57 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WxCpMultiServiceImpl implements WxCpMultiService {
 
-	private static final ConcurrentHashMap<String, WxCpService> CONCURRENT_CP_MAP = new ConcurrentHashMap<>(1);
+    private static final ConcurrentHashMap<String, WxCpService> CONCURRENT_CP_MAP = new ConcurrentHashMap<>(1);
 
-	private static final ConcurrentHashMap<String, WxCpMessageRouter> CONCURRENT_ROUTER_MAP = new ConcurrentHashMap<>(
-			1);
+    private static final ConcurrentHashMap<String, WxCpMessageRouter> CONCURRENT_ROUTER_MAP = new ConcurrentHashMap<>(
+            1);
 
-	/**
-	 * 通过key, 获取WxCpService
-	 * @param key key
-	 * @return WxCpService
-	 */
-	@Override
-	public WxCpService getWxCpService(String key) {
-		return CONCURRENT_CP_MAP.get(key);
-	}
+    /**
+     * 通过key, 获取WxCpService
+     * @param key key
+     * @return WxCpService
+     */
+    @Override
+    public WxCpService getWxCpService(String key) {
+        return CONCURRENT_CP_MAP.get(key);
+    }
 
-	/**
-	 * 通过key, 获取WxCpMessageRouter
-	 * @param key key
-	 * @return WxCpMessageRouter
-	 */
-	@Override
-	public WxCpMessageRouter getWxCpMessageRouter(String key) {
-		return CONCURRENT_ROUTER_MAP.get(key);
-	}
+    /**
+     * 通过key, 获取WxCpMessageRouter
+     * @param key key
+     * @return WxCpMessageRouter
+     */
+    @Override
+    public WxCpMessageRouter getWxCpMessageRouter(String key) {
+        return CONCURRENT_ROUTER_MAP.get(key);
+    }
 
-	/**
-	 * 设置WxCpService，通过key
-	 * @param key key
-	 * @param wxCpService wxCpService
-	 */
-	public void setWxCpService(String key, WxCpService wxCpService) {
-		CONCURRENT_CP_MAP.put(key, wxCpService);
-	}
+    /**
+     * 设置WxCpService，通过key
+     * @param key key
+     * @param wxCpService wxCpService
+     */
+    public void setWxCpService(String key, WxCpService wxCpService) {
+        CONCURRENT_CP_MAP.put(key, wxCpService);
+    }
 
-	/**
-	 * 设置WxCpMessageRouter，通过key
-	 * @param key key
-	 * @param wxCpMessageRouter wxCpMessageRouter
-	 */
-	public void setWxCpMessageRouter(String key, WxCpMessageRouter wxCpMessageRouter) {
-		CONCURRENT_ROUTER_MAP.put(key, wxCpMessageRouter);
-	}
+    /**
+     * 设置WxCpMessageRouter，通过key
+     * @param key key
+     * @param wxCpMessageRouter wxCpMessageRouter
+     */
+    public void setWxCpMessageRouter(String key, WxCpMessageRouter wxCpMessageRouter) {
+        CONCURRENT_ROUTER_MAP.put(key, wxCpMessageRouter);
+    }
 
-	/**
-	 * 通过key，从列表中移除一个 WxCpService 实例
-	 * @param key key
-	 */
-	@Override
-	public void removeWxCpService(String key) {
-		CONCURRENT_CP_MAP.remove(key);
-		CONCURRENT_ROUTER_MAP.remove(key);
-	}
+    /**
+     * 通过key，从列表中移除一个 WxCpService 实例
+     * @param key key
+     */
+    @Override
+    public void removeWxCpService(String key) {
+        CONCURRENT_CP_MAP.remove(key);
+        CONCURRENT_ROUTER_MAP.remove(key);
+    }
 
 }

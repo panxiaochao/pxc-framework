@@ -29,18 +29,18 @@ import java.util.List;
  */
 public interface RootMapper<T> extends BaseMapper<T> {
 
-	/**
-	 * 批量新增
-	 * @param entityList 实体数组
-	 * @return 成功数
-	 */
-	int insertBatchSomeColumn(List<T> entityList);
+    /**
+     * 批量新增
+     * @param entityList 实体数组
+     * @return 成功数
+     */
+    int insertBatchSomeColumn(List<T> entityList);
 
-	/**
-	 * 批量更新
-	 * @param entityList 实体数组
-	 * @return 成功数
-	 */
-	int updateBatchSomeColumn(List<T> entityList);
+    /**
+     * 批量更新
+     * @param entityList 实体数组
+     * @return 成功数
+     */
+    int updateBatchSomeColumn(List<T> entityList);
 
 }

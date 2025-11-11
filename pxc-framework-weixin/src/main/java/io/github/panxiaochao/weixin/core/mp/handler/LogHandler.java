@@ -34,16 +34,16 @@ import java.util.Map;
  */
 public class LogHandler extends AbstractMpHandler {
 
-	@Override
-	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
-			WxSessionManager sessionManager) {
-		try {
-			logger.info("接收到请求消息，内容：{}", JacksonUtil.toString(wxMessage));
-		}
-		catch (Exception e) {
-			logger.error("记录消息异常", e);
-		}
-		return null;
-	}
+    @Override
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
+            WxSessionManager sessionManager) {
+        try {
+            logger.info("接收到请求消息，内容：{}", JacksonUtil.toString(wxMessage));
+        }
+        catch (Exception e) {
+            logger.error("记录消息异常", e);
+        }
+        return null;
+    }
 
 }

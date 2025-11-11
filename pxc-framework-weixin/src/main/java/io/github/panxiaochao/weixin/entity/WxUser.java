@@ -38,72 +38,72 @@ import java.util.Date;
 @Setter
 public class WxUser implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String openid;
+    private String openid;
 
-	private String appid;
+    private String appid;
 
-	private String phone;
+    private String phone;
 
-	private String nickname;
+    private String nickname;
 
-	private int sex;
+    private int sex;
 
-	private String city;
+    private String city;
 
-	private String province;
+    private String province;
 
-	private String headImgUrl;
+    private String headImgUrl;
 
-	@JsonProperty("subscribe_time")
-	private Date subscribeTime;
+    @JsonProperty("subscribe_time")
+    private Date subscribeTime;
 
-	private boolean subscribe;
+    private boolean subscribe;
 
-	private String unionid;
+    private String unionid;
 
-	private String remark;
+    private String remark;
 
-	private Long[] tagidList;
+    private Long[] tagidList;
 
-	private String subscribeScene;
+    private String subscribeScene;
 
-	private String qrSceneStr;
+    private String qrSceneStr;
 
-	public WxUser() {
-	}
+    public WxUser() {
+    }
 
-	public WxUser(String openid) {
-		this.openid = openid;
-	}
+    public WxUser(String openid) {
+        this.openid = openid;
+    }
 
-	public WxUser(WxMpUser wxMpUser, String appid) {
-		this.openid = wxMpUser.getOpenId();
-		this.appid = appid;
-		this.subscribe = wxMpUser.getSubscribe();
-		if (wxMpUser.getSubscribe()) {
-			this.nickname = wxMpUser.getNickname();
-			this.headImgUrl = wxMpUser.getHeadImgUrl();
-			this.subscribeTime = new Date(wxMpUser.getSubscribeTime() * 1000);
-			this.unionid = wxMpUser.getUnionId();
-			this.remark = wxMpUser.getRemark();
-			this.tagidList = wxMpUser.getTagIds();
-			this.subscribeScene = wxMpUser.getSubscribeScene();
-			String qrScene = wxMpUser.getQrScene();
-			this.qrSceneStr = !StringUtils.hasText(qrScene) ? wxMpUser.getQrSceneStr() : qrScene;
-		}
-	}
+    public WxUser(WxMpUser wxMpUser, String appid) {
+        this.openid = wxMpUser.getOpenId();
+        this.appid = appid;
+        this.subscribe = wxMpUser.getSubscribe();
+        if (wxMpUser.getSubscribe()) {
+            this.nickname = wxMpUser.getNickname();
+            this.headImgUrl = wxMpUser.getHeadImgUrl();
+            this.subscribeTime = new Date(wxMpUser.getSubscribeTime() * 1000);
+            this.unionid = wxMpUser.getUnionId();
+            this.remark = wxMpUser.getRemark();
+            this.tagidList = wxMpUser.getTagIds();
+            this.subscribeScene = wxMpUser.getSubscribeScene();
+            String qrScene = wxMpUser.getQrScene();
+            this.qrSceneStr = !StringUtils.hasText(qrScene) ? wxMpUser.getQrSceneStr() : qrScene;
+        }
+    }
 
-	public WxUser(WxOAuth2UserInfo wxMpUser, String appid) {
-		this.openid = wxMpUser.getOpenid();
-		this.appid = appid;
-		this.subscribe = wxMpUser.getNickname() != null;
-		if (this.subscribe) {
-			this.nickname = wxMpUser.getNickname();
-			this.headImgUrl = wxMpUser.getHeadImgUrl();
-			this.unionid = wxMpUser.getUnionId();
-		}
-	}
+    public WxUser(WxOAuth2UserInfo wxMpUser, String appid) {
+        this.openid = wxMpUser.getOpenid();
+        this.appid = appid;
+        this.subscribe = wxMpUser.getNickname() != null;
+        if (this.subscribe) {
+            this.nickname = wxMpUser.getNickname();
+            this.headImgUrl = wxMpUser.getHeadImgUrl();
+            this.unionid = wxMpUser.getUnionId();
+        }
+    }
 
 }

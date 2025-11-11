@@ -29,18 +29,18 @@ package io.github.panxiaochao.weixin.manager;
  */
 public interface IWxManager {
 
-	/**
-	 * obtain the v
-	 * @param key key
-	 * @return value
-	 */
-	String get(String key);
+    /**
+     * obtain the v
+     * @param key key
+     * @return value
+     */
+    String get(String key);
 
-	/**
-	 * set k-v
-	 * @param key key
-	 * @param value value
-	 */
-	void set(String key, String value);
+    /**
+     * set k-v
+     * @param key key
+     * @param value value
+     */
+    void set(String key, String value);
 
 }

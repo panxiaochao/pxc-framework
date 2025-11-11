@@ -33,16 +33,16 @@ import org.springframework.util.StringUtils;
  */
 public class TraceFeignInterceptor implements RequestInterceptor {
 
-	@Override
-	public void apply(RequestTemplate requestTemplate) {
-		String traceId = TraceLogContext.getTraceId();
-		if (StringUtils.hasText(traceId)) {
-			requestTemplate.header(TraceLogConstant.TRACE_ID, traceId);
-			requestTemplate.header(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
-			requestTemplate.header(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
-			requestTemplate.header(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
-			requestTemplate.header(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
-		}
-	}
+    @Override
+    public void apply(RequestTemplate requestTemplate) {
+        String traceId = TraceLogContext.getTraceId();
+        if (StringUtils.hasText(traceId)) {
+            requestTemplate.header(TraceLogConstant.TRACE_ID, traceId);
+            requestTemplate.header(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
+            requestTemplate.header(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
+            requestTemplate.header(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
+            requestTemplate.header(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
+        }
+    }
 
 }

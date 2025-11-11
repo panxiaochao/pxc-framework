@@ -33,14 +33,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "mybatis-plus", ignoreInvalidFields = true)
 public class MpProperties {
 
-	/**
-	 * 数据库类型, 默认Mysql类型
-	 */
-	private DbType dbType = DbType.MYSQL;
+    /**
+     * 数据库类型, 默认Mysql类型
+     */
+    private DbType dbType = DbType.MYSQL;
 
-	/**
-	 * 是否开启sql日志追踪, 支持: true 和 false , 1 和 0 , on 和 off
-	 */
-	private String sqlLogTrace = "false";
+    /**
+     * 是否开启sql日志追踪, 支持: true 和 false , 1 和 0 , on 和 off
+     */
+    private String sqlLogTrace = "false";
 
 }

@@ -33,9 +33,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.pxc-framework.dynamic", ignoreInvalidFields = true)
 public class DsProperties {
 
-	/**
-	 * 查询数据库中多数据源数据的SQL
-	 */
-	private String queryDsSql;
+    /**
+     * 查询数据库中多数据源数据的SQL
+     */
+    private String queryDsSql;
 
 }

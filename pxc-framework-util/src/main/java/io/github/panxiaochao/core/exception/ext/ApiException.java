@@ -30,31 +30,31 @@ import lombok.Getter;
 @Getter
 public class ApiException extends ServerException {
 
-	private static final long serialVersionUID = -4367714276298639594L;
+    private static final long serialVersionUID = -4367714276298639594L;
 
-	/**
-	 * 错误码
-	 */
-	private final int code;
+    /**
+     * 错误码
+     */
+    private final int code;
 
-	public ApiException(IEnum<Integer> responseEnum) {
-		super(responseEnum);
-		this.code = responseEnum.getCode();
-	}
+    public ApiException(IEnum<Integer> responseEnum) {
+        super(responseEnum);
+        this.code = responseEnum.getCode();
+    }
 
-	public ApiException(IEnum<Integer> responseEnum, String message) {
-		super(responseEnum, message);
-		this.code = responseEnum.getCode();
-	}
+    public ApiException(IEnum<Integer> responseEnum, String message) {
+        super(responseEnum, message);
+        this.code = responseEnum.getCode();
+    }
 
-	public ApiException(IEnum<Integer> responseEnum, Throwable cause) {
-		super(responseEnum, cause);
-		this.code = responseEnum.getCode();
-	}
+    public ApiException(IEnum<Integer> responseEnum, Throwable cause) {
+        super(responseEnum, cause);
+        this.code = responseEnum.getCode();
+    }
 
-	public ApiException(IEnum<Integer> responseEnum, String message, Throwable cause) {
-		super(responseEnum, message, cause);
-		this.code = responseEnum.getCode();
-	}
+    public ApiException(IEnum<Integer> responseEnum, String message, Throwable cause) {
+        super(responseEnum, message, cause);
+        this.code = responseEnum.getCode();
+    }
 
 }

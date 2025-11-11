@@ -65,96 +65,96 @@ import java.util.Objects;
 @ConditionalOnWebApplication
 public class Redisson3AutoConfiguration {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Redisson3AutoConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Redisson3AutoConfiguration.class);
 
-	private final Redisson3Properties redisson3Properties;
+    private final Redisson3Properties redisson3Properties;
 
-	/**
-	 * 自定义 Redisson 配置
-	 * @return RedissonAutoConfigurationCustomizer
-	 */
-	@Bean
-	public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers() {
-		return config -> {
-			// 序列化模式
-			JsonJacksonCodec jsonCodec = new JsonJacksonCodec(objectMapper());
-			// 组合序列化 key 使用 String 内容使用通用 json 格式
-			config.setCodec(new CompositeCodec(StringCodec.INSTANCE, jsonCodec, jsonCodec));
-			config.setThreads(16);
-			config.setNettyThreads(32);
-			// 缓存 Lua 脚本 减少网络传输(redisson 大部分的功能都是基于 Lua 脚本实现)
-			config.setUseScriptCache(true);
-			// 获取方法
-			Method singleServerMethod = ReflectionUtils.findMethod(Config.class, "getSingleServerConfig");
-			Method sentinelServersMethod = ReflectionUtils.findMethod(Config.class, "getSentinelServersConfig");
-			Method clusterServersMethod = ReflectionUtils.findMethod(Config.class, "getClusterServersConfig");
-			// 自定义前缀
-			KeyPrefixNameMapper keyPrefixNameMapper = new KeyPrefixNameMapper(redisson3Properties.getKeyPrefix());
-			// 使用单机模式, 使用自定义前缀
-			if (singleServerMethod != null) {
-				ReflectionUtils.makeAccessible(singleServerMethod);
-				Object singleServerObject = ReflectionUtils.invokeMethod(singleServerMethod, config);
-				if (Objects.nonNull(singleServerObject)) {
-					((SingleServerConfig) singleServerObject).setNameMapper(keyPrefixNameMapper);
-				}
-			}
-			// 哨兵模式
-			if (sentinelServersMethod != null) {
-				ReflectionUtils.makeAccessible(sentinelServersMethod);
-				Object sentinelServersObject = ReflectionUtils.invokeMethod(sentinelServersMethod, config);
-				if (Objects.nonNull(sentinelServersObject)) {
-					((SentinelServersConfig) sentinelServersObject).setNameMapper(keyPrefixNameMapper);
-				}
-			}
-			// 集群配置方式
-			// 哨兵模式
-			if (clusterServersMethod != null) {
-				ReflectionUtils.makeAccessible(clusterServersMethod);
-				Object clusterServersObject = ReflectionUtils.invokeMethod(clusterServersMethod, config);
-				if (Objects.nonNull(clusterServersObject)) {
-					((ClusterServersConfig) clusterServersObject).setNameMapper(keyPrefixNameMapper);
-				}
-			}
-			LOGGER.info("配置[Redis -> Redisson]成功！");
-		};
-	}
+    /**
+     * 自定义 Redisson 配置
+     * @return RedissonAutoConfigurationCustomizer
+     */
+    @Bean
+    public RedissonAutoConfigurationCustomizer redissonAutoConfigurationCustomizers() {
+        return config -> {
+            // 序列化模式
+            JsonJacksonCodec jsonCodec = new JsonJacksonCodec(objectMapper());
+            // 组合序列化 key 使用 String 内容使用通用 json 格式
+            config.setCodec(new CompositeCodec(StringCodec.INSTANCE, jsonCodec, jsonCodec));
+            config.setThreads(16);
+            config.setNettyThreads(32);
+            // 缓存 Lua 脚本 减少网络传输(redisson 大部分的功能都是基于 Lua 脚本实现)
+            config.setUseScriptCache(true);
+            // 获取方法
+            Method singleServerMethod = ReflectionUtils.findMethod(Config.class, "getSingleServerConfig");
+            Method sentinelServersMethod = ReflectionUtils.findMethod(Config.class, "getSentinelServersConfig");
+            Method clusterServersMethod = ReflectionUtils.findMethod(Config.class, "getClusterServersConfig");
+            // 自定义前缀
+            KeyPrefixNameMapper keyPrefixNameMapper = new KeyPrefixNameMapper(redisson3Properties.getKeyPrefix());
+            // 使用单机模式, 使用自定义前缀
+            if (singleServerMethod != null) {
+                ReflectionUtils.makeAccessible(singleServerMethod);
+                Object singleServerObject = ReflectionUtils.invokeMethod(singleServerMethod, config);
+                if (Objects.nonNull(singleServerObject)) {
+                    ((SingleServerConfig) singleServerObject).setNameMapper(keyPrefixNameMapper);
+                }
+            }
+            // 哨兵模式
+            if (sentinelServersMethod != null) {
+                ReflectionUtils.makeAccessible(sentinelServersMethod);
+                Object sentinelServersObject = ReflectionUtils.invokeMethod(sentinelServersMethod, config);
+                if (Objects.nonNull(sentinelServersObject)) {
+                    ((SentinelServersConfig) sentinelServersObject).setNameMapper(keyPrefixNameMapper);
+                }
+            }
+            // 集群配置方式
+            // 哨兵模式
+            if (clusterServersMethod != null) {
+                ReflectionUtils.makeAccessible(clusterServersMethod);
+                Object clusterServersObject = ReflectionUtils.invokeMethod(clusterServersMethod, config);
+                if (Objects.nonNull(clusterServersObject)) {
+                    ((ClusterServersConfig) clusterServersObject).setNameMapper(keyPrefixNameMapper);
+                }
+            }
+            LOGGER.info("配置[Redis -> Redisson]成功！");
+        };
+    }
 
-	/**
-	 * Redis 序列化配置 采用 RedissonConnectionFactory 工厂
-	 * @return RedisTemplate
-	 */
-	@Bean(name = "redisTemplate")
-	public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-		RedisTemplate<String, T> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory);
-		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
-				Object.class);
-		jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
-		// 使用 StringRedisSerializer 来序列化和反序列化redis的key值
-		template.setKeySerializer(RedisSerializer.string());
-		template.setHashKeySerializer(RedisSerializer.string());
-		// 使用 Jackson2JsonRedisSerializer 序列化VALUE
-		template.setValueSerializer(jackson2JsonRedisSerializer);
-		template.setHashValueSerializer(jackson2JsonRedisSerializer);
-		// afterPropertiesSet
-		template.afterPropertiesSet();
-		LOGGER.info("配置[Redis -> RedisTemplate]成功！");
-		return template;
-	}
+    /**
+     * Redis 序列化配置 采用 RedissonConnectionFactory 工厂
+     * @return RedisTemplate
+     */
+    @Bean(name = "redisTemplate")
+    public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, T> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
+                Object.class);
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper());
+        // 使用 StringRedisSerializer 来序列化和反序列化redis的key值
+        template.setKeySerializer(RedisSerializer.string());
+        template.setHashKeySerializer(RedisSerializer.string());
+        // 使用 Jackson2JsonRedisSerializer 序列化VALUE
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        // afterPropertiesSet
+        template.afterPropertiesSet();
+        LOGGER.info("配置[Redis -> RedisTemplate]成功！");
+        return template;
+    }
 
-	private ObjectMapper objectMapper() {
-		// 使用Jackson2JsonRedisSerialize 替换默认序列化(默认采用的是JDK序列化)
-		ObjectMapper om = new ObjectMapper();
-		// 指定要序列化的域, field, get, set, 以及修饰符范围，ANY是都有包括private和public
-		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
-		om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
-				JsonTypeInfo.As.PROPERTY);
-		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		om.setDateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN));
-		om.registerModule(new CustomizeJavaTimeModule());
-		return om;
-	}
+    private ObjectMapper objectMapper() {
+        // 使用Jackson2JsonRedisSerialize 替换默认序列化(默认采用的是JDK序列化)
+        ObjectMapper om = new ObjectMapper();
+        // 指定要序列化的域, field, get, set, 以及修饰符范围，ANY是都有包括private和public
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
+        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY);
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        om.setDateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN));
+        om.registerModule(new CustomizeJavaTimeModule());
+        return om;
+    }
 
 }

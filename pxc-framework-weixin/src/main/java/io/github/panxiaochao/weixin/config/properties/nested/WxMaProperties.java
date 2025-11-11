@@ -34,79 +34,79 @@ import java.util.List;
 @Setter
 public class WxMaProperties {
 
-	/**
-	 * 是否开启
-	 */
-	private Boolean enabled;
+    /**
+     * 是否开启
+     */
+    private Boolean enabled;
 
-	/**
-	 * 指定key前缀.
-	 */
-	private String keyPrefix = "wx:ma";
+    /**
+     * 指定key前缀.
+     */
+    private String keyPrefix = "wx:ma";
 
-	/**
-	 * 多小程序配置
-	 */
-	private List<MaConfig> configs;
+    /**
+     * 多小程序配置
+     */
+    private List<MaConfig> configs;
 
-	@Getter
-	@Setter
-	public static class MaConfig {
+    @Getter
+    @Setter
+    public static class MaConfig {
 
-		/**
-		 * 设置微信小程序的 appId
-		 */
-		private String appId;
+        /**
+         * 设置微信小程序的 appId
+         */
+        private String appId;
 
-		/**
-		 * 设置微信小程序的 appSecret
-		 */
-		private String appSecret;
+        /**
+         * 设置微信小程序的 appSecret
+         */
+        private String appSecret;
 
-		/**
-		 * 令牌 token
-		 */
-		private String token;
+        /**
+         * 令牌 token
+         */
+        private String token;
 
-		/**
-		 * 消息加解密密钥 EncodingAESKey
-		 */
-		private String aesKey;
+        /**
+         * 消息加解密密钥 EncodingAESKey
+         */
+        private String aesKey;
 
-		/**
-		 * 消息格式，XML或者JSON
-		 */
-		private String msgDataFormat;
+        /**
+         * 消息格式，XML或者JSON
+         */
+        private String msgDataFormat;
 
-		/**
-		 * 是否使用稳定版 Access Token
-		 */
-		private boolean useStableAccessToken = false;
+        /**
+         * 是否使用稳定版 Access Token
+         */
+        private boolean useStableAccessToken = false;
 
-	}
+    }
 
-	/**
-	 * 配置多个消息处理器
-	 */
-	private List<MaHandler> handlers;
+    /**
+     * 配置多个消息处理器
+     */
+    private List<MaHandler> handlers;
 
-	/**
-	 * 自定义消息处理器
-	 */
-	@Getter
-	@Setter
-	public static class MaHandler {
+    /**
+     * 自定义消息处理器
+     */
+    @Getter
+    @Setter
+    public static class MaHandler {
 
-		/**
-		 * 设置消息处理器
-		 */
-		private Class<? extends AbstractMaHandler> handler;
+        /**
+         * 设置消息处理器
+         */
+        private Class<? extends AbstractMaHandler> handler;
 
-		/**
-		 * 消息类型，默认 event
-		 */
-		private String content;
+        /**
+         * 消息类型，默认 event
+         */
+        private String content;
 
-	}
+    }
 
 }

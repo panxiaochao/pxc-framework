@@ -38,45 +38,45 @@ import java.util.Objects;
  */
 public class TranslateFastJson2Filter implements ValueFilter {
 
-	@Override
-	public Object apply(Object object, String name, Object value) {
-		if (Objects.isNull(value)) {
-			return value;
-		}
-		// 获取字段上注解
-		try {
-			Field field = ReflectionUtils.findField(object.getClass(), name);
-			Translate translate = field.getAnnotation(Translate.class);
-			if (Objects.isNull(translate) || field.getType() != String.class) {
-				return value;
-			}
-			// 获取属性
-			TranslateStrategy strategy = translate.strategy();
-			String strategyClassName = translate.handler().getName();
-			// 相同的class，使用自带策略
-			if (strategyClassName.equals(IHandler.class.getName())) {
-				Object objectVal = strategy.use().apply(value.toString());
-				if (Objects.equals(objectVal.getClass(), Boolean.class)) {
-					return Boolean.parseBoolean(objectVal.toString());
-				}
-				else {
-					return objectVal.toString();
-				}
-			}
-			else {
-				Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
-				if (Objects.equals(invokeValue.getClass(), Boolean.class)) {
-					return Boolean.parseBoolean(invokeValue.toString());
-				}
-				else {
-					return invokeValue.toString();
-				}
-			}
-		}
-		catch (Exception e) {
-			throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-					"The field [" + name + "] serialize is error! ");
-		}
-	}
+    @Override
+    public Object apply(Object object, String name, Object value) {
+        if (Objects.isNull(value)) {
+            return value;
+        }
+        // 获取字段上注解
+        try {
+            Field field = ReflectionUtils.findField(object.getClass(), name);
+            Translate translate = field.getAnnotation(Translate.class);
+            if (Objects.isNull(translate) || field.getType() != String.class) {
+                return value;
+            }
+            // 获取属性
+            TranslateStrategy strategy = translate.strategy();
+            String strategyClassName = translate.handler().getName();
+            // 相同的class，使用自带策略
+            if (strategyClassName.equals(IHandler.class.getName())) {
+                Object objectVal = strategy.use().apply(value.toString());
+                if (Objects.equals(objectVal.getClass(), Boolean.class)) {
+                    return Boolean.parseBoolean(objectVal.toString());
+                }
+                else {
+                    return objectVal.toString();
+                }
+            }
+            else {
+                Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
+                if (Objects.equals(invokeValue.getClass(), Boolean.class)) {
+                    return Boolean.parseBoolean(invokeValue.toString());
+                }
+                else {
+                    return invokeValue.toString();
+                }
+            }
+        }
+        catch (Exception e) {
+            throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+                    "The field [" + name + "] serialize is error! ");
+        }
+    }
 
 }

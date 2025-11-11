@@ -42,69 +42,69 @@ import java.util.Objects;
  */
 public class TranslateJackJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
 
-	/**
-	 * 策略
-	 */
-	private final IStrategy<Object> strategy;
+    /**
+     * 策略
+     */
+    private final IStrategy<Object> strategy;
 
-	/**
-	 * 自定义策略 className
-	 */
-	private final String strategyClassName;
+    /**
+     * 自定义策略 className
+     */
+    private final String strategyClassName;
 
-	public TranslateJackJsonSerializer() {
-		this(null, null);
-	}
+    public TranslateJackJsonSerializer() {
+        this(null, null);
+    }
 
-	public TranslateJackJsonSerializer(IStrategy<Object> strategy, String strategyClassName) {
-		this.strategy = strategy;
-		this.strategyClassName = strategyClassName;
-	}
+    public TranslateJackJsonSerializer(IStrategy<Object> strategy, String strategyClassName) {
+        this.strategy = strategy;
+        this.strategyClassName = strategyClassName;
+    }
 
-	@Override
-	public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) {
-		try {
-			// 默认方法
-			if (strategyClassName.equals(IHandler.class.getName())) {
-				Object objectVal = strategy.use().apply(value);
-				if (Objects.equals(objectVal.getClass(), Boolean.class)) {
-					gen.writeBoolean(Boolean.parseBoolean(objectVal.toString()));
-				}
-				else {
-					gen.writeString(objectVal.toString());
-				}
-			}
-			else {
-				Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
-				if (Objects.equals(invokeValue.getClass(), Boolean.class)) {
-					gen.writeBoolean(Boolean.parseBoolean(invokeValue.toString()));
-				}
-				else {
-					gen.writeString(invokeValue.toString());
-				}
-			}
-		}
-		catch (Exception e) {
-			throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-					"The field [" + gen.getOutputContext().getCurrentName() + "] serialize is error! ");
-		}
+    @Override
+    public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) {
+        try {
+            // 默认方法
+            if (strategyClassName.equals(IHandler.class.getName())) {
+                Object objectVal = strategy.use().apply(value);
+                if (Objects.equals(objectVal.getClass(), Boolean.class)) {
+                    gen.writeBoolean(Boolean.parseBoolean(objectVal.toString()));
+                }
+                else {
+                    gen.writeString(objectVal.toString());
+                }
+            }
+            else {
+                Object invokeValue = InvokeMethodUtil.invoke(strategyClassName, value);
+                if (Objects.equals(invokeValue.getClass(), Boolean.class)) {
+                    gen.writeBoolean(Boolean.parseBoolean(invokeValue.toString()));
+                }
+                else {
+                    gen.writeString(invokeValue.toString());
+                }
+            }
+        }
+        catch (Exception e) {
+            throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+                    "The field [" + gen.getOutputContext().getCurrentName() + "] serialize is error! ");
+        }
 
-	}
+    }
 
-	@Override
-	public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
-		if (ObjectUtil.isNotEmpty(property)) {
-			Translate translate = property.getAnnotation(Translate.class);
-			if (null == translate) {
-				translate = property.getContextAnnotation(Translate.class);
-			}
-			if (null != translate) {
-				Assert.notNull(translate.strategy(), "The strategy must not be null");
-				Assert.notNull(translate.handler(), "The handler must not be null");
-				return new TranslateJackJsonSerializer(translate.strategy(), translate.handler().getName());
-			}
-		}
-		return new TranslateJackJsonSerializer();
-	}
+    @Override
+    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
+        if (ObjectUtil.isNotEmpty(property)) {
+            Translate translate = property.getAnnotation(Translate.class);
+            if (null == translate) {
+                translate = property.getContextAnnotation(Translate.class);
+            }
+            if (null != translate) {
+                Assert.notNull(translate.strategy(), "The strategy must not be null");
+                Assert.notNull(translate.handler(), "The handler must not be null");
+                return new TranslateJackJsonSerializer(translate.strategy(), translate.handler().getName());
+            }
+        }
+        return new TranslateJackJsonSerializer();
+    }
 
 }

@@ -34,92 +34,92 @@ import java.util.List;
 @Setter
 public class WxMpProperties {
 
-	/**
-	 * 是否开启
-	 */
-	private Boolean enabled;
+    /**
+     * 是否开启
+     */
+    private Boolean enabled;
 
-	/**
-	 * 指定key前缀.
-	 */
-	private String keyPrefix = "wx:mp";
+    /**
+     * 指定key前缀.
+     */
+    private String keyPrefix = "wx:mp";
 
-	/**
-	 * 多个公众号配置信息 <pre>
-	 *     configs:
-	 *       - appId: 1111 # 第一个公众号的appid
-	 *         secret: 1111
-	 *         token: 111
-	 *         aesKey: 111
-	 *       - appId: 2222 # 第二个公众号的appid，以下同上
-	 *         secret: 2222
-	 *         token: 2222
-	 *         aesKey: 2222
-	 * </pre>
-	 */
-	private List<MpConfig> configs;
+    /**
+     * 多个公众号配置信息 <pre>
+     *     configs:
+     *       - appId: 1111 # 第一个公众号的appid
+     *         secret: 1111
+     *         token: 111
+     *         aesKey: 111
+     *       - appId: 2222 # 第二个公众号的appid，以下同上
+     *         secret: 2222
+     *         token: 2222
+     *         aesKey: 2222
+     * </pre>
+     */
+    private List<MpConfig> configs;
 
-	/**
-	 * 基础配置信息
-	 */
-	@Getter
-	@Setter
-	public static class MpConfig {
+    /**
+     * 基础配置信息
+     */
+    @Getter
+    @Setter
+    public static class MpConfig {
 
-		/**
-		 * 设置微信公众号的 appId
-		 */
-		private String appId;
+        /**
+         * 设置微信公众号的 appId
+         */
+        private String appId;
 
-		/**
-		 * 设置微信公众号的 appSecret
-		 */
-		private String appSecret;
+        /**
+         * 设置微信公众号的 appSecret
+         */
+        private String appSecret;
 
-		/**
-		 * 令牌 token
-		 */
-		private String token;
+        /**
+         * 令牌 token
+         */
+        private String token;
 
-		/**
-		 * 消息加解密密钥 EncodingAESKey
-		 */
-		private String aesKey;
+        /**
+         * 消息加解密密钥 EncodingAESKey
+         */
+        private String aesKey;
 
-		/**
-		 * 是否使用稳定版 Access Token, 默认true
-		 */
-		private boolean useStableAccessToken = false;
+        /**
+         * 是否使用稳定版 Access Token, 默认true
+         */
+        private boolean useStableAccessToken = false;
 
-	}
+    }
 
-	/**
-	 * 配置多个消息处理器
-	 */
-	private List<MpHandler> handlers;
+    /**
+     * 配置多个消息处理器
+     */
+    private List<MpHandler> handlers;
 
-	/**
-	 * 自定义消息处理器
-	 */
-	@Getter
-	@Setter
-	public static class MpHandler {
+    /**
+     * 自定义消息处理器
+     */
+    @Getter
+    @Setter
+    public static class MpHandler {
 
-		/**
-		 * 设置消息处理器
-		 */
-		private Class<? extends AbstractMpHandler> handler;
+        /**
+         * 设置消息处理器
+         */
+        private Class<? extends AbstractMpHandler> handler;
 
-		/**
-		 * 消息类型，默认 event
-		 */
-		private String msgType;
+        /**
+         * 消息类型，默认 event
+         */
+        private String msgType;
 
-		/**
-		 * 事件类型：比如有订阅、关注等等，具体值参考官方Demo示例
-		 */
-		private String event;
+        /**
+         * 事件类型：比如有订阅、关注等等，具体值参考官方Demo示例
+         */
+        private String event;
 
-	}
+    }
 
 }

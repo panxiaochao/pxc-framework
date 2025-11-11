@@ -45,64 +45,64 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PlusWxOpenService {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	/**
-	 * 初始化 WxOpenService
-	 * @return WxOpenService
-	 */
-	public WxOpenService build() {
-		if (!wxProperties.getOpen().getEnabled()) {
-			return new WxOpenServiceImpl();
-		}
-		final WxOpenProperties openProperties = wxProperties.getOpen();
-		// 存储方式
-		StorageType storageType = wxProperties.getStorageType();
-		WxOpenConfigStorage configStorage;
-		switch (storageType) {
-			case Redisson:
-				configStorage = redissonConfigStorage();
-				break;
-			case RedisTemplate:
-				configStorage = redisTemplateConfigStorage();
-				break;
-			default:
-				configStorage = new WxOpenInMemoryConfigStorage();
-				break;
-		}
-		configStorage.setWxOpenInfo(openProperties.getAppId(), openProperties.getSecret(), openProperties.getToken(),
-				openProperties.getAesKey());
-		WxOpenService service = new WxOpenServiceImpl();
-		service.setWxOpenConfigStorage(configStorage);
-		return service;
-	}
+    /**
+     * 初始化 WxOpenService
+     * @return WxOpenService
+     */
+    public WxOpenService build() {
+        if (!wxProperties.getOpen().getEnabled()) {
+            return new WxOpenServiceImpl();
+        }
+        final WxOpenProperties openProperties = wxProperties.getOpen();
+        // 存储方式
+        StorageType storageType = wxProperties.getStorageType();
+        WxOpenConfigStorage configStorage;
+        switch (storageType) {
+            case Redisson:
+                configStorage = redissonConfigStorage();
+                break;
+            case RedisTemplate:
+                configStorage = redisTemplateConfigStorage();
+                break;
+            default:
+                configStorage = new WxOpenInMemoryConfigStorage();
+                break;
+        }
+        configStorage.setWxOpenInfo(openProperties.getAppId(), openProperties.getSecret(), openProperties.getToken(),
+                openProperties.getAesKey());
+        WxOpenService service = new WxOpenServiceImpl();
+        service.setWxOpenConfigStorage(configStorage);
+        return service;
+    }
 
-	/**
-	 * Redisson 存储方案
-	 */
-	private WxOpenConfigStorage redissonConfigStorage() {
-		RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
-		if (Objects.isNull(redissonClient)) {
-			redissonClient = SpringContextUtil.getBean("redissonClient");
-		}
-		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
-		return new WxOpenInRedissonConfigStorage(redissonClient, wxProperties.getOpen().getKeyPrefix());
-	}
+    /**
+     * Redisson 存储方案
+     */
+    private WxOpenConfigStorage redissonConfigStorage() {
+        RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+        if (Objects.isNull(redissonClient)) {
+            redissonClient = SpringContextUtil.getBean("redissonClient");
+        }
+        Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
+        return new WxOpenInRedissonConfigStorage(redissonClient, wxProperties.getOpen().getKeyPrefix());
+    }
 
-	/**
-	 * RedisTemplate 存储方案
-	 */
-	private WxOpenConfigStorage redisTemplateConfigStorage() {
-		StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
-		}
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("redisTemplate");
-		}
-		Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
-		WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
-		return new WxOpenInRedisTemplateConfigStorage(redisOps, wxProperties.getOpen().getKeyPrefix());
-	}
+    /**
+     * RedisTemplate 存储方案
+     */
+    private WxOpenConfigStorage redisTemplateConfigStorage() {
+        StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
+        }
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("redisTemplate");
+        }
+        Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
+        WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
+        return new WxOpenInRedisTemplateConfigStorage(redisOps, wxProperties.getOpen().getKeyPrefix());
+    }
 
 }

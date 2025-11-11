@@ -23,20 +23,20 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import java.util.Map;
 
 /**
- * 
+ *
  * <p>
  * 默认 Null 处理
  * </p>
- * 
+ *
  * @author Lypxc
  * @since 2024-12-11
  */
 public class NullHandler extends AbstractMpHandler {
 
-	@Override
-	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
-			WxSessionManager sessionManager) {
-		return null;
-	}
+    @Override
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
+            WxSessionManager sessionManager) {
+        return null;
+    }
 
 }

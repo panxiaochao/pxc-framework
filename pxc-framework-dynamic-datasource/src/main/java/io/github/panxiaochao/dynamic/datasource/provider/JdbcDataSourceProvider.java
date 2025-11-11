@@ -41,69 +41,69 @@ import java.util.Map;
  */
 public class JdbcDataSourceProvider extends AbstractJdbcDataSourceProvider {
 
-	/**
-	 * LOGGER JdbcDataSourceProvider.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcDataSourceProvider.class);
+    /**
+     * LOGGER JdbcDataSourceProvider.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcDataSourceProvider.class);
 
-	private final DsProperties properties;
+    private final DsProperties properties;
 
-	private final DataSourceProperties dataSourceProperties;
+    private final DataSourceProperties dataSourceProperties;
 
-	private final StringEncryptor stringEncryptor;
+    private final StringEncryptor stringEncryptor;
 
-	/**
-	 * 通过默认数据源创建器创建数据源
-	 * @param defaultDataSourceCreator 默认数据源创建器
-	 * @param stringEncryptor 加密配置文件
-	 * @param dataSourceProperties 基础数据源属性配置文件
-	 * @param properties 属性配置文件
-	 */
-	public JdbcDataSourceProvider(DefaultDataSourceCreator defaultDataSourceCreator, StringEncryptor stringEncryptor,
-			DataSourceProperties dataSourceProperties, DsProperties properties) {
-		super(defaultDataSourceCreator, dataSourceProperties.getUrl(), dataSourceProperties.getUsername(),
-				dataSourceProperties.getPassword());
-		this.properties = properties;
-		this.dataSourceProperties = dataSourceProperties;
-		this.stringEncryptor = stringEncryptor;
-	}
+    /**
+     * 通过默认数据源创建器创建数据源
+     * @param defaultDataSourceCreator 默认数据源创建器
+     * @param stringEncryptor 加密配置文件
+     * @param dataSourceProperties 基础数据源属性配置文件
+     * @param properties 属性配置文件
+     */
+    public JdbcDataSourceProvider(DefaultDataSourceCreator defaultDataSourceCreator, StringEncryptor stringEncryptor,
+            DataSourceProperties dataSourceProperties, DsProperties properties) {
+        super(defaultDataSourceCreator, dataSourceProperties.getUrl(), dataSourceProperties.getUsername(),
+                dataSourceProperties.getPassword());
+        this.properties = properties;
+        this.dataSourceProperties = dataSourceProperties;
+        this.stringEncryptor = stringEncryptor;
+    }
 
-	/**
-	 * 执行语句获得数据源参数
-	 * @param statement 语句
-	 * @return 数据源参数
-	 * @throws SQLException sql异常
-	 */
-	@Override
-	protected Map<String, DataSourceProperty> executeStmt(Statement statement) throws SQLException {
-		Map<String, DataSourceProperty> map = new HashMap<>(8);
-		if (StringUtils.hasText(properties.getQueryDsSql())) {
-			ResultSet rs = statement.executeQuery(properties.getQueryDsSql());
-			while (rs.next()) {
-				String name = rs.getString("name");
-				String url = rs.getString("url");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				DataSourceProperty property = new DataSourceProperty();
-				property.setUsername(username);
-				property.setLazy(true);
-				property.setPassword(password);
-				property.setUrl(url);
-				map.put(name, property);
-			}
-		}
-		else {
-			LOGGER.error("请配置动态数据库查询语句参数[queryDsSql]");
-		}
+    /**
+     * 执行语句获得数据源参数
+     * @param statement 语句
+     * @return 数据源参数
+     * @throws SQLException sql异常
+     */
+    @Override
+    protected Map<String, DataSourceProperty> executeStmt(Statement statement) throws SQLException {
+        Map<String, DataSourceProperty> map = new HashMap<>(8);
+        if (StringUtils.hasText(properties.getQueryDsSql())) {
+            ResultSet rs = statement.executeQuery(properties.getQueryDsSql());
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String url = rs.getString("url");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                DataSourceProperty property = new DataSourceProperty();
+                property.setUsername(username);
+                property.setLazy(true);
+                property.setPassword(password);
+                property.setUrl(url);
+                map.put(name, property);
+            }
+        }
+        else {
+            LOGGER.error("请配置动态数据库查询语句参数[queryDsSql]");
+        }
 
-		// 添加默认主数据源
-		DataSourceProperty property = new DataSourceProperty();
-		property.setUsername(dataSourceProperties.getUsername());
-		property.setPassword(dataSourceProperties.getPassword());
-		property.setUrl(dataSourceProperties.getUrl());
-		property.setLazy(true);
-		map.put("master", property);
-		return map;
-	}
+        // 添加默认主数据源
+        DataSourceProperty property = new DataSourceProperty();
+        property.setUsername(dataSourceProperties.getUsername());
+        property.setPassword(dataSourceProperties.getPassword());
+        property.setUrl(dataSourceProperties.getUrl());
+        property.setLazy(true);
+        map.put("master", property);
+        return map;
+    }
 
 }

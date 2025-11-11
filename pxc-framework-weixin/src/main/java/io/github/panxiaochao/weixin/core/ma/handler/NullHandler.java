@@ -33,10 +33,10 @@ import java.util.Map;
  */
 public class NullHandler extends AbstractMaHandler {
 
-	@Override
-	public WxMaXmlOutMessage handle(WxMaMessage wxMaMessage, Map<String, Object> map, WxMaService wxMaService,
-			WxSessionManager wxSessionManager) {
-		return null;
-	}
+    @Override
+    public WxMaXmlOutMessage handle(WxMaMessage wxMaMessage, Map<String, Object> map, WxMaService wxMaService,
+            WxSessionManager wxSessionManager) {
+        return null;
+    }
 
 }

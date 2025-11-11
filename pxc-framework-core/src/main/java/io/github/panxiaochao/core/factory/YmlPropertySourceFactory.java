@@ -36,18 +36,18 @@ import java.util.Objects;
  */
 public class YmlPropertySourceFactory extends DefaultPropertySourceFactory {
 
-	@Override
-	@Nullable
-	public PropertySource<?> createPropertySource(@Nullable String name, EncodedResource resource) throws IOException {
-		String sourceName = resource.getResource().getFilename();
-		if (StringUtils.hasText(sourceName) && (StringUtils.endsWithIgnoreCase(sourceName, ".yml")
-				|| StringUtils.endsWithIgnoreCase(sourceName, ".yaml"))) {
-			YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
-			factory.setResources(resource.getResource());
-			factory.afterPropertiesSet();
-			return new PropertiesPropertySource(sourceName, Objects.requireNonNull(factory.getObject()));
-		}
-		return super.createPropertySource(name, resource);
-	}
+    @Override
+    @Nullable
+    public PropertySource<?> createPropertySource(@Nullable String name, EncodedResource resource) throws IOException {
+        String sourceName = resource.getResource().getFilename();
+        if (StringUtils.hasText(sourceName) && (StringUtils.endsWithIgnoreCase(sourceName, ".yml")
+                || StringUtils.endsWithIgnoreCase(sourceName, ".yaml"))) {
+            YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
+            factory.setResources(resource.getResource());
+            factory.afterPropertiesSet();
+            return new PropertiesPropertySource(sourceName, Objects.requireNonNull(factory.getObject()));
+        }
+        return super.createPropertySource(name, resource);
+    }
 
 }

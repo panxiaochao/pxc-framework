@@ -26,14 +26,14 @@ package io.github.panxiaochao.holiday.constants;
  */
 public interface HolidayConstant {
 
-	/**
-	 * 自带节假日json数据位置
-	 */
-	String DEFAULT_JSON_LOCATION = "classpath*:/json/**/*.json";
+    /**
+     * 自带节假日json数据位置
+     */
+    String DEFAULT_JSON_LOCATION = "classpath*:/json/**/*.json";
 
-	/**
-	 * key 前缀
-	 */
-	String KEY_PREFIX = "holiday:";
+    /**
+     * key 前缀
+     */
+    String KEY_PREFIX = "holiday:";
 
 }

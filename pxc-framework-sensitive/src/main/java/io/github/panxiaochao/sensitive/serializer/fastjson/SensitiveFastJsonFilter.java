@@ -37,33 +37,33 @@ import java.util.Objects;
  */
 public class SensitiveFastJsonFilter implements ValueFilter {
 
-	@Override
-	public Object process(Object object, String name, Object value) {
-		if (Objects.isNull(value) || !(value instanceof String)) {
-			return value;
-		}
-		// 获取字段上注解
-		try {
-			Field field = ReflectionUtils.findField(object.getClass(), name);
-			Sensitive sensitive = field.getAnnotation(Sensitive.class);
-			if (Objects.isNull(sensitive) || field.getType() != String.class) {
-				return value;
-			}
-			// 获取属性
-			SensitiveStrategy strategy = sensitive.strategy();
-			String strategyClassName = sensitive.handler().getName();
-			// 相同的class，使用自带策略
-			if (strategyClassName.equals(IHandler.class.getName())) {
-				return strategy.use().apply(value.toString());
-			}
-			else {
-				return InvokeMethodUtil.invoke(strategyClassName, value);
-			}
-		}
-		catch (Exception e) {
-			throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-					"The field [" + name + "] serialize is error! ");
-		}
-	}
+    @Override
+    public Object process(Object object, String name, Object value) {
+        if (Objects.isNull(value) || !(value instanceof String)) {
+            return value;
+        }
+        // 获取字段上注解
+        try {
+            Field field = ReflectionUtils.findField(object.getClass(), name);
+            Sensitive sensitive = field.getAnnotation(Sensitive.class);
+            if (Objects.isNull(sensitive) || field.getType() != String.class) {
+                return value;
+            }
+            // 获取属性
+            SensitiveStrategy strategy = sensitive.strategy();
+            String strategyClassName = sensitive.handler().getName();
+            // 相同的class，使用自带策略
+            if (strategyClassName.equals(IHandler.class.getName())) {
+                return strategy.use().apply(value.toString());
+            }
+            else {
+                return InvokeMethodUtil.invoke(strategyClassName, value);
+            }
+        }
+        catch (Exception e) {
+            throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+                    "The field [" + name + "] serialize is error! ");
+        }
+    }
 
 }

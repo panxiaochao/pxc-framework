@@ -35,19 +35,19 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TraceWebMvcInterceptor implements HandlerInterceptor {
 
-	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-		if (handler instanceof HandlerMethod) {
-			TraceWebMvcHandler.instance().processBeforeTraceLog(request);
-			response.addHeader(TraceLogConstant.TRACE_ID, TraceLogContext.getTraceId());
-		}
-		return true;
-	}
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (handler instanceof HandlerMethod) {
+            TraceWebMvcHandler.instance().processBeforeTraceLog(request);
+            response.addHeader(TraceLogConstant.TRACE_ID, TraceLogContext.getTraceId());
+        }
+        return true;
+    }
 
-	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
-			@Nullable Exception ex) {
-		TraceWebMvcHandler.instance().cleanTraceLogAll();
-	}
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+            @Nullable Exception ex) {
+        TraceWebMvcHandler.instance().cleanTraceLogAll();
+    }
 
 }

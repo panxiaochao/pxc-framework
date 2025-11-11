@@ -33,14 +33,14 @@ import java.util.List;
  */
 public class MySqlInjector extends DefaultSqlInjector {
 
-	@Override
-	public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
-		// 获取 MyBatis-Plus 自带方法
-		List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
-		// 增加自定义方法，字段注解上不等于 FieldFill.UPDATE 的字段才会插入
-		methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
-		methodList.add(new MySqlUpdateBatchSomeColumn());
-		return methodList;
-	}
+    @Override
+    public List<AbstractMethod> getMethodList(Class<?> mapperClass, TableInfo tableInfo) {
+        // 获取 MyBatis-Plus 自带方法
+        List<AbstractMethod> methodList = super.getMethodList(mapperClass, tableInfo);
+        // 增加自定义方法，字段注解上不等于 FieldFill.UPDATE 的字段才会插入
+        methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
+        methodList.add(new MySqlUpdateBatchSomeColumn());
+        return methodList;
+    }
 
 }

@@ -30,6 +30,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractCpHandler implements WxCpMessageHandler {
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 }

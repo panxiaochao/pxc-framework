@@ -41,61 +41,61 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AutoConfiguration
 public class TraceLogAutoConfiguration {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TraceLogAutoConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraceLogAutoConfiguration.class);
 
-	/**
-	 * WebMvc Trace Log
-	 */
-	@Configuration
-	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-	@ConditionalOnClass(name = {
-			//
-			"org.springframework.web.servlet.config.annotation.WebMvcConfigurer",
-			"org.springframework.boot.web.servlet.FilterRegistrationBean" //
-	})
-	static class TraceLogWebMvcConfigurer implements WebMvcConfigurer {
+    /**
+     * WebMvc Trace Log
+     */
+    @Configuration
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+    @ConditionalOnClass(name = {
+            //
+            "org.springframework.web.servlet.config.annotation.WebMvcConfigurer",
+            "org.springframework.boot.web.servlet.FilterRegistrationBean" //
+    })
+    static class TraceLogWebMvcConfigurer implements WebMvcConfigurer {
 
-		@Override
-		public void addInterceptors(InterceptorRegistry registry) {
-			LOGGER.info("配置[TraceLog-WebMvc]成功！");
-			registry.addInterceptor(new TraceWebMvcInterceptor())
-				.addPathPatterns("/**")
-				.order(Ordered.HIGHEST_PRECEDENCE);
-		}
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            LOGGER.info("配置[TraceLog-WebMvc]成功！");
+            registry.addInterceptor(new TraceWebMvcInterceptor())
+                .addPathPatterns("/**")
+                .order(Ordered.HIGHEST_PRECEDENCE);
+        }
 
-	}
+    }
 
-	/**
-	 * GateWay Trace Log
-	 */
-	@Configuration
-	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-	@ConditionalOnClass(name = { "org.springframework.cloud.gateway.filter.GlobalFilter" })
-	static class TraceLogGatewayConfiguration {
+    /**
+     * GateWay Trace Log
+     */
+    @Configuration
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+    @ConditionalOnClass(name = { "org.springframework.cloud.gateway.filter.GlobalFilter" })
+    static class TraceLogGatewayConfiguration {
 
-		@Bean
-		@Order(Ordered.HIGHEST_PRECEDENCE)
-		public TraceGatewayGlobalFilter tracerScgGlobalFilter() {
-			LOGGER.info("配置[TraceLog-Gateway]成功！");
-			return new TraceGatewayGlobalFilter();
-		}
+        @Bean
+        @Order(Ordered.HIGHEST_PRECEDENCE)
+        public TraceGatewayGlobalFilter tracerScgGlobalFilter() {
+            LOGGER.info("配置[TraceLog-Gateway]成功！");
+            return new TraceGatewayGlobalFilter();
+        }
 
-	}
+    }
 
-	/**
-	 * Feign Trace Log
-	 */
-	@Configuration
-	@ConditionalOnClass(name = { "feign.RequestInterceptor" })
-	static class TraceLogFeignConfiguration {
+    /**
+     * Feign Trace Log
+     */
+    @Configuration
+    @ConditionalOnClass(name = { "feign.RequestInterceptor" })
+    static class TraceLogFeignConfiguration {
 
-		@Bean
-		@Order(Ordered.HIGHEST_PRECEDENCE)
-		public TraceFeignInterceptor traceFeignInterceptor() {
-			LOGGER.info("配置[TraceLog-Feign]成功！");
-			return new TraceFeignInterceptor();
-		}
+        @Bean
+        @Order(Ordered.HIGHEST_PRECEDENCE)
+        public TraceFeignInterceptor traceFeignInterceptor() {
+            LOGGER.info("配置[TraceLog-Feign]成功！");
+            return new TraceFeignInterceptor();
+        }
 
-	}
+    }
 
 }

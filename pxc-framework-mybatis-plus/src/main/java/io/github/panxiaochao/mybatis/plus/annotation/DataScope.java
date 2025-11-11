@@ -35,16 +35,16 @@ import java.lang.annotation.Target;
 @Documented
 public @interface DataScope {
 
-	/**
-	 * 数据权限模板的占位符关键字，默认为 "org_id"
-	 * @return 占位符关键字数组
-	 */
-	String[] key() default "org_id";
+    /**
+     * 数据权限模板的占位符关键字，默认为 "org_id"
+     * @return 占位符关键字数组
+     */
+    String[] key() default "org_id";
 
-	/**
-	 * 自定义数据权限过滤sql
-	 * @return 权限标识符
-	 */
-	String sqlFilter() default "";
+    /**
+     * 自定义数据权限过滤sql
+     * @return 权限标识符
+     */
+    String sqlFilter() default "";
 
 }

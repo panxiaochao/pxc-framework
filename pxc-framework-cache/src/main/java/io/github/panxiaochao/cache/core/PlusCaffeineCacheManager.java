@@ -52,222 +52,222 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PlusCaffeineCacheManager implements CacheManager {
 
-	private Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
+    private Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
 
-	private boolean allowNullValues = true;
+    private boolean allowNullValues = true;
 
-	private boolean dynamic = true;
+    private boolean dynamic = true;
 
-	private final Map<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
+    private final Map<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
 
-	private final Collection<String> customCacheNames = new CopyOnWriteArrayList<>();
+    private final Collection<String> customCacheNames = new CopyOnWriteArrayList<>();
 
-	/**
-	 * Construct a dynamic CaffeineCacheManager, lazily creating cache instances as they
-	 * are being requested.
-	 */
-	public PlusCaffeineCacheManager() {
-	}
+    /**
+     * Construct a dynamic CaffeineCacheManager, lazily creating cache instances as they
+     * are being requested.
+     */
+    public PlusCaffeineCacheManager() {
+    }
 
-	/**
-	 * Specify the set of cache names for this CacheManager's 'static' mode.
-	 * <p>
-	 * The number of caches and their names will be fixed after a call to this method,
-	 * with no creation of further cache regions at runtime.
-	 * <p>
-	 * Calling this with a {@code null} collection argument resets the mode to 'dynamic',
-	 * allowing for further creation of caches again.
-	 */
-	public void setCacheNames(@Nullable Collection<String> cacheNames) {
-		if (cacheNames != null) {
-			for (String name : cacheNames) {
-				this.cacheMap.put(name, createCaffeineCache(name));
-			}
-			this.dynamic = false;
-		}
-		else {
-			this.dynamic = true;
-		}
-	}
+    /**
+     * Specify the set of cache names for this CacheManager's 'static' mode.
+     * <p>
+     * The number of caches and their names will be fixed after a call to this method,
+     * with no creation of further cache regions at runtime.
+     * <p>
+     * Calling this with a {@code null} collection argument resets the mode to 'dynamic',
+     * allowing for further creation of caches again.
+     */
+    public void setCacheNames(@Nullable Collection<String> cacheNames) {
+        if (cacheNames != null) {
+            for (String name : cacheNames) {
+                this.cacheMap.put(name, createCaffeineCache(name));
+            }
+            this.dynamic = false;
+        }
+        else {
+            this.dynamic = true;
+        }
+    }
 
-	/**
-	 * Set the Caffeine to use for building each individual {@link CaffeineCache}
-	 * instance.
-	 * @see #createNativeCaffeineCache
-	 * @see Caffeine#build()
-	 */
-	public void setCaffeine(Caffeine<Object, Object> caffeine) {
-		Assert.notNull(caffeine, "Caffeine must not be null");
-		doSetCaffeine(caffeine);
-	}
+    /**
+     * Set the Caffeine to use for building each individual {@link CaffeineCache}
+     * instance.
+     * @see #createNativeCaffeineCache
+     * @see Caffeine#build()
+     */
+    public void setCaffeine(Caffeine<Object, Object> caffeine) {
+        Assert.notNull(caffeine, "Caffeine must not be null");
+        doSetCaffeine(caffeine);
+    }
 
-	/**
-	 * Set the {@link CaffeineSpec} to use for building each individual
-	 * {@link CaffeineCache} instance.
-	 * @see #createNativeCaffeineCache
-	 * @see Caffeine#from(CaffeineSpec)
-	 */
-	public void setCaffeineSpec(CaffeineSpec caffeineSpec) {
-		doSetCaffeine(Caffeine.from(caffeineSpec));
-	}
+    /**
+     * Set the {@link CaffeineSpec} to use for building each individual
+     * {@link CaffeineCache} instance.
+     * @see #createNativeCaffeineCache
+     * @see Caffeine#from(CaffeineSpec)
+     */
+    public void setCaffeineSpec(CaffeineSpec caffeineSpec) {
+        doSetCaffeine(Caffeine.from(caffeineSpec));
+    }
 
-	/**
-	 * Set the Caffeine cache specification String to use for building each individual
-	 * {@link CaffeineCache} instance. The given value needs to comply with Caffeine's
-	 * {@link CaffeineSpec} (see its javadoc).
-	 * @see #createNativeCaffeineCache
-	 * @see Caffeine#from(String)
-	 */
-	public void setCacheSpecification(String cacheSpecification) {
-		doSetCaffeine(Caffeine.from(cacheSpecification));
-	}
+    /**
+     * Set the Caffeine cache specification String to use for building each individual
+     * {@link CaffeineCache} instance. The given value needs to comply with Caffeine's
+     * {@link CaffeineSpec} (see its javadoc).
+     * @see #createNativeCaffeineCache
+     * @see Caffeine#from(String)
+     */
+    public void setCacheSpecification(String cacheSpecification) {
+        doSetCaffeine(Caffeine.from(cacheSpecification));
+    }
 
-	private void doSetCaffeine(Caffeine<Object, Object> cacheBuilder) {
-		if (!ObjectUtils.nullSafeEquals(this.cacheBuilder, cacheBuilder)) {
-			this.cacheBuilder = cacheBuilder;
-			refreshCommonCaches();
-		}
-	}
+    private void doSetCaffeine(Caffeine<Object, Object> cacheBuilder) {
+        if (!ObjectUtils.nullSafeEquals(this.cacheBuilder, cacheBuilder)) {
+            this.cacheBuilder = cacheBuilder;
+            refreshCommonCaches();
+        }
+    }
 
-	/**
-	 * Specify whether to accept and convert {@code null} values for all caches in this
-	 * cache manager.
-	 * <p>
-	 * Default is "true", despite Caffeine itself not supporting {@code null} values. An
-	 * internal holder object will be used to store user-level {@code null}s.
-	 */
-	public void setAllowNullValues(boolean allowNullValues) {
-		if (this.allowNullValues != allowNullValues) {
-			this.allowNullValues = allowNullValues;
-			refreshCommonCaches();
-		}
-	}
+    /**
+     * Specify whether to accept and convert {@code null} values for all caches in this
+     * cache manager.
+     * <p>
+     * Default is "true", despite Caffeine itself not supporting {@code null} values. An
+     * internal holder object will be used to store user-level {@code null}s.
+     */
+    public void setAllowNullValues(boolean allowNullValues) {
+        if (this.allowNullValues != allowNullValues) {
+            this.allowNullValues = allowNullValues;
+            refreshCommonCaches();
+        }
+    }
 
-	/**
-	 * Return whether this cache manager accepts and converts {@code null} values for all
-	 * of its caches.
-	 */
-	public boolean isAllowNullValues() {
-		return this.allowNullValues;
-	}
+    /**
+     * Return whether this cache manager accepts and converts {@code null} values for all
+     * of its caches.
+     */
+    public boolean isAllowNullValues() {
+        return this.allowNullValues;
+    }
 
-	@Override
-	public Collection<String> getCacheNames() {
-		return Collections.unmodifiableSet(this.cacheMap.keySet());
-	}
+    @Override
+    public Collection<String> getCacheNames() {
+        return Collections.unmodifiableSet(this.cacheMap.keySet());
+    }
 
-	@Override
-	@Nullable
-	public Cache getCache(String name) {
-		// 重写 name 分割 name
-		String[] array = StringUtils.delimitedListToStringArray(name, StringPools.HASH);
-		name = array[0];
-		Cache cache = this.cacheMap.get(name);
-		if (cache == null && this.dynamic) {
-			if (array.length > 1) {
-				long mills = DurationStyle.detectAndParse(array[1]).toMillis();
-				cache = this.cacheMap.computeIfAbsent(name,
-						str -> this.adaptCaffeineCache(str, createNativeCaffeineCache(mills, 100, 500)));
-			}
-			else {
-				cache = this.cacheMap.computeIfAbsent(name, this::createCaffeineCache);
-			}
-		}
-		return cache;
-	}
+    @Override
+    @Nullable
+    public Cache getCache(String name) {
+        // 重写 name 分割 name
+        String[] array = StringUtils.delimitedListToStringArray(name, StringPools.HASH);
+        name = array[0];
+        Cache cache = this.cacheMap.get(name);
+        if (cache == null && this.dynamic) {
+            if (array.length > 1) {
+                long mills = DurationStyle.detectAndParse(array[1]).toMillis();
+                cache = this.cacheMap.computeIfAbsent(name,
+                        str -> this.adaptCaffeineCache(str, createNativeCaffeineCache(mills, 100, 500)));
+            }
+            else {
+                cache = this.cacheMap.computeIfAbsent(name, this::createCaffeineCache);
+            }
+        }
+        return cache;
+    }
 
-	/**
-	 * Register the given native Caffeine Cache instance with this cache manager, adapting
-	 * it to Spring's cache API for exposure through {@link #getCache}. Any number of such
-	 * custom caches may be registered side by side.
-	 * <p>
-	 * This allows for custom settings per cache (as opposed to all caches sharing the
-	 * common settings in the cache manager's configuration) and is typically used with
-	 * the Caffeine builder API:
-	 * {@code registerCustomCache("myCache", Caffeine.newBuilder().maximumSize(10).build())}
-	 * <p>
-	 * Note that any other caches, whether statically specified through
-	 * {@link #setCacheNames} or dynamically built on demand, still operate with the
-	 * common settings in the cache manager's configuration.
-	 * @param name the name of the cache
-	 * @param cache the custom Caffeine Cache instance to register
-	 * @since 5.2.8
-	 * @see #adaptCaffeineCache
-	 */
-	public void registerCustomCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
-		this.customCacheNames.add(name);
-		this.cacheMap.put(name, adaptCaffeineCache(name, cache));
-	}
+    /**
+     * Register the given native Caffeine Cache instance with this cache manager, adapting
+     * it to Spring's cache API for exposure through {@link #getCache}. Any number of such
+     * custom caches may be registered side by side.
+     * <p>
+     * This allows for custom settings per cache (as opposed to all caches sharing the
+     * common settings in the cache manager's configuration) and is typically used with
+     * the Caffeine builder API:
+     * {@code registerCustomCache("myCache", Caffeine.newBuilder().maximumSize(10).build())}
+     * <p>
+     * Note that any other caches, whether statically specified through
+     * {@link #setCacheNames} or dynamically built on demand, still operate with the
+     * common settings in the cache manager's configuration.
+     * @param name the name of the cache
+     * @param cache the custom Caffeine Cache instance to register
+     * @since 5.2.8
+     * @see #adaptCaffeineCache
+     */
+    public void registerCustomCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
+        this.customCacheNames.add(name);
+        this.cacheMap.put(name, adaptCaffeineCache(name, cache));
+    }
 
-	/**
-	 * Adapt the given new native Caffeine Cache instance to Spring's {@link Cache}
-	 * abstraction for the specified cache name.
-	 * @param name the name of the cache
-	 * @param cache the native Caffeine Cache instance
-	 * @return the Spring CaffeineCache adapter (or a decorator thereof)
-	 * @since 5.2.8
-	 * @see CaffeineCache
-	 * @see #isAllowNullValues()
-	 */
-	protected Cache adaptCaffeineCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
-		return new CaffeineCache(name, cache, isAllowNullValues());
-	}
+    /**
+     * Adapt the given new native Caffeine Cache instance to Spring's {@link Cache}
+     * abstraction for the specified cache name.
+     * @param name the name of the cache
+     * @param cache the native Caffeine Cache instance
+     * @return the Spring CaffeineCache adapter (or a decorator thereof)
+     * @since 5.2.8
+     * @see CaffeineCache
+     * @see #isAllowNullValues()
+     */
+    protected Cache adaptCaffeineCache(String name, com.github.benmanes.caffeine.cache.Cache<Object, Object> cache) {
+        return new CaffeineCache(name, cache, isAllowNullValues());
+    }
 
-	/**
-	 * Build a common {@link CaffeineCache} instance for the specified cache name, using
-	 * the common Caffeine configuration specified on this cache manager.
-	 * <p>
-	 * Delegates to {@link #adaptCaffeineCache} as the adaptation method to Spring's cache
-	 * abstraction (allowing for centralized decoration etc), passing in a freshly built
-	 * native Caffeine Cache instance.
-	 * @param name the name of the cache
-	 * @return the Spring CaffeineCache adapter (or a decorator thereof)
-	 * @see #adaptCaffeineCache
-	 * @see #createNativeCaffeineCache
-	 */
-	protected Cache createCaffeineCache(String name) {
-		return adaptCaffeineCache(name, createNativeCaffeineCache());
-	}
+    /**
+     * Build a common {@link CaffeineCache} instance for the specified cache name, using
+     * the common Caffeine configuration specified on this cache manager.
+     * <p>
+     * Delegates to {@link #adaptCaffeineCache} as the adaptation method to Spring's cache
+     * abstraction (allowing for centralized decoration etc), passing in a freshly built
+     * native Caffeine Cache instance.
+     * @param name the name of the cache
+     * @return the Spring CaffeineCache adapter (or a decorator thereof)
+     * @see #adaptCaffeineCache
+     * @see #createNativeCaffeineCache
+     */
+    protected Cache createCaffeineCache(String name) {
+        return adaptCaffeineCache(name, createNativeCaffeineCache());
+    }
 
-	/**
-	 * Build a common Caffeine Cache instance for the specified cache name, using the
-	 * common Caffeine configuration specified on this cache manager, default expire 1
-	 * minute.
-	 * @return the native Caffeine Cache instance
-	 * @see #createCaffeineCache
-	 */
-	protected com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache() {
-		return this.cacheBuilder
-			// 设置过期时间
-			.expireAfterWrite(Duration.ofSeconds(30))
-			// 初始化缓存空间大小
-			.initialCapacity(100)
-			// 最大的缓存条数
-			.maximumSize(500)
-			.build();
-	}
+    /**
+     * Build a common Caffeine Cache instance for the specified cache name, using the
+     * common Caffeine configuration specified on this cache manager, default expire 1
+     * minute.
+     * @return the native Caffeine Cache instance
+     * @see #createCaffeineCache
+     */
+    protected com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache() {
+        return this.cacheBuilder
+            // 设置过期时间
+            .expireAfterWrite(Duration.ofSeconds(30))
+            // 初始化缓存空间大小
+            .initialCapacity(100)
+            // 最大的缓存条数
+            .maximumSize(500)
+            .build();
+    }
 
-	private com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache(long milliseconds,
-			int initialCapacity, long maximumSize) {
-		return Caffeine.newBuilder()
-			// 设置过期时间
-			.expireAfterWrite(Duration.ofMillis(milliseconds))
-			// 初始化缓存空间大小
-			.initialCapacity(initialCapacity)
-			// 最大的缓存条数
-			.maximumSize(maximumSize)
-			.build();
-	}
+    private com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache(long milliseconds,
+            int initialCapacity, long maximumSize) {
+        return Caffeine.newBuilder()
+            // 设置过期时间
+            .expireAfterWrite(Duration.ofMillis(milliseconds))
+            // 初始化缓存空间大小
+            .initialCapacity(initialCapacity)
+            // 最大的缓存条数
+            .maximumSize(maximumSize)
+            .build();
+    }
 
-	/**
-	 * Recreate the common caches with the current state of this manager.
-	 */
-	private void refreshCommonCaches() {
-		for (Map.Entry<String, Cache> entry : this.cacheMap.entrySet()) {
-			if (!this.customCacheNames.contains(entry.getKey())) {
-				entry.setValue(createCaffeineCache(entry.getKey()));
-			}
-		}
-	}
+    /**
+     * Recreate the common caches with the current state of this manager.
+     */
+    private void refreshCommonCaches() {
+        for (Map.Entry<String, Cache> entry : this.cacheMap.entrySet()) {
+            if (!this.customCacheNames.contains(entry.getKey())) {
+                entry.setValue(createCaffeineCache(entry.getKey()));
+            }
+        }
+    }
 
 }

@@ -26,17 +26,17 @@ package io.github.panxiaochao.weixin.enums;
  */
 public enum HttpClientType {
 
-	/**
-	 * HttpClient.
-	 */
-	HttpClient,
-	/**
-	 * OkHttp.
-	 */
-	OkHttp,
-	/**
-	 * JoddHttp.
-	 */
-	JoddHttp,
+    /**
+     * HttpClient.
+     */
+    HttpClient,
+    /**
+     * OkHttp.
+     */
+    OkHttp,
+    /**
+     * JoddHttp.
+     */
+    JoddHttp,
 
 }

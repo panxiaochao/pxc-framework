@@ -51,100 +51,100 @@ import java.util.stream.Stream;
 @ConfigurationProperties(prefix = "spring.pxc-framework.holiday", ignoreInvalidFields = true)
 public class HolidayProperties implements InitializingBean {
 
-	/**
-	 * LOGGER HolidayProperties.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(HolidayProperties.class);
+    /**
+     * LOGGER HolidayProperties.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(HolidayProperties.class);
 
-	private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-	/**
-	 * <p>
-	 * 自定义扩展json存放路径
-	 * </p>
-	 * <pre>
-	 * 1.加载类路径中: classpath*: /data/**&#47;*.json
-	 * 2.文件系统路径: file: C:/some/path/**&#47;*.json
-	 * </pre>
-	 */
-	@Getter
-	@Setter
-	private String[] jsonLocations;
+    /**
+     * <p>
+     * 自定义扩展json存放路径
+     * </p>
+     * <pre>
+     * 1.加载类路径中: classpath*: /data/**&#47;*.json
+     * 2.文件系统路径: file: C:/some/path/**&#47;*.json
+     * </pre>
+     */
+    @Getter
+    @Setter
+    private String[] jsonLocations;
 
-	/**
-	 * 是否覆盖已有年份数据, 默认false
-	 */
-	@Getter
-	@Setter
-	private boolean overwrite;
+    /**
+     * 是否覆盖已有年份数据, 默认false
+     */
+    @Getter
+    @Setter
+    private boolean overwrite;
 
-	public Resource[] resolveDefaultJsonLocation() {
-		return Stream.of(HolidayConstant.DEFAULT_JSON_LOCATION)
-			.flatMap(location -> Stream.of(getResources(location)))
-			.toArray(Resource[]::new);
-	}
+    public Resource[] resolveDefaultJsonLocation() {
+        return Stream.of(HolidayConstant.DEFAULT_JSON_LOCATION)
+            .flatMap(location -> Stream.of(getResources(location)))
+            .toArray(Resource[]::new);
+    }
 
-	public Resource[] getResources(String location) {
-		try {
-			return this.resourcePatternResolver.getResources(location);
-		}
-		catch (IOException e) {
-			return new Resource[0];
-		}
-	}
+    public Resource[] getResources(String location) {
+        try {
+            return this.resourcePatternResolver.getResources(location);
+        }
+        catch (IOException e) {
+            return new Resource[0];
+        }
+    }
 
-	/**
-	 * 初始化工作
-	 */
-	@Override
-	public void afterPropertiesSet() {
-		Resource[] resources = resolveDefaultJsonLocation();
-		for (Resource resource : resources) {
-			Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
-					+ " (please add config file or check your holiday json configuration)");
-			try (InputStream inputStream = resource.getInputStream()) {
-				String json = ResourceUtil.read(inputStream);
-				Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
-				Objects.requireNonNull(holiday, "holiday cannot be null");
-				Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
-			}
-			catch (IOException e) {
-				throw new IllegalStateException("Error resolveResource", e);
-			}
-		}
-		// 加载自定义路径
-		if (Optional.ofNullable(jsonLocations).isPresent()) {
-			Arrays.stream(jsonLocations).forEach(location -> {
-				Resource[] locationResources = getResources(location);
-				for (Resource resource : locationResources) {
-					Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
-							+ " (please add config file or check your holiday json configuration)");
-					try (InputStream inputStream = resource.getInputStream()) {
-						String json = ResourceUtil.read(inputStream);
-						Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
-						if (holiday != null && holiday.getYear() != null) {
-							// 覆盖 或 年份数据为空
-							if (overwrite
-									|| null == Singleton.INST.get(HolidayConstant.KEY_PREFIX + holiday.getYear())) {
-								Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
-							}
-							else {
-								LOGGER.warn("年份{}已存在，不覆盖！", holiday.getYear());
-							}
-						}
-						else {
-							LOGGER.error("自定义Holiday文件[{}]数据格式有误，请检查！", resource.getFile().getName());
-						}
-					}
-					catch (IOException e) {
-						throw new IllegalStateException("Error resolveResource", e);
-					}
-				}
-			});
-		}
-		else {
-			LOGGER.warn("自定义Holiday location路径为空，不加载！");
-		}
-	}
+    /**
+     * 初始化工作
+     */
+    @Override
+    public void afterPropertiesSet() {
+        Resource[] resources = resolveDefaultJsonLocation();
+        for (Resource resource : resources) {
+            Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+                    + " (please add config file or check your holiday json configuration)");
+            try (InputStream inputStream = resource.getInputStream()) {
+                String json = ResourceUtil.read(inputStream);
+                Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
+                Objects.requireNonNull(holiday, "holiday cannot be null");
+                Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
+            }
+            catch (IOException e) {
+                throw new IllegalStateException("Error resolveResource", e);
+            }
+        }
+        // 加载自定义路径
+        if (Optional.ofNullable(jsonLocations).isPresent()) {
+            Arrays.stream(jsonLocations).forEach(location -> {
+                Resource[] locationResources = getResources(location);
+                for (Resource resource : locationResources) {
+                    Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+                            + " (please add config file or check your holiday json configuration)");
+                    try (InputStream inputStream = resource.getInputStream()) {
+                        String json = ResourceUtil.read(inputStream);
+                        Holiday holiday = JacksonUtil.toBean(json, Holiday.class);
+                        if (holiday != null && holiday.getYear() != null) {
+                            // 覆盖 或 年份数据为空
+                            if (overwrite
+                                    || null == Singleton.INST.get(HolidayConstant.KEY_PREFIX + holiday.getYear())) {
+                                Singleton.INST.single(HolidayConstant.KEY_PREFIX + holiday.getYear(), holiday);
+                            }
+                            else {
+                                LOGGER.warn("年份{}已存在，不覆盖！", holiday.getYear());
+                            }
+                        }
+                        else {
+                            LOGGER.error("自定义Holiday文件[{}]数据格式有误，请检查！", resource.getFile().getName());
+                        }
+                    }
+                    catch (IOException e) {
+                        throw new IllegalStateException("Error resolveResource", e);
+                    }
+                }
+            });
+        }
+        else {
+            LOGGER.warn("自定义Holiday location路径为空，不加载！");
+        }
+    }
 
 }

@@ -34,27 +34,27 @@ import org.apache.ibatis.mapping.SqlSource;
  */
 public class MySqlUpdateBatchSomeColumn extends AbstractMethod {
 
-	private static final long serialVersionUID = 794731765508860279L;
+    private static final long serialVersionUID = 794731765508860279L;
 
-	private static final String METHOD_NAME = "updateBatchSomeColumn";
+    private static final String METHOD_NAME = "updateBatchSomeColumn";
 
-	/**
-	 * 默认方法名
-	 */
-	public MySqlUpdateBatchSomeColumn() {
-		super(METHOD_NAME);
-	}
+    /**
+     * 默认方法名
+     */
+    public MySqlUpdateBatchSomeColumn() {
+        super(METHOD_NAME);
+    }
 
-	@Override
-	public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-		String sql = "<script>\n<foreach collection=\"list\" item=\"item\" separator=\";\">\nupdate %s %s where %s=#{%s} %s\n</foreach>\n</script>";
-		String additional = tableInfo.isWithVersion() ? tableInfo.getVersionFieldInfo().getVersionOli("item", "item.")
-				: StringPools.EMPTY + tableInfo.getLogicDeleteSql(true, true);
-		String setSql = sqlSet(tableInfo.isWithLogicDelete(), false, tableInfo, false, "item", "item.");
-		String sqlResult = String.format(sql, tableInfo.getTableName(), setSql, tableInfo.getKeyColumn(),
-				"item." + tableInfo.getKeyProperty(), additional);
-		SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
-		return this.addUpdateMappedStatement(mapperClass, modelClass, METHOD_NAME, sqlSource);
-	}
+    @Override
+    public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
+        String sql = "<script>\n<foreach collection=\"list\" item=\"item\" separator=\";\">\nupdate %s %s where %s=#{%s} %s\n</foreach>\n</script>";
+        String additional = tableInfo.isWithVersion() ? tableInfo.getVersionFieldInfo().getVersionOli("item", "item.")
+                : StringPools.EMPTY + tableInfo.getLogicDeleteSql(true, true);
+        String setSql = sqlSet(tableInfo.isWithLogicDelete(), false, tableInfo, false, "item", "item.");
+        String sqlResult = String.format(sql, tableInfo.getTableName(), setSql, tableInfo.getKeyColumn(),
+                "item." + tableInfo.getKeyProperty(), additional);
+        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sqlResult, modelClass);
+        return this.addUpdateMappedStatement(mapperClass, modelClass, METHOD_NAME, sqlSource);
+    }
 
 }

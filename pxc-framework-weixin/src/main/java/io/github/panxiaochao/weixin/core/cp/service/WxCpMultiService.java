@@ -29,24 +29,24 @@ import me.chanjar.weixin.cp.message.WxCpMessageRouter;
  */
 public interface WxCpMultiService {
 
-	/**
-	 * 通过key, 获取WxCpService
-	 * @param key key
-	 * @return WxCpService
-	 */
-	WxCpService getWxCpService(String key);
+    /**
+     * 通过key, 获取WxCpService
+     * @param key key
+     * @return WxCpService
+     */
+    WxCpService getWxCpService(String key);
 
-	/**
-	 * 通过key, 获取WxCpMessageRouter
-	 * @param key key
-	 * @return WxCpMessageRouter
-	 */
-	WxCpMessageRouter getWxCpMessageRouter(String key);
+    /**
+     * 通过key, 获取WxCpMessageRouter
+     * @param key key
+     * @return WxCpMessageRouter
+     */
+    WxCpMessageRouter getWxCpMessageRouter(String key);
 
-	/**
-	 * 通过key，从列表中移除一个 WxCpService 实例
-	 * @param key key
-	 */
-	void removeWxCpService(String key);
+    /**
+     * 通过key，从列表中移除一个 WxCpService 实例
+     * @param key key
+     */
+    void removeWxCpService(String key);
 
 }

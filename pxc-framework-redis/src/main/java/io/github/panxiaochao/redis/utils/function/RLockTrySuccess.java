@@ -26,9 +26,9 @@ package io.github.panxiaochao.redis.utils.function;
 @FunctionalInterface
 public interface RLockTrySuccess {
 
-	/**
-	 * 自定义成功处理方法
-	 */
-	void apply();
+    /**
+     * 自定义成功处理方法
+     */
+    void apply();
 
 }

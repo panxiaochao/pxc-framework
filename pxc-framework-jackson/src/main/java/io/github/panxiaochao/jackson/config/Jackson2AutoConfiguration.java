@@ -53,36 +53,36 @@ import java.util.TimeZone;
 @AutoConfiguration(before = JacksonAutoConfiguration.class)
 public class Jackson2AutoConfiguration {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Jackson2AutoConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Jackson2AutoConfiguration.class);
 
-	/**
-	 * <p>
-	 * To override the default ObjectMapper (and XmlMapper).
-	 * </p>
-	 * <pre>
-	 *     1.Jackson2ObjectMapperBuilderCustomizer 注册Bean
-	 *     2.生成Bean Jackson2ObjectMapperBuilder
-	 *     3.通过 Jackson2ObjectMapperBuilder 生成 ObjectMapper
-	 * </pre>
-	 * @return custom Jackson2ObjectMapperBuilderCustomizer
-	 */
-	@Bean
-	public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-		LOGGER.info("配置[Jackson2ObjectMapper]成功！");
-		return builder -> builder.locale(Locale.CHINA)
-			// 所有字段全部展现
-			.serializationInclusion(JsonInclude.Include.ALWAYS)
-			.timeZone(TimeZone.getDefault())
-			.dateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN))
-			// 忽略空Bean转json的错误
-			.failOnEmptyBeans(false)
-			// 忽略未知属性
-			.failOnUnknownProperties(false)
-			// 自定义 NUll 处理
-			.postConfigurer(objectMapper -> objectMapper.getSerializerProvider()
-				.setNullValueSerializer(NullValueJsonSerializer.INSTANCE))
-			// 时间格式化处理
-			.modules(new CustomizeJavaTimeModule());
-	}
+    /**
+     * <p>
+     * To override the default ObjectMapper (and XmlMapper).
+     * </p>
+     * <pre>
+     *     1.Jackson2ObjectMapperBuilderCustomizer 注册Bean
+     *     2.生成Bean Jackson2ObjectMapperBuilder
+     *     3.通过 Jackson2ObjectMapperBuilder 生成 ObjectMapper
+     * </pre>
+     * @return custom Jackson2ObjectMapperBuilderCustomizer
+     */
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        LOGGER.info("配置[Jackson2ObjectMapper]成功！");
+        return builder -> builder.locale(Locale.CHINA)
+            // 所有字段全部展现
+            .serializationInclusion(JsonInclude.Include.ALWAYS)
+            .timeZone(TimeZone.getDefault())
+            .dateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN))
+            // 忽略空Bean转json的错误
+            .failOnEmptyBeans(false)
+            // 忽略未知属性
+            .failOnUnknownProperties(false)
+            // 自定义 NUll 处理
+            .postConfigurer(objectMapper -> objectMapper.getSerializerProvider()
+                .setNullValueSerializer(NullValueJsonSerializer.INSTANCE))
+            // 时间格式化处理
+            .modules(new CustomizeJavaTimeModule());
+    }
 
 }

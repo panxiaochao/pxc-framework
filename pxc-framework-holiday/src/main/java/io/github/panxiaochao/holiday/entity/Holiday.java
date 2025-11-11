@@ -35,54 +35,54 @@ import java.util.List;
 @Setter
 public class Holiday implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 年份
-	 */
-	private String year;
+    /**
+     * 年份
+     */
+    private String year;
 
-	/**
-	 * 节假日期集合
-	 */
-	private List<Days> days = new ArrayList<>();
+    /**
+     * 节假日期集合
+     */
+    private List<Days> days = new ArrayList<>();
 
-	/**
-	 * 工作补班日期集合
-	 */
-	private List<WorkDays> workdays = new ArrayList<>();
+    /**
+     * 工作补班日期集合
+     */
+    private List<WorkDays> workdays = new ArrayList<>();
 
-	/**
-	 * 节假日期详情
-	 */
-	@Setter
-	@Getter
-	public static class Days {
+    /**
+     * 节假日期详情
+     */
+    @Setter
+    @Getter
+    public static class Days {
 
-		/**
-		 * 节日名称
-		 */
-		private String name;
+        /**
+         * 节日名称
+         */
+        private String name;
 
-		/**
-		 * 日期
-		 */
-		private String date;
+        /**
+         * 日期
+         */
+        private String date;
 
-	}
+    }
 
-	/**
-	 * 工作补班日期详情
-	 */
-	@Setter
-	@Getter
-	public static class WorkDays {
+    /**
+     * 工作补班日期详情
+     */
+    @Setter
+    @Getter
+    public static class WorkDays {
 
-		/**
-		 * 日期
-		 */
-		private String date;
+        /**
+         * 日期
+         */
+        private String date;
 
-	}
+    }
 
 }

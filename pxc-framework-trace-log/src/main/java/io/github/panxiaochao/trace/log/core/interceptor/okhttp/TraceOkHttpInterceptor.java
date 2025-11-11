@@ -41,19 +41,19 @@ import java.io.IOException;
  */
 public class TraceOkHttpInterceptor implements Interceptor {
 
-	@NotNull
-	@Override
-	public Response intercept(@NotNull Chain chain) throws IOException {
-		Request.Builder builder = chain.request().newBuilder();
-		String traceId = TraceLogContext.getTraceId();
-		if (StringUtils.hasText(traceId)) {
-			builder.header(TraceLogConstant.TRACE_ID, traceId);
-			builder.header(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
-			builder.header(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
-			builder.header(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
-			builder.header(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
-		}
-		return chain.proceed(builder.build());
-	}
+    @NotNull
+    @Override
+    public Response intercept(@NotNull Chain chain) throws IOException {
+        Request.Builder builder = chain.request().newBuilder();
+        String traceId = TraceLogContext.getTraceId();
+        if (StringUtils.hasText(traceId)) {
+            builder.header(TraceLogConstant.TRACE_ID, traceId);
+            builder.header(TraceLogConstant.SPAN_ID, TraceLogContext.generateNextSpanId());
+            builder.header(TraceLogConstant.PRE_APP, SpringContextUtil.getApplicationName());
+            builder.header(TraceLogConstant.PRE_HOST_IP, IpUtil.getHostIp());
+            builder.header(TraceLogConstant.PRE_HOST_NAME, IpUtil.getHostName());
+        }
+        return chain.proceed(builder.build());
+    }
 
 }

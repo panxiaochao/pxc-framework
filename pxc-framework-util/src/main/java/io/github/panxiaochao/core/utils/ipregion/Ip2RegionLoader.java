@@ -41,92 +41,92 @@ import java.io.InputStream;
 @Getter
 public class Ip2RegionLoader {
 
-	/**
-	 * LOGGER Ip2RegionLoader.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2RegionLoader.class);
+    /**
+     * LOGGER Ip2RegionLoader.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Ip2RegionLoader.class);
 
-	private static final ResourcePatternResolver RESOURCE_PATTERN_RESOLVER = new PathMatchingResourcePatternResolver();
+    private static final ResourcePatternResolver RESOURCE_PATTERN_RESOLVER = new PathMatchingResourcePatternResolver();
 
-	/**
-	 * ip2region_v4.db 文件路径
-	 */
-	private static final String IP2REGION_V4_DB_LOCATION = "classpath*:/ip2region/ip2region_v4.xdb";
+    /**
+     * ip2region_v4.db 文件路径
+     */
+    private static final String IP2REGION_V4_DB_LOCATION = "classpath*:/ip2region/ip2region_v4.xdb";
 
-	/**
-	 * ip2region_v6.db 文件路径
-	 */
-	private static final String IP2REGION_V6_DB_LOCATION = "classpath*:/ip2region/ip2region_v6.xdb";
+    /**
+     * ip2region_v6.db 文件路径
+     */
+    private static final String IP2REGION_V6_DB_LOCATION = "classpath*:/ip2region/ip2region_v6.xdb";
 
-	private static final Searcher SEARCHER_V4;
+    private static final Searcher SEARCHER_V4;
 
-	private static final Searcher SEARCHER_V6;
+    private static final Searcher SEARCHER_V6;
 
-	static {
-		try {
-			SEARCHER_V4 = Searcher.newWithBuffer(Version.IPv4, loadContentFromFile(IP2REGION_V4_DB_LOCATION));
-			LOGGER.info("配置[ip2region_v4]成功！");
-		}
-		catch (IOException e) {
-			throw new RuntimeException("load ip2region_v4 file db is error", e);
-		}
-		// V2 版本不提供支持，因为V2版本的db文件体积太大，打包不合适
-		// V3 版本进行模块拆分，采用自定义db文件路径
-		SEARCHER_V6 = null;
-	}
+    static {
+        try {
+            SEARCHER_V4 = Searcher.newWithBuffer(Version.IPv4, loadContentFromFile(IP2REGION_V4_DB_LOCATION));
+            LOGGER.info("配置[ip2region_v4]成功！");
+        }
+        catch (IOException e) {
+            throw new RuntimeException("load ip2region_v4 file db is error", e);
+        }
+        // V2 版本不提供支持，因为V2版本的db文件体积太大，打包不合适
+        // V3 版本进行模块拆分，采用自定义db文件路径
+        SEARCHER_V6 = null;
+    }
 
-	/**
-	 * Don't new Constructor
-	 */
-	private Ip2RegionLoader() {
-	}
+    /**
+     * Don't new Constructor
+     */
+    private Ip2RegionLoader() {
+    }
 
-	/**
-	 * 获取 ip2region_v4 对象
-	 * @return Searcher
-	 */
-	public static Searcher searcherV4() {
-		return SEARCHER_V4;
-	}
+    /**
+     * 获取 ip2region_v4 对象
+     * @return Searcher
+     */
+    public static Searcher searcherV4() {
+        return SEARCHER_V4;
+    }
 
-	/**
-	 * 获取 ip2region_v6 对象
-	 * @return Searcher
-	 */
-	public static Searcher searcherV6() {
-		return SEARCHER_V6;
-	}
+    /**
+     * 获取 ip2region_v6 对象
+     * @return Searcher
+     */
+    public static Searcher searcherV6() {
+        return SEARCHER_V6;
+    }
 
-	/**
-	 * 从内存加载DB数据
-	 * @param filePath 路径
-	 * @return byte[]
-	 */
-	public static LongByteArray loadContentFromFile(String filePath) {
-		Resource[] resources = getResources(filePath);
-		for (Resource resource : resources) {
-			Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
-					+ " (please add config file or check your holiday json configuration)");
-			try (InputStream inputStream = resource.getInputStream()) {
-				byte[] bytes = ResourceUtil.readByteArray(inputStream);
-				final LongByteArray byteArray = new LongByteArray();
-				byteArray.append(bytes);
-				return byteArray;
-			}
-			catch (IOException e) {
-				throw new RuntimeException("load ip2region file db is error", e);
-			}
-		}
-		return null;
-	}
+    /**
+     * 从内存加载DB数据
+     * @param filePath 路径
+     * @return byte[]
+     */
+    public static LongByteArray loadContentFromFile(String filePath) {
+        Resource[] resources = getResources(filePath);
+        for (Resource resource : resources) {
+            Assert.isTrue(resource.exists(), "Cannot find config location: " + resource
+                    + " (please add config file or check your holiday json configuration)");
+            try (InputStream inputStream = resource.getInputStream()) {
+                byte[] bytes = ResourceUtil.readByteArray(inputStream);
+                final LongByteArray byteArray = new LongByteArray();
+                byteArray.append(bytes);
+                return byteArray;
+            }
+            catch (IOException e) {
+                throw new RuntimeException("load ip2region file db is error", e);
+            }
+        }
+        return null;
+    }
 
-	public static Resource[] getResources(String location) {
-		try {
-			return RESOURCE_PATTERN_RESOLVER.getResources(location);
-		}
-		catch (IOException e) {
-			return new Resource[0];
-		}
-	}
+    public static Resource[] getResources(String location) {
+        try {
+            return RESOURCE_PATTERN_RESOLVER.getResources(location);
+        }
+        catch (IOException e) {
+            return new Resource[0];
+        }
+    }
 
 }
