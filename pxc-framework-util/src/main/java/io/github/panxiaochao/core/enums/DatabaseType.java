@@ -35,7 +35,7 @@ public enum DatabaseType {
 	/**
 	 * MYSQL
 	 */
-	MYSQL("mysql", "com.mysql.cj.jdbc.Driver","MySql数据库"),
+	MYSQL("mysql", "com.mysql.cj.jdbc.Driver", "MySql数据库"),
 	/**
 	 * MARIADB
 	 */
@@ -47,7 +47,7 @@ public enum DatabaseType {
 	/**
 	 * oracle12c new pagination
 	 */
-	ORACLE_12C("oracle12c",  "", "Oracle12c+数据库"),
+	ORACLE_12C("oracle12c", "", "Oracle12c+数据库"),
 	/**
 	 * DB2
 	 */

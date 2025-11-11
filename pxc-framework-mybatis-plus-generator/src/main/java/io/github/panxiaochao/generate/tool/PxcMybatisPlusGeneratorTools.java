@@ -131,7 +131,7 @@ public class PxcMybatisPlusGeneratorTools {
 			.naming(NamingStrategy.underline_to_camel)
 			.columnNaming(NamingStrategy.underline_to_camel)
 			.idType(IdType.AUTO);
-//			.formatFileName("%sPO");
+		// .formatFileName("%sPO");
 		if (!CollectionUtils.isEmpty(builder.insertFields)) {
 			strategyBuilder.entityBuilder().addTableFills(builder.insertFields);
 		}

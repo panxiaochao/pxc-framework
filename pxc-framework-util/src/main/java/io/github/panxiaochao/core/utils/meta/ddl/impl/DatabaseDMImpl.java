@@ -209,9 +209,8 @@ public class DatabaseDMImpl extends AbstractDatabase implements IDatabase {
 		}
 		for (ColumnMeta column : columnMetas) {
 			if (StrUtil.isNotBlank(column.getColumnComment())) {
-				results.add(String.format("COMMENT ON COLUMN \"%s\".\"%s\".\"%s\" IS '%s';", schemaName,
-						tableName, column.getColumnName(),
-						column.getColumnComment().replace("\"", "\\\"")));
+				results.add(String.format("COMMENT ON COLUMN \"%s\".\"%s\".\"%s\" IS '%s';", schemaName, tableName,
+						column.getColumnName(), column.getColumnComment().replace("\"", "\\\"")));
 			}
 		}
 		return results;
