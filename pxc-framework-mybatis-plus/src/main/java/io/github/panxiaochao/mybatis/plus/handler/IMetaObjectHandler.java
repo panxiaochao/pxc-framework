@@ -30,26 +30,26 @@ import java.util.Objects;
  */
 public interface IMetaObjectHandler {
 
-	/**
-	 * 插入元对象字段填充（用于插入时对公共字段的填充）
-	 * @param metaObject 元对象
-	 */
-	void insertFillCustomize(MetaObject metaObject);
+    /**
+     * 插入元对象字段填充（用于插入时对公共字段的填充）
+     * @param metaObject 元对象
+     */
+    void insertFillCustomize(MetaObject metaObject);
 
-	/**
-	 * 通用填充判断
-	 * @param fieldName java bean property name
-	 * @param fieldVal java bean property value
-	 * @param metaObject meta object parameter
-	 */
-	default boolean fillValIfNullByName(String fieldName, Object fieldVal, MetaObject metaObject) {
-		return Objects.nonNull(fieldVal) && metaObject.hasSetter(fieldName);
-	}
+    /**
+     * 通用填充判断
+     * @param fieldName java bean property name
+     * @param fieldVal java bean property value
+     * @param metaObject meta object parameter
+     */
+    default boolean fillValIfNullByName(String fieldName, Object fieldVal, MetaObject metaObject) {
+        return Objects.nonNull(fieldVal) && metaObject.hasSetter(fieldName);
+    }
 
-	/**
-	 * 更新元对象字段填充（用于更新时对公共字段的填充）
-	 * @param metaObject 元对象
-	 */
-	void updateFillCustomize(MetaObject metaObject);
+    /**
+     * 更新元对象字段填充（用于更新时对公共字段的填充）
+     * @param metaObject 元对象
+     */
+    void updateFillCustomize(MetaObject metaObject);
 
 }

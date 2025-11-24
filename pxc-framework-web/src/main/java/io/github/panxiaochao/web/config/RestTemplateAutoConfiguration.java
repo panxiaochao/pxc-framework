@@ -64,125 +64,125 @@ import java.util.List;
 @ConditionalOnProperty(name = "spring.pxc-framework.restTemplate.enabled", havingValue = "true")
 public class RestTemplateAutoConfiguration {
 
-	private final WebProperties webProperties;
+    private final WebProperties webProperties;
 
-	@Bean
-	public HttpClientConnectionManager poolingHttpClientConnectionManager() {
-		// 注册https请求, http请求默认就支持
-		PoolingHttpClientConnectionManagerBuilder builder = PoolingHttpClientConnectionManagerBuilder.create();
-		// @formatter:off
+    @Bean
+    public HttpClientConnectionManager poolingHttpClientConnectionManager() {
+        // 注册https请求, http请求默认就支持
+        PoolingHttpClientConnectionManagerBuilder builder = PoolingHttpClientConnectionManagerBuilder.create();
+        // @formatter:off
 		builder.setTlsSocketStrategy(getTlsSocketStrategy())
 				.setDefaultSocketConfig(getSocketConfig())
 				.setDefaultConnectionConfig(getConnectionConfig())
 				.setMaxConnTotal(webProperties.getRestTemplate().getMaxConnTotal())
 				.setMaxConnPerRoute(webProperties.getRestTemplate().getMaxConnPerRoute());
 		// @formatter:on
-		return builder.build();
-	}
+        return builder.build();
+    }
 
-	@Bean
-	public HttpClient httpClient(HttpClientConnectionManager poolingHttpClientConnectionManager) {
-		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-		// 设置http连接管理器
-		httpClientBuilder.setConnectionManager(poolingHttpClientConnectionManager);
-		// 设置重试次数
-		httpClientBuilder.setRetryStrategy(getRetryStrategy());
-		// 常规配置
-		httpClientBuilder.setDefaultRequestConfig(getRequestConfig());
-		return httpClientBuilder.build();
-	}
+    @Bean
+    public HttpClient httpClient(HttpClientConnectionManager poolingHttpClientConnectionManager) {
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        // 设置http连接管理器
+        httpClientBuilder.setConnectionManager(poolingHttpClientConnectionManager);
+        // 设置重试次数
+        httpClientBuilder.setRetryStrategy(getRetryStrategy());
+        // 常规配置
+        httpClientBuilder.setDefaultRequestConfig(getRequestConfig());
+        return httpClientBuilder.build();
+    }
 
-	@Bean
-	public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
-		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		// httpClient创建器
-		clientHttpRequestFactory.setHttpClient(httpClient);
-		// 连接超时时间/毫秒（连接上服务器(握手成功)的时间，超出抛出connect timeout）
-		clientHttpRequestFactory
-			.setConnectTimeout(Duration.ofMillis(webProperties.getRestTemplate().getConnectTimeout() * 1000));
-		// 数据读取超时时间(socketTimeout)/毫秒（务器返回数据(response)的时间，超过抛出read timeout）
-		clientHttpRequestFactory
-			.setReadTimeout(Duration.ofMillis(webProperties.getRestTemplate().getReadTimeout() * 1000));
-		// 连接池获取请求连接的超时时间，不宜过长，必须设置/毫秒（超时间未拿到可用连接，会抛出org.apache.http.conn.ConnectionPoolTimeoutException:
-		// Timeout waiting for connection from pool）
-		clientHttpRequestFactory
-			.setConnectionRequestTimeout(Duration.ofMillis(webProperties.getRestTemplate().getConnectTimeout() * 1000));
-		return clientHttpRequestFactory;
-	}
+    @Bean
+    public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        // httpClient创建器
+        clientHttpRequestFactory.setHttpClient(httpClient);
+        // 连接超时时间/毫秒（连接上服务器(握手成功)的时间，超出抛出connect timeout）
+        clientHttpRequestFactory
+            .setConnectTimeout(Duration.ofMillis(webProperties.getRestTemplate().getConnectTimeout() * 1000));
+        // 数据读取超时时间(socketTimeout)/毫秒（务器返回数据(response)的时间，超过抛出read timeout）
+        clientHttpRequestFactory
+            .setReadTimeout(Duration.ofMillis(webProperties.getRestTemplate().getReadTimeout() * 1000));
+        // 连接池获取请求连接的超时时间，不宜过长，必须设置/毫秒（超时间未拿到可用连接，会抛出org.apache.http.conn.ConnectionPoolTimeoutException:
+        // Timeout waiting for connection from pool）
+        clientHttpRequestFactory
+            .setConnectionRequestTimeout(Duration.ofMillis(webProperties.getRestTemplate().getConnectTimeout() * 1000));
+        return clientHttpRequestFactory;
+    }
 
-	@Bean
-	public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
-		RestTemplate restTemplate = new RestTemplate();
-		// 配置请求工厂
-		restTemplate.setRequestFactory(clientHttpRequestFactory);
-		List<HttpMessageConverter<?>> httpMessageConverters = restTemplate.getMessageConverters();
-		httpMessageConverters.forEach(httpMessageConverter -> {
-			if (httpMessageConverter instanceof StringHttpMessageConverter messageConverter) {
-				// 解决乱码问题
-				messageConverter.setDefaultCharset(StandardCharsets.UTF_8);
-			}
-		});
-		return restTemplate;
-	}
+    @Bean
+    public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
+        RestTemplate restTemplate = new RestTemplate();
+        // 配置请求工厂
+        restTemplate.setRequestFactory(clientHttpRequestFactory);
+        List<HttpMessageConverter<?>> httpMessageConverters = restTemplate.getMessageConverters();
+        httpMessageConverters.forEach(httpMessageConverter -> {
+            if (httpMessageConverter instanceof StringHttpMessageConverter messageConverter) {
+                // 解决乱码问题
+                messageConverter.setDefaultCharset(StandardCharsets.UTF_8);
+            }
+        });
+        return restTemplate;
+    }
 
-	/**
-	 * Gets a configured {@code SocketConfig}
-	 * @return {@link SocketConfig}
-	 */
-	protected SocketConfig getSocketConfig() {
-		return SocketConfig.custom()
-			.setSoTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
-			.build();
-	}
+    /**
+     * Gets a configured {@code SocketConfig}
+     * @return {@link SocketConfig}
+     */
+    protected SocketConfig getSocketConfig() {
+        return SocketConfig.custom()
+            .setSoTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
+            .build();
+    }
 
-	/**
-	 * Gets a configured {@code ConnectionConfig}
-	 * @return {@link ConnectionConfig}
-	 */
-	protected ConnectionConfig getConnectionConfig() {
-		return ConnectionConfig.custom()
-			.setSocketTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
-			.setConnectTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
-			.setTimeToLive(Timeout.ofSeconds(webProperties.getRestTemplate().getTimeToLive()))
-			.build();
-	}
+    /**
+     * Gets a configured {@code ConnectionConfig}
+     * @return {@link ConnectionConfig}
+     */
+    protected ConnectionConfig getConnectionConfig() {
+        return ConnectionConfig.custom()
+            .setSocketTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
+            .setConnectTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
+            .setTimeToLive(Timeout.ofSeconds(webProperties.getRestTemplate().getTimeToLive()))
+            .build();
+    }
 
-	/**
-	 * Gets a configured {@code TlsSocketStrategy}
-	 * @return {@link TlsSocketStrategy}
-	 */
-	protected TlsSocketStrategy getTlsSocketStrategy() {
-		try {
-			SSLContext sslContext = SSLContexts.custom().loadTrustMaterial((chain, authType) -> true).build();
-			return new DefaultClientTlsStrategy(sslContext,
-					new String[] { TLS.V_1_3.id, TLS.V_1_2.id, TLS.V_1_1.id, TLS.V_1_0.id }, null, SSLBufferMode.STATIC,
-					HttpsSupport.getDefaultHostnameVerifier());
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to configure the TLSSocketStrategy", e);
-		}
-	}
+    /**
+     * Gets a configured {@code TlsSocketStrategy}
+     * @return {@link TlsSocketStrategy}
+     */
+    protected TlsSocketStrategy getTlsSocketStrategy() {
+        try {
+            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial((chain, authType) -> true).build();
+            return new DefaultClientTlsStrategy(sslContext,
+                    new String[] { TLS.V_1_3.id, TLS.V_1_2.id, TLS.V_1_1.id, TLS.V_1_0.id }, null, SSLBufferMode.STATIC,
+                    HttpsSupport.getDefaultHostnameVerifier());
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Unable to configure the TLSSocketStrategy", e);
+        }
+    }
 
-	/**
-	 * Gets a configured {@code RequestConfig}
-	 * @return {@link RequestConfig}
-	 */
-	protected RequestConfig getRequestConfig() {
-		return RequestConfig.custom()
-			.setConnectionRequestTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
-			.setResponseTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
-			.setConnectionKeepAlive(Timeout.ofSeconds(webProperties.getRestTemplate().getTimeToLive()))
-			.setRedirectsEnabled(false)
-			.build();
-	}
+    /**
+     * Gets a configured {@code RequestConfig}
+     * @return {@link RequestConfig}
+     */
+    protected RequestConfig getRequestConfig() {
+        return RequestConfig.custom()
+            .setConnectionRequestTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
+            .setResponseTimeout(Timeout.ofSeconds(webProperties.getRestTemplate().getConnectTimeout()))
+            .setConnectionKeepAlive(Timeout.ofSeconds(webProperties.getRestTemplate().getTimeToLive()))
+            .setRedirectsEnabled(false)
+            .build();
+    }
 
-	/**
-	 * Gets a configured {@code HttpRequestRetryStrategy}
-	 * @return {@link HttpRequestRetryStrategy}
-	 */
-	protected HttpRequestRetryStrategy getRetryStrategy() {
-		return new DefaultHttpRequestRetryStrategy(webProperties.getRestTemplate().getMaxRetries(),
-				TimeValue.ofSeconds(webProperties.getRestTemplate().getRetryInterval()));
-	}
+    /**
+     * Gets a configured {@code HttpRequestRetryStrategy}
+     * @return {@link HttpRequestRetryStrategy}
+     */
+    protected HttpRequestRetryStrategy getRetryStrategy() {
+        return new DefaultHttpRequestRetryStrategy(webProperties.getRestTemplate().getMaxRetries(),
+                TimeValue.ofSeconds(webProperties.getRestTemplate().getRetryInterval()));
+    }
 
 }

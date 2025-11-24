@@ -52,86 +52,86 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlusWxMaService {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	/**
-	 * 初始化 WxMaService
-	 * @return WxMaService
-	 */
-	public WxMaService build() {
-		if (!wxProperties.getMa().getEnabled()) {
-			return new WxMaServiceImpl();
-		}
-		final List<WxMaProperties.MaConfig> maPropertiesList = wxProperties.getMa().getConfigs();
-		if (CollectionUtils.isEmpty(maPropertiesList)) {
-			throw new RuntimeException("请配置微信小程序相关参数！");
-		}
-		// 存储方式
-		StorageType storageType = wxProperties.getStorageType();
-		Map<String, WxMaConfig> configStorages = maPropertiesList.stream().map(maConfig -> {
-			WxMaDefaultConfigImpl configStorage;
-			switch (storageType) {
-				case Redisson:
-				case RedisTemplate:
-					configStorage = redissonConfigStorage();
-					break;
-				default:
-					configStorage = new WxMaDefaultConfigImpl();
-					break;
-			}
-			configStorage.setAppid(maConfig.getAppId());
-			configStorage.setSecret(maConfig.getAppSecret());
-			configStorage.setToken(maConfig.getToken());
-			configStorage.setAesKey(maConfig.getAesKey());
-			configStorage.setMsgDataFormat(maConfig.getMsgDataFormat());
-			configStorage.useStableAccessToken(maConfig.isUseStableAccessToken());
-			return configStorage;
-		}).collect(Collectors.toMap(WxMaDefaultConfigImpl::getAppid, a -> a, (o, n) -> o));
-		// 设置默认AppId，启动默认设置第一个
-		setDefaultAppId(maPropertiesList);
-		return getWxMaService(configStorages);
-	}
+    /**
+     * 初始化 WxMaService
+     * @return WxMaService
+     */
+    public WxMaService build() {
+        if (!wxProperties.getMa().getEnabled()) {
+            return new WxMaServiceImpl();
+        }
+        final List<WxMaProperties.MaConfig> maPropertiesList = wxProperties.getMa().getConfigs();
+        if (CollectionUtils.isEmpty(maPropertiesList)) {
+            throw new RuntimeException("请配置微信小程序相关参数！");
+        }
+        // 存储方式
+        StorageType storageType = wxProperties.getStorageType();
+        Map<String, WxMaConfig> configStorages = maPropertiesList.stream().map(maConfig -> {
+            WxMaDefaultConfigImpl configStorage;
+            switch (storageType) {
+                case Redisson:
+                case RedisTemplate:
+                    configStorage = redissonConfigStorage();
+                    break;
+                default:
+                    configStorage = new WxMaDefaultConfigImpl();
+                    break;
+            }
+            configStorage.setAppid(maConfig.getAppId());
+            configStorage.setSecret(maConfig.getAppSecret());
+            configStorage.setToken(maConfig.getToken());
+            configStorage.setAesKey(maConfig.getAesKey());
+            configStorage.setMsgDataFormat(maConfig.getMsgDataFormat());
+            configStorage.useStableAccessToken(maConfig.isUseStableAccessToken());
+            return configStorage;
+        }).collect(Collectors.toMap(WxMaDefaultConfigImpl::getAppid, a -> a, (o, n) -> o));
+        // 设置默认AppId，启动默认设置第一个
+        setDefaultAppId(maPropertiesList);
+        return getWxMaService(configStorages);
+    }
 
-	private void setDefaultAppId(List<WxMaProperties.MaConfig> maPropertiesList) {
-		final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
-		Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
-		wxManager.set(WxConstant.MA_KEY, maPropertiesList.get(0).getAppId());
-	}
+    private void setDefaultAppId(List<WxMaProperties.MaConfig> maPropertiesList) {
+        final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
+        Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
+        wxManager.set(WxConstant.MA_KEY, maPropertiesList.get(0).getAppId());
+    }
 
-	@NotNull
-	private WxMaService getWxMaService(Map<String, WxMaConfig> configStorages) {
-		HttpClientType httpClientType = wxProperties.getHttpClientType();
-		WxMaService waMpService;
-		switch (httpClientType) {
-			case OkHttp:
-				waMpService = new WxMaServiceOkHttpImpl();
-				break;
-			case JoddHttp:
-				waMpService = new WxMaServiceJoddHttpImpl();
-				break;
-			case HttpClient:
-				waMpService = new WxMaServiceHttpClientImpl();
-				break;
-			default:
-				waMpService = new WxMaServiceImpl();
-				break;
-		}
-		waMpService.setMultiConfigs(configStorages);
-		waMpService.setMaxRetryTimes(3);
-		waMpService.setRetrySleepMillis(1000);
-		return waMpService;
-	}
+    @NotNull
+    private WxMaService getWxMaService(Map<String, WxMaConfig> configStorages) {
+        HttpClientType httpClientType = wxProperties.getHttpClientType();
+        WxMaService waMpService;
+        switch (httpClientType) {
+            case OkHttp:
+                waMpService = new WxMaServiceOkHttpImpl();
+                break;
+            case JoddHttp:
+                waMpService = new WxMaServiceJoddHttpImpl();
+                break;
+            case HttpClient:
+                waMpService = new WxMaServiceHttpClientImpl();
+                break;
+            default:
+                waMpService = new WxMaServiceImpl();
+                break;
+        }
+        waMpService.setMultiConfigs(configStorages);
+        waMpService.setMaxRetryTimes(3);
+        waMpService.setRetrySleepMillis(1000);
+        return waMpService;
+    }
 
-	/**
-	 * Redisson 存储方案
-	 */
-	private WxMaDefaultConfigImpl redissonConfigStorage() {
-		RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
-		if (Objects.isNull(redissonClient)) {
-			redissonClient = SpringContextUtil.getBean("redissonClient");
-		}
-		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
-		return new WxMaRedissonConfigImpl(redissonClient, wxProperties.getMa().getKeyPrefix());
-	}
+    /**
+     * Redisson 存储方案
+     */
+    private WxMaDefaultConfigImpl redissonConfigStorage() {
+        RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+        if (Objects.isNull(redissonClient)) {
+            redissonClient = SpringContextUtil.getBean("redissonClient");
+        }
+        Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
+        return new WxMaRedissonConfigImpl(redissonClient, wxProperties.getMa().getKeyPrefix());
+    }
 
 }

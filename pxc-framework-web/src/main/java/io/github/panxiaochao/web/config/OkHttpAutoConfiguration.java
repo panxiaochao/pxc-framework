@@ -45,59 +45,59 @@ import java.util.concurrent.TimeUnit;
 @EnableConfigurationProperties(WebProperties.class)
 public class OkHttpAutoConfiguration {
 
-	private final WebProperties properties;
+    private final WebProperties properties;
 
-	@Bean
-	public ConnectionPool connectionPool() {
-		return new ConnectionPool(properties.getOkHttp().getMaxIdleConnections(),
-				properties.getOkHttp().getKeepAliveDuration(), TimeUnit.SECONDS);
-	}
+    @Bean
+    public ConnectionPool connectionPool() {
+        return new ConnectionPool(properties.getOkHttp().getMaxIdleConnections(),
+                properties.getOkHttp().getKeepAliveDuration(), TimeUnit.SECONDS);
+    }
 
-	@Bean
-	public OkHttpClient okHttpClient(ConnectionPool connectionPool) {
-		OkHttpClient.Builder builder = new OkHttpClient.Builder();
-		builder.sslSocketFactory(sslSocketFactory(), x509TrustManager());
-		// 是否开启缓存
-		builder.setRetryOnConnectionFailure$okhttp(false);
-		builder.connectTimeout(properties.getOkHttp().getConnectTimeout(), TimeUnit.SECONDS);
-		builder.readTimeout(properties.getOkHttp().getReadTimeout(), TimeUnit.SECONDS);
-		builder.writeTimeout(properties.getOkHttp().getWriteTimeout(), TimeUnit.SECONDS);
-		builder.connectionPool(connectionPool);
-		builder.followRedirects(true);
-		builder.followSslRedirects(true);
-		// 设置默认主机验证规则
-		builder.setHostnameVerifier$okhttp((hostname, session) -> true);
-		return builder.build();
-	}
+    @Bean
+    public OkHttpClient okHttpClient(ConnectionPool connectionPool) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+        // 是否开启缓存
+        builder.setRetryOnConnectionFailure$okhttp(false);
+        builder.connectTimeout(properties.getOkHttp().getConnectTimeout(), TimeUnit.SECONDS);
+        builder.readTimeout(properties.getOkHttp().getReadTimeout(), TimeUnit.SECONDS);
+        builder.writeTimeout(properties.getOkHttp().getWriteTimeout(), TimeUnit.SECONDS);
+        builder.connectionPool(connectionPool);
+        builder.followRedirects(true);
+        builder.followSslRedirects(true);
+        // 设置默认主机验证规则
+        builder.setHostnameVerifier$okhttp((hostname, session) -> true);
+        return builder.build();
+    }
 
-	public X509TrustManager x509TrustManager() {
-		return new X509TrustManager() {
-			@Override
-			public void checkClientTrusted(X509Certificate[] chain, String authType) {
-			}
+    public X509TrustManager x509TrustManager() {
+        return new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
 
-			@Override
-			public void checkServerTrusted(X509Certificate[] chain, String authType) {
-			}
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
 
-			@Override
-			public X509Certificate[] getAcceptedIssuers() {
-				return new X509Certificate[0];
-			}
-		};
-	}
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        };
+    }
 
-	public SSLSocketFactory sslSocketFactory() {
-		try {
-			// 信任任何链接
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, new TrustManager[] { x509TrustManager() }, new SecureRandom());
-			return sslContext.getSocketFactory();
-		}
-		catch (Exception e) {
-			// skip
-		}
-		return null;
-	}
+    public SSLSocketFactory sslSocketFactory() {
+        try {
+            // 信任任何链接
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[] { x509TrustManager() }, new SecureRandom());
+            return sslContext.getSocketFactory();
+        }
+        catch (Exception e) {
+            // skip
+        }
+        return null;
+    }
 
 }

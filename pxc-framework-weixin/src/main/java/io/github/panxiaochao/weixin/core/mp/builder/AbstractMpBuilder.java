@@ -32,14 +32,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractMpBuilder {
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	/**
-	 * @param content 内容
-	 * @param wxMessage 消息
-	 * @param wxMpService wxMpService
-	 * @return WxMpXmlOutMessage
-	 */
-	public abstract WxMpXmlOutMessage build(String content, WxMpXmlMessage wxMessage, WxMpService wxMpService);
+    /**
+     * @param content 内容
+     * @param wxMessage 消息
+     * @param wxMpService wxMpService
+     * @return WxMpXmlOutMessage
+     */
+    public abstract WxMpXmlOutMessage build(String content, WxMpXmlMessage wxMessage, WxMpService wxMpService);
 
 }

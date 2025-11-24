@@ -36,19 +36,19 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(Ip2regionProperties.class)
 public class Ip2regionAutoConfiguration {
 
-	/**
-	 * LOGGER Ip2regionAutoConfiguration.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionAutoConfiguration.class);
+    /**
+     * LOGGER Ip2regionAutoConfiguration.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Ip2regionAutoConfiguration.class);
 
-	/**
-	 * 创建 Ip2regionClient 对象
-	 * @param ip2regionProperties ip2regionProperties
-	 * @return Ip2regionClient
-	 */
-	@Bean
-	public Ip2regionClient ip2regionClient(Ip2regionProperties ip2regionProperties) {
-		return new Ip2regionClient(ip2regionProperties);
-	}
+    /**
+     * 创建 Ip2regionClient 对象
+     * @param ip2regionProperties ip2regionProperties
+     * @return Ip2regionClient
+     */
+    @Bean
+    public Ip2regionClient ip2regionClient(Ip2regionProperties ip2regionProperties) {
+        return new Ip2regionClient(ip2regionProperties);
+    }
 
 }

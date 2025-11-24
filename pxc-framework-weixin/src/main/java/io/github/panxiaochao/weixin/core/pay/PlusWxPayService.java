@@ -33,36 +33,36 @@ import org.apache.commons.lang3.StringUtils;
 @RequiredArgsConstructor
 public class PlusWxPayService {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	/**
-	 * 初始化WxPayService
-	 * @return WxPayService
-	 */
-	public WxPayService build() {
-		if (!wxProperties.getPay().getEnabled()) {
-			return new WxPayServiceImpl();
-		}
-		WxPayConfig payConfig = new WxPayConfig();
-		payConfig.setAppId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getAppId()));
-		payConfig.setMchId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getMchId()));
-		payConfig.setMchKey(StringUtils.trimToNull(wxProperties.getPay().getConfig().getMchKey()));
-		payConfig.setSubAppId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getSubAppId()));
-		payConfig.setSubMchId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getSubMchId()));
-		payConfig.setKeyPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getKeyPath()));
-		// 以下是Api v3以及支付分相关
-		payConfig.setServiceId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getServiceId()));
-		payConfig
-			.setPayScoreNotifyUrl(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPayScoreNotifyUrl()));
-		payConfig.setPrivateKeyPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPrivateKeyPath()));
-		payConfig.setPrivateCertPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPrivateCertPath()));
-		payConfig.setCertSerialNo(StringUtils.trimToNull(wxProperties.getPay().getConfig().getCertSerialNo()));
-		payConfig.setApiV3Key(StringUtils.trimToNull(wxProperties.getPay().getConfig().getApiv3Key()));
-		// 可以指定是否使用沙箱环境
-		payConfig.setUseSandboxEnv(false);
-		WxPayService wxPayService = new WxPayServiceImpl();
-		wxPayService.setConfig(payConfig);
-		return wxPayService;
-	}
+    /**
+     * 初始化WxPayService
+     * @return WxPayService
+     */
+    public WxPayService build() {
+        if (!wxProperties.getPay().getEnabled()) {
+            return new WxPayServiceImpl();
+        }
+        WxPayConfig payConfig = new WxPayConfig();
+        payConfig.setAppId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getAppId()));
+        payConfig.setMchId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getMchId()));
+        payConfig.setMchKey(StringUtils.trimToNull(wxProperties.getPay().getConfig().getMchKey()));
+        payConfig.setSubAppId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getSubAppId()));
+        payConfig.setSubMchId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getSubMchId()));
+        payConfig.setKeyPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getKeyPath()));
+        // 以下是Api v3以及支付分相关
+        payConfig.setServiceId(StringUtils.trimToNull(wxProperties.getPay().getConfig().getServiceId()));
+        payConfig
+            .setPayScoreNotifyUrl(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPayScoreNotifyUrl()));
+        payConfig.setPrivateKeyPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPrivateKeyPath()));
+        payConfig.setPrivateCertPath(StringUtils.trimToNull(wxProperties.getPay().getConfig().getPrivateCertPath()));
+        payConfig.setCertSerialNo(StringUtils.trimToNull(wxProperties.getPay().getConfig().getCertSerialNo()));
+        payConfig.setApiV3Key(StringUtils.trimToNull(wxProperties.getPay().getConfig().getApiv3Key()));
+        // 可以指定是否使用沙箱环境
+        payConfig.setUseSandboxEnv(false);
+        WxPayService wxPayService = new WxPayServiceImpl();
+        wxPayService.setConfig(payConfig);
+        return wxPayService;
+    }
 
 }

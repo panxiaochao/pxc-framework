@@ -31,35 +31,35 @@ import lombok.Getter;
 @Getter
 public enum HolidayType {
 
-	/**
-	 * 工作日
-	 */
-	WEEKDAY(0, "工作日"),
-	/**
-	 * 公休日（休息日）
-	 */
-	PUBLIC_HOLIDAY(1, "公休日"),
-	/**
-	 * 节假日
-	 */
-	HOLIDAY(2, "节假日");
+    /**
+     * 工作日
+     */
+    WEEKDAY(0, "工作日"),
+    /**
+     * 公休日（休息日）
+     */
+    PUBLIC_HOLIDAY(1, "公休日"),
+    /**
+     * 节假日
+     */
+    HOLIDAY(2, "节假日");
 
-	public final int type;
+    public final int type;
 
-	public final String name;
+    public final String name;
 
-	/**
-	 * 根据type返回日期类型
-	 * @param type 值
-	 * @return 日期类型
-	 */
-	public HolidayType ofType(int type) {
-		for (HolidayType holidayType : values()) {
-			if (holidayType.type == type) {
-				return holidayType;
-			}
-		}
-		throw new IllegalArgumentException("Invalid type: " + type);
-	}
+    /**
+     * 根据type返回日期类型
+     * @param type 值
+     * @return 日期类型
+     */
+    public HolidayType ofType(int type) {
+        for (HolidayType holidayType : values()) {
+            if (holidayType.type == type) {
+                return holidayType;
+            }
+        }
+        throw new IllegalArgumentException("Invalid type: " + type);
+    }
 
 }

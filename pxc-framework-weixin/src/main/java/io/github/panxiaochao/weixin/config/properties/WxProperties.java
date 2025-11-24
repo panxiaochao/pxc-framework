@@ -42,50 +42,50 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties(prefix = "spring.pxc-framework.wx", ignoreInvalidFields = true)
 public class WxProperties {
 
-	/**
-	 * 存储类型.
-	 */
-	private StorageType storageType = StorageType.Memory;
+    /**
+     * 存储类型.
+     */
+    private StorageType storageType = StorageType.Memory;
 
-	/**
-	 * http客户端类型.
-	 */
-	private HttpClientType httpClientType = HttpClientType.HttpClient;
+    /**
+     * http客户端类型.
+     */
+    private HttpClientType httpClientType = HttpClientType.HttpClient;
 
-	/**
-	 * 微信小程序
-	 **/
-	@NestedConfigurationProperty
-	private WxMaProperties ma = new WxMaProperties();
+    /**
+     * 微信小程序
+     **/
+    @NestedConfigurationProperty
+    private WxMaProperties ma = new WxMaProperties();
 
-	/**
-	 * 微信公众号
-	 **/
-	@NestedConfigurationProperty
-	private WxMpProperties mp = new WxMpProperties();
+    /**
+     * 微信公众号
+     **/
+    @NestedConfigurationProperty
+    private WxMpProperties mp = new WxMpProperties();
 
-	/**
-	 * 企业号/企业微信
-	 **/
-	@NestedConfigurationProperty
-	private WxCpProperties cp = new WxCpProperties();
+    /**
+     * 企业号/企业微信
+     **/
+    @NestedConfigurationProperty
+    private WxCpProperties cp = new WxCpProperties();
 
-	/**
-	 * 微信支付
-	 **/
-	@NestedConfigurationProperty
-	private WxPayProperties pay = new WxPayProperties();
+    /**
+     * 微信支付
+     **/
+    @NestedConfigurationProperty
+    private WxPayProperties pay = new WxPayProperties();
 
-	/**
-	 * 微信开放平台
-	 **/
-	@NestedConfigurationProperty
-	private WxOpenProperties open = new WxOpenProperties();
+    /**
+     * 微信开放平台
+     **/
+    @NestedConfigurationProperty
+    private WxOpenProperties open = new WxOpenProperties();
 
-	/**
-	 * 微信视频号
-	 **/
-	@NestedConfigurationProperty
-	private WxChannelProperties channel = new WxChannelProperties();
+    /**
+     * 微信视频号
+     **/
+    @NestedConfigurationProperty
+    private WxChannelProperties channel = new WxChannelProperties();
 
 }

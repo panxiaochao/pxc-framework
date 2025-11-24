@@ -25,38 +25,38 @@ package io.github.panxiaochao.trace.log.constants;
  */
 public interface TraceLogConstant {
 
-	String APP = "APP";
+    String APP = "APP";
 
-	String PRE_APP = "PRE_APP";
+    String PRE_APP = "PRE_APP";
 
-	String TRACE_ID = "TRACE_ID";
+    String TRACE_ID = "TRACE_ID";
 
-	String SPAN_ID = "SPAN_ID";
+    String SPAN_ID = "SPAN_ID";
 
-	/**
-	 * 本机IP
-	 */
-	String HOST_IP = "HOST_IP";
+    /**
+     * 本机IP
+     */
+    String HOST_IP = "HOST_IP";
 
-	/**
-	 * 本机 Host Name
-	 */
-	String HOST_NAME = "HOST_NAME";
+    /**
+     * 本机 Host Name
+     */
+    String HOST_NAME = "HOST_NAME";
 
-	/**
-	 * 上游 IP
-	 */
-	String PRE_HOST_IP = "PRE_HOST_IP";
+    /**
+     * 上游 IP
+     */
+    String PRE_HOST_IP = "PRE_HOST_IP";
 
-	/**
-	 * 上游 Host Name
-	 */
-	String PRE_HOST_NAME = "PRE_HOST_NAME";
+    /**
+     * 上游 Host Name
+     */
+    String PRE_HOST_NAME = "PRE_HOST_NAME";
 
-	String UNKNOWN = "unknown";
+    String UNKNOWN = "unknown";
 
-	String MDC_KEY = "tl";
+    String MDC_KEY = "tl";
 
-	int INITIAL_VALUE = 0;
+    int INITIAL_VALUE = 0;
 
 }

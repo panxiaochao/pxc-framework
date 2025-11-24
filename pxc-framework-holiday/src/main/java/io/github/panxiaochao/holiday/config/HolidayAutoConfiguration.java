@@ -36,19 +36,19 @@ import org.springframework.context.annotation.Bean;
 @EnableConfigurationProperties(HolidayProperties.class)
 public class HolidayAutoConfiguration {
 
-	/**
-	 * LOGGER HolidayAutoConfiguration.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(HolidayAutoConfiguration.class);
+    /**
+     * LOGGER HolidayAutoConfiguration.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(HolidayAutoConfiguration.class);
 
-	/**
-	 * Holiday client
-	 * @return HolidayClient
-	 */
-	@Bean
-	public HolidayClient holidayClient() {
-		LOGGER.info("配置[HolidayClient]成功！");
-		return new HolidayClient();
-	}
+    /**
+     * Holiday client
+     * @return HolidayClient
+     */
+    @Bean
+    public HolidayClient holidayClient() {
+        LOGGER.info("配置[HolidayClient]成功！");
+        return new HolidayClient();
+    }
 
 }

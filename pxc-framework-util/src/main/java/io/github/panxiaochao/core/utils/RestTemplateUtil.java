@@ -50,92 +50,92 @@ import java.util.List;
  */
 public class RestTemplateUtil {
 
-	private static final RestTemplate REST_TEMPLATE = new RestTemplate();
+    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
-	static {
-		List<HttpMessageConverter<?>> httpMessageConverters = REST_TEMPLATE.getMessageConverters();
-		httpMessageConverters.forEach(httpMessageConverter -> {
-			if (httpMessageConverter instanceof StringHttpMessageConverter messageConverter) {
-				// 解决乱码问题
-				messageConverter.setDefaultCharset(StandardCharsets.UTF_8);
-			}
-		});
-		// 加入拦截器
-		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-		interceptors.add(new LoggingClientHttpRequestInterceptor());
-		REST_TEMPLATE.setInterceptors(interceptors);
-		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		factory.setReadTimeout(10 * 1000);
-		factory.setConnectTimeout(10 * 1000);
-		REST_TEMPLATE.setRequestFactory(new BufferingClientHttpRequestFactory(factory));
-	}
+    static {
+        List<HttpMessageConverter<?>> httpMessageConverters = REST_TEMPLATE.getMessageConverters();
+        httpMessageConverters.forEach(httpMessageConverter -> {
+            if (httpMessageConverter instanceof StringHttpMessageConverter messageConverter) {
+                // 解决乱码问题
+                messageConverter.setDefaultCharset(StandardCharsets.UTF_8);
+            }
+        });
+        // 加入拦截器
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+        interceptors.add(new LoggingClientHttpRequestInterceptor());
+        REST_TEMPLATE.setInterceptors(interceptors);
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setReadTimeout(10 * 1000);
+        factory.setConnectTimeout(10 * 1000);
+        REST_TEMPLATE.setRequestFactory(new BufferingClientHttpRequestFactory(factory));
+    }
 
-	/**
-	 * 静态获取RestTemplate实例对象，可自由调用其方法
-	 * @return RestTemplate实例对象
-	 */
-	public static RestTemplate getRestTemplate() {
-		return REST_TEMPLATE;
-	}
+    /**
+     * 静态获取RestTemplate实例对象，可自由调用其方法
+     * @return RestTemplate实例对象
+     */
+    public static RestTemplate getRestTemplate() {
+        return REST_TEMPLATE;
+    }
 
-	/**
-	 * 请求日志拦截
-	 */
-	static class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
+    /**
+     * 请求日志拦截
+     */
+    static class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
-		private final Logger log = LoggerFactory.getLogger(getClass());
+        private final Logger log = LoggerFactory.getLogger(getClass());
 
-		@Override
-		public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
-				throws IOException {
-			// 跟踪请求
-			traceRequest(request, body);
-			ClientHttpResponse response = execution.execute(request, body);
-			// 跟踪返回结果
-			traceResponse(response);
-			return response;
-		}
+        @Override
+        public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+                throws IOException {
+            // 跟踪请求
+            traceRequest(request, body);
+            ClientHttpResponse response = execution.execute(request, body);
+            // 跟踪返回结果
+            traceResponse(response);
+            return response;
+        }
 
-		private void traceRequest(HttpRequest request, byte[] body) throws IOException {
-			log.info("===========================request begin================================================");
-			log.info("URI         : {}", request.getURI());
-			log.info("Method      : {}", request.getMethod());
-			log.info("Headers     : {}", request.getHeaders());
-			log.info("Request body: {}", new String(body, StandardCharsets.UTF_8));
-			log.info("==========================request end================================================");
-		}
+        private void traceRequest(HttpRequest request, byte[] body) throws IOException {
+            log.info("===========================request begin================================================");
+            log.info("URI         : {}", request.getURI());
+            log.info("Method      : {}", request.getMethod());
+            log.info("Headers     : {}", request.getHeaders());
+            log.info("Request body: {}", new String(body, StandardCharsets.UTF_8));
+            log.info("==========================request end================================================");
+        }
 
-		/**
-		 * 跟踪返回结果
-		 * @param response 返回结果
-		 * @throws IOException IOException
-		 */
-		private void traceResponse(ClientHttpResponse response) throws IOException {
-			String responseBody = ResourceUtil.read(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8));
-			log.info("============================ response begin ============================");
-			log.info("Status code  : {}", response.getStatusCode());
-			log.info("Status text  : {}", response.getStatusText());
-			log.info("Headers      : {}", response.getHeaders());
-			log.info("Response body: {}", responseBody);
-			log.info("============================ response end ============================");
-		}
+        /**
+         * 跟踪返回结果
+         * @param response 返回结果
+         * @throws IOException IOException
+         */
+        private void traceResponse(ClientHttpResponse response) throws IOException {
+            String responseBody = ResourceUtil.read(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8));
+            log.info("============================ response begin ============================");
+            log.info("Status code  : {}", response.getStatusCode());
+            log.info("Status text  : {}", response.getStatusText());
+            log.info("Headers      : {}", response.getHeaders());
+            log.info("Response body: {}", responseBody);
+            log.info("============================ response end ============================");
+        }
 
-	}
+    }
 
-	public static void main(String[] args) throws IOException {
-		// String url = "https://wx.hzwindow.com.cn/hzwechat/hzwx/applet/page/img/image";
-		// HttpHeaders headers = new HttpHeaders();
-		// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		// // 接口参数
-		// MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
-		// multiValueMap.add("token", "b5b3hc8e008dba62a449fdc1977");
-		// // 处理文件
-		// FileSystemResource fileSystemResource = new FileSystemResource(new
-		// File("/Users/Lypxc/Desktop/1.jpg"));
-		// multiValueMap.add("file", fileSystemResource);
-		// HttpEntity<MultiValueMap<String, Object>> httpEntity = new
-		// HttpEntity<>(multiValueMap, headers);
-		// REST_TEMPLATE.postForEntity(url, httpEntity, String.class);
-	}
+    public static void main(String[] args) throws IOException {
+        // String url = "https://wx.hzwindow.com.cn/hzwechat/hzwx/applet/page/img/image";
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        // // 接口参数
+        // MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
+        // multiValueMap.add("token", "b5b3hc8e008dba62a449fdc1977");
+        // // 处理文件
+        // FileSystemResource fileSystemResource = new FileSystemResource(new
+        // File("/Users/Lypxc/Desktop/1.jpg"));
+        // multiValueMap.add("file", fileSystemResource);
+        // HttpEntity<MultiValueMap<String, Object>> httpEntity = new
+        // HttpEntity<>(multiValueMap, headers);
+        // REST_TEMPLATE.postForEntity(url, httpEntity, String.class);
+    }
 
 }

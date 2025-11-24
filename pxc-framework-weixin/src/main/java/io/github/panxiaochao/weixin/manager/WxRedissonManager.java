@@ -34,45 +34,45 @@ import java.util.Objects;
  */
 public class WxRedissonManager implements IWxManager {
 
-	private final RedissonClient redissonClient;
+    private final RedissonClient redissonClient;
 
-	public WxRedissonManager() {
-		RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
-		if (Objects.isNull(redissonClient)) {
-			redissonClient = SpringContextUtil.getBean("redissonClient");
-		}
-		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
-		this.redissonClient = redissonClient;
-	}
+    public WxRedissonManager() {
+        RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+        if (Objects.isNull(redissonClient)) {
+            redissonClient = SpringContextUtil.getBean("redissonClient");
+        }
+        Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
+        this.redissonClient = redissonClient;
+    }
 
-	/**
-	 * obtain the v
-	 * @param key key
-	 * @return value
-	 */
-	@Override
-	public String get(String key) {
-		RBucket<String> rBucket = getRbucket(key);
-		return StringUtils.hasText(rBucket.get()) ? rBucket.get() : null;
-	}
+    /**
+     * obtain the v
+     * @param key key
+     * @return value
+     */
+    @Override
+    public String get(String key) {
+        RBucket<String> rBucket = getRbucket(key);
+        return StringUtils.hasText(rBucket.get()) ? rBucket.get() : null;
+    }
 
-	/**
-	 * Set the value
-	 * @param key key
-	 * @param value object value
-	 */
-	@Override
-	public void set(String key, String value) {
-		getRbucket(key).set(value);
-	}
+    /**
+     * Set the value
+     * @param key key
+     * @param value object value
+     */
+    @Override
+    public void set(String key, String value) {
+        getRbucket(key).set(value);
+    }
 
-	/**
-	 * obtain the bucket
-	 * @param bucketName bucket name
-	 * @return RBucket
-	 */
-	private <T> RBucket<T> getRbucket(String bucketName) {
-		return this.redissonClient.getBucket(bucketName, new StringCodec(StandardCharsets.UTF_8));
-	}
+    /**
+     * obtain the bucket
+     * @param bucketName bucket name
+     * @return RBucket
+     */
+    private <T> RBucket<T> getRbucket(String bucketName) {
+        return this.redissonClient.getBucket(bucketName, new StringCodec(StandardCharsets.UTF_8));
+    }
 
 }

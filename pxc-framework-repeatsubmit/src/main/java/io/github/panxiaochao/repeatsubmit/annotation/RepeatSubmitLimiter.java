@@ -35,19 +35,19 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RepeatSubmitLimiter {
 
-	/**
-	 * 提交间隔时间, 小于此时间间隔属于重复提交, 默认毫秒
-	 */
-	long interval() default 5000;
+    /**
+     * 提交间隔时间, 小于此时间间隔属于重复提交, 默认毫秒
+     */
+    long interval() default 5000;
 
-	/**
-	 * 时间单位格式, 默认毫秒
-	 */
-	TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
+    /**
+     * 时间单位格式, 默认毫秒
+     */
+    TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 
-	/**
-	 * 自定义提示消息
-	 */
-	String message() default "";
+    /**
+     * 自定义提示消息
+     */
+    String message() default "";
 
 }

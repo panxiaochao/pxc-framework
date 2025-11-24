@@ -15,10 +15,10 @@ import java.util.regex.Pattern;
  */
 public class RegexUtilTest {
 
-	@Test
-	void getAllGroupNames() {
-		final Pattern pattern = Pattern.compile("(?<year>\\d+)-(?<month>\\d+)-(?<day>\\d+)", Pattern.DOTALL);
-		System.out.println(RegexUtil.getAllGroupNames(pattern, "2021-10-11"));
-	}
+    @Test
+    void getAllGroupNames() {
+        final Pattern pattern = Pattern.compile("(?<year>\\d+)-(?<month>\\d+)-(?<day>\\d+)", Pattern.DOTALL);
+        System.out.println(RegexUtil.getAllGroupNames(pattern, "2021-10-11"));
+    }
 
 }

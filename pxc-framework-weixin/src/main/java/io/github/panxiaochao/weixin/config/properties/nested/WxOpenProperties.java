@@ -33,54 +33,54 @@ import java.util.List;
 @Setter
 public class WxOpenProperties {
 
-	/**
-	 * 是否开启
-	 */
-	private Boolean enabled;
+    /**
+     * 是否开启
+     */
+    private Boolean enabled;
 
-	/**
-	 * 指定key前缀.
-	 */
-	private String keyPrefix = "wx:open";
+    /**
+     * 指定key前缀.
+     */
+    private String keyPrefix = "wx:open";
 
-	/**
-	 * 微信开放平台的appid
-	 */
-	private String appId;
+    /**
+     * 微信开放平台的appid
+     */
+    private String appId;
 
-	/**
-	 * 微信开放平台的app secret
-	 */
-	private String secret;
+    /**
+     * 微信开放平台的app secret
+     */
+    private String secret;
 
-	/**
-	 * 微信开放平台的token
-	 */
-	private String token;
+    /**
+     * 微信开放平台的token
+     */
+    private String token;
 
-	/**
-	 * 微信开放平台的EncodingAESKey
-	 */
-	private String aesKey;
+    /**
+     * 微信开放平台的EncodingAESKey
+     */
+    private String aesKey;
 
-	/**
-	 * 授权 URL
-	 */
-	private String authorizeUrl;
+    /**
+     * 授权 URL
+     */
+    private String authorizeUrl;
 
-	/**
-	 * 微信公众号 AppId
-	 */
-	private String mpAppId;
+    /**
+     * 微信公众号 AppId
+     */
+    private String mpAppId;
 
-	/**
-	 * 微信小程序 AppId
-	 */
-	private String maAppId;
+    /**
+     * 微信小程序 AppId
+     */
+    private String maAppId;
 
-	/**
-	 * 配置多个消息处理器
-	 */
-	private List<WxMpProperties.MpHandler> handlers;
+    /**
+     * 配置多个消息处理器
+     */
+    private List<WxMpProperties.MpHandler> handlers;
 
 }

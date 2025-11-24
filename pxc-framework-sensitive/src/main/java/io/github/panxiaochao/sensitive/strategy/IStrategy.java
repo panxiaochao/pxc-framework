@@ -28,9 +28,9 @@ import java.util.function.Function;
  */
 public interface IStrategy<T> {
 
-	/**
-	 * 泛型函数.
-	 */
-	Function<String, T> use();
+    /**
+     * 泛型函数.
+     */
+    Function<String, T> use();
 
 }

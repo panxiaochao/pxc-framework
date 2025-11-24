@@ -45,14 +45,14 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Translate {
 
-	/**
-	 * 处理策略，当且仅handler是默认处理{@link IHandler}情况下生效
-	 */
-	TranslateStrategy strategy() default TranslateStrategy.DEFAULT;
+    /**
+     * 处理策略，当且仅handler是默认处理{@link IHandler}情况下生效
+     */
+    TranslateStrategy strategy() default TranslateStrategy.DEFAULT;
 
-	/**
-	 * 自定义处理方法
-	 */
-	Class<? extends IHandler> handler() default IHandler.class;
+    /**
+     * 自定义处理方法
+     */
+    Class<? extends IHandler> handler() default IHandler.class;
 
 }

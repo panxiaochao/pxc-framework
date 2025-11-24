@@ -13,8 +13,8 @@ import io.github.panxiaochao.core.utils.SystemServerUtil;
  */
 public class SystemServerInfoTest {
 
-	public static void main(String[] args) {
-		System.out.println(SystemServerUtil.ofCpuInfo());
-	}
+    public static void main(String[] args) {
+        System.out.println(SystemServerUtil.ofCpuInfo());
+    }
 
 }

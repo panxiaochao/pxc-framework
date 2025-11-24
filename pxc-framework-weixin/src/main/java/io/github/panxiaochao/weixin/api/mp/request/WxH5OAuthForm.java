@@ -28,6 +28,6 @@ import lombok.Setter;
 @Setter
 public class WxH5OAuthForm {
 
-	private String code;
+    private String code;
 
 }

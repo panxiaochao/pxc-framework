@@ -26,14 +26,14 @@ package io.github.panxiaochao.crypto.encrypt;
  */
 public interface BytesEncryptor {
 
-	/**
-	 * Encrypt the byte array.
-	 */
-	byte[] encrypt(byte[] byteArray);
+    /**
+     * Encrypt the byte array.
+     */
+    byte[] encrypt(byte[] byteArray);
 
-	/**
-	 * Decrypt the byte array.
-	 */
-	byte[] decrypt(byte[] encryptedBytes);
+    /**
+     * Decrypt the byte array.
+     */
+    byte[] decrypt(byte[] encryptedBytes);
 
 }

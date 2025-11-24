@@ -48,61 +48,61 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimiter {
 
-	/**
-	 * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
-	 */
-	String key() default "";
+    /**
+     * 限流Key, 支持 Spring EL 表达式, 例如 #id, #user.id
+     */
+    String key() default "";
 
-	/**
-	 * 指定时间内, API最大请求次数
-	 */
-	int maxCount() default 10;
+    /**
+     * 指定时间内, API最大请求次数
+     */
+    int maxCount() default 10;
 
-	/**
-	 * 限定时间范围, 默认毫秒
-	 */
-	long limitTime() default 60 * 1000;
+    /**
+     * 限定时间范围, 默认毫秒
+     */
+    long limitTime() default 60 * 1000;
 
-	/**
-	 * 时间单位格式, 默认毫秒
-	 */
-	TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
+    /**
+     * 时间单位格式, 默认毫秒
+     */
+    TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 
-	/**
-	 * 限流类型
-	 */
-	RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
+    /**
+     * 限流类型
+     */
+    RateLimiterType rateLimiterType() default RateLimiterType.METHOD;
 
-	/**
-	 * 自定义提示消息
-	 */
-	String message() default "";
+    /**
+     * 自定义提示消息
+     */
+    String message() default "";
 
-	/**
-	 * 限流类型
-	 */
-	enum RateLimiterType {
+    /**
+     * 限流类型
+     */
+    enum RateLimiterType {
 
-		/**
-		 * 根据 IP 进行限流
-		 */
-		IP,
+        /**
+         * 根据 IP 进行限流
+         */
+        IP,
 
-		/**
-		 * 根据 METHOD 进行限流
-		 */
-		METHOD,
+        /**
+         * 根据 METHOD 进行限流
+         */
+        METHOD,
 
-		/**
-		 * 根据 IP+METHOD 进行限流
-		 */
-		IP_METHOD,
+        /**
+         * 根据 IP+METHOD 进行限流
+         */
+        IP_METHOD,
 
-		/**
-		 * 单机/单实例限流
-		 */
-		SINGLE
+        /**
+         * 单机/单实例限流
+         */
+        SINGLE
 
-	}
+    }
 
 }

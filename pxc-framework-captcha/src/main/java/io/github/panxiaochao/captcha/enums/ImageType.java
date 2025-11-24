@@ -31,18 +31,18 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ImageType {
 
-	JPG("jpg", "data:image/jpg;base64", "image/jpg"),
+    JPG("jpg", "data:image/jpg;base64", "image/jpg"),
 
-	JPEG("jpeg", "data:image/jpeg;base64", "image/jpeg"),
+    JPEG("jpeg", "data:image/jpeg;base64", "image/jpeg"),
 
-	PNG("png", "data:image/png;base64", "image/png"),
+    PNG("png", "data:image/png;base64", "image/png"),
 
-	GIF("gif", "data:image/gif;base64", "image/gif");
+    GIF("gif", "data:image/gif;base64", "image/gif");
 
-	private final String suffix;
+    private final String suffix;
 
-	private final String imageData;
+    private final String imageData;
 
-	private final String contentType;
+    private final String contentType;
 
 }

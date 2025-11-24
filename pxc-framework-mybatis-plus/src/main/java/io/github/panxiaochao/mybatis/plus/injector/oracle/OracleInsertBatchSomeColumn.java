@@ -44,103 +44,103 @@ import java.util.function.Predicate;
  */
 public class OracleInsertBatchSomeColumn extends AbstractMethod {
 
-	private static final long serialVersionUID = 2784412040297613815L;
+    private static final long serialVersionUID = 2784412040297613815L;
 
-	/**
-	 * 字段筛选条件
-	 */
-	@Setter
-	@Accessors(chain = true)
-	private Predicate<TableFieldInfo> predicate;
+    /**
+     * 字段筛选条件
+     */
+    @Setter
+    @Accessors(chain = true)
+    private Predicate<TableFieldInfo> predicate;
 
-	private static final String INSERT_BATCH_SQL = "<script>\nINSERT ALL \n  %s\n</script>";
+    private static final String INSERT_BATCH_SQL = "<script>\nINSERT ALL \n  %s\n</script>";
 
-	/**
-	 * 默认方法名
-	 * @param predicate 字段筛选条件
-	 */
-	public OracleInsertBatchSomeColumn(Predicate<TableFieldInfo> predicate) {
-		super("insertBatchSomeColumn");
-		this.predicate = predicate;
-	}
+    /**
+     * 默认方法名
+     * @param predicate 字段筛选条件
+     */
+    public OracleInsertBatchSomeColumn(Predicate<TableFieldInfo> predicate) {
+        super("insertBatchSomeColumn");
+        this.predicate = predicate;
+    }
 
-	@SuppressWarnings("Duplicates")
-	@Override
-	public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
-		// pojo类型为Map时禁用
-		if (tableInfo.getEntityType().equals(Map.class)) {
-			return null;
-		}
-		// return super.injectMappedStatement(mapperClass,modelClass,tableInfo);
-		KeyGenerator keyGenerator = new NoKeyGenerator();
-		SqlMethod sqlMethod = SqlMethod.INSERT_ONE;
-		List<TableFieldInfo> fieldList = tableInfo.getFieldList();
-		String insertSqlColumn = tableInfo.getKeyInsertSqlColumn(true, null, false)
-				+ this.filterTableFieldInfo(fieldList, predicate, TableFieldInfo::getInsertSqlColumn, EMPTY);
-		String columns = insertSqlColumn.substring(0, insertSqlColumn.length() - 1);
-		String insertSqlProperty = tableInfo.getKeyInsertSqlProperty(true, ENTITY_DOT, false)
-				+ this.filterTableFieldInfo(fieldList, predicate, i -> i.getInsertSqlProperty(ENTITY_DOT), EMPTY);
-		insertSqlProperty = LEFT_BRACKET + insertSqlProperty.substring(0, insertSqlProperty.length() - 1)
-				+ RIGHT_BRACKET;
-		String valuesScript = convertForeach(insertSqlProperty, "list", tableInfo.getTableName(), columns, ENTITY,
-				NEWLINE);
-		String keyProperty = null;
-		String keyColumn = null;
-		// 表包含主键处理逻辑,如果不包含主键当普通字段处理
-		if (tableInfo.havePK()) {
-			if (tableInfo.getIdType() == IdType.AUTO) {
-				/* 自增主键 */
-				keyGenerator = new Jdbc3KeyGenerator();
-				keyProperty = tableInfo.getKeyProperty();
-				keyColumn = tableInfo.getKeyColumn();
-			}
-			else {
-				if (null != tableInfo.getKeySequence()) {
-					keyGenerator = TableInfoHelper.genKeyGenerator(this.methodName, tableInfo, builderAssistant);
-					keyProperty = tableInfo.getKeyProperty();
-					keyColumn = tableInfo.getKeyColumn();
-				}
-			}
-		}
-		String sql = String.format(INSERT_BATCH_SQL, valuesScript);
-		SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
-		return this.addInsertMappedStatement(mapperClass, modelClass, this.methodName, sqlSource, keyGenerator,
-				keyProperty, keyColumn);
-	}
+    @SuppressWarnings("Duplicates")
+    @Override
+    public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
+        // pojo类型为Map时禁用
+        if (tableInfo.getEntityType().equals(Map.class)) {
+            return null;
+        }
+        // return super.injectMappedStatement(mapperClass,modelClass,tableInfo);
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        SqlMethod sqlMethod = SqlMethod.INSERT_ONE;
+        List<TableFieldInfo> fieldList = tableInfo.getFieldList();
+        String insertSqlColumn = tableInfo.getKeyInsertSqlColumn(true, null, false)
+                + this.filterTableFieldInfo(fieldList, predicate, TableFieldInfo::getInsertSqlColumn, EMPTY);
+        String columns = insertSqlColumn.substring(0, insertSqlColumn.length() - 1);
+        String insertSqlProperty = tableInfo.getKeyInsertSqlProperty(true, ENTITY_DOT, false)
+                + this.filterTableFieldInfo(fieldList, predicate, i -> i.getInsertSqlProperty(ENTITY_DOT), EMPTY);
+        insertSqlProperty = LEFT_BRACKET + insertSqlProperty.substring(0, insertSqlProperty.length() - 1)
+                + RIGHT_BRACKET;
+        String valuesScript = convertForeach(insertSqlProperty, "list", tableInfo.getTableName(), columns, ENTITY,
+                NEWLINE);
+        String keyProperty = null;
+        String keyColumn = null;
+        // 表包含主键处理逻辑,如果不包含主键当普通字段处理
+        if (tableInfo.havePK()) {
+            if (tableInfo.getIdType() == IdType.AUTO) {
+                /* 自增主键 */
+                keyGenerator = new Jdbc3KeyGenerator();
+                keyProperty = tableInfo.getKeyProperty();
+                keyColumn = tableInfo.getKeyColumn();
+            }
+            else {
+                if (null != tableInfo.getKeySequence()) {
+                    keyGenerator = TableInfoHelper.genKeyGenerator(this.methodName, tableInfo, builderAssistant);
+                    keyProperty = tableInfo.getKeyProperty();
+                    keyColumn = tableInfo.getKeyColumn();
+                }
+            }
+        }
+        String sql = String.format(INSERT_BATCH_SQL, valuesScript);
+        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
+        return this.addInsertMappedStatement(mapperClass, modelClass, this.methodName, sqlSource, keyGenerator,
+                keyProperty, keyColumn);
+    }
 
-	public static String convertForeach(final String sqlScript, final String collection, final String tableName,
-			final String columns, final String item, final String separator) {
-		StringBuilder sb = new StringBuilder("<foreach");
+    public static String convertForeach(final String sqlScript, final String collection, final String tableName,
+            final String columns, final String item, final String separator) {
+        StringBuilder sb = new StringBuilder("<foreach");
 
-		if (StringUtils.hasText(collection)) {
-			sb.append(" collection=\"").append(collection).append("\"");
-		}
+        if (StringUtils.hasText(collection)) {
+            sb.append(" collection=\"").append(collection).append("\"");
+        }
 
-		if (StringUtils.hasText(item)) {
-			sb.append(" item=\"").append(item).append("\"");
-		}
+        if (StringUtils.hasText(item)) {
+            sb.append(" item=\"").append(item).append("\"");
+        }
 
-		if (StringUtils.hasText(separator)) {
-			sb.append(" separator=\"").append(separator).append("\"");
-		}
+        if (StringUtils.hasText(separator)) {
+            sb.append(" separator=\"").append(separator).append("\"");
+        }
 
-		sb.append(">").append("\n");
+        sb.append(">").append("\n");
 
-		if (StringUtils.hasText(tableName)) {
-			sb.append(" INTO ").append(tableName).append(" ");
-		}
+        if (StringUtils.hasText(tableName)) {
+            sb.append(" INTO ").append(tableName).append(" ");
+        }
 
-		if (StringUtils.hasText(columns)) {
-			sb.append(LEFT_BRACKET).append(columns).append(RIGHT_BRACKET).append(" VALUES ");
-		}
+        if (StringUtils.hasText(columns)) {
+            sb.append(LEFT_BRACKET).append(columns).append(RIGHT_BRACKET).append(" VALUES ");
+        }
 
-		return sb.append(sqlScript)
-			.append("\n")
-			.append("</foreach>\n")
-			.append(" SELECT ")
-			.append("*")
-			.append(" FROM dual")
-			.toString();
-	}
+        return sb.append(sqlScript)
+            .append("\n")
+            .append("</foreach>\n")
+            .append(" SELECT ")
+            .append("*")
+            .append(" FROM dual")
+            .toString();
+    }
 
 }

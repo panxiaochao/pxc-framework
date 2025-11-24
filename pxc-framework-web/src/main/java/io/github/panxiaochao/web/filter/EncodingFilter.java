@@ -34,14 +34,14 @@ import java.nio.charset.StandardCharsets;
  */
 public class EncodingFilter implements Filter {
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		// 编码
-		servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-		servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-		// 放行
-		filterChain.doFilter(servletRequest, servletResponse);
-	}
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        // 编码
+        servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        // 放行
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
 
 }

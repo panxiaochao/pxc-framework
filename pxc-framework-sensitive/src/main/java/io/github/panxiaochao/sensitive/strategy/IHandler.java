@@ -26,13 +26,13 @@ package io.github.panxiaochao.sensitive.strategy;
  */
 public interface IHandler {
 
-	/**
-	 * 处理基类方法
-	 * @param value 值
-	 * @return 处理后结果
-	 */
-	default String handler(String value) {
-		return value;
-	}
+    /**
+     * 处理基类方法
+     * @param value 值
+     * @return 处理后结果
+     */
+    default String handler(String value) {
+        return value;
+    }
 
 }

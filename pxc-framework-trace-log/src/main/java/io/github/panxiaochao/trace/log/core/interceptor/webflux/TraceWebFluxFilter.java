@@ -33,17 +33,17 @@ import reactor.core.publisher.Mono;
  */
 public class TraceWebFluxFilter implements WebFilter, Ordered {
 
-	@Override
-	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-		ServerHttpRequest request = exchange.getRequest();
-		return chain
-			.filter(exchange.mutate().request(TraceWebFluxHandler.instance().processBeforeTraceLog(request)).build())
-			.doFinally(signalType -> TraceWebFluxHandler.instance().cleanTraceLogAll());
-	}
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        return chain
+            .filter(exchange.mutate().request(TraceWebFluxHandler.instance().processBeforeTraceLog(request)).build())
+            .doFinally(signalType -> TraceWebFluxHandler.instance().cleanTraceLogAll());
+    }
 
-	@Override
-	public int getOrder() {
-		return Ordered.HIGHEST_PRECEDENCE;
-	}
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
 
 }

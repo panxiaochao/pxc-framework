@@ -30,13 +30,13 @@ import me.chanjar.weixin.cp.bean.message.WxCpXmlOutMessage;
  */
 public class TextBuilder extends AbstractCpBuilder {
 
-	@Override
-	public WxCpXmlOutMessage build(String content, WxCpXmlMessage wxMessage, WxCpService service) {
-		return WxCpXmlOutMessage.TEXT()
-			.content(content)
-			.fromUser(wxMessage.getToUserName())
-			.toUser(wxMessage.getFromUserName())
-			.build();
-	}
+    @Override
+    public WxCpXmlOutMessage build(String content, WxCpXmlMessage wxMessage, WxCpService service) {
+        return WxCpXmlOutMessage.TEXT()
+            .content(content)
+            .fromUser(wxMessage.getToUserName())
+            .toUser(wxMessage.getFromUserName())
+            .build();
+    }
 
 }

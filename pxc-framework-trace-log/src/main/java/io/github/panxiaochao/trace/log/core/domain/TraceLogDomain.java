@@ -48,153 +48,153 @@ import java.util.StringJoiner;
 @Getter
 public class TraceLogDomain implements Serializable {
 
-	private static final long serialVersionUID = 5728436343648917967L;
+    private static final long serialVersionUID = 5728436343648917967L;
 
-	private Map<String, String> attributes = new HashMap<>();
+    private Map<String, String> attributes = new HashMap<>();
 
-	private TraceLogDomain() {
-	}
+    private TraceLogDomain() {
+    }
 
-	public TraceLogDomain(TraceLogDomainBuilder builder) {
-		// traceId 如果没有取到TraceId，就重新生成一个
-		if (StringUtils.hasText(builder.getTraceId())) {
-			builder.setTraceId(UuidUtil.getSimpleUuid());
-		}
-		TraceLogContext.setTraceId(builder.getTraceId());
-		// spanId 如果为空，会放入初始值
-		TraceLogContext.setSpanId(builder.getSpanId());
-		// 本机IP
-		TraceLogContext.setHostIp(builder.getHostIp());
-		// 本机名
-		TraceLogContext.setHostName(builder.getHostName());
-		// 额外属性
-		// TraceLogContext.setExtData(this.attributes);
-	}
+    public TraceLogDomain(TraceLogDomainBuilder builder) {
+        // traceId 如果没有取到TraceId，就重新生成一个
+        if (StringUtils.hasText(builder.getTraceId())) {
+            builder.setTraceId(UuidUtil.getSimpleUuid());
+        }
+        TraceLogContext.setTraceId(builder.getTraceId());
+        // spanId 如果为空，会放入初始值
+        TraceLogContext.setSpanId(builder.getSpanId());
+        // 本机IP
+        TraceLogContext.setHostIp(builder.getHostIp());
+        // 本机名
+        TraceLogContext.setHostName(builder.getHostName());
+        // 额外属性
+        // TraceLogContext.setExtData(this.attributes);
+    }
 
-	/**
-	 * 格式化生成打印日志标签
-	 * @return 日志标签
-	 */
-	public String formatTraceLogLabel() {
-		StringJoiner traceLogLabel = new StringJoiner(StringPools.COMMA, "[", "]");
-		// 额外属性添加
-		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_APP));
-		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_IP));
-		traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_NAME));
-		traceLogLabel.add(SpringContextUtil.getApplicationName());
-		traceLogLabel.add(TraceLogContext.getSpanId());
-		traceLogLabel.add(TraceLogContext.getTraceId());
-		traceLogLabel.add(TraceLogContext.getHostIp());
-		traceLogLabel.add(TraceLogContext.getHostName());
-		return traceLogLabel.toString();
-	}
+    /**
+     * 格式化生成打印日志标签
+     * @return 日志标签
+     */
+    public String formatTraceLogLabel() {
+        StringJoiner traceLogLabel = new StringJoiner(StringPools.COMMA, "[", "]");
+        // 额外属性添加
+        traceLogLabel.add(attributes.get(TraceLogConstant.PRE_APP));
+        traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_IP));
+        traceLogLabel.add(attributes.get(TraceLogConstant.PRE_HOST_NAME));
+        traceLogLabel.add(SpringContextUtil.getApplicationName());
+        traceLogLabel.add(TraceLogContext.getSpanId());
+        traceLogLabel.add(TraceLogContext.getTraceId());
+        traceLogLabel.add(TraceLogContext.getHostIp());
+        traceLogLabel.add(TraceLogContext.getHostName());
+        return traceLogLabel.toString();
+    }
 
-	/**
-	 * WebMvc Builder构造
-	 * @param request HttpServletRequest
-	 * @return TraceLogDomainBuilder
-	 */
-	public static TraceLogDomainBuilder withServletRequest(HttpServletRequest request) {
-		Assert.notNull(request, "request cannot be null");
-		return new TraceLogDomainBuilder(request);
-	}
+    /**
+     * WebMvc Builder构造
+     * @param request HttpServletRequest
+     * @return TraceLogDomainBuilder
+     */
+    public static TraceLogDomainBuilder withServletRequest(HttpServletRequest request) {
+        Assert.notNull(request, "request cannot be null");
+        return new TraceLogDomainBuilder(request);
+    }
 
-	/**
-	 * WebFlux Builder构造
-	 * @param request ServerHttpRequest
-	 * @return TraceLogDomainBuilder
-	 */
-	public static TraceLogDomainBuilder withServerHttpRequest(ServerHttpRequest request) {
-		Assert.notNull(request, "request cannot be null");
-		return new TraceLogDomainBuilder(request);
-	}
+    /**
+     * WebFlux Builder构造
+     * @param request ServerHttpRequest
+     * @return TraceLogDomainBuilder
+     */
+    public static TraceLogDomainBuilder withServerHttpRequest(ServerHttpRequest request) {
+        Assert.notNull(request, "request cannot be null");
+        return new TraceLogDomainBuilder(request);
+    }
 
-	@Getter
-	@Setter
-	public static final class TraceLogDomainBuilder implements Serializable {
+    @Getter
+    @Setter
+    public static final class TraceLogDomainBuilder implements Serializable {
 
-		private static final long serialVersionUID = 5728436343648917967L;
+        private static final long serialVersionUID = 5728436343648917967L;
 
-		/**
-		 * 链路唯一ID
-		 */
-		private String traceId;
+        /**
+         * 链路唯一ID
+         */
+        private String traceId;
 
-		/**
-		 * 链路节点
-		 */
-		private String spanId;
+        /**
+         * 链路节点
+         */
+        private String spanId;
 
-		/**
-		 * 当前ip
-		 */
-		private String hostIp;
+        /**
+         * 当前ip
+         */
+        private String hostIp;
 
-		/**
-		 * 当前HostName
-		 */
-		private String hostName;
+        /**
+         * 当前HostName
+         */
+        private String hostName;
 
-		private final Map<String, String> attributes = new HashMap<>();
+        private final Map<String, String> attributes = new HashMap<>();
 
-		/**
-		 * Servlet Http Request
-		 */
-		private TraceLogDomainBuilder(HttpServletRequest request) {
-			// 获取 RequestHead 信息
-			this.traceId = request.getHeader(TraceLogConstant.TRACE_ID);
-			this.spanId = request.getHeader(TraceLogConstant.SPAN_ID);
-			this.hostIp = IpUtil.getHostIp();
-			this.hostName = IpUtil.getHostName();
-			// 额外属性
-			attributes.put(TraceLogConstant.PRE_APP,
-					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_APP)));
-			attributes.put(TraceLogConstant.PRE_HOST_IP,
-					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_IP)));
-			attributes.put(TraceLogConstant.PRE_HOST_NAME,
-					getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_NAME)));
-		}
+        /**
+         * Servlet Http Request
+         */
+        private TraceLogDomainBuilder(HttpServletRequest request) {
+            // 获取 RequestHead 信息
+            this.traceId = request.getHeader(TraceLogConstant.TRACE_ID);
+            this.spanId = request.getHeader(TraceLogConstant.SPAN_ID);
+            this.hostIp = IpUtil.getHostIp();
+            this.hostName = IpUtil.getHostName();
+            // 额外属性
+            attributes.put(TraceLogConstant.PRE_APP,
+                    getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_APP)));
+            attributes.put(TraceLogConstant.PRE_HOST_IP,
+                    getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_IP)));
+            attributes.put(TraceLogConstant.PRE_HOST_NAME,
+                    getNotBlankHeaderName(request.getHeader(TraceLogConstant.PRE_HOST_NAME)));
+        }
 
-		/**
-		 * WebFlux ServerHttpRequest
-		 */
-		private TraceLogDomainBuilder(ServerHttpRequest request) {
-			// 获取 RequestHead 信息
-			HttpHeaders headers = request.getHeaders();
-			this.traceId = getWebFluxHeaderName(headers, TraceLogConstant.TRACE_ID);
-			this.spanId = getWebFluxHeaderName(headers, TraceLogConstant.SPAN_ID);
-			this.hostIp = IpUtil.getHostIp();
-			this.hostName = IpUtil.getHostName();
-			// 额外属性
-			attributes.put(TraceLogConstant.PRE_APP,
-					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_APP)));
-			attributes.put(TraceLogConstant.PRE_HOST_IP,
-					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_IP)));
-			attributes.put(TraceLogConstant.PRE_HOST_NAME,
-					getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_NAME)));
-		}
+        /**
+         * WebFlux ServerHttpRequest
+         */
+        private TraceLogDomainBuilder(ServerHttpRequest request) {
+            // 获取 RequestHead 信息
+            HttpHeaders headers = request.getHeaders();
+            this.traceId = getWebFluxHeaderName(headers, TraceLogConstant.TRACE_ID);
+            this.spanId = getWebFluxHeaderName(headers, TraceLogConstant.SPAN_ID);
+            this.hostIp = IpUtil.getHostIp();
+            this.hostName = IpUtil.getHostName();
+            // 额外属性
+            attributes.put(TraceLogConstant.PRE_APP,
+                    getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_APP)));
+            attributes.put(TraceLogConstant.PRE_HOST_IP,
+                    getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_IP)));
+            attributes.put(TraceLogConstant.PRE_HOST_NAME,
+                    getNotBlankHeaderName(getWebFluxHeaderName(headers, TraceLogConstant.PRE_HOST_NAME)));
+        }
 
-		private String getWebFluxHeaderName(HttpHeaders headers, String headerName) {
-			List<String> traceIds = headers.get(headerName);
-			if (!CollectionUtils.isEmpty(traceIds)) {
-				return traceIds.get(0);
-			}
-			return null;
-		}
+        private String getWebFluxHeaderName(HttpHeaders headers, String headerName) {
+            List<String> traceIds = headers.get(headerName);
+            if (!CollectionUtils.isEmpty(traceIds)) {
+                return traceIds.get(0);
+            }
+            return null;
+        }
 
-		private String getNotBlankHeaderName(String headerName) {
-			if (StringUtils.hasText(headerName)) {
-				return TraceLogConstant.UNKNOWN;
-			}
-			return headerName;
-		}
+        private String getNotBlankHeaderName(String headerName) {
+            if (StringUtils.hasText(headerName)) {
+                return TraceLogConstant.UNKNOWN;
+            }
+            return headerName;
+        }
 
-		public TraceLogDomain build() {
-			TraceLogDomain traceLogDomain = new TraceLogDomain(this);
-			traceLogDomain.attributes = Collections.unmodifiableMap(this.attributes);
-			return traceLogDomain;
-		}
+        public TraceLogDomain build() {
+            TraceLogDomain traceLogDomain = new TraceLogDomain(this);
+            traceLogDomain.attributes = Collections.unmodifiableMap(this.attributes);
+            return traceLogDomain;
+        }
 
-	}
+    }
 
 }

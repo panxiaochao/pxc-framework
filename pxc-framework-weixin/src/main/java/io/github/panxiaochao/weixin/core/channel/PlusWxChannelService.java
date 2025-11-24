@@ -55,104 +55,104 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PlusWxChannelService {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	/**
-	 * 初始化 WxChannelService
-	 */
-	public WxChannelMultiService build() {
-		WxChannelMultiServiceImpl wxChannelMultiService = new WxChannelMultiServiceImpl();
-		if (wxProperties.getChannel().getEnabled()) {
-			final List<WxChannelProperties.WxChannelConfig> cpPropertiesList = wxProperties.getChannel().getConfig();
-			if (CollectionUtils.isEmpty(cpPropertiesList)) {
-				throw new RuntimeException("请配置微信视频号相关参数！");
-			}
-			// 存储方式
-			StorageType storageType = wxProperties.getStorageType();
-			for (WxChannelProperties.WxChannelConfig wxChannelConfig : cpPropertiesList) {
-				WxChannelDefaultConfigImpl configStorage;
-				switch (storageType) {
-					case Redisson:
-						configStorage = redissonConfigStorage();
-						break;
-					case RedisTemplate:
-						configStorage = redisTemplateConfigStorage();
-						break;
-					default:
-						configStorage = new WxChannelDefaultConfigImpl();
-						break;
-				}
-				configStorage.setAppid(wxChannelConfig.getAppId());
-				configStorage.setSecret(wxChannelConfig.getSecret());
-				if (StringUtils.hasText(wxChannelConfig.getToken())) {
-					configStorage.setToken(wxChannelConfig.getToken());
-				}
-				if (StringUtils.hasText(wxChannelConfig.getAesKey())) {
-					configStorage.setAesKey(wxChannelConfig.getAesKey());
-				}
-				configStorage.setStableAccessToken(wxChannelConfig.isUseStableAccessToken());
-				WxChannelService wxChannelService = getWxChannelService(configStorage);
-				wxChannelMultiService.setWxChannelService(wxChannelConfig.getAppId(), wxChannelService);
-			}
-			// 设置默认AppId，启动默认设置第一个
-			setDefaultAppId(cpPropertiesList);
-		}
-		return wxChannelMultiService;
-	}
+    /**
+     * 初始化 WxChannelService
+     */
+    public WxChannelMultiService build() {
+        WxChannelMultiServiceImpl wxChannelMultiService = new WxChannelMultiServiceImpl();
+        if (wxProperties.getChannel().getEnabled()) {
+            final List<WxChannelProperties.WxChannelConfig> cpPropertiesList = wxProperties.getChannel().getConfig();
+            if (CollectionUtils.isEmpty(cpPropertiesList)) {
+                throw new RuntimeException("请配置微信视频号相关参数！");
+            }
+            // 存储方式
+            StorageType storageType = wxProperties.getStorageType();
+            for (WxChannelProperties.WxChannelConfig wxChannelConfig : cpPropertiesList) {
+                WxChannelDefaultConfigImpl configStorage;
+                switch (storageType) {
+                    case Redisson:
+                        configStorage = redissonConfigStorage();
+                        break;
+                    case RedisTemplate:
+                        configStorage = redisTemplateConfigStorage();
+                        break;
+                    default:
+                        configStorage = new WxChannelDefaultConfigImpl();
+                        break;
+                }
+                configStorage.setAppid(wxChannelConfig.getAppId());
+                configStorage.setSecret(wxChannelConfig.getSecret());
+                if (StringUtils.hasText(wxChannelConfig.getToken())) {
+                    configStorage.setToken(wxChannelConfig.getToken());
+                }
+                if (StringUtils.hasText(wxChannelConfig.getAesKey())) {
+                    configStorage.setAesKey(wxChannelConfig.getAesKey());
+                }
+                configStorage.setStableAccessToken(wxChannelConfig.isUseStableAccessToken());
+                WxChannelService wxChannelService = getWxChannelService(configStorage);
+                wxChannelMultiService.setWxChannelService(wxChannelConfig.getAppId(), wxChannelService);
+            }
+            // 设置默认AppId，启动默认设置第一个
+            setDefaultAppId(cpPropertiesList);
+        }
+        return wxChannelMultiService;
+    }
 
-	private void setDefaultAppId(List<WxChannelProperties.WxChannelConfig> cpPropertiesList) {
-		final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
-		Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
-		wxManager.set(WxConstant.CHANNEL_KEY, cpPropertiesList.get(0).getAppId());
-	}
+    private void setDefaultAppId(List<WxChannelProperties.WxChannelConfig> cpPropertiesList) {
+        final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
+        Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
+        wxManager.set(WxConstant.CHANNEL_KEY, cpPropertiesList.get(0).getAppId());
+    }
 
-	private WxChannelService getWxChannelService(WxChannelConfig configStorages) {
-		HttpClientType httpClientType = wxProperties.getHttpClientType();
-		WxChannelService wxChannelService;
-		switch (httpClientType) {
-			case OkHttp:
-			case JoddHttp:
-				wxChannelService = new WxChannelServiceOkHttpImpl();
-				break;
-			case HttpClient:
-				wxChannelService = new WxChannelServiceHttpClientImpl();
-				break;
-			default:
-				wxChannelService = new WxChannelServiceImpl();
-				break;
-		}
-		wxChannelService.setConfig(configStorages);
-		wxChannelService.setMaxRetryTimes(3);
-		wxChannelService.setRetrySleepMillis(1000);
-		return wxChannelService;
-	}
+    private WxChannelService getWxChannelService(WxChannelConfig configStorages) {
+        HttpClientType httpClientType = wxProperties.getHttpClientType();
+        WxChannelService wxChannelService;
+        switch (httpClientType) {
+            case OkHttp:
+            case JoddHttp:
+                wxChannelService = new WxChannelServiceOkHttpImpl();
+                break;
+            case HttpClient:
+                wxChannelService = new WxChannelServiceHttpClientImpl();
+                break;
+            default:
+                wxChannelService = new WxChannelServiceImpl();
+                break;
+        }
+        wxChannelService.setConfig(configStorages);
+        wxChannelService.setMaxRetryTimes(3);
+        wxChannelService.setRetrySleepMillis(1000);
+        return wxChannelService;
+    }
 
-	/**
-	 * Redisson 存储方案
-	 */
-	private WxChannelDefaultConfigImpl redissonConfigStorage() {
-		RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
-		if (Objects.isNull(redissonClient)) {
-			redissonClient = SpringContextUtil.getBean("redissonClient");
-		}
-		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
-		return new WxChannelRedissonConfigImpl(redissonClient, wxProperties.getCp().getKeyPrefix());
-	}
+    /**
+     * Redisson 存储方案
+     */
+    private WxChannelDefaultConfigImpl redissonConfigStorage() {
+        RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+        if (Objects.isNull(redissonClient)) {
+            redissonClient = SpringContextUtil.getBean("redissonClient");
+        }
+        Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
+        return new WxChannelRedissonConfigImpl(redissonClient, wxProperties.getCp().getKeyPrefix());
+    }
 
-	/**
-	 * RedisTemplate 存储方案
-	 */
-	private WxChannelDefaultConfigImpl redisTemplateConfigStorage() {
-		StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
-		}
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("redisTemplate");
-		}
-		Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
-		WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
-		return new WxChannelRedisConfigImpl(redisOps, wxProperties.getChannel().getKeyPrefix());
-	}
+    /**
+     * RedisTemplate 存储方案
+     */
+    private WxChannelDefaultConfigImpl redisTemplateConfigStorage() {
+        StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
+        }
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("redisTemplate");
+        }
+        Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
+        WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
+        return new WxChannelRedisConfigImpl(redisOps, wxProperties.getChannel().getKeyPrefix());
+    }
 
 }

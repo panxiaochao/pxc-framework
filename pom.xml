@@ -86,7 +86,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 2025.0.X 版本支持 3.5.x -->
-        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-boot.version>3.5.8</spring-boot.version>
         <spring-data-redis.version>3.5.4</spring-data-redis.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-openfeign.version>4.3.0</spring-cloud-openfeign.version>
@@ -132,8 +132,9 @@
         <maven-compiler-plugin.verison>3.13.0</maven-compiler-plugin.verison>
         <maven-source-plugin.verison>3.3.1</maven-source-plugin.verison>
         <maven-javadoc-plugin.verison>3.11.2</maven-javadoc-plugin.verison>
-        <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
+        <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
         <license-maven-plugin.version>4.6</license-maven-plugin.version>
+        <spring-javaformat-maven-plugin.version>0.0.47</spring-javaformat-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -609,6 +610,30 @@
                             </excludes>
                         </licenseSet>
                     </licenseSets>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <!-- 执行生命周期 validate 阶段执行 -->
+                        <phase>validate</phase>
+                        <!-- 表示子模块可以继承此配置 -->
+                        <inherited>true</inherited>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>

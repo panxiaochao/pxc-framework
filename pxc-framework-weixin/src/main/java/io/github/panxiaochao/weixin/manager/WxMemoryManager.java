@@ -27,26 +27,26 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WxMemoryManager implements IWxManager {
 
-	private static final ConcurrentHashMap<String, String> CONCURRENT_APPID_MAP = new ConcurrentHashMap<>(1);
+    private static final ConcurrentHashMap<String, String> CONCURRENT_APPID_MAP = new ConcurrentHashMap<>(1);
 
-	/**
-	 * obtain the v
-	 * @param key key
-	 * @return value
-	 */
-	@Override
-	public String get(String key) {
-		return CONCURRENT_APPID_MAP.get(key);
-	}
+    /**
+     * obtain the v
+     * @param key key
+     * @return value
+     */
+    @Override
+    public String get(String key) {
+        return CONCURRENT_APPID_MAP.get(key);
+    }
 
-	/**
-	 * set the value
-	 * @param key key
-	 * @param value object value
-	 */
-	@Override
-	public void set(String key, String value) {
-		CONCURRENT_APPID_MAP.put(key, value);
-	}
+    /**
+     * set the value
+     * @param key key
+     * @param value object value
+     */
+    @Override
+    public void set(String key, String value) {
+        CONCURRENT_APPID_MAP.put(key, value);
+    }
 
 }

@@ -33,14 +33,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.pxc-framework.ip2region", ignoreInvalidFields = true)
 public class Ip2regionProperties {
 
-	/**
-	 * ip2region_v4.xdb 文件路径
-	 */
-	private String v4dbLocation;
+    /**
+     * ip2region_v4.xdb 文件路径
+     */
+    private String v4dbLocation;
 
-	/**
-	 * ip2region_v6.xdb 文件路径
-	 */
-	private String v6dbLocation;
+    /**
+     * ip2region_v6.xdb 文件路径
+     */
+    private String v6dbLocation;
 
 }

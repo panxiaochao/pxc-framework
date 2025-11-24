@@ -33,26 +33,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.pxc-framework.cache", ignoreInvalidFields = true)
 public class CacheManagerProperties {
 
-	/**
-	 * 缓存类型: caffeine（默认）、REDIS、SIMPLE
-	 */
-	private CacheManagerType cacheType = CacheManagerType.CAFFEINE;
+    /**
+     * 缓存类型: caffeine（默认）、REDIS、SIMPLE
+     */
+    private CacheManagerType cacheType = CacheManagerType.CAFFEINE;
 
-	/**
-	 *
-	 */
-	private final Caffeine caffeine = new Caffeine();
+    /**
+     *
+     */
+    private final Caffeine caffeine = new Caffeine();
 
-	@Getter
-	@Setter
-	public static class Caffeine {
+    @Getter
+    @Setter
+    public static class Caffeine {
 
-		/**
-		 * The spec to use to create caches. See CaffeineSpec for more details on the spec
-		 * format.
-		 */
-		private String spec;
+        /**
+         * The spec to use to create caches. See CaffeineSpec for more details on the spec
+         * format.
+         */
+        private String spec;
 
-	}
+    }
 
 }

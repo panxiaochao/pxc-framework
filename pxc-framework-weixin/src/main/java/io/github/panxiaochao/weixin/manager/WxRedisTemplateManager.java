@@ -30,38 +30,38 @@ import java.util.Objects;
  */
 public class WxRedisTemplateManager implements IWxManager {
 
-	private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
-	public WxRedisTemplateManager() {
-		StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
-		}
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("redisTemplate");
-		}
-		Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
-		this.stringRedisTemplate = redisTemplate;
-	}
+    public WxRedisTemplateManager() {
+        StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
+        }
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("redisTemplate");
+        }
+        Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
+        this.stringRedisTemplate = redisTemplate;
+    }
 
-	/**
-	 * obtain the v
-	 * @param key key
-	 * @return value
-	 */
-	@Override
-	public String get(String key) {
-		return stringRedisTemplate.opsForValue().get(key);
-	}
+    /**
+     * obtain the v
+     * @param key key
+     * @return value
+     */
+    @Override
+    public String get(String key) {
+        return stringRedisTemplate.opsForValue().get(key);
+    }
 
-	/**
-	 * Set the value
-	 * @param key key
-	 * @param value object value
-	 */
-	@Override
-	public void set(String key, String value) {
-		stringRedisTemplate.opsForValue().set(key, value);
-	}
+    /**
+     * Set the value
+     * @param key key
+     * @param value object value
+     */
+    @Override
+    public void set(String key, String value) {
+        stringRedisTemplate.opsForValue().set(key, value);
+    }
 
 }

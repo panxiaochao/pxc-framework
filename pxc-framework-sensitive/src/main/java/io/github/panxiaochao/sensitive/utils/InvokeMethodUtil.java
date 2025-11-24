@@ -33,39 +33,39 @@ import java.util.Objects;
  */
 public class InvokeMethodUtil {
 
-	/**
-	 * 映射自定义方法
-	 * @param className class名
-	 * @param value json value
-	 * @return 脱敏后的值
-	 */
-	public static Object invoke(String className, Object value) {
-		// 不同class，使用自定义策略
-		try {
-			// 防止反射内存泄漏，每次都new一个对象
-			Object obj;
-			if (null != Singleton.INST.get(className)) {
-				obj = Singleton.INST.get(className);
-			}
-			else {
-				Class<?> cls = Class.forName(className);
-				obj = cls.newInstance();
-				Singleton.INST.single(className, obj);
-			}
-			Method handlerMethod = ReflectionUtils.findMethod(obj.getClass(), "handler", String.class);
-			if (Objects.isNull(handlerMethod)) {
-				throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
-						"The class [" + className + "] is not implements IHandler! ");
-			}
-			else {
-				ReflectionUtils.makeAccessible(handlerMethod);
-				return ReflectionUtils.invokeMethod(handlerMethod, obj, value);
-			}
-		}
-		catch (Exception e) {
-			// 使用默认值
-			return value.toString();
-		}
-	}
+    /**
+     * 映射自定义方法
+     * @param className class名
+     * @param value json value
+     * @return 脱敏后的值
+     */
+    public static Object invoke(String className, Object value) {
+        // 不同class，使用自定义策略
+        try {
+            // 防止反射内存泄漏，每次都new一个对象
+            Object obj;
+            if (null != Singleton.INST.get(className)) {
+                obj = Singleton.INST.get(className);
+            }
+            else {
+                Class<?> cls = Class.forName(className);
+                obj = cls.newInstance();
+                Singleton.INST.single(className, obj);
+            }
+            Method handlerMethod = ReflectionUtils.findMethod(obj.getClass(), "handler", String.class);
+            if (Objects.isNull(handlerMethod)) {
+                throw new ServerRuntimeException(CommonResponseEnum.INTERNAL_SERVER_ERROR,
+                        "The class [" + className + "] is not implements IHandler! ");
+            }
+            else {
+                ReflectionUtils.makeAccessible(handlerMethod);
+                return ReflectionUtils.invokeMethod(handlerMethod, obj, value);
+            }
+        }
+        catch (Exception e) {
+            // 使用默认值
+            return value.toString();
+        }
+    }
 
 }

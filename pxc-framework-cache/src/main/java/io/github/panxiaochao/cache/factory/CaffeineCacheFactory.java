@@ -32,34 +32,34 @@ import java.time.Duration;
  */
 public final class CaffeineCacheFactory {
 
-	/**
-	 * 创建原生静态缓存类
-	 * @param initialCapacity 初始化空间大小
-	 * @param maximumSize 最大缓存空间
-	 * @param duration 过期时间
-	 * @return Cache
-	 */
-	public static Cache<String, Object> createNativeCaffeineCache(int initialCapacity, long maximumSize,
-			final Duration duration) {
-		return Caffeine.newBuilder()
-			// 设置过期时间
-			.expireAfterWrite(duration)
-			// 初始化缓存空间大小
-			.initialCapacity(initialCapacity)
-			// 最大的缓存条数
-			.maximumSize(maximumSize)
-			.build();
-	}
+    /**
+     * 创建原生静态缓存类
+     * @param initialCapacity 初始化空间大小
+     * @param maximumSize 最大缓存空间
+     * @param duration 过期时间
+     * @return Cache
+     */
+    public static Cache<String, Object> createNativeCaffeineCache(int initialCapacity, long maximumSize,
+            final Duration duration) {
+        return Caffeine.newBuilder()
+            // 设置过期时间
+            .expireAfterWrite(duration)
+            // 初始化缓存空间大小
+            .initialCapacity(initialCapacity)
+            // 最大的缓存条数
+            .maximumSize(maximumSize)
+            .build();
+    }
 
-	/**
-	 * Constructs a new {@code Caffeine} instance with the settings specified in
-	 * {@code spec}.
-	 * @param spec a String in the format specified by {@link CaffeineSpec}
-	 * @return Cache
-	 */
-	public static Cache<String, Object> createNativeCaffeineCache(String spec) {
-		Caffeine<Object, Object> cacheBuilder = Caffeine.from(spec);
-		return cacheBuilder.build();
-	}
+    /**
+     * Constructs a new {@code Caffeine} instance with the settings specified in
+     * {@code spec}.
+     * @param spec a String in the format specified by {@link CaffeineSpec}
+     * @return Cache
+     */
+    public static Cache<String, Object> createNativeCaffeineCache(String spec) {
+        Caffeine<Object, Object> cacheBuilder = Caffeine.from(spec);
+        return cacheBuilder.build();
+    }
 
 }

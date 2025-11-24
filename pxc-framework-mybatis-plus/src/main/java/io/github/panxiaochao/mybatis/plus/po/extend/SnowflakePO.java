@@ -30,13 +30,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 public class SnowflakePO extends BasePO {
 
-	private static final long serialVersionUID = 7230085915708636092L;
+    private static final long serialVersionUID = 7230085915708636092L;
 
-	/**
-	 * 主键
-	 */
-	@Schema(description = "主键")
-	@TableId(value = "ID", type = IdType.ASSIGN_ID)
-	private Long id;
+    /**
+     * 主键
+     */
+    @Schema(description = "主键")
+    @TableId(value = "ID", type = IdType.ASSIGN_ID)
+    private Long id;
 
 }

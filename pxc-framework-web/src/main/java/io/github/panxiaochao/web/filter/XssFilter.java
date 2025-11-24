@@ -43,37 +43,37 @@ import java.util.List;
  */
 public class XssFilter implements Filter {
 
-	/**
-	 * LOGGER XssFilter.class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(XssFilter.class);
+    /**
+     * LOGGER XssFilter.class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(XssFilter.class);
 
-	private final static PathMatcher PATHMATCHER = new AntPathMatcher();
+    private final static PathMatcher PATHMATCHER = new AntPathMatcher();
 
-	private static final String[] WHITE_SUFFIXES = new String[] { "js", "css", "ico", "png", "jpg", "jpeg", "gif",
-			"svg", "ttf", "fon", "ttc" };
+    private static final String[] WHITE_SUFFIXES = new String[] { "js", "css", "ico", "png", "jpg", "jpeg", "gif",
+            "svg", "ttf", "fon", "ttc" };
 
-	private final List<String> excludeUrls;
+    private final List<String> excludeUrls;
 
-	public XssFilter(List<String> whiteList) {
-		this.excludeUrls = whiteList;
-	}
+    public XssFilter(List<String> whiteList) {
+        this.excludeUrls = whiteList;
+    }
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		String requestUrl = request.getRequestURI();
-		if (HttpMethod.OPTIONS.toString().equals(request.getMethod())
-				|| StringUtils.endsWithAny(requestUrl, WHITE_SUFFIXES)
-				|| excludeUrls.stream().anyMatch(excludeUrl -> PATHMATCHER.match(excludeUrl, requestUrl))) {
-			filterChain.doFilter(request, response);
-		}
-		else {
-			LOGGER.info("XssFilter request url: {}, method: {}", requestUrl, request.getMethod());
-			filterChain.doFilter(new XssWrapper(request), response);
-		}
-	}
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        String requestUrl = request.getRequestURI();
+        if (HttpMethod.OPTIONS.toString().equals(request.getMethod())
+                || StringUtils.endsWithAny(requestUrl, WHITE_SUFFIXES)
+                || excludeUrls.stream().anyMatch(excludeUrl -> PATHMATCHER.match(excludeUrl, requestUrl))) {
+            filterChain.doFilter(request, response);
+        }
+        else {
+            LOGGER.info("XssFilter request url: {}, method: {}", requestUrl, request.getMethod());
+            filterChain.doFilter(new XssWrapper(request), response);
+        }
+    }
 
 }

@@ -45,36 +45,36 @@ import java.util.Objects;
 @EnableConfigurationProperties(OperateLogProperties.class)
 public class OperateLogAutoConfiguration {
 
-	@Bean
-	public OperateLogAspect operateLogAspect() {
-		return new OperateLogAspect();
-	}
+    @Bean
+    public OperateLogAspect operateLogAspect() {
+        return new OperateLogAspect();
+    }
 
-	@Bean
-	public OperateLogDao operateLogDao(OperateLogProperties operateLogProperties) {
-		if (operateLogProperties.logType.equals(OperateLogType.CUSTOM)) {
-			if (!Objects.isNull(operateLogProperties.getHandler())) {
-				AbstractOperateLogHandler handler;
-				Component cpt = AnnotationUtils.findAnnotation(operateLogProperties.getHandler(), Component.class);
-				if (cpt != null) {
-					handler = SpringContextUtil.getBean(operateLogProperties.getHandler());
-				}
-				else {
-					GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-					beanDefinition.setBeanClass(operateLogProperties.getHandler());
-					beanDefinition.setAutowireCandidate(true);
-					beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-					String beanName = SpringContextUtil.registerBeanDefinition(beanDefinition,
-							operateLogProperties.getHandler().getClassLoader());
-					handler = SpringContextUtil.getBeanByClassName(beanName);
-				}
-				return new OperateLogDao(handler);
-			}
-			else {
-				throw new ServerRuntimeException(OperateLogErrorEnum.OPERATE_LOG_HANDLER_ERROR);
-			}
-		}
-		return null;
-	}
+    @Bean
+    public OperateLogDao operateLogDao(OperateLogProperties operateLogProperties) {
+        if (operateLogProperties.logType.equals(OperateLogType.CUSTOM)) {
+            if (!Objects.isNull(operateLogProperties.getHandler())) {
+                AbstractOperateLogHandler handler;
+                Component cpt = AnnotationUtils.findAnnotation(operateLogProperties.getHandler(), Component.class);
+                if (cpt != null) {
+                    handler = SpringContextUtil.getBean(operateLogProperties.getHandler());
+                }
+                else {
+                    GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+                    beanDefinition.setBeanClass(operateLogProperties.getHandler());
+                    beanDefinition.setAutowireCandidate(true);
+                    beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+                    String beanName = SpringContextUtil.registerBeanDefinition(beanDefinition,
+                            operateLogProperties.getHandler().getClassLoader());
+                    handler = SpringContextUtil.getBeanByClassName(beanName);
+                }
+                return new OperateLogDao(handler);
+            }
+            else {
+                throw new ServerRuntimeException(OperateLogErrorEnum.OPERATE_LOG_HANDLER_ERROR);
+            }
+        }
+        return null;
+    }
 
 }

@@ -38,23 +38,23 @@ import java.io.IOException;
  */
 public class TraceServletFilter implements Filter {
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
-			throws IOException, ServletException {
-		if (servletRequest instanceof HttpServletRequest && servletResponse instanceof HttpServletResponse) {
-			try {
-				HttpServletRequest request = (HttpServletRequest) servletRequest;
-				HttpServletResponse response = (HttpServletResponse) servletResponse;
-				TraceWebMvcHandler.instance().processBeforeTraceLog(request);
-				response.addHeader(TraceLogConstant.TRACE_ID, TraceLogContext.getTraceId());
-				chain.doFilter(request, response);
-				return;
-			}
-			finally {
-				TraceWebMvcHandler.instance().cleanTraceLogAll();
-			}
-		}
-		chain.doFilter(servletRequest, servletResponse);
-	}
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
+            throws IOException, ServletException {
+        if (servletRequest instanceof HttpServletRequest && servletResponse instanceof HttpServletResponse) {
+            try {
+                HttpServletRequest request = (HttpServletRequest) servletRequest;
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                TraceWebMvcHandler.instance().processBeforeTraceLog(request);
+                response.addHeader(TraceLogConstant.TRACE_ID, TraceLogContext.getTraceId());
+                chain.doFilter(request, response);
+                return;
+            }
+            finally {
+                TraceWebMvcHandler.instance().cleanTraceLogAll();
+            }
+        }
+        chain.doFilter(servletRequest, servletResponse);
+    }
 
 }

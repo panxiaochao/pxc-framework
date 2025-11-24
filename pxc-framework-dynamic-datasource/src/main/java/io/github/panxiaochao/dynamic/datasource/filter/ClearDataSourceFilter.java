@@ -36,17 +36,17 @@ import java.io.IOException;
  */
 public class ClearDataSourceFilter extends GenericFilterBean implements Ordered {
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		DynamicDataSourceContextHolder.clear();
-		filterChain.doFilter(servletRequest, servletResponse);
-		DynamicDataSourceContextHolder.clear();
-	}
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        DynamicDataSourceContextHolder.clear();
+        filterChain.doFilter(servletRequest, servletResponse);
+        DynamicDataSourceContextHolder.clear();
+    }
 
-	@Override
-	public int getOrder() {
-		return Integer.MIN_VALUE;
-	}
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE;
+    }
 
 }

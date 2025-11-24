@@ -30,13 +30,13 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
  */
 public class TextBuilder extends AbstractMpBuilder {
 
-	@Override
-	public WxMpXmlOutMessage build(String content, WxMpXmlMessage wxMessage, WxMpService service) {
-		return WxMpXmlOutMessage.TEXT()
-			.content(content)
-			.fromUser(wxMessage.getToUser())
-			.toUser(wxMessage.getFromUser())
-			.build();
-	}
+    @Override
+    public WxMpXmlOutMessage build(String content, WxMpXmlMessage wxMessage, WxMpService service) {
+        return WxMpXmlOutMessage.TEXT()
+            .content(content)
+            .fromUser(wxMessage.getToUser())
+            .toUser(wxMessage.getFromUser())
+            .build();
+    }
 
 }

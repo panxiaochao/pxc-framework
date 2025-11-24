@@ -42,62 +42,62 @@ import org.springframework.core.Ordered;
 @EnableConfigurationProperties({ WebProperties.class })
 public class FilterAutoConfiguration {
 
-	/**
-	 * EncodingFilter 过滤器
-	 * @return FilterRegistrationBean
-	 */
-	@Bean
-	public FilterRegistrationBean<EncodingFilter> encodingFilter() {
-		FilterRegistrationBean<EncodingFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(new EncodingFilter());
-		registrationBean.addUrlPatterns("/*");
-		registrationBean.addServletNames("encodingFilter");
-		registrationBean.setOrder(0);
-		return registrationBean;
-	}
+    /**
+     * EncodingFilter 过滤器
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    public FilterRegistrationBean<EncodingFilter> encodingFilter() {
+        FilterRegistrationBean<EncodingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new EncodingFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("encodingFilter");
+        registrationBean.setOrder(0);
+        return registrationBean;
+    }
 
-	/**
-	 * CorsFilter 过滤器
-	 * @return FilterRegistrationBean
-	 */
-	@Bean
-	@ConditionalOnProperty(name = "spring.pxc-framework.cors.enabled", havingValue = "true")
-	public FilterRegistrationBean<CorsFilter> corsFilter() {
-		FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(new CorsFilter());
-		registrationBean.addUrlPatterns("/*");
-		registrationBean.addServletNames("corsFilter");
-		registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-		return registrationBean;
-	}
+    /**
+     * CorsFilter 过滤器
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    @ConditionalOnProperty(name = "spring.pxc-framework.cors.enabled", havingValue = "true")
+    public FilterRegistrationBean<CorsFilter> corsFilter() {
+        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CorsFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("corsFilter");
+        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registrationBean;
+    }
 
-	/**
-	 * RequestWrapperFilter 过滤器
-	 * @return FilterRegistrationBean
-	 */
-	@Bean
-	public FilterRegistrationBean<RequestWrapperFilter> requestWrapperFilter() {
-		FilterRegistrationBean<RequestWrapperFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(new RequestWrapperFilter());
-		registrationBean.addUrlPatterns("/*");
-		registrationBean.addServletNames("requestWrapperFilter");
-		registrationBean.setOrder(1);
-		return registrationBean;
-	}
+    /**
+     * RequestWrapperFilter 过滤器
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    public FilterRegistrationBean<RequestWrapperFilter> requestWrapperFilter() {
+        FilterRegistrationBean<RequestWrapperFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new RequestWrapperFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("requestWrapperFilter");
+        registrationBean.setOrder(1);
+        return registrationBean;
+    }
 
-	/**
-	 * XssFilter 过滤器
-	 * @return FilterRegistrationBean
-	 */
-	@Bean
-	@ConditionalOnProperty(name = "spring.pxc-framework.xss.enabled", havingValue = "true")
-	public FilterRegistrationBean<XssFilter> xssFilter(WebProperties webProperties) {
-		FilterRegistrationBean<XssFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(new XssFilter(webProperties.getXss().getExcludeUrls()));
-		registrationBean.addUrlPatterns("/*");
-		registrationBean.addServletNames("xssFilter");
-		registrationBean.setOrder(2);
-		return registrationBean;
-	}
+    /**
+     * XssFilter 过滤器
+     * @return FilterRegistrationBean
+     */
+    @Bean
+    @ConditionalOnProperty(name = "spring.pxc-framework.xss.enabled", havingValue = "true")
+    public FilterRegistrationBean<XssFilter> xssFilter(WebProperties webProperties) {
+        FilterRegistrationBean<XssFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new XssFilter(webProperties.getXss().getExcludeUrls()));
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.addServletNames("xssFilter");
+        registrationBean.setOrder(2);
+        return registrationBean;
+    }
 
 }

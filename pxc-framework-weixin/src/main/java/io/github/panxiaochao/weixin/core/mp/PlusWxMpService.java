@@ -55,103 +55,103 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlusWxMpService {
 
-	private final WxProperties wxProperties;
+    private final WxProperties wxProperties;
 
-	/**
-	 * 初始化 WxMpService
-	 * @return WxMpService
-	 */
-	public WxMpService build() {
-		if (!wxProperties.getMp().getEnabled()) {
-			return new WxMpServiceImpl();
-		}
-		final List<WxMpProperties.MpConfig> mpPropertiesList = wxProperties.getMp().getConfigs();
-		if (CollectionUtils.isEmpty(mpPropertiesList)) {
-			throw new RuntimeException("请配置微信公众号appId和appSecret相关参数！");
-		}
-		// 存储方式
-		StorageType storageType = wxProperties.getStorageType();
-		Map<String, WxMpConfigStorage> configStorages = mpPropertiesList.stream().map(mpProperties -> {
-			WxMpDefaultConfigImpl configStorage;
-			switch (storageType) {
-				case Redisson:
-					configStorage = redissonConfigStorage();
-					break;
-				case RedisTemplate:
-					configStorage = redisTemplateConfigStorage();
-					break;
-				default:
-					configStorage = new WxMpDefaultConfigImpl();
-					break;
-			}
-			configStorage.setAppId(mpProperties.getAppId());
-			configStorage.setSecret(mpProperties.getAppSecret());
-			configStorage.setToken(mpProperties.getToken());
-			configStorage.setAesKey(mpProperties.getAesKey());
-			configStorage.setUseStableAccessToken(mpProperties.isUseStableAccessToken());
-			return configStorage;
-		}).collect(Collectors.toMap(WxMpDefaultConfigImpl::getAppId, a -> a, (o, n) -> o));
-		// 设置默认AppId，启动默认设置第一个
-		setDefaultAppId(mpPropertiesList);
-		return getWxMpService(configStorages);
-	}
+    /**
+     * 初始化 WxMpService
+     * @return WxMpService
+     */
+    public WxMpService build() {
+        if (!wxProperties.getMp().getEnabled()) {
+            return new WxMpServiceImpl();
+        }
+        final List<WxMpProperties.MpConfig> mpPropertiesList = wxProperties.getMp().getConfigs();
+        if (CollectionUtils.isEmpty(mpPropertiesList)) {
+            throw new RuntimeException("请配置微信公众号appId和appSecret相关参数！");
+        }
+        // 存储方式
+        StorageType storageType = wxProperties.getStorageType();
+        Map<String, WxMpConfigStorage> configStorages = mpPropertiesList.stream().map(mpProperties -> {
+            WxMpDefaultConfigImpl configStorage;
+            switch (storageType) {
+                case Redisson:
+                    configStorage = redissonConfigStorage();
+                    break;
+                case RedisTemplate:
+                    configStorage = redisTemplateConfigStorage();
+                    break;
+                default:
+                    configStorage = new WxMpDefaultConfigImpl();
+                    break;
+            }
+            configStorage.setAppId(mpProperties.getAppId());
+            configStorage.setSecret(mpProperties.getAppSecret());
+            configStorage.setToken(mpProperties.getToken());
+            configStorage.setAesKey(mpProperties.getAesKey());
+            configStorage.setUseStableAccessToken(mpProperties.isUseStableAccessToken());
+            return configStorage;
+        }).collect(Collectors.toMap(WxMpDefaultConfigImpl::getAppId, a -> a, (o, n) -> o));
+        // 设置默认AppId，启动默认设置第一个
+        setDefaultAppId(mpPropertiesList);
+        return getWxMpService(configStorages);
+    }
 
-	private void setDefaultAppId(List<WxMpProperties.MpConfig> mpPropertiesList) {
-		final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
-		Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
-		wxManager.set(WxConstant.MP_KEY, mpPropertiesList.get(0).getAppId());
-	}
+    private void setDefaultAppId(List<WxMpProperties.MpConfig> mpPropertiesList) {
+        final IWxManager wxManager = SpringContextUtil.getBean(IWxManager.class);
+        Objects.requireNonNull(wxManager, "请正确配置IWxManager相关配置！");
+        wxManager.set(WxConstant.MP_KEY, mpPropertiesList.get(0).getAppId());
+    }
 
-	@NotNull
-	private WxMpService getWxMpService(Map<String, WxMpConfigStorage> configStorages) {
-		HttpClientType httpClientType = wxProperties.getHttpClientType();
-		WxMpService wxMpService;
-		switch (httpClientType) {
-			case OkHttp:
-				wxMpService = new WxMpServiceOkHttpImpl();
-				break;
-			case JoddHttp:
-				wxMpService = new WxMpServiceJoddHttpImpl();
-				break;
-			case HttpClient:
-				wxMpService = new WxMpServiceHttpClientImpl();
-				break;
-			default:
-				wxMpService = new WxMpServiceImpl();
-				break;
-		}
-		wxMpService.setMultiConfigStorages(configStorages);
-		wxMpService.setMaxRetryTimes(3);
-		wxMpService.setRetrySleepMillis(1000);
-		return wxMpService;
-	}
+    @NotNull
+    private WxMpService getWxMpService(Map<String, WxMpConfigStorage> configStorages) {
+        HttpClientType httpClientType = wxProperties.getHttpClientType();
+        WxMpService wxMpService;
+        switch (httpClientType) {
+            case OkHttp:
+                wxMpService = new WxMpServiceOkHttpImpl();
+                break;
+            case JoddHttp:
+                wxMpService = new WxMpServiceJoddHttpImpl();
+                break;
+            case HttpClient:
+                wxMpService = new WxMpServiceHttpClientImpl();
+                break;
+            default:
+                wxMpService = new WxMpServiceImpl();
+                break;
+        }
+        wxMpService.setMultiConfigStorages(configStorages);
+        wxMpService.setMaxRetryTimes(3);
+        wxMpService.setRetrySleepMillis(1000);
+        return wxMpService;
+    }
 
-	/**
-	 * Redisson 存储方案
-	 */
-	private WxMpDefaultConfigImpl redissonConfigStorage() {
-		RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
-		if (Objects.isNull(redissonClient)) {
-			redissonClient = SpringContextUtil.getBean("redissonClient");
-		}
-		Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
-		return new WxMpRedissonConfigImpl(redissonClient, wxProperties.getMp().getKeyPrefix());
-	}
+    /**
+     * Redisson 存储方案
+     */
+    private WxMpDefaultConfigImpl redissonConfigStorage() {
+        RedissonClient redissonClient = SpringContextUtil.getBean(RedissonClient.class);
+        if (Objects.isNull(redissonClient)) {
+            redissonClient = SpringContextUtil.getBean("redissonClient");
+        }
+        Objects.requireNonNull(redissonClient, "请正确配置Redisson相关配置！");
+        return new WxMpRedissonConfigImpl(redissonClient, wxProperties.getMp().getKeyPrefix());
+    }
 
-	/**
-	 * RedisTemplate 存储方案
-	 */
-	private WxMpDefaultConfigImpl redisTemplateConfigStorage() {
-		StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
-		}
-		if (Objects.isNull(redisTemplate)) {
-			redisTemplate = SpringContextUtil.getBean("redisTemplate");
-		}
-		Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
-		WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
-		return new WxMpRedisConfigImpl(redisOps, wxProperties.getMp().getKeyPrefix());
-	}
+    /**
+     * RedisTemplate 存储方案
+     */
+    private WxMpDefaultConfigImpl redisTemplateConfigStorage() {
+        StringRedisTemplate redisTemplate = SpringContextUtil.getBean(StringRedisTemplate.class);
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("stringRedisTemplate");
+        }
+        if (Objects.isNull(redisTemplate)) {
+            redisTemplate = SpringContextUtil.getBean("redisTemplate");
+        }
+        Objects.requireNonNull(redisTemplate, "请正确配置RedisTemplate相关配置！");
+        WxRedisOps redisOps = new RedisTemplateWxRedisOps(redisTemplate);
+        return new WxMpRedisConfigImpl(redisOps, wxProperties.getMp().getKeyPrefix());
+    }
 
 }

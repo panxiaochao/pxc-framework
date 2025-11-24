@@ -30,61 +30,61 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WxChannelMultiServiceImpl implements WxChannelMultiService {
 
-	private static final ConcurrentHashMap<String, WxChannelService> CONCURRENT_CHANNEL_MAP = new ConcurrentHashMap<>(
-			1);
+    private static final ConcurrentHashMap<String, WxChannelService> CONCURRENT_CHANNEL_MAP = new ConcurrentHashMap<>(
+            1);
 
-	// private static final ConcurrentHashMap<String, WxChannelMessageRouter>
-	// CONCURRENT_ROUTER_MAP = new ConcurrentHashMap<>(
-	// 1);
+    // private static final ConcurrentHashMap<String, WxChannelMessageRouter>
+    // CONCURRENT_ROUTER_MAP = new ConcurrentHashMap<>(
+    // 1);
 
-	/**
-	 * 通过key 获取 WxChannelService
-	 * @param key key
-	 * @return WxChannelService
-	 */
-	@Override
-	public WxChannelService getWxChannelService(String key) {
-		return CONCURRENT_CHANNEL_MAP.get(key);
-	}
+    /**
+     * 通过key 获取 WxChannelService
+     * @param key key
+     * @return WxChannelService
+     */
+    @Override
+    public WxChannelService getWxChannelService(String key) {
+        return CONCURRENT_CHANNEL_MAP.get(key);
+    }
 
-	// /**
-	// * 通过key, 获取WxChannelMessageRouter
-	// *
-	// * @param key key
-	// * @return WxChannelMessageRouter
-	// */
-	// @Override
-	// public WxChannelMessageRouter getWxChannelMessageRouter(String key) {
-	// return CONCURRENT_ROUTER_MAP.get(key);
-	// }
+    // /**
+    // * 通过key, 获取WxChannelMessageRouter
+    // *
+    // * @param key key
+    // * @return WxChannelMessageRouter
+    // */
+    // @Override
+    // public WxChannelMessageRouter getWxChannelMessageRouter(String key) {
+    // return CONCURRENT_ROUTER_MAP.get(key);
+    // }
 
-	/**
-	 * 设置WxChannelService，通过key
-	 * @param key key
-	 * @param wxChannelService wxChannelService
-	 */
-	public void setWxChannelService(String key, WxChannelService wxChannelService) {
-		CONCURRENT_CHANNEL_MAP.put(key, wxChannelService);
-	}
+    /**
+     * 设置WxChannelService，通过key
+     * @param key key
+     * @param wxChannelService wxChannelService
+     */
+    public void setWxChannelService(String key, WxChannelService wxChannelService) {
+        CONCURRENT_CHANNEL_MAP.put(key, wxChannelService);
+    }
 
-	// /**
-	// * 设置WxChannelMessageRouter，通过key
-	// * @param key key
-	// * @param wxChannelMessageRouter wxChannelMessageRouter
-	// */
-	// public void setWxChannelMessageRouter(String key, WxChannelMessageRouter
-	// wxChannelMessageRouter) {
-	// CONCURRENT_ROUTER_MAP.put(key, wxChannelMessageRouter);
-	// }
+    // /**
+    // * 设置WxChannelMessageRouter，通过key
+    // * @param key key
+    // * @param wxChannelMessageRouter wxChannelMessageRouter
+    // */
+    // public void setWxChannelMessageRouter(String key, WxChannelMessageRouter
+    // wxChannelMessageRouter) {
+    // CONCURRENT_ROUTER_MAP.put(key, wxChannelMessageRouter);
+    // }
 
-	/**
-	 * 根据key，从列表中移除一个 WxChannelService 实例
-	 * @param key key
-	 */
-	@Override
-	public void removeWxChannelService(String key) {
-		CONCURRENT_CHANNEL_MAP.remove(key);
-		// CONCURRENT_ROUTER_MAP.remove(key);
-	}
+    /**
+     * 根据key，从列表中移除一个 WxChannelService 实例
+     * @param key key
+     */
+    @Override
+    public void removeWxChannelService(String key) {
+        CONCURRENT_CHANNEL_MAP.remove(key);
+        // CONCURRENT_ROUTER_MAP.remove(key);
+    }
 
 }

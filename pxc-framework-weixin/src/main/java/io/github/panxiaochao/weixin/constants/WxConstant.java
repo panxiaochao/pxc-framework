@@ -25,18 +25,18 @@ package io.github.panxiaochao.weixin.constants;
  */
 public interface WxConstant {
 
-	String MP_KEY = String.format("wx:%s:current:appId", "mp");
+    String MP_KEY = String.format("wx:%s:current:appId", "mp");
 
-	String MA_KEY = String.format("wx:%s:current:appId", "ma");
+    String MA_KEY = String.format("wx:%s:current:appId", "ma");
 
-	String CP_KEY = String.format("wx:%s:current:corpId", "cp");
+    String CP_KEY = String.format("wx:%s:current:corpId", "cp");
 
-	String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
+    String CP_OBJECT_KEY = String.format("wx:%s:current:corpId", "cp_object");
 
-	String PAY_KEY = String.format("wx:%s:current:appId", "pay");
+    String PAY_KEY = String.format("wx:%s:current:appId", "pay");
 
-	String OPEN_KEY = String.format("wx:%s:current:appId", "open");
+    String OPEN_KEY = String.format("wx:%s:current:appId", "open");
 
-	String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
+    String CHANNEL_KEY = String.format("wx:%s:current:appId", "channel");
 
 }

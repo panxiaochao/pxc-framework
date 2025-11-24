@@ -29,30 +29,30 @@ import java.io.Serializable;
  */
 public interface IDrawCaptcha extends Serializable {
 
-	/**
-	 * 获取验证码的内容
-	 */
-	String getCaptchaCode();
+    /**
+     * 获取验证码的内容
+     */
+    String getCaptchaCode();
 
-	/**
-	 * 将验证码写出入到目标流中
-	 * @param out 目标流
-	 */
-	void writeTo(OutputStream out);
+    /**
+     * 将验证码写出入到目标流中
+     * @param out 目标流
+     */
+    void writeTo(OutputStream out);
 
-	/**
-	 * 获取图形验证码图片bytes
-	 */
-	byte[] getImageBytes();
+    /**
+     * 获取图形验证码图片bytes
+     */
+    byte[] getImageBytes();
 
-	/**
-	 * 获得图片的Base64形式
-	 */
-	String getImageBase64();
+    /**
+     * 获得图片的Base64形式
+     */
+    String getImageBase64();
 
-	/**
-	 * 获取图片的Base64Data格式
-	 */
-	String getImageBase64Data();
+    /**
+     * 获取图片的Base64Data格式
+     */
+    String getImageBase64Data();
 
 }

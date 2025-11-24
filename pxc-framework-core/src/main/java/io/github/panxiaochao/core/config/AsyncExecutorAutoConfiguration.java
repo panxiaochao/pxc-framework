@@ -50,57 +50,57 @@ import java.util.concurrent.ThreadPoolExecutor;
 @ConditionalOnProperty(name = "spring.pxc-framework.async", havingValue = "true")
 public class AsyncExecutorAutoConfiguration implements AsyncConfigurer {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AsyncExecutorAutoConfiguration.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(AsyncExecutorAutoConfiguration.class);
 
-	/**
-	 * 核心线程数, 根据规则生成
-	 */
-	private final int core = Runtime.getRuntime().availableProcessors() + 1;
+    /**
+     * 核心线程数, 根据规则生成
+     */
+    private final int core = Runtime.getRuntime().availableProcessors() + 1;
 
-	private final PxcFrameWorkProperties pxcFrameWorkProperties;
+    private final PxcFrameWorkProperties pxcFrameWorkProperties;
 
-	@Override
-	public Executor getAsyncExecutor() {
-		PxcFrameWorkProperties.ThreadPoolConfig threadPoolConfig = pxcFrameWorkProperties.getThreadPool();
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		// 核心线程数
-		executor.setCorePoolSize(core);
-		// 最大线程数
-		executor.setMaxPoolSize(core * 2);
-		// 队列大小
-		executor.setQueueCapacity(threadPoolConfig.getQueueCapacity());
-		// 线程活跃时间(秒)
-		executor.setKeepAliveSeconds(threadPoolConfig.getKeepAliveSeconds());
-		// 线程前缀
-		executor.setThreadNamePrefix("async-" + threadPoolConfig.getThreadNamePrefix());
-		// 线程分组名称
-		executor.setThreadGroupName("async-" + threadPoolConfig.getThreadGroupName());
-		// 所有任务结束后关闭线程池
-		executor.setWaitForTasksToCompleteOnShutdown(threadPoolConfig.isWaitForJobsToCompleteOnShutdown());
-		// 拒绝策略 CallerRunsPolicy
-		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-		// 添加装饰器，上文传递
-		// executor.setTaskDecorator(new TraceLogCopyContextTaskDecorator());
-		// 初始化
-		executor.initialize();
-		LOGGER.info("配置[AsyncExecutor]成功！");
-		return executor;
-	}
+    @Override
+    public Executor getAsyncExecutor() {
+        PxcFrameWorkProperties.ThreadPoolConfig threadPoolConfig = pxcFrameWorkProperties.getThreadPool();
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        // 核心线程数
+        executor.setCorePoolSize(core);
+        // 最大线程数
+        executor.setMaxPoolSize(core * 2);
+        // 队列大小
+        executor.setQueueCapacity(threadPoolConfig.getQueueCapacity());
+        // 线程活跃时间(秒)
+        executor.setKeepAliveSeconds(threadPoolConfig.getKeepAliveSeconds());
+        // 线程前缀
+        executor.setThreadNamePrefix("async-" + threadPoolConfig.getThreadNamePrefix());
+        // 线程分组名称
+        executor.setThreadGroupName("async-" + threadPoolConfig.getThreadGroupName());
+        // 所有任务结束后关闭线程池
+        executor.setWaitForTasksToCompleteOnShutdown(threadPoolConfig.isWaitForJobsToCompleteOnShutdown());
+        // 拒绝策略 CallerRunsPolicy
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // 添加装饰器，上文传递
+        // executor.setTaskDecorator(new TraceLogCopyContextTaskDecorator());
+        // 初始化
+        executor.initialize();
+        LOGGER.info("配置[AsyncExecutor]成功！");
+        return executor;
+    }
 
-	@Override
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return (throwable, method, objects) -> {
-			throwable.printStackTrace();
-			StringBuilder sb = new StringBuilder();
-			sb.append("Exception message - ")
-				.append(throwable.getMessage())
-				.append(", Method name - ")
-				.append(method.getName());
-			if (objects.getClass().isArray() && Objects.nonNull(objects)) {
-				sb.append(", Parameter value - ").append(Arrays.toString(objects));
-			}
-			LOGGER.error(sb.toString());
-		};
-	}
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return (throwable, method, objects) -> {
+            throwable.printStackTrace();
+            StringBuilder sb = new StringBuilder();
+            sb.append("Exception message - ")
+                .append(throwable.getMessage())
+                .append(", Method name - ")
+                .append(method.getName());
+            if (objects.getClass().isArray() && Objects.nonNull(objects)) {
+                sb.append(", Parameter value - ").append(Arrays.toString(objects));
+            }
+            LOGGER.error(sb.toString());
+        };
+    }
 
 }

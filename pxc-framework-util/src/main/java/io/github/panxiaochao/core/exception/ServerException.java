@@ -29,31 +29,31 @@ import lombok.Getter;
 @Getter
 public class ServerException extends Exception {
 
-	private static final long serialVersionUID = 9012390889969142663L;
+    private static final long serialVersionUID = 9012390889969142663L;
 
-	/**
-	 * 错误码
-	 */
-	private final int code;
+    /**
+     * 错误码
+     */
+    private final int code;
 
-	public ServerException(IEnum<Integer> responseEnum) {
-		super(responseEnum.getMessage());
-		this.code = responseEnum.getCode();
-	}
+    public ServerException(IEnum<Integer> responseEnum) {
+        super(responseEnum.getMessage());
+        this.code = responseEnum.getCode();
+    }
 
-	public ServerException(IEnum<Integer> responseEnum, String message) {
-		super(message);
-		this.code = responseEnum.getCode();
-	}
+    public ServerException(IEnum<Integer> responseEnum, String message) {
+        super(message);
+        this.code = responseEnum.getCode();
+    }
 
-	public ServerException(IEnum<Integer> responseEnum, Throwable cause) {
-		super(responseEnum.getMessage(), cause);
-		this.code = responseEnum.getCode();
-	}
+    public ServerException(IEnum<Integer> responseEnum, Throwable cause) {
+        super(responseEnum.getMessage(), cause);
+        this.code = responseEnum.getCode();
+    }
 
-	public ServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
-		super(message, cause);
-		this.code = responseEnum.getCode();
-	}
+    public ServerException(IEnum<Integer> responseEnum, String message, Throwable cause) {
+        super(message, cause);
+        this.code = responseEnum.getCode();
+    }
 
 }

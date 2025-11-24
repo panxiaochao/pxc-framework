@@ -35,13 +35,13 @@ import java.io.Serializable;
 @Setter
 public abstract class TenantPO extends BasePO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 租户ID
-	 */
-	@Schema(description = "租户ID")
-	@TableId("tenant_id")
-	private String tenantId;
+    /**
+     * 租户ID
+     */
+    @Schema(description = "租户ID")
+    @TableId("tenant_id")
+    private String tenantId;
 
 }

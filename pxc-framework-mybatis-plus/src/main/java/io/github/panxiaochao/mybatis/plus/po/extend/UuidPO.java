@@ -30,13 +30,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 public class UuidPO extends BasePO {
 
-	private static final long serialVersionUID = 230788523080038096L;
+    private static final long serialVersionUID = 230788523080038096L;
 
-	/**
-	 * 主键
-	 */
-	@Schema(description = "主键")
-	@TableId(value = "ID", type = IdType.ASSIGN_UUID)
-	private String id;
+    /**
+     * 主键
+     */
+    @Schema(description = "主键")
+    @TableId(value = "ID", type = IdType.ASSIGN_UUID)
+    private String id;
 
 }

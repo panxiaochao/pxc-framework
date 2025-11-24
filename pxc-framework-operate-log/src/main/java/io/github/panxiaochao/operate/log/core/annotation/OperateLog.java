@@ -36,44 +36,44 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperateLog {
 
-	/**
-	 * 获取请求参数key, 支持 Spring EL 表达式, 例如 #id, #user.id
-	 */
-	String key() default "";
+    /**
+     * 获取请求参数key, 支持 Spring EL 表达式, 例如 #id, #user.id
+     */
+    String key() default "";
 
-	/**
-	 * 标题.
-	 */
-	String title() default "";
+    /**
+     * 标题.
+     */
+    String title() default "";
 
-	/**
-	 * 描述操作日志
-	 **/
-	String description() default "";
+    /**
+     * 描述操作日志
+     **/
+    String description() default "";
 
-	/**
-	 * 业务类型
-	 */
-	BusinessType businessType() default BusinessType.OTHER;
+    /**
+     * 业务类型
+     */
+    BusinessType businessType() default BusinessType.OTHER;
 
-	/**
-	 * 操作人设备类型
-	 */
-	String operatorType() default "";
+    /**
+     * 操作人设备类型
+     */
+    String operatorType() default "";
 
-	/**
-	 * 排除指定的请求参数名
-	 */
-	String[] excludeParamNames() default {};
+    /**
+     * 排除指定的请求参数名
+     */
+    String[] excludeParamNames() default {};
 
-	/**
-	 * 是否保存请求的参数
-	 */
-	boolean saveReqParams() default true;
+    /**
+     * 是否保存请求的参数
+     */
+    boolean saveReqParams() default true;
 
-	/**
-	 * 是否保存响应的参数
-	 */
-	boolean saveResData() default true;
+    /**
+     * 是否保存响应的参数
+     */
+    boolean saveResData() default true;
 
 }

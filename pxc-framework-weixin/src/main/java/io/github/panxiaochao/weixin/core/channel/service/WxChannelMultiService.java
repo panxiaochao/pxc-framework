@@ -28,24 +28,24 @@ import me.chanjar.weixin.channel.api.WxChannelService;
  */
 public interface WxChannelMultiService {
 
-	/**
-	 * 通过key 获取 WxChannelService
-	 * @param key key
-	 * @return WxChannelService
-	 */
-	WxChannelService getWxChannelService(String key);
+    /**
+     * 通过key 获取 WxChannelService
+     * @param key key
+     * @return WxChannelService
+     */
+    WxChannelService getWxChannelService(String key);
 
-	// /**
-	// * 通过key, 获取WxChannelMessageRouter
-	// * @param key key
-	// * @return WxChannelMessageRouter
-	// */
-	// WxChannelMessageRouter getWxChannelMessageRouter(String key);
+    // /**
+    // * 通过key, 获取WxChannelMessageRouter
+    // * @param key key
+    // * @return WxChannelMessageRouter
+    // */
+    // WxChannelMessageRouter getWxChannelMessageRouter(String key);
 
-	/**
-	 * 根据key，从列表中移除一个 WxChannelService 实例
-	 * @param key key
-	 */
-	void removeWxChannelService(String key);
+    /**
+     * 根据key，从列表中移除一个 WxChannelService 实例
+     * @param key key
+     */
+    void removeWxChannelService(String key);
 
 }

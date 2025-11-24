@@ -38,24 +38,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
-	@Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body, HttpHeaders headers,
-			HttpStatusCode statusCode, WebRequest request) {
-		ServletResponseEnum servletExceptionEnum;
-		try {
-			servletExceptionEnum = ServletResponseEnum.valueOf(e.getClass().getSimpleName());
-		}
-		catch (IllegalArgumentException e1) {
-			LOGGER.error("class [{}] not defined in enum {}", e.getClass().getName(),
-					ServletResponseEnum.class.getName());
-			return new ResponseEntity<>(R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(),
-					CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), body), headers, statusCode);
-		}
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body, HttpHeaders headers,
+            HttpStatusCode statusCode, WebRequest request) {
+        ServletResponseEnum servletExceptionEnum;
+        try {
+            servletExceptionEnum = ServletResponseEnum.valueOf(e.getClass().getSimpleName());
+        }
+        catch (IllegalArgumentException e1) {
+            LOGGER.error("class [{}] not defined in enum {}", e.getClass().getName(),
+                    ServletResponseEnum.class.getName());
+            return new ResponseEntity<>(R.fail(CommonResponseEnum.INTERNAL_SERVER_ERROR.getCode(),
+                    CommonResponseEnum.INTERNAL_SERVER_ERROR.getMessage(), body), headers, statusCode);
+        }
 
-		return new ResponseEntity<>(R.fail(servletExceptionEnum.getCode(), servletExceptionEnum.getMessage(), body),
-				headers, statusCode);
-	}
+        return new ResponseEntity<>(R.fail(servletExceptionEnum.getCode(), servletExceptionEnum.getMessage(), body),
+                headers, statusCode);
+    }
 
 }

@@ -32,47 +32,47 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 public class TraceWebMvcHandler {
 
-	/**
-	 * volatile是为了保证内存可见性，防止编译器过度优化（指令重排序）
-	 */
-	private static volatile TraceWebMvcHandler traceWebMvcHandler = null;
+    /**
+     * volatile是为了保证内存可见性，防止编译器过度优化（指令重排序）
+     */
+    private static volatile TraceWebMvcHandler traceWebMvcHandler = null;
 
-	/**
-	 * 饿汉模式，多线程安全
-	 * @return 初始化实例
-	 */
-	public static TraceWebMvcHandler instance() {
-		if (null == traceWebMvcHandler) {
-			synchronized (TraceWebMvcHandler.class) {
-				if (null == traceWebMvcHandler) {
-					traceWebMvcHandler = new TraceWebMvcHandler();
-				}
-			}
-		}
-		return traceWebMvcHandler;
-	}
+    /**
+     * 饿汉模式，多线程安全
+     * @return 初始化实例
+     */
+    public static TraceWebMvcHandler instance() {
+        if (null == traceWebMvcHandler) {
+            synchronized (TraceWebMvcHandler.class) {
+                if (null == traceWebMvcHandler) {
+                    traceWebMvcHandler = new TraceWebMvcHandler();
+                }
+            }
+        }
+        return traceWebMvcHandler;
+    }
 
-	/**
-	 * 处理前置追踪日志
-	 * @param request request
-	 */
-	public void processBeforeTraceLog(HttpServletRequest request) {
-		// 日志标签语句
-		// @formatter:off
+    /**
+     * 处理前置追踪日志
+     * @param request request
+     */
+    public void processBeforeTraceLog(HttpServletRequest request) {
+        // 日志标签语句
+        // @formatter:off
 		String labelLogLabel = TraceLogDomain
 				.withServletRequest(request).build()
 				.formatTraceLogLabel();
 		// @formatter:on
-		// 置入MDC
-		MDC.put(TraceLogConstant.MDC_KEY, labelLogLabel);
-	}
+        // 置入MDC
+        MDC.put(TraceLogConstant.MDC_KEY, labelLogLabel);
+    }
 
-	/**
-	 * 清除日志记录
-	 */
-	public void cleanTraceLogAll() {
-		TraceLogContext.removeAll();
-		MDC.remove(TraceLogConstant.MDC_KEY);
-	}
+    /**
+     * 清除日志记录
+     */
+    public void cleanTraceLogAll() {
+        TraceLogContext.removeAll();
+        MDC.remove(TraceLogConstant.MDC_KEY);
+    }
 
 }

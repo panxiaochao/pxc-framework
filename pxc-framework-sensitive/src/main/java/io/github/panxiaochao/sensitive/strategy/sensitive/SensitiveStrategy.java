@@ -32,96 +32,96 @@ import java.util.function.Function;
 @AllArgsConstructor
 public enum SensitiveStrategy implements IStrategy<String> {
 
-	/**
-	 * 身份证脱敏
-	 */
-	ID_CARD(s -> DesensitizeUtil.idCardNum(s, 3, 4)),
-	/**
-	 * 姓名
-	 */
-	FULL_NAME(DesensitizeUtil::chineseName),
-	/**
-	 * 手机号脱敏
-	 */
-	PHONE(DesensitizeUtil::mobilePhone),
-	/**
-	 * 电话号码
-	 */
-	MOBILE(DesensitizeUtil::fixedPhone),
-	/**
-	 * 地址脱敏
-	 */
-	ADDRESS(s -> DesensitizeUtil.address(s, 8)),
-	/**
-	 * 邮箱脱敏
-	 */
-	EMAIL(DesensitizeUtil::email),
-	/**
-	 * 银行卡
-	 */
-	BANK_CARD(DesensitizeUtil::bankCard),
-	/**
-	 * 密码
-	 */
-	PASSWORD(DesensitizeUtil::password),
-	/**
-	 * 车牌
-	 */
-	CAR_NUMBER(DesensitizeUtil::carLicense),
+    /**
+     * 身份证脱敏
+     */
+    ID_CARD(s -> DesensitizeUtil.idCardNum(s, 3, 4)),
+    /**
+     * 姓名
+     */
+    FULL_NAME(DesensitizeUtil::chineseName),
+    /**
+     * 手机号脱敏
+     */
+    PHONE(DesensitizeUtil::mobilePhone),
+    /**
+     * 电话号码
+     */
+    MOBILE(DesensitizeUtil::fixedPhone),
+    /**
+     * 地址脱敏
+     */
+    ADDRESS(s -> DesensitizeUtil.address(s, 8)),
+    /**
+     * 邮箱脱敏
+     */
+    EMAIL(DesensitizeUtil::email),
+    /**
+     * 银行卡
+     */
+    BANK_CARD(DesensitizeUtil::bankCard),
+    /**
+     * 密码
+     */
+    PASSWORD(DesensitizeUtil::password),
+    /**
+     * 车牌
+     */
+    CAR_NUMBER(DesensitizeUtil::carLicense),
 
-	/**
-	 * 中文名
-	 */
-	CHINESE_NAME(DesensitizeUtil::chineseName),
+    /**
+     * 中文名
+     */
+    CHINESE_NAME(DesensitizeUtil::chineseName),
 
-	/**
-	 * 固定电话
-	 */
-	FIXED_PHONE(DesensitizeUtil::fixedPhone),
+    /**
+     * 固定电话
+     */
+    FIXED_PHONE(DesensitizeUtil::fixedPhone),
 
-	/**
-	 * 用户ID
-	 */
-	USER_ID(s -> String.valueOf(DesensitizeUtil.userId())),
-	/**
-	 * ipv4
-	 */
-	IPV4(DesensitizeUtil::ipv4),
+    /**
+     * 用户ID
+     */
+    USER_ID(s -> String.valueOf(DesensitizeUtil.userId())),
+    /**
+     * ipv4
+     */
+    IPV4(DesensitizeUtil::ipv4),
 
-	/**
-	 * ipv6
-	 */
-	IPV6(DesensitizeUtil::ipv6),
+    /**
+     * ipv6
+     */
+    IPV6(DesensitizeUtil::ipv6),
 
-	/**
-	 * 中国大陆车牌，包含普通车辆、新能源车辆
-	 */
-	CAR_LICENSE(DesensitizeUtil::carLicense),
+    /**
+     * 中国大陆车牌，包含普通车辆、新能源车辆
+     */
+    CAR_LICENSE(DesensitizeUtil::carLicense),
 
-	/**
-	 * 只显示第一个字符
-	 */
-	FIRST_MASK(DesensitizeUtil::firstMask),
+    /**
+     * 只显示第一个字符
+     */
+    FIRST_MASK(DesensitizeUtil::firstMask),
 
-	/**
-	 * 清空为null
-	 */
-	CLEAR(s -> DesensitizeUtil.clear()),
+    /**
+     * 清空为null
+     */
+    CLEAR(s -> DesensitizeUtil.clear()),
 
-	/**
-	 * 清空为""
-	 */
-	CLEAR_TO_NULL(s -> DesensitizeUtil.clearToNull()),
-	/**
-	 * 默认, 原值返回
-	 */
-	DEFAULT(s -> s);
+    /**
+     * 清空为""
+     */
+    CLEAR_TO_NULL(s -> DesensitizeUtil.clearToNull()),
+    /**
+     * 默认, 原值返回
+     */
+    DEFAULT(s -> s);
 
-	private final Function<String, String> desensitize;
+    private final Function<String, String> desensitize;
 
-	@Override
-	public Function<String, String> use() {
-		return this.desensitize;
-	}
+    @Override
+    public Function<String, String> use() {
+        return this.desensitize;
+    }
 
 }

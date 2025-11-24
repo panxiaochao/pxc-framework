@@ -34,89 +34,89 @@ import java.util.List;
 @Setter
 public class WxCpProperties {
 
-	/**
-	 * 是否开启
-	 */
-	private Boolean enabled;
+    /**
+     * 是否开启
+     */
+    private Boolean enabled;
 
-	/**
-	 * 指定key前缀.
-	 */
-	private String keyPrefix = "wx:cp";
+    /**
+     * 指定key前缀.
+     */
+    private String keyPrefix = "wx:cp";
 
-	/**
-	 * 企业号/企业微信
-	 */
-	private List<WxCpConfig> config;
+    /**
+     * 企业号/企业微信
+     */
+    private List<WxCpConfig> config;
 
-	@Getter
-	@Setter
-	public static class WxCpConfig {
+    @Getter
+    @Setter
+    public static class WxCpConfig {
 
-		/**
-		 * 企业微信的 corpId
-		 */
-		private String corpId;
+        /**
+         * 企业微信的 corpId
+         */
+        private String corpId;
 
-		/**
-		 * 企业微信应用的 Secret
-		 */
-		private String corpSecret;
+        /**
+         * 企业微信应用的 Secret
+         */
+        private String corpSecret;
 
-		/**
-		 * 企业微信应用的 AgentId
-		 */
-		private Integer agentId;
+        /**
+         * 企业微信应用的 AgentId
+         */
+        private Integer agentId;
 
-		/**
-		 * 企业微信应用的 token
-		 */
-		private String token;
+        /**
+         * 企业微信应用的 token
+         */
+        private String token;
 
-		/**
-		 * 企业微信应用的 EncodingAESKey
-		 */
-		private String aesKey;
+        /**
+         * 企业微信应用的 EncodingAESKey
+         */
+        private String aesKey;
 
-		/**
-		 * 微信企业号应用 会话存档私钥
-		 */
-		private String msgAuditPriKey;
+        /**
+         * 微信企业号应用 会话存档私钥
+         */
+        private String msgAuditPriKey;
 
-		/**
-		 * 微信企业号应用 会话存档类库路径
-		 */
-		private String msgAuditLibPath;
+        /**
+         * 微信企业号应用 会话存档类库路径
+         */
+        private String msgAuditLibPath;
 
-	}
+    }
 
-	/**
-	 * 配置多个消息处理器
-	 */
-	private List<CpHandler> handlers;
+    /**
+     * 配置多个消息处理器
+     */
+    private List<CpHandler> handlers;
 
-	/**
-	 * 自定义消息处理器
-	 */
-	@Getter
-	@Setter
-	public static class CpHandler {
+    /**
+     * 自定义消息处理器
+     */
+    @Getter
+    @Setter
+    public static class CpHandler {
 
-		/**
-		 * 设置消息处理器
-		 */
-		private Class<? extends AbstractCpHandler> handler;
+        /**
+         * 设置消息处理器
+         */
+        private Class<? extends AbstractCpHandler> handler;
 
-		/**
-		 * 消息类型，默认 event
-		 */
-		private String msgType;
+        /**
+         * 消息类型，默认 event
+         */
+        private String msgType;
 
-		/**
-		 * 事件类型：比如有订阅、关注等等，具体值参考官方Demo示例
-		 */
-		private String event;
+        /**
+         * 事件类型：比如有订阅、关注等等，具体值参考官方Demo示例
+         */
+        private String event;
 
-	}
+    }
 
 }

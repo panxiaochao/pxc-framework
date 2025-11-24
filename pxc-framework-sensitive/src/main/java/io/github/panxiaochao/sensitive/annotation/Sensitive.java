@@ -44,14 +44,14 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Sensitive {
 
-	/**
-	 * 处理策略，当且仅handler是默认处理{@link IHandler}情况下生效
-	 */
-	SensitiveStrategy strategy() default SensitiveStrategy.DEFAULT;
+    /**
+     * 处理策略，当且仅handler是默认处理{@link IHandler}情况下生效
+     */
+    SensitiveStrategy strategy() default SensitiveStrategy.DEFAULT;
 
-	/**
-	 * 自定义处理方法
-	 */
-	Class<? extends IHandler> handler() default IHandler.class;
+    /**
+     * 自定义处理方法
+     */
+    Class<? extends IHandler> handler() default IHandler.class;
 
 }
