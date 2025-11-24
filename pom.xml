@@ -650,7 +650,9 @@
                 <version>${spring-javaformat-maven-plugin.version}</version>
                 <executions>
                     <execution>
+                        <!-- 执行生命周期 validate 阶段执行 -->
                         <phase>validate</phase>
+                        <!-- 表示子模块可以继承此配置 -->
                         <inherited>true</inherited>
                         <goals>
                             <goal>validate</goal>
