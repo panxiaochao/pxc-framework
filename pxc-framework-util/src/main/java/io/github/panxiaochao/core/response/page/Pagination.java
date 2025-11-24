@@ -139,4 +139,25 @@ public class Pagination {
         return pages;
     }
 
+    /**
+     * 静态构造方式.
+     * @param pageNo 页码
+     * @param pageSize 页数
+     * @return Pagination
+     */
+    public static Pagination of(long pageNo, long pageSize) {
+        return of(pageNo, pageSize, 0);
+    }
+
+    /**
+     * 静态构造方式.
+     * @param pageNo 页码
+     * @param pageSize 页数
+     * @param total 总数
+     * @return Pagination
+     */
+    public static Pagination of(long pageNo, long pageSize, long total) {
+        return new Pagination(pageNo, pageSize, total);
+    }
+
 }
