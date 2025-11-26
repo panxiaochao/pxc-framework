@@ -28,7 +28,6 @@ import org.springframework.context.annotation.Bean;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <p>
@@ -72,7 +71,7 @@ public class Jackson2AutoConfiguration {
         return builder -> builder.locale(Locale.CHINA)
             // 所有字段全部展现
             .serializationInclusion(JsonInclude.Include.ALWAYS)
-            .timeZone(TimeZone.getDefault())
+            .timeZone("GMT+8")
             .dateFormat(new SimpleDateFormat(DatePattern.NORMAL_DATE_TIME_PATTERN))
             // 忽略空Bean转json的错误
             .failOnEmptyBeans(false)

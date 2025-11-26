@@ -46,7 +46,7 @@ public class NullValueJsonSerializer extends JsonSerializer<Object> {
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         String fieldName = gen.getOutputContext().getCurrentName();
         // 反射获取字段
-        Field field = ReflectionUtils.findField(gen.getCurrentValue().getClass(), fieldName);
+        Field field = ReflectionUtils.findField(gen.currentValue().getClass(), fieldName);
         if (Objects.nonNull(field)) {
             // 数字类型Integer、Double、Long等返回""
             if (Number.class.isAssignableFrom(field.getType())) {

@@ -58,15 +58,15 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.3.4</spring-boot.version>
-        <lombok.version>1.18.32</lombok.version>
+        <spring-boot.version>3.5.8</spring-boot.version>
+        <lombok.version>1.18.42</lombok.version>
 
         <!-- 插件版本 -->
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-compiler-plugin.verison>3.11.0</maven-compiler-plugin.verison>
+        <maven-compiler-plugin.verison>3.13.0</maven-compiler-plugin.verison>
         <maven-source-plugin.verison>3.3.1</maven-source-plugin.verison>
-        <maven-javadoc-plugin.verison>3.10.0</maven-javadoc-plugin.verison>
-        <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
+        <maven-javadoc-plugin.verison>3.11.2</maven-javadoc-plugin.verison>
+        <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -330,7 +330,7 @@
                 <version>4.6</version>
                 <configuration>
                     <properties>
-                        <year>2022-2024</year>
+                        <year>2025-2026</year>
                         <owner>Lypxc</owner>
                         <email>545685602@qq.com</email>
                     </properties>
@@ -348,6 +348,8 @@
                                 <exclude>**/*.xml</exclude>
                                 <exclude>.gitignore</exclude>
                                 <exclude>.springjavaformatconfig</exclude>
+                                <exclude>package-info.java</exclude>
+                                <exclude>**/*.txt</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
@@ -365,7 +367,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.2.7</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
